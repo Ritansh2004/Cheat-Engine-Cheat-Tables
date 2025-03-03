@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>56</ID>
+      <Description>"Bionic Commando"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"Character   [Endurance/Health]   Damage/Electricity/Fire/Oxigen/Radiation"</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>define(address,"bionic_commando.exe"+478ADD)
+define(bytes,8B 46 08 F6 40 05 03)
+[ENABLE]
+assert(address,bytes)
+alloc(newmem,$100)
+label(player_ammo)
+label(player_base_x)
+label(player_base_y)
+label(player_deposit)
+label(player_endurance)
+label(player_health)
+label(player_inventory)
+label(player_supply)
+label(return)
+registersymbol(player_ammo)
+registersymbol(player_endurance)
+registersymbol(player_health)
+registersymbol(player_inventory)
+newmem:
+  mov eax,[esi+08]
+  push eax
+  push ebx
+  push ecx
+  lea ecx,[eax+10]
+  push ecx
+  mov ebx,player_supply
+  push ebx
+  call strcmp
+  test eax,eax
+  jne player_deposit
+  cmp [esi],0
+  je player_deposit
+  mov ebx,player_ammo
+  xor ecx,ecx
+player_base_x:
+  cmp byte ptr[player_inventory],0
+  je short @f
+  mov [esi],(float)999
+  jmp player_base_y
+  @@:
+  cmp dword ptr[ebx+ecx*4],0
+  jne short @f
+  mov [ebx+ecx*4],esi
+  jmp player_base_y
+  @@:
+  cmp [ebx+ecx*4],esi
+  je player_base_y
+  inc ecx
+  jmp player_base_x
+player_base_y:
+player_deposit:
+  add esp,8
+  mov ebx,player_damage
+  mov eax,[esi+8]
+  lea ecx,[eax+10]
+  push ecx
+  push ebx
+  call strcmp
+  test eax,eax
+  jne short @f
+  mov [player_health],esi
+  mov [esi],0
+  cmp byte ptr[player_endurance],1
+  jne short @f
+  mov [esi],(float)1
+  @@:
+  add esp,8
+  pop ecx
+  pop ebx
+  pop eax
+  test byte ptr [eax+05],03
+  jmp return
+player_ammo:
+  dd 0
+player_damage:
+  db 67 6F 64 00 00
+player_endurance:
+  db 1
+player_health:
+  dd 0
+player_inventory:
+  db 0
+player_supply:
+  db 5F 61 6D 6D 6F 5F 70 6F 6F 6C 00 00
+address:
+  jmp newmem
+  nop 2
+return:
+[DISABLE]
+dealloc(newmem)
+player_endurance:
+  db 0
+unregistersymbol(player_ammo)
+unregistersymbol(player_endurance)
+unregistersymbol(player_health)
+unregistersymbol(player_inventory)
+address:
+  db bytes
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>52</ID>
+          <Description>"Character   [Inventory]   Ammo/Grenades"</Description>
+          <LastState/>
+          <Color>FFFF00</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>define(address,"bionic_commando.exe"+47956F)
+define(bytes,89 0E 8B 50 04)
+[ENABLE]
+assert(address,bytes)
+alloc(newmem,$100)
+label(player_data_x)
+label(player_data_y)
+label(return)
+newmem:
+  push eax
+  push ebx
+  mov eax,player_ammo
+  cmp [eax],0
+  je player_data_x
+  xor ebx,ebx
+player_data_y:
+  cmp dword ptr[eax+ebx*4],0
+  je player_data_x
+  cmp [eax+ebx*4],esi
+  jne short @f
+  pop ebx
+  pop eax
+  mov edx,[eax+4]
+  jmp return
+  @@:
+  inc ebx
+  jmp player_data_y
+player_data_x:
+  pop ebx
+  pop eax
+  mov [esi],ecx
+  mov edx,[eax+04]
+  jmp return
+address:
+  jmp newmem
+return:
+player_inventory:
+  db 1
+[DISABLE]
+dealloc(newmem)
+address:
+  db bytes
+player_inventory:
+  db 0
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"bionic_commando.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+</LuaScript>
+</CheatTable>

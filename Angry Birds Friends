@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>2</ID>
+      <Description>"Score"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+ 
+ 
+aobscanmodule(INJECT,GameAssembly.dll,01 51 2C C3 CC) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+add edx,#99999
+
+code:
+  add [rcx+2C],edx
+  ret 
+  int 3 
+  jmp return
+
+INJECT:
+  jmp newmem
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT:
+  db 01 51 2C C3 CC
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+64B610
+
+GameAssembly.dll+64B5FB: 0F 28 74 24 30  - movaps xmm6,[rsp+30]
+GameAssembly.dll+64B600: 48 83 C4 40     - add rsp,40
+GameAssembly.dll+64B604: 5F              - pop rdi
+GameAssembly.dll+64B605: C3              - ret 
+GameAssembly.dll+64B606: E8 15 F0 CE FF  - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+64B60B: CC              - int 3 
+GameAssembly.dll+64B60C: CC              - int 3 
+GameAssembly.dll+64B60D: CC              - int 3 
+GameAssembly.dll+64B60E: CC              - int 3 
+GameAssembly.dll+64B60F: CC              - int 3 
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+64B610: 01 51 2C        - add [rcx+2C],edx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+64B613: C3              - ret 
+GameAssembly.dll+64B614: CC              - int 3 
+GameAssembly.dll+64B615: CC              - int 3 
+GameAssembly.dll+64B616: CC              - int 3 
+GameAssembly.dll+64B617: CC              - int 3 
+GameAssembly.dll+64B618: CC              - int 3 
+GameAssembly.dll+64B619: CC              - int 3 
+GameAssembly.dll+64B61A: CC              - int 3 
+GameAssembly.dll+64B61B: CC              - int 3 
+GameAssembly.dll+64B61C: CC              - int 3 
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"Angry Birds Friends.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+</LuaScript>
+</CheatTable>

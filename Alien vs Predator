@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>85</ID>
+      <Description>"Alien vs Predator"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"Character   [Single Player]   ---------/Survivor   [------/Marine/---------]   Score"</Description>
+          <LastState/>
+          <Color>00FF00</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(score_character,AvP_DX11.exe,01 75 1C 6A FF)
+stealtheditex(score_character_plugin_base,score_character,3)
+alloc(newmem,$100,AvP_DX11.exe)
+label(code)
+label(return)
+label(score_character_plugin_value)
+registersymbol(score_character_plugin_value)
+newmem:
+  add [ebp+1C],3E8
+code:
+  add [ebp+1C],esi
+  push -01
+  jmp return
+score_character_plugin_base:
+score_character_plugin_value:
+  jmp newmem
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(score_character_plugin_value)
+score_character_plugin_value:
+  db 01 75 1C 6A FF
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>77</ID>
+          <Description>"Character   [Single Player]   Missions/Survivor   [Alien/Marine/Predator]   Health"</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(health_character,AvP_DX11.exe,F3 0F 5C 44 24 ?? 0F 2F C8 F3 0F 11 46 34)
+stealtheditex(health_character_plugin_base,health_character,3)
+alloc(newmem,100,AvP_DX11.exe)
+label(code)
+label(health_character_plugin_value)
+label(return)
+registersymbol(health_character_plugin_value)
+newmem:
+  cmp [esi+58],1
+  jne code
+  jmp return
+code:
+  subss xmm0,[esp+0C]
+  jmp return
+health_character_plugin_base:
+health_character_plugin_value:
+  jmp newmem
+  nop
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(health_character_plugin_value)
+health_character_plugin_value:
+  db F3 0F 5C 44 24 0C
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>80</ID>
+          <Description>"Character   [Single Player]   Missions/---------   [------/-------/Predator]   Energy   [Plasma Caster/Mines]"</Description>
+          <LastState/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(energy_character,AvP_DX11.exe,F3 0F 11 86 38 04 00 00 8B)
+stealtheditex(energy_character_plugin_base,energy_character,3)
+alloc(newmem,100,AvP_DX11.exe)
+label(code)
+label(energy_character_plugin_value)
+label(return)
+registersymbol(energy_character_plugin_value)
+newmem:
+  movss xmm0,[esi+43C]
+code:
+  movss [esi+438],xmm0
+  jmp return
+energy_character_plugin_base:
+energy_character_plugin_value:
+  jmp newmem
+  nop 3
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(energy_character_plugin_value)
+energy_character_plugin_value:
+  db F3 0F 11 86 38 04 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>79</ID>
+          <Description>"Character   [Single Player]   Missions/Survivor   [------/Marine/--------]   Ammo   [Bullets/Gas/Grenades]"</Description>
+          <LastState/>
+          <Color>FFFF00</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(ammo_character,AvP_DX11.exe,F3 0F 5C C1 F3 0F 11 41 ?? d9)
+stealtheditex(ammo_character_plugin_base,ammo_character,3)
+alloc(newmem,100,AvP_DX11.exe)
+label(ammo_character_plugin_value)
+label(return)
+registersymbol(ammo_character_plugin_value)
+newmem:
+  movss [ecx+10],xmm0
+  jmp return
+ammo_character_plugin_base:
+ammo_character_plugin_value:
+  jmp newmem
+  nop 4
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(ammo_character_plugin_value)
+ammo_character_plugin_value:
+  db F3 0F 5C C1 F3 0F 11 41 10
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"AvP_DX11.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>6</ID>
+      <Description>"Amount"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+aobscanmodule(BlackPearl,GameAssembly.dll,44 8B 3B 41 8B C7)
+alloc(newmem,$1000,BlackPearl)
+
+label(code)
+label(return)
+label(pBP)
+registersymbol(pBP)
+
+newmem:
+
+mov [pBP], rbx
+jmp code
+
+code:
+  mov r15d,[rbx]
+  mov eax,r15d
+  jmp return
+
+pBP:
+
+BlackPearl:
+  jmp newmem
+  nop
+return:
+registersymbol(BlackPearl)
+
+[DISABLE]
+BlackPeral:
+  db 44 8B 3B 41 8B C7
+
+unregistersymbol(*)
+dealloc(newmem)
+
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+92794C
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>7</ID>
+          <Description>"Value"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pBP</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>"Power-Up's (10+)"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+ 
+ 
+aobscanmodule(INJECT,GameAssembly.dll,89 48 18 4C 8B 46 18) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+add ecx,#11
+
+code:
+  mov [rax+18],ecx
+  mov r8,[rsi+18]
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 2
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT:
+  db 89 48 18 4C 8B 46 18
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+92B23F
+
+GameAssembly.dll+92B223: 48 8B D5              - mov rdx,rbp
+GameAssembly.dll+92B226: 49 8B CE              - mov rcx,r14
+GameAssembly.dll+92B229: E8 82 11 41 00        - call GameAssembly.dll+D3C3B0
+GameAssembly.dll+92B22E: 48 8B D8              - mov rbx,rax
+GameAssembly.dll+92B231: 48 85 C0              - test rax,rax
+GameAssembly.dll+92B234: 74 61                 - je GameAssembly.dll+92B297
+GameAssembly.dll+92B236: 8B 48 18              - mov ecx,[rax+18]
+GameAssembly.dll+92B239: 3B CF                 - cmp ecx,edi
+GameAssembly.dll+92B23B: 7C 5A                 - jl GameAssembly.dll+92B297
+GameAssembly.dll+92B23D: 2B CF                 - sub ecx,edi
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+92B23F: 89 48 18              - mov [rax+18],ecx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+92B242: 4C 8B 46 18           - mov r8,[rsi+18]
+GameAssembly.dll+92B246: 4D 85 C0              - test r8,r8
+GameAssembly.dll+92B249: 75 1E                 - jne GameAssembly.dll+92B269
+GameAssembly.dll+92B24B: 48 8B 0D 2E C9 3C 03  - mov rcx,[GameAssembly.dll+3CF7B80]
+GameAssembly.dll+92B252: 44 39 81 E0 00 00 00  - cmp [rcx+000000E0],r8d
+GameAssembly.dll+92B259: 75 05                 - jne GameAssembly.dll+92B260
+GameAssembly.dll+92B25B: E8 40 D6 B4 FF        - call GameAssembly.il2cpp_runtime_class_init
+GameAssembly.dll+92B260: 33 C9                 - xor ecx,ecx
+GameAssembly.dll+92B262: E8 39 99 A0 01        - call GameAssembly.dll+2334BA0
+GameAssembly.dll+92B267: EB 0E                 - jmp GameAssembly.dll+92B277
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"Angry Birds 2.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+
+</LuaScript>
+</CheatTable>

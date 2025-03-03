@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"Nitro"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+ 
+ 
+aobscanmodule(INJECT,GameAssembly.dll,63 4A 00 F3 0F 11 83 34 07 00 00) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+ // movss [rbx+00000734],xmm0
+  jmp return
+
+INJECT+03:
+  jmp newmem
+  nop 3
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT+03:
+  db F3 0F 11 83 34 07 00 00
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+58A16D
+
+GameAssembly.dll+58A141: 48 8B 83 80 06 00 00     - mov rax,[rbx+00000680]
+GameAssembly.dll+58A148: 48 85 C0                 - test rax,rax
+GameAssembly.dll+58A14B: 74 6D                    - je GameAssembly.dll+58A1BA
+GameAssembly.dll+58A14D: 80 B8 F2 00 00 00 00     - cmp byte ptr [rax+000000F2],00
+GameAssembly.dll+58A154: 75 59                    - jne GameAssembly.dll+58A1AF
+GameAssembly.dll+58A156: F3 0F 10 8B 34 07 00 00  - movss xmm1,[rbx+00000734]
+GameAssembly.dll+58A15E: 45 33 C0                 - xor r8d,r8d
+GameAssembly.dll+58A161: F3 0F 5C CE              - subss xmm1,xmm6
+GameAssembly.dll+58A165: 0F 57 C0                 - xorps xmm0,xmm0
+GameAssembly.dll+58A168: E8 63 63 4A 00           - call GameAssembly.dll+A304D0
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+58A16D: F3 0F 11 83 34 07 00 00  - movss [rbx+00000734],xmm0
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+58A175: 45 33 C0                 - xor r8d,r8d
+GameAssembly.dll+58A178: F3 0F 59 05 E4 A6 1A 01  - mulss xmm0,[GameAssembly.dll+1734864]
+GameAssembly.dll+58A180: 33 D2                    - xor edx,edx
+GameAssembly.dll+58A182: E8 A9 DE F0 FF           - call GameAssembly.dll+498030
+GameAssembly.dll+58A187: F3 0F 10 83 34 07 00 00  - movss xmm0,[rbx+00000734]
+GameAssembly.dll+58A18F: 0F 2E 05 2E A7 1A 01     - ucomiss xmm0,[GameAssembly.dll+17348C4]
+GameAssembly.dll+58A196: 7A 06                    - jp GameAssembly.dll+58A19E
+GameAssembly.dll+58A198: 75 04                    - jne GameAssembly.dll+58A19E
+GameAssembly.dll+58A19A: B1 01                    - mov cl,01
+GameAssembly.dll+58A19C: EB 02                    - jmp GameAssembly.dll+58A1A0
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"Missile"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+ 
+ 
+aobscanmodule(INJECT,GameAssembly.dll,29 4B 3C 01 4B 40) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+ // sub [rbx+3C],ecx
+  add [rbx+40],ecx
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT:
+  db 29 4B 3C 01 4B 40
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+2D521C
+
+GameAssembly.dll+2D5200: 75 59           - jne GameAssembly.dll+2D525B
+GameAssembly.dll+2D5202: 48 85 FF        - test rdi,rdi
+GameAssembly.dll+2D5205: 74 5F           - je GameAssembly.dll+2D5266
+GameAssembly.dll+2D5207: 48 8B 43 30     - mov rax,[rbx+30]
+GameAssembly.dll+2D520B: 8B 4F 18        - mov ecx,[rdi+18]
+GameAssembly.dll+2D520E: 48 85 C0        - test rax,rax
+GameAssembly.dll+2D5211: 74 53           - je GameAssembly.dll+2D5266
+GameAssembly.dll+2D5213: 80 78 2C 00     - cmp byte ptr [rax+2C],00
+GameAssembly.dll+2D5217: 74 03           - je GameAssembly.dll+2D521C
+GameAssembly.dll+2D5219: 8B 48 30        - mov ecx,[rax+30]
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+2D521C: 29 4B 3C        - sub [rbx+3C],ecx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+2D521F: 01 4B 40        - add [rbx+40],ecx
+GameAssembly.dll+2D5222: 83 7B 3C 00     - cmp dword ptr [rbx+3C],00
+GameAssembly.dll+2D5226: 7F 20           - jg GameAssembly.dll+2D5248
+GameAssembly.dll+2D5228: 48 8B 4B 20     - mov rcx,[rbx+20]
+GameAssembly.dll+2D522C: 48 85 C9        - test rcx,rcx
+GameAssembly.dll+2D522F: 74 35           - je GameAssembly.dll+2D5266
+GameAssembly.dll+2D5231: 33 D2           - xor edx,edx
+GameAssembly.dll+2D5233: E8 68 97 18 00  - call GameAssembly.dll+45E9A0
+GameAssembly.dll+2D5238: 48 8B 4B 20     - mov rcx,[rbx+20]
+GameAssembly.dll+2D523C: 48 85 C9        - test rcx,rcx
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"AgentIntercept.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+</LuaScript>
+</CheatTable>

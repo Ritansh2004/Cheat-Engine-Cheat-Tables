@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>66</ID>
+      <Description>"Blades of Time"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>65</ID>
+          <Description>"Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Ammo"</Description>
+          <LastState/>
+          <Color>C08080</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(inventory,bladesoftime.exe,8D 44 C7 2C )
+alloc(newmem,$100)
+label(base)
+label(return)
+registersymbol(inventory)
+newmem:
+  cmp eax,"bladesoftime.exe"
+  jna base
+  cmp [eax+18],08004000
+  jne base
+  cmp [eax+20],08004000
+  jne base
+  cmp dword ptr[eax+4],0
+  jle base
+  mov dword ptr[eax+4],63
+base:
+  mov edx,[eax+04]
+  lea eax,[ebp-08]
+  jmp return
+inventory+8:
+  jmp newmem
+  nop
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(inventory)
+inventory+8:
+  db 8B 50 04 8D 45 F8
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>56</ID>
+          <Description>"Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Health/------------"</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+{$lua}
+local pHealthOn = getAddressList().getMemoryRecordByDescription("Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Health/One Hit Kill")
+if (pHealthOn.Active) then
+ pHealthOn.Active = false
+end
+{$asm}
+aobscanmodule(health,bladesoftime.exe,F3 0F 10 83 6C 04 00 00)
+alloc(newmem,$100)
+label(code)
+label(return)
+registersymbol(health)
+newmem:
+  push ebp
+  mov ebp,[ebx+810]
+  cmp ebp,44FA0000
+  pop ebp
+  jne code
+  mov [ebx+46C],(float)9999
+  jmp return
+code:
+  movss xmm0,[ebx+46C]
+  jmp return
+health:
+  jmp newmem
+  nop 3
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(health)
+health:
+  db F3 0F 10 83 6C 04 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>62</ID>
+          <Description>"Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Health/One Hit Kill"</Description>
+          <LastState/>
+          <Color>8000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+{$lua}
+local pHealthOff = getAddressList().getMemoryRecordByDescription("Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Health/------------")
+if (pHealthOff.Active) then
+ pHealthOff.Active = false
+end
+{$asm}
+aobscanmodule(health_one_hit_kill,bladesoftime.exe,F3 0F 10 83 6C 04 00 00)
+alloc(newmem,$100)
+label(code)
+label(return)
+registersymbol(health_one_hit_kill)
+newmem:
+  push ebp
+  mov ebp,[ebx+810]
+  cmp ebp,44FA0000
+  pop ebp
+  jne code
+  mov [ebx+46C],(float)9999
+  jmp return
+code:
+  mov [ebx+46C],(float)1
+  jmp return
+health_one_hit_kill:
+  jmp newmem
+  nop 3
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(health_one_hit_kill)
+health_one_hit_kill:
+  db F3 0F 10 83 6C 04 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>64</ID>
+          <Description>"Dismal Swamp/Outbreak/Story   [Ayumi/Michelle/Zero]   Mana"</Description>
+          <LastState/>
+          <Color>FFFF00</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(base_mana_capacity,bladesoftime.exe,81 38 00 00 01 08 74 1F 8B 08 8B 50 04)
+aobscanmodule(base_mana_maximum,bladesoftime.exe,89 50 04 8B 13)
+alloc(newmem_x,$100)
+alloc(newmem_y,$100)
+label(base_total)
+label(base_x)
+label(base_y)
+label(return_x)
+label(return_y)
+registersymbol(base_mana_capacity)
+registersymbol(base_mana_maximum)
+registersymbol(base_total)
+newmem_x:
+  cmp eax,"bladesoftime.exe"
+  jna base_x
+  cmp [eax],05000004
+  jne base_x
+  cmp [eax+14],08000200
+  jne base_x
+  cmp [eax+04],(float)0.5
+  jle base_x
+  mov [eax+04],(float)99
+  mov [base_total],eax
+base_x:
+  mov edx,[eax+04]
+  mov esi,[ebp+08]
+  jmp return_x
+base_total:
+  dd 0
+base_mana_capacity+A:
+  jmp newmem_x
+  nop
+return_x:
+newmem_y:
+  push ebx
+  mov ebx,base_total
+  test ebx,ebx
+  je base_y
+  mov ebx,[ebx]
+  test ebx,ebx
+  je base_y
+  cmp eax,ebx
+  jne base_y
+  mov edx,(float)14
+base_y:
+  pop ebx
+  mov [eax+04],edx
+  mov edx,[ebx]
+  jmp return_y
+base_mana_maximum:
+  jmp newmem_y
+return_y:
+[DISABLE]
+dealloc(newmem_x)
+dealloc(newmem_y)
+unregistersymbol(base_mana_capacity)
+unregistersymbol(base_mana_maximum)
+unregistersymbol(base_total)
+base_mana_capacity+A:
+  db 8B 50 04 8B 75 08
+base_mana_maximum:
+  db 89 50 04 8B 13
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"bladesoftime.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+
+</LuaScript>
+</CheatTable>

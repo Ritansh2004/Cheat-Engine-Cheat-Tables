@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>50</ID>
+      <Description>"Aliens: Colonial Marines"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>49</ID>
+          <Description>"Campaign/Firing Range/Stasis Interrupted   [Stamina]   Sprint"</Description>
+          <LastState/>
+          <Color>8000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(stamina,ACM.exe,F3 0F 11 86 E0 15 00 00 76)
+alloc(newmem,$100)
+label(return)
+registersymbol(stamina)
+newmem:
+  movss [esi+15E0],xmm0
+  mov [esi+15E0],(float)10
+  jmp return
+stamina:
+  jmp newmem
+  nop 3
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(stamina)
+stamina:
+  db F3 0F 11 86 E0 15 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Campaign/Firing Range/Stasis Interrupted   [Inventory]   Reload On   [-----------/Primary/Secondary/--------------/Sidearm/--------]"</Description>
+          <LastState/>
+          <Color>C08080</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+{$lua}
+local pReloadOff = getAddressList().getMemoryRecordByDescription("Campaign/Firing Range/Stasis Interrupted   [Inventory]   Reload Off   [Alternate/Primary/Secondary/Sentry Turret/Sidearm/Tactical]")
+if (pReloadOff.Active) then
+ pReloadOff.Active = false
+end
+{$asm}
+aobscanmodule(inventory_capacity,ACM.exe,E0 8B 86 B4 02 00 00 5E C3 CC)
+alloc(newmem_x,$100)
+label(code_x)
+label(return_x)
+registersymbol(inventory_capacity)
+newmem_x:
+  mov [esi+2B4],3E7
+code_x:
+  mov eax,[esi+2B4]
+  jmp return_x
+inventory_capacity+01:
+  jmp newmem_x
+  nop
+return_x:
+[DISABLE]
+dealloc(newmem_x)
+unregistersymbol(inventory_capacity)
+inventory_capacity+01:
+  db 8B 86 B4 02 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>41</ID>
+          <Description>"Campaign/Firing Range/Stasis Interrupted   [Inventory]   Reload Off   [Alternate/Primary/Secondary/Sentry Turret/Sidearm/Tactical]"</Description>
+          <LastState/>
+          <Color>C08080</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+{$lua}
+local pReloadOn = getAddressList().getMemoryRecordByDescription("Campaign/Firing Range/Stasis Interrupted   [Inventory]   Reload On   [-----------/Primary/Secondary/--------------/Sidearm/--------]")
+if (pReloadOn.Active) then
+ pReloadOn.Active = false
+end
+{$asm}
+aobscanmodule(inventory_capacity,ACM.exe,E0 8B 86 B4 02 00 00 5E C3 CC)
+aobscanmodule(inventory_pouch,ACM.exe,29 07 8B 3F 8B 4D 0C)
+alloc(newmem_x,$100)
+alloc(newmem_y,$100)
+label(code_x)
+label(code_y)
+label(return_x)
+label(return_y)
+registersymbol(inventory_capacity)
+registersymbol(inventory_pouch)
+newmem_x:
+  mov [esi+2B4],3E7
+code_x:
+  mov eax,[esi+2B4]
+  jmp return_x
+inventory_capacity+01:
+  jmp newmem_x
+  nop
+return_x:
+newmem_y:
+  cmp [edi+18],0
+  jne code_y
+  mov [edi],63
+  mov edi,[edi]
+  mov ecx,[ebp+0C]
+  jmp return_y
+code_y:
+  sub [edi],eax
+  mov edi,[edi]
+  mov ecx,[ebp+0C]
+  jmp return_y
+inventory_pouch:
+  jmp newmem_y
+  nop 2
+return_y:
+[DISABLE]
+dealloc(newmem_x)
+dealloc(newmem_y)
+unregistersymbol(inventory_capacity)
+unregistersymbol(inventory_pouch)
+inventory_capacity+01:
+  db 8B 86 B4 02 00 00
+inventory_pouch:
+  db 29 07 8B 3F 8B 4D 0C
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"Campaign/Firing Range/Stasis Interrupted   [Health]  "</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(health,ACM.exe,F3 0F 11 83 70 03 00 00 5B)
+alloc(newmem,$100)
+label(code)
+label(return)
+registersymbol(health)
+newmem:
+  cmp [ebx+9bc],40000000
+  jne code
+  mov [ebx+370],(float)100
+  jmp return
+code:
+  movss [ebx+370],xmm0
+  jmp return
+health:
+  jmp newmem
+  nop 3
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(health)
+health:
+  db F3 0F 11 83 70 03 00 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>47</ID>
+          <Description>"Campaign/-------------/--------------------   [Arsenal Upgrades]   Points"</Description>
+          <LastState/>
+          <Color>00FF00</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(arsenal_upgrade_points,ACM.exe,01 89 4E 14 83 7B 64 00)
+alloc(newmem,$100)
+label(return)
+registersymbol(arsenal_upgrade_points)
+newmem:
+  mov [esi+14],63
+  cmp dword ptr [ebx+64],00
+  jmp return
+arsenal_upgrade_points+01:
+  jmp newmem
+  nop 2
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(arsenal_upgrade_points)
+arsenal_upgrade_points+01:
+  db 89 4E 14 83 7B 64 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"Campaign/Firing Range/Stasis Interrupted   [Armor]"</Description>
+          <LastState/>
+          <Color>FF8000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+aobscanmodule(armor,ACM.exe,5C 45 08 8B 45 0C F3 0F 11 07 5F)
+alloc(newmem,$100)
+label(code)
+label(return)
+registersymbol(armor)
+newmem:
+  cmp [edi+14],42c80000
+  jne code
+  mov [edi],(float)100
+  pop edi
+  jmp return
+code:
+  movss [edi],xmm0
+  pop edi
+  jmp return
+armor+06:
+  jmp newmem
+return:
+[DISABLE]
+dealloc(newmem)
+unregistersymbol(armor)
+armor+06:
+  db F3 0F 11 07 5F
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"ACM.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+</LuaScript>
+</CheatTable>

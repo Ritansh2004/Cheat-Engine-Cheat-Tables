@@ -56,6 +56,11 @@ Please don't POST this Cheat Tables in any other platform or websites. Its free 
 
 https://fearlessrevolution.com/memberlist.php?mode=viewprofile&u=213726&sid=0f7ddd121c4e244f2663f8c2b424024d
 
+## Clone the Repository:
+```bash
+git clone https://github.com/Ritansh2004/Cheat-Engine-Cheat-Tables.git
+```
+
 ---
 
 Happy cheating!

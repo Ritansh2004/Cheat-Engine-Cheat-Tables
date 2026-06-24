@@ -1,0 +1,1601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CustomScriptErrorMessage>Failed to activate "{description}" This can happen when the game version and table version do not match close enough</CustomScriptErrorMessage>
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>116</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Cropdeck.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>4</ID>
+          <Description>"EnergyComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.EnergyComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.EnergyComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [energycomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+energycomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(energycomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(energycomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.EnergyComponent:get_CurrentValue
+
+28A6D836BAD: 00 00        - add [rax],al
+28A6D836BAF: 00 01        - add [rcx],al
+28A6D836BB1: 00 00        - add [rax],al
+28A6D836BB3: 00 00        - add [rax],al
+28A6D836BB5: 00 00        - add [rax],al
+28A6D836BB7: 00 00        - add [rax],al
+28A6D836BB9: 00 00        - add [rax],al
+28A6D836BBB: 00 00        - add [rax],al
+28A6D836BBD: 00 00        - add [rax],al
+28A6D836BBF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.EnergyComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.EnergyComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.EnergyComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.EnergyComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.EnergyComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.EnergyComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.EnergyComponent:get_CurrentValue+17: C3           - ret 
+28A6D836BD8: 01 04 01     - add [rcx+rax],eax
+28A6D836BDB: 00 04 02     - add [rdx+rax],al
+28A6D836BDE: 00 00        - add [rax],al
+28A6D836BE0: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Value Show/Update When Day Change"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BACB7B0" RealAddress="2C54B7A0014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>energycomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BACB7C0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[energycomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="1000000" RealAddress="2C53BACB7C4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[energycomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BACB7C8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[energycomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BACB7CC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[energycomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BACB7D0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[energycomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>50</ID>
+          <Description>"MaxEnergyComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.MaxEnergyComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.MaxEnergyComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [maxenergycomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+maxenergycomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(maxenergycomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(maxenergycomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.MaxEnergyComponent:get_CurrentValue
+
+28A6D836CAD: 00 00        - add [rax],al
+28A6D836CAF: 00 01        - add [rcx],al
+28A6D836CB1: 00 00        - add [rax],al
+28A6D836CB3: 00 00        - add [rax],al
+28A6D836CB5: 00 00        - add [rax],al
+28A6D836CB7: 00 00        - add [rax],al
+28A6D836CB9: 00 00        - add [rax],al
+28A6D836CBB: 00 00        - add [rax],al
+28A6D836CBD: 00 00        - add [rax],al
+28A6D836CBF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.MaxEnergyComponent:get_CurrentValue+17: C3           - ret 
+28A6D836CD8: 01 04 01     - add [rcx+rax],eax
+28A6D836CDB: 00 04 02     - add [rdx+rax],al
+28A6D836CDE: 00 00        - add [rax],al
+28A6D836CE0: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"Value Show/Update When Day Change"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53B6AF390" RealAddress="2C54B7C0014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>maxenergycomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="999999" RealAddress="2C53B6AF3A0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[maxenergycomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="1000000" RealAddress="2C53B6AF3A4"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[maxenergycomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>73</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="1000000" RealAddress="2C53B6AF3A8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[maxenergycomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>74</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="1" RealAddress="2C53B6AF3AC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[maxenergycomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B6AF3B0"/>
+              <VariableType>Float</VariableType>
+              <Address>[maxenergycomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>12</ID>
+          <Description>"ExtraMarketRerollsComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [extramarketrerollscomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+extramarketrerollscomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(extramarketrerollscomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(extramarketrerollscomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue
+
+28A6D836F1D: 00 00        - add [rax],al
+28A6D836F1F: 00 01        - add [rcx],al
+28A6D836F21: 00 00        - add [rax],al
+28A6D836F23: 00 00        - add [rax],al
+28A6D836F25: 00 00        - add [rax],al
+28A6D836F27: 00 00        - add [rax],al
+28A6D836F29: 00 00        - add [rax],al
+28A6D836F2B: 00 00        - add [rax],al
+28A6D836F2D: 00 00        - add [rax],al
+28A6D836F2F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.ExtraMarketRerollsComponent:get_CurrentValue+17: C3           - ret 
+28A6D836F48: 01 04 01     - add [rcx+rax],eax
+28A6D836F4B: 00 04 02     - add [rdx+rax],al
+28A6D836F4E: 00 00        - add [rax],al
+28A6D836F50: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"Value Show/Update When Day Change"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BAD4F00" RealAddress="2C54B7D0014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>extramarketrerollscomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BAD4F10"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[extramarketrerollscomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4F14"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[extramarketrerollscomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BAD4F18"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[extramarketrerollscomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4F1C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[extramarketrerollscomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4F20"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[extramarketrerollscomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>20</ID>
+          <Description>"FreeMarketRerollsComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [freemarketrerollscomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+freemarketrerollscomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(freemarketrerollscomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(freemarketrerollscomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue
+
+28A6D83701D: 00 00        - add [rax],al
+28A6D83701F: 00 01        - add [rcx],al
+28A6D837021: 00 00        - add [rax],al
+28A6D837023: 00 00        - add [rax],al
+28A6D837025: 00 00        - add [rax],al
+28A6D837027: 00 00        - add [rax],al
+28A6D837029: 00 00        - add [rax],al
+28A6D83702B: 00 00        - add [rax],al
+28A6D83702D: 00 00        - add [rax],al
+28A6D83702F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.FreeMarketRerollsComponent:get_CurrentValue+17: C3           - ret 
+28A6D837048: 01 04 01     - add [rcx+rax],eax
+28A6D83704B: 00 04 02     - add [rdx+rax],al
+28A6D83704E: 00 00        - add [rax],al
+28A6D837050: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"Value Show/Update When Level Complete"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BAD4DB0" RealAddress="2C54B7E0014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>freemarketrerollscomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4DC0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[freemarketrerollscomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4DC4"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[freemarketrerollscomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4DC8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[freemarketrerollscomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4DCC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[freemarketrerollscomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>90</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BAD4DD0"/>
+              <VariableType>Float</VariableType>
+              <Address>[freemarketrerollscomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>23</ID>
+          <Description>"GemsComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.GemsComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.GemsComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [gemscomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+gemscomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gemscomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(gemscomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.GemsComponent:get_CurrentValue
+
+28A6D836B3D: 00 00        - add [rax],al
+28A6D836B3F: 00 01        - add [rcx],al
+28A6D836B41: 00 00        - add [rax],al
+28A6D836B43: 00 00        - add [rax],al
+28A6D836B45: 00 00        - add [rax],al
+28A6D836B47: 00 00        - add [rax],al
+28A6D836B49: 00 00        - add [rax],al
+28A6D836B4B: 00 00        - add [rax],al
+28A6D836B4D: 00 00        - add [rax],al
+28A6D836B4F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.GemsComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.GemsComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.GemsComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.GemsComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.GemsComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.GemsComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.GemsComponent:get_CurrentValue+17: C3           - ret 
+28A6D836B68: 01 04 01     - add [rcx+rax],eax
+28A6D836B6B: 00 04 02     - add [rdx+rax],al
+28A6D836B6E: 00 00        - add [rax],al
+28A6D836B70: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"Value Show/Update When Level Complete"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C51FA1F0C0" RealAddress="2C54B7F0014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>gemscomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>91</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="999999999" RealAddress="2C51FA1F0D0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gemscomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="999999999" RealAddress="2C51FA1F0D4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gemscomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="999999999" RealAddress="2C51FA1F0D8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gemscomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C51FA1F0DC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gemscomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C51FA1F0E0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gemscomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>26</ID>
+          <Description>"GoldComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.GoldComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.GoldComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [goldcomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+goldcomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(goldcomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(goldcomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.GoldComponent:get_CurrentValue
+
+28A6D836A3D: 00 00        - add [rax],al
+28A6D836A3F: 00 01        - add [rcx],al
+28A6D836A41: 00 00        - add [rax],al
+28A6D836A43: 00 00        - add [rax],al
+28A6D836A45: 00 00        - add [rax],al
+28A6D836A47: 00 00        - add [rax],al
+28A6D836A49: 00 00        - add [rax],al
+28A6D836A4B: 00 00        - add [rax],al
+28A6D836A4D: 00 00        - add [rax],al
+28A6D836A4F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.GoldComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.GoldComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.GoldComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.GoldComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.GoldComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.GoldComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.GoldComponent:get_CurrentValue+17: C3           - ret 
+28A6D836A68: 01 04 01     - add [rcx+rax],eax
+28A6D836A6B: 00 04 02     - add [rdx+rax],al
+28A6D836A6E: 00 00        - add [rax],al
+28A6D836A70: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"Value Show/Update When Day Change"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BBE5750" RealAddress="2C54B800014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>goldcomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BBE5760"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[goldcomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="999999999" Activated="1" RealAddress="2C53BBE5764"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[goldcomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="999999999" RealAddress="2C53BBE5768"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[goldcomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BBE576C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[goldcomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BBE5770"/>
+              <VariableType>Float</VariableType>
+              <Address>[goldcomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>34</ID>
+          <Description>"HandSizeComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.HandSizeComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.HandSizeComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [handsizecomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+handsizecomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(handsizecomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(handsizecomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.HandSizeComponent:get_CurrentValue
+
+28A6D836DAD: 00 00        - add [rax],al
+28A6D836DAF: 00 01        - add [rcx],al
+28A6D836DB1: 00 00        - add [rax],al
+28A6D836DB3: 00 00        - add [rax],al
+28A6D836DB5: 00 00        - add [rax],al
+28A6D836DB7: 00 00        - add [rax],al
+28A6D836DB9: 00 00        - add [rax],al
+28A6D836DBB: 00 00        - add [rax],al
+28A6D836DBD: 00 00        - add [rax],al
+28A6D836DBF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.HandSizeComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.HandSizeComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.HandSizeComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.HandSizeComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.HandSizeComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.HandSizeComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.HandSizeComponent:get_CurrentValue+17: C3           - ret 
+28A6D836DD8: 01 04 01     - add [rcx+rax],eax
+28A6D836DDB: 00 04 02     - add [rdx+rax],al
+28A6D836DDE: 00 00        - add [rax],al
+28A6D836DE0: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"Value Show/Update When Level Complete"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BADF600" RealAddress="2C54B810014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>handsizecomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="3" RealAddress="2C53BADF610"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[handsizecomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="4" RealAddress="2C53BADF614"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[handsizecomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="4" RealAddress="2C53BADF618"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[handsizecomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="1" RealAddress="2C53BADF61C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[handsizecomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>100</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BADF620"/>
+              <VariableType>Float</VariableType>
+              <Address>[handsizecomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>45</ID>
+          <Description>"HealthComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.HealthComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.HealthComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [healthcomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+healthcomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(healthcomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(healthcomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.HealthComponent:get_CurrentValue
+
+Mdz.Stats.MdzGameplayHealthEntityExtension:GetHealth+78: 41 FF D3        - call r11
+28A6D8AB6BB: 00 00           - add [rax],al
+28A6D8AB6BD: 00 00           - add [rax],al
+28A6D8AB6BF: 00 01           - add [rcx],al
+28A6D8AB6C1: 04 02           - add al,02
+28A6D8AB6C3: 05 04 03 01 50  - add eax,50010304
+28A6D8AB6C8: 00 00           - add [rax],al
+28A6D8AB6CA: 00 00           - add [rax],al
+28A6D8AB6CC: 00 00           - add [rax],al
+28A6D8AB6CE: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+Mdz.Stats.HealthComponent:get_CurrentValue: 48 83 EC 08     - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.HealthComponent:get_CurrentValue+4: 48 89 34 24     - mov [rsp],rsi
+Mdz.Stats.HealthComponent:get_CurrentValue+8: 48 8B F1        - mov rsi,rcx
+Mdz.Stats.HealthComponent:get_CurrentValue+b: 48 63 46 14     - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.HealthComponent:get_CurrentValue+f: 48 8B 34 24     - mov rsi,[rsp]
+Mdz.Stats.HealthComponent:get_CurrentValue+13: 48 83 C4 08     - add rsp,08
+Mdz.Stats.HealthComponent:get_CurrentValue+17: C3              - ret 
+28A6D8AB6E8: 01 04 01        - add [rcx+rax],eax
+28A6D8AB6EB: 00 04 02        - add [rdx+rax],al
+28A6D8AB6EE: 00 00           - add [rax],al
+28A6D8AB6F0: 00 00           - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"Value Show/Update When Day Change"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53BBF1BA0" RealAddress="2C54B820014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>healthcomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>81</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="2" RealAddress="2C53BBF1BB0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthcomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="2" RealAddress="2C53BBF1BB4"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthcomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="2" RealAddress="2C53BBF1BB8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthcomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BBF1BBC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthcomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>85</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53BBF1BC0"/>
+              <VariableType>Float</VariableType>
+              <Address>[healthcomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>62</ID>
+          <Description>"WeatherHazardChanceComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [weatherhazardchancecomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+weatherhazardchancecomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(weatherhazardchancecomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(weatherhazardchancecomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue
+
+28A91A9C7DD: 00 00        - add [rax],al
+28A91A9C7DF: 00 01        - add [rcx],al
+28A91A9C7E1: 00 00        - add [rax],al
+28A91A9C7E3: 00 00        - add [rax],al
+28A91A9C7E5: 00 00        - add [rax],al
+28A91A9C7E7: 00 00        - add [rax],al
+28A91A9C7E9: 00 00        - add [rax],al
+28A91A9C7EB: 00 00        - add [rax],al
+28A91A9C7ED: 00 00        - add [rax],al
+28A91A9C7EF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.WeatherHazardChanceComponent:get_CurrentValue+17: C3           - ret 
+28A91A9C808: 01 04 01     - add [rcx+rax],eax
+28A91A9C80B: 00 04 02     - add [rdx+rax],al
+28A91A9C80E: 00 00        - add [rax],al
+28A91A9C810: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"Value Show/Update When New Level Start"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53B5415A0" RealAddress="2C54B830014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>weatherhazardchancecomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415B0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherhazardchancecomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>102</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415B4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherhazardchancecomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415B8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherhazardchancecomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B5415BC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherhazardchancecomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B5415C0"/>
+              <VariableType>Float</VariableType>
+              <Address>[weatherhazardchancecomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>63</ID>
+          <Description>"WeatherRainyChanceComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [weatherrainychancecomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+weatherrainychancecomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(weatherrainychancecomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(weatherrainychancecomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue
+
+28A91A9C84D: 00 00        - add [rax],al
+28A91A9C84F: 00 01        - add [rcx],al
+28A91A9C851: 00 00        - add [rax],al
+28A91A9C853: 00 00        - add [rax],al
+28A91A9C855: 00 00        - add [rax],al
+28A91A9C857: 00 00        - add [rax],al
+28A91A9C859: 00 00        - add [rax],al
+28A91A9C85B: 00 00        - add [rax],al
+28A91A9C85D: 00 00        - add [rax],al
+28A91A9C85F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.WeatherRainyChanceComponent:get_CurrentValue+17: C3           - ret 
+28A91A9C878: 01 04 01     - add [rcx+rax],eax
+28A91A9C87B: 00 04 02     - add [rdx+rax],al
+28A91A9C87E: 00 00        - add [rax],al
+28A91A9C880: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"Value Show/Update When New Level Start"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53B5415D0" RealAddress="2C54B840014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>weatherrainychancecomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415E0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherrainychancecomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415E4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherrainychancecomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="100" RealAddress="2C53B5415E8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherrainychancecomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B5415EC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weatherrainychancecomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B5415F0"/>
+              <VariableType>Float</VariableType>
+              <Address>[weatherrainychancecomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>68</ID>
+          <Description>"WeatherSunnyChanceComponent"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cropdeck.exe
+  Version: 
+  Date   : 2026-06-21
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [weathersunnychancecomponent_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+weathersunnychancecomponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(weathersunnychancecomponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(weathersunnychancecomponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue
+
+28A91A9C8BD: 00 00        - add [rax],al
+28A91A9C8BF: 00 01        - add [rcx],al
+28A91A9C8C1: 00 00        - add [rax],al
+28A91A9C8C3: 00 00        - add [rax],al
+28A91A9C8C5: 00 00        - add [rax],al
+28A91A9C8C7: 00 00        - add [rax],al
+28A91A9C8C9: 00 00        - add [rax],al
+28A91A9C8CB: 00 00        - add [rax],al
+28A91A9C8CD: 00 00        - add [rax],al
+28A91A9C8CF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+4: 48 89 34 24  - mov [rsp],rsi
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+8: 48 8B F1     - mov rsi,rcx
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+b: 48 63 46 14  - movsxd  rax,dword ptr [rsi+14]
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+f: 48 8B 34 24  - mov rsi,[rsp]
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+13: 48 83 C4 08  - add rsp,08
+Mdz.Stats.WeatherSunnyChanceComponent:get_CurrentValue+17: C3           - ret 
+28A91A9C8E8: 01 04 01     - add [rcx+rax],eax
+28A91A9C8EB: 00 04 02     - add [rdx+rax],al
+28A91A9C8EE: 00 00        - add [rax],al
+28A91A9C8F0: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"Value Show/Update When New Level Start"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002C53B541600" RealAddress="2C54B850014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>weathersunnychancecomponent_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"BaseValue"</Description>
+              <LastState Value="100" RealAddress="2C53B541610"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weathersunnychancecomponent_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>112</ID>
+              <Description>"CurrentValue"</Description>
+              <LastState Value="100" RealAddress="2C53B541614"/>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weathersunnychancecomponent_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>113</ID>
+              <Description>"MaxValue"</Description>
+              <LastState Value="100" RealAddress="2C53B541618"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weathersunnychancecomponent_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>114</ID>
+              <Description>"FlatModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B54161C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[weathersunnychancecomponent_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"PercentageModifiers"</Description>
+              <LastState Value="0" RealAddress="2C53B541620"/>
+              <VariableType>Float</VariableType>
+              <Address>[weathersunnychancecomponent_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>117</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>118</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " CROPDECK - v1.0.8 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

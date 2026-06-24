@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>2</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Echo Generation 2.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"TurnBasedCharacter"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Echo Generation 2.exe
+  Version: 
+  Date   : 2026-06-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+46CD20)
+define(bytes,40 53 48 83 EC 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+46CD20)
+
+label(code)
+label(return)
+
+newmem:
+mov [turnbasedcharacter_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,20
+  jmp return
+
+turnbasedcharacter_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(turnbasedcharacter_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,20
+
+dealloc(newmem)
+unregistersymbol(turnbasedcharacter_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: TurnBasedCharacter.On_ChoosingAction_Cards
+
+GameAssembly.dll+46CCF9: 45 33 C0              - xor r8d,r8d
+GameAssembly.dll+46CCFC: C6 83 48 01 00 00 01  - mov byte ptr [rbx+00000148],01
+GameAssembly.dll+46CD03: BA 08 00 00 00        - mov edx,00000008
+GameAssembly.dll+46CD08: 48 8B CB              - mov rcx,rbx
+GameAssembly.dll+46CD0B: 48 8B 7C 24 60        - mov rdi,[rsp+60]
+GameAssembly.dll+46CD10: 48 83 C4 50           - add rsp,50
+GameAssembly.dll+46CD14: 5B                    - pop rbx
+GameAssembly.dll+46CD15: E9 A6 58 FF FF        - jmp TurnBasedCharacter.ChangeState
+GameAssembly.dll+46CD1A: E8 91 64 E4 FF        - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+46CD1F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+TurnBasedCharacter.On_ChoosingAction_Cards: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+46CD22: 48 83 EC 20           - sub rsp,20
+GameAssembly.dll+46CD26: 80 3D 19 C1 6D 02 00  - cmp byte ptr [GameAssembly.dll+2B48E46],00
+GameAssembly.dll+46CD2D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+46CD30: 75 43                 - jne GameAssembly.dll+46CD75
+GameAssembly.dll+46CD32: 48 8D 0D EF D6 59 02  - lea rcx,[GameAssembly.dll+2A0A428]
+GameAssembly.dll+46CD39: E8 22 62 E4 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+46CD3E: 48 8D 0D FB 71 54 02  - lea rcx,[GameAssembly.dll+29B3F40]
+GameAssembly.dll+46CD45: E8 16 62 E4 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+46CD4A: 48 8D 0D 6F 7A 54 02  - lea rcx,[GameAssembly.dll+29B47C0]
+GameAssembly.dll+46CD51: E8 0A 62 E4 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"Value Show/Update When UNSELECT ActionCard"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001DADC792900" RealAddress="7FFE42680011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>turnbasedcharacter_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"destroyOnDefeatComplete"</Description>
+                  <LastState Value="0" RealAddress="1DADC792920"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"companionType"</Description>
+                  <LastState Value="33" RealAddress="1DADC792924"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+24</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"characterName"</Description>
+                  <LastState RealAddress="1DADD08A3D4"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[turnbasedcharacter_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"flipPortrait"</Description>
+                  <LastState Value="0" RealAddress="1DADC792938"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"playerControlled"</Description>
+                  <LastState Value="1" RealAddress="1DADC792939"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+39</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"isPlayerTeamOverride"</Description>
+                  <LastState Value="0" RealAddress="1DADC79293A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+3A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"isBoss"</Description>
+                  <LastState Value="0" RealAddress="1DADC792948"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"maxHealth"</Description>
+                  <LastState Value="60" RealAddress="1DADC79294C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"startShield"</Description>
+                  <LastState Value="0" RealAddress="1DADC792950"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"initiative"</Description>
+                  <LastState Value="5" RealAddress="1DADC792954"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"specialDefeatCondtions"</Description>
+                  <LastState Value="0" RealAddress="1DADC792958"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"allowRepeatSymbols"</Description>
+                  <LastState Value="1" RealAddress="1DADC792988"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"volume"</Description>
+                  <LastState Value="1" RealAddress="1DADC7929A0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"health"</Description>
+                  <LastState Value="999" RealAddress="1DADC7929D8"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"shield"</Description>
+                  <LastState Value="999" RealAddress="1DADC7929DC"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"healthbar_useEntity2DHeight"</Description>
+                  <LastState Value="0" RealAddress="1DADC7929E8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"currentState"</Description>
+                  <LastState Value="3" RealAddress="1DADC792A30"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"isCardUsed"</Description>
+                  <LastState Value="1" RealAddress="1DADC792A48"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+148</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"skillpoints"</Description>
+                  <LastState Value="2" RealAddress="1DADC792A4C"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"onSequenceComplete_GoToIdle"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A50"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+150</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"isInit"</Description>
+                  <LastState Value="1" RealAddress="1DADC792A70"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"randomSeed"</Description>
+                  <LastState Value="65958" RealAddress="1DADC792A74"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"turnCount"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A78"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"cardsPlayedThisTurn"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A7C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+17C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"quitting"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A80"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"roundInitiative"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A84"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"queuedDamage"</Description>
+                  <LastState Value="0" RealAddress="1DADC792A98"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"previousState"</Description>
+                  <LastState Value="9" RealAddress="1DADC792ACC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"stateStartAt"</Description>
+                  <LastState Value="231.625824" RealAddress="1DADC792AD0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"hasStartedAnim"</Description>
+                  <LastState Value="1" RealAddress="1DADC792AD4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"lastActionIndex"</Description>
+                  <LastState Value="4294967295" RealAddress="1DADC792AD8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"statusEffectDelay"</Description>
+                  <LastState Value="0" RealAddress="1DADC792AE8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"lastStatusAt"</Description>
+                  <LastState Value="231.5925293" RealAddress="1DADC792AEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"statusIndex"</Description>
+                  <LastState Value="1" RealAddress="1DADC792AF0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"hasAppliedEffect"</Description>
+                  <LastState Value="0" RealAddress="1DADC792AF4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"clearStatusEffectStun"</Description>
+                  <LastState Value="0" RealAddress="1DADC792AF5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1F5</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"initialTurnDelay"</Description>
+                  <LastState Value="0.200000003" RealAddress="1DADC792AF8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"hasNegativeStatuses"</Description>
+                  <LastState Value="1" RealAddress="1DADC792AFC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"hasSpawnedMinigame"</Description>
+                  <LastState Value="0" RealAddress="1DADC792AFD"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+1FD</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"phaseTransition"</Description>
+                  <LastState Value="0" RealAddress="1DADC792B00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+200</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"phase_02"</Description>
+                  <LastState Value="0" RealAddress="1DADC792B04"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+204</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"isDefeatComplete"</Description>
+                  <LastState Value="0" RealAddress="1DADC792B10"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+210</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"defeatFallback"</Description>
+                  <LastState Value="3" RealAddress="1DADC792B14"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+214</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"introCompleted"</Description>
+                  <LastState Value="1" RealAddress="1DADC792B18"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+218</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"lqaCombatHandNeedsReview"</Description>
+                  <LastState Value="0" RealAddress="1DADC792B19"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+219</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"lqaCombatHandReviewStartedAt"</Description>
+                  <LastState Value="0" RealAddress="1DADC792B30"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+230</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"combatReward"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"moneyReward"</Description>
+                  <LastState Value="0000006400000019" RealAddress="1DADB769BE0"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"experienceReward"</Description>
+                  <LastState Value="0000000F0000000A" RealAddress="1DADB769BE8"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"selectedCard"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"baseCardID"</Description>
+                  <LastState Value="535" RealAddress="1DADD204190"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"cardLevel"</Description>
+                  <LastState Value="0" RealAddress="1DADD204194"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"useCount"</Description>
+                  <LastState Value="1" RealAddress="1DADD2041A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"combatUseCount"</Description>
+                  <LastState Value="0" RealAddress="1DADD2041C0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"isFrozen"</Description>
+                  <LastState Value="0" RealAddress="1DADD2041C4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"pickupOrder"</Description>
+                  <LastState Value="41" RealAddress="1DADCE478E0"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"isNew"</Description>
+                  <LastState Value="0" RealAddress="1DADCE478E8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"isUsed"</Description>
+                  <LastState Value="0" RealAddress="1DADCE478E9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>19</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"acquiredInLevel"</Description>
+                  <LastState Value="181" RealAddress="1DADCE478EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"acquiredByCharacter"</Description>
+                  <LastState Value="33" RealAddress="1DADCE478F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"acquiredInChapter"</Description>
+                  <LastState Value="0" RealAddress="1DADCE478F4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"cardID"</Description>
+                  <LastState Value="535" RealAddress="1DAA513E478"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"shopCost"</Description>
+                  <LastState Value="500" RealAddress="1DAA513E47C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"cardClass"</Description>
+                  <LastState Value="12" RealAddress="1DAA513E490"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"cardRarity"</Description>
+                  <LastState Value="0" RealAddress="1DAA513E494"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"cardTargetType"</Description>
+                  <LastState Value="3" RealAddress="1DAA513E498"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"cardTemplate"</Description>
+                  <LastState Value="1" RealAddress="1DAA513E49C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"actionPointCost"</Description>
+                  <LastState Value="1" RealAddress="1DAA513E4B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"batteryTotal"</Description>
+                  <LastState Value="0" RealAddress="1DAA513E4B4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"alwaysUpgraded"</Description>
+                  <LastState Value="0" RealAddress="1DAA513E4D8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"autoUpgrade"</Description>
+                  <LastState Value="0" RealAddress="1DAA513E4D9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[turnbasedcharacter_ptr]+168</Address>
+                  <Offsets>
+                    <Offset>79</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>80</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>81</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Echo Generation 2 - v1.0.47 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

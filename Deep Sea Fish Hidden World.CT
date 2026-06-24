@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>70</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Deep Sea Fish Hidden World.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"FishModule"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Deep Sea Fish Hidden World.exe
+  Version: 
+  Date   : 2026-06-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+30FC50)
+define(bytes,40 53 55 56 57)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+30FC50)
+
+label(code)
+label(return)
+
+newmem:
+mov [fishmodule_ptr],rcx
+
+code:
+  push rbx
+  push rbp
+  push rsi
+  push rdi
+  jmp return
+
+fishmodule_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(fishmodule_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // push rbp
+  // push rsi
+  // push rdi
+
+dealloc(newmem)
+unregistersymbol(fishmodule_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FishModule.Spawn
+
+GameAssembly.dll+30FC46: CC                    - int 3 
+GameAssembly.dll+30FC47: CC                    - int 3 
+GameAssembly.dll+30FC48: CC                    - int 3 
+GameAssembly.dll+30FC49: CC                    - int 3 
+GameAssembly.dll+30FC4A: CC                    - int 3 
+GameAssembly.dll+30FC4B: CC                    - int 3 
+GameAssembly.dll+30FC4C: CC                    - int 3 
+GameAssembly.dll+30FC4D: CC                    - int 3 
+GameAssembly.dll+30FC4E: CC                    - int 3 
+GameAssembly.dll+30FC4F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+FishModule.Spawn: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+30FC52: 55                    - push rbp
+GameAssembly.dll+30FC53: 56                    - push rsi
+GameAssembly.dll+30FC54: 57                    - push rdi
+GameAssembly.dll+30FC55: 41 56                 - push r14
+GameAssembly.dll+30FC57: 48 83 EC 60           - sub rsp,60
+GameAssembly.dll+30FC5B: 80 3D 5B EF AD 01 00  - cmp byte ptr [GameAssembly.dll+1DEEBBD],00
+GameAssembly.dll+30FC62: 41 0F B6 D9           - movzx ebx,r9b
+GameAssembly.dll+30FC66: 4D 8B F0              - mov r14,r8
+GameAssembly.dll+30FC69: 8B EA                 - mov ebp,edx
+GameAssembly.dll+30FC6B: 48 8B F1              - mov rsi,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"Value Show When Start Fishing"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001F6B0FFAD00" RealAddress="7FF883AB0010"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>fishmodule_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"isPermanent"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD20"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"isActive"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD21"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+21</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"quantity"</Description>
+                  <LastState Value="26" RealAddress="1F6B0FFAD58"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"electricChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD5C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"boomChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD60"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"addTimeChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD64"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"respawnChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD68"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"goldenChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD6C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+6C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"crownChance"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD70"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"bonusHp"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD74"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+74</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"diveTimer"</Description>
+                  <LastState Value="1.050107121" RealAddress="1F6B0FFAD78"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"flashyUnlocked"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD7C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"flashyState"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD80"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"flashyCdLeft"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD84"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"hpReduction"</Description>
+                  <LastState Value="0" RealAddress="1F6B0FFAD88"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+88</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"flashyConfig"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"cooldown"</Description>
+                  <LastState Value="15" RealAddress="1F6B0FE3528"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"duration"</Description>
+                  <LastState Value="8" RealAddress="1F6B0FE352C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"breakerCdPerc"</Description>
+                  <LastState Value="-0.3000000119" RealAddress="1F6B0FE3530"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"breakerRadiusPerc"</Description>
+                  <LastState Value="0.3000000119" RealAddress="1F6B0FE3534"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"statisticModule"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"isPermanent"</Description>
+                  <LastState Value="0" RealAddress="1F6F6BCBBF0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"isActive"</Description>
+                  <LastState Value="0" RealAddress="1F6F6BCBBF1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>21</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"baseCoin"</Description>
+                  <LastState Value="0" RealAddress="1F6F6BCBC08"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"fishCaught"</Description>
+                  <LastState Value="1" RealAddress="1F6F6BCBC28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"fishCaughtByBeam"</Description>
+                  <LastState Value="0" RealAddress="1F6F6BCBC2C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"boomExploded"</Description>
+                  <LastState Value="0" RealAddress="1F6F6BCBC38"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"timeModule"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"isPermanent"</Description>
+                  <LastState Value="0" RealAddress="1F6F6B4B720"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"isActive"</Description>
+                  <LastState Value="0" RealAddress="1F6F6B4B721"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>21</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"time"</Description>
+                  <LastState Value="-0.01603396237" RealAddress="1F6F6B4B728"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"timeAdded"</Description>
+                  <LastState Value="0" RealAddress="1F6F6B4B72C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"resetTimeAddedTimer"</Description>
+                  <LastState Value="0.3833109736" RealAddress="1F6F6B4B730"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"giantFish_miscModule"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"outerBound"</Description>
+                  <LastState Value="120" RealAddress="1F6F97107A0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"width"</Description>
+                  <LastState Value="177.8645935" RealAddress="1F6F97107A4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"height"</Description>
+                  <LastState Value="99.99999237" RealAddress="1F6F97107A8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"timeLeft"</Description>
+                  <LastState Value="20" RealAddress="1F6F97107AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"isExist"</Description>
+                  <LastState Value="0" RealAddress="1F6F97107B0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"canSpawn"</Description>
+                  <LastState Value="0" RealAddress="1F6F97107B1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>41</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"cardModule"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"isPermanent"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710870"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"isActive"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710871"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>21</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"currentRage"</Description>
+                  <LastState Value="1" RealAddress="1F6F9710878"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"rageLevel"</Description>
+                  <LastState Value="0" RealAddress="1F6F971087C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"requiredRage"</Description>
+                  <LastState Value="50" RealAddress="1F6F9710880"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"isSelectingCard"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710890"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"electricKillUnlocked"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710891"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>41</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"shockBoomUnlocked"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710892"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>42</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"horizonBeamUnlocked"</Description>
+                  <LastState Value="0" RealAddress="1F6F9710893"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>43</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"breakerModule"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"isPermanent"</Description>
+                  <LastState Value="0" RealAddress="1F6F96FC8E0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"isActive"</Description>
+                  <LastState Value="0" RealAddress="1F6F96FC8E1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>21</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"radius"</Description>
+                  <LastState Value="3.600000143" RealAddress="1F6F96FC918"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"radiusUpgrade"</Description>
+                  <LastState Value="0.200000003" RealAddress="1F6F96FC91C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"cd"</Description>
+                  <LastState Value="0.7999999523" RealAddress="1F6F96FC920"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"curCd"</Description>
+                  <LastState Value="0.08339448273" RealAddress="1F6F96FC924"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"dmg"</Description>
+                  <LastState Value="4" RealAddress="1F6F96FC928"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"critChance"</Description>
+                  <LastState Value="0" RealAddress="1F6F96FC92C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"critDmg"</Description>
+                  <LastState Value="2" RealAddress="1F6F96FC930"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"flashyActive"</Description>
+                  <LastState Value="0" RealAddress="1F6F96FC934"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"flashyTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="1F6F96FC938"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"rotateSpeed"</Description>
+                  <LastState Value="53" RealAddress="1F6F96FC93C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fishmodule_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>67</ID>
+          <Description>"Money"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Deep Sea Fish Hidden World.exe
+  Version: 
+  Date   : 2026-06-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+32777F)
+define(bytes,0F 11 41 10 48 8B 05 16 E9 98 01)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+32777F)
+
+label(code)
+label(return)
+
+newmem:
+mov [money_ptr],rcx
+
+code:
+  movups [rcx+10],xmm0
+  mov rax,[GameAssembly.dll+1CB60A0]
+  jmp return
+
+money_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(money_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movups [rcx+10],xmm0
+  // mov rax,[GameAssembly.dll+1CB60A0]
+
+dealloc(newmem)
+unregistersymbol(money_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+32777F
+
+GameAssembly.dll+32774F: 48 8D 4C 24 40        - lea rcx,[rsp+40]
+GameAssembly.dll+327754: 0F 29 44 24 20        - movaps [rsp+20],xmm0
+GameAssembly.dll+327759: E8 12 1E B8 00        - call System.Decimal.op_Addition
+GameAssembly.dll+32775E: 0F 10 0B              - movups xmm1,[rbx]
+GameAssembly.dll+327761: 45 33 C0              - xor r8d,r8d
+GameAssembly.dll+327764: 48 8D 54 24 30        - lea rdx,[rsp+30]
+GameAssembly.dll+327769: 0F 10 00              - movups xmm0,[rax]
+GameAssembly.dll+32776C: 48 8B 05 45 1B 9A 01  - mov rax,[GameAssembly.dll+1CC92B8]
+GameAssembly.dll+327773: 0F 29 4C 24 20        - movaps [rsp+20],xmm1
+GameAssembly.dll+327778: 48 8B 88 B8 00 00 00  - mov rcx,[rax+000000B8]
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+32777F: 0F 11 41 10           - movups [rcx+10],xmm0
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+327783: 48 8B 05 16 E9 98 01  - mov rax,[GameAssembly.dll+1CB60A0]
+GameAssembly.dll+32778A: 48 8B 88 B8 00 00 00  - mov rcx,[rax+000000B8]
+GameAssembly.dll+327791: 0F 10 01              - movups xmm0,[rcx]
+GameAssembly.dll+327794: 48 8D 4C 24 20        - lea rcx,[rsp+20]
+GameAssembly.dll+327799: 0F 29 44 24 30        - movaps [rsp+30],xmm0
+GameAssembly.dll+32779E: E8 DD 24 B8 00        - call System.Decimal.op_GreaterThan
+GameAssembly.dll+3277A3: 84 C0                 - test al,al
+GameAssembly.dll+3277A5: 0F 84 C7 00 00 00     - je GameAssembly.dll+327872
+GameAssembly.dll+3277AB: 48 8B 05 06 1B 9A 01  - mov rax,[GameAssembly.dll+1CC92B8]
+GameAssembly.dll+3277B2: 48 8B 88 B8 00 00 00  - mov rcx,[rax+000000B8]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"Value Show When Decrease/Increase"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"Value"</Description>
+              <LastState Value="9999992304999393890" RealAddress="1F56A204D38"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[money_ptr]+18</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>69</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>71</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Deep Sea Fish Hidden World ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,4266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CustomScriptErrorMessage>Failed to activate "{description}" This can happen when the game version and table version do not match close enough
+
+Use PROFILE LINK Option for CONTACT Table Owner</CustomScriptErrorMessage>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>295</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Carpenter.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"CharacterAiming"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterAiming:Update)
+define(bytes,55 48 8B EC 48 81 EC A0 00 00 00)
+
+[ENABLE]
+
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterAiming:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [characteraiming_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000A0
+  jmp return
+
+characteraiming_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(characteraiming_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000A0
+
+dealloc(newmem)
+unregistersymbol(characteraiming_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterAiming:Update
+
+244B632CE88: 01 04 02                 - add [rdx+rax],eax
+244B632CE8B: 05 04 03 01 50           - add eax,50010304
+244B632CE90: 00 00                    - add [rax],al
+244B632CE92: 00 00                    - add [rax],al
+244B632CE94: 00 00                    - add [rax],al
+244B632CE96: 00 00                    - add [rax],al
+244B632CE98: 00 00                    - add [rax],al
+244B632CE9A: 00 00                    - add [rax],al
+244B632CE9C: 00 00                    - add [rax],al
+244B632CE9E: 00 00                    - add [rax],al
+// ---------- INJECTING HERE ----------
+CharacterAiming:Update: 55                       - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterAiming:Update+1: 48 8B EC                 - mov rbp,rsp
+CharacterAiming:Update+4: 48 81 EC A0 00 00 00     - sub rsp,000000A0
+CharacterAiming:Update+b: 48 89 75 E8              - mov [rbp-18],rsi
+CharacterAiming:Update+f: 48 89 7D F0              - mov [rbp-10],rdi
+CharacterAiming:Update+13: 4C 89 7D F8              - mov [rbp-08],r15
+CharacterAiming:Update+17: 48 8B F1                 - mov rsi,rcx
+CharacterAiming:Update+1a: 0F B6 86 AC 01 00 00     - movzx eax,byte ptr [rsi+000001AC]
+CharacterAiming:Update+21: 85 C0                    - test eax,eax
+CharacterAiming:Update+23: 0F 84 65 08 00 00        - je CharacterAiming:Update+88e
+CharacterAiming:Update+29: F3 0F 10 86 5C 01 00 00  - movss xmm0,[rsi+0000015C]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>characteraiming_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"m_updateRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"m_angleSnapSize"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+10C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"m_aimTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"m_startAimAngle"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"m_startAimAngleThrow"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"m_aimAssistMaxDistance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"m_aimAssistMinDotProduct"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"m_breathingAmount"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+154</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"m_breathingFrequency"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"m_updateTimer"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"m_previousAnimTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"m_activeRecoil"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"m_queuedRecoil"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"m_lastRecoilAddTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+17C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"m_lastFireTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"m_previousAimAngleNoRecoil"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"m_previousAimAngle"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"m_aimVelocity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+18C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"m_aimType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"m_useAimAnimationTime"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+19C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"m_allowPumpAnimation"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+19D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"m_useAimForSecondary"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+19E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"m_checkForBlock"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+19F</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"m_isAimBlocked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+1A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"m_weaponSwayStabilisation"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+1A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"m_weaponSwayIntro"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+1A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"m_aimingActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+1AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"m_weaponShownOnAnimNode"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+1AD</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"m_weapon"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>298</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>299</ID>
+                      <Description>"m_firing"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>300</ID>
+                      <Description>"m_burstFireCount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>301</ID>
+                      <Description>"m_fireBlockedUntilTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>302</ID>
+                      <Description>"m_shellCasingQueued"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>303</ID>
+                      <Description>"m_queuedEjectShellCasingsReload"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>304</ID>
+                      <Description>"m_allowPumpAction"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+A8</Address>
+                      <Offsets>
+                        <Offset>DC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>305</ID>
+                  <Description>"m_weaponInstance"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>312</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>306</ID>
+                          <Description>"m_itemRotated"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>307</ID>
+                          <Description>"m_stackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>308</ID>
+                          <Description>"m_activated"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>309</ID>
+                          <Description>"m_ammoCount"</Description>
+                          <Color>808040</Color>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>58</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>310</ID>
+                          <Description>"m_firedCount"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>5C</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>311</ID>
+                          <Description>"m_requiresAction"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+A8</Address>
+                          <Offsets>
+                            <Offset>60</Offset>
+                            <Offset>68</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>313</ID>
+                      <Description>"m_itemDefinition"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>324</ID>
+                          <Description>"Main"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>314</ID>
+                              <Description>"m_useItemPostResult"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>D0</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>315</ID>
+                              <Description>"m_canBeActivated"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>D4</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>316</ID>
+                              <Description>"m_isKey"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>D5</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>317</ID>
+                              <Description>"m_maxStackSize"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E0</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>318</ID>
+                              <Description>"m_baseShopPrice"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E4</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>319</ID>
+                              <Description>"m_shopStackSize"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E8</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>320</ID>
+                              <Description>"m_isImportantItem"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>F8</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>321</ID>
+                              <Description>"m_inventoryItemCellSpriteSizeScalar"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>FC</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>322</ID>
+                              <Description>"m_vendingMachineSizeScalar"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>100</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>323</ID>
+                              <Description>"m_hideFromQuickItem"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>104</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>325</ID>
+                          <Description>"m_weaponSettings"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>326</ID>
+                              <Description>"m_aimRecoil"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>D8</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>327</ID>
+                              <Description>"m_recoilApplicationRateScalar"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>DC</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>328</ID>
+                              <Description>"m_recoilRecoveryCurveScalar"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E0</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>329</ID>
+                              <Description>"m_transformRecoilDistance"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E4</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>330</ID>
+                              <Description>"m_transformRecoilDuration"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>E8</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>331</ID>
+                              <Description>"m_transformRecoilResetDuration"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>EC</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>332</ID>
+                              <Description>"m_refireTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>F0</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>333</ID>
+                              <Description>"m_triggerFireMode"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>F4</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>334</ID>
+                              <Description>"m_maxAmmo"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>F8</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>335</ID>
+                              <Description>"m_discardOnEmpty"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>FC</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>336</ID>
+                              <Description>"m_autoReloadAmount"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>100</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>337</ID>
+                              <Description>"m_activeReloadType"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>10C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>338</ID>
+                              <Description>"m_activeReloadSpeedOnFail"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>118</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>339</ID>
+                              <Description>"m_activeReloadSpeedOnSuccess"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>11C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>340</ID>
+                              <Description>"m_activeReloadAnimationSpeedOnSuccess"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>120</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>341</ID>
+                              <Description>"m_activeReloadAnimationSpeedOnFailure"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>124</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>342</ID>
+                              <Description>"m_shellCasingEjectionType"</Description>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>128</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>343</ID>
+                              <Description>"m_shellCasingDelay"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>14C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>344</ID>
+                              <Description>"m_wallBlockedDistance"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>150</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>345</ID>
+                              <Description>"m_movementBlockOnFireTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>154</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>346</ID>
+                              <Description>"m_useAction"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>158</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>347</ID>
+                              <Description>"m_pumpDistance"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>15C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>348</ID>
+                              <Description>"m_pumpInTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>160</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>349</ID>
+                              <Description>"m_pumpOutTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>164</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>350</ID>
+                              <Description>"m_pumpDelay"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>168</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>351</ID>
+                              <Description>"m_pumpMidActionDelay"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>16C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>352</ID>
+                              <Description>"m_actionFSMTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>170</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>353</ID>
+                              <Description>"m_actionBlockFireTime"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>174</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>354</ID>
+                              <Description>"m_weaponSwayFrequency"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>178</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>355</ID>
+                              <Description>"m_weaponSwayScale"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>17C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>356</ID>
+                              <Description>"m_weaponSwayFrequency2"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>180</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>357</ID>
+                              <Description>"m_weaponSwayScale2"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>184</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>358</ID>
+                              <Description>"m_weaponSwayStabilisationDuration"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>188</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>359</ID>
+                              <Description>"m_weaponSwayMaxStability"</Description>
+                              <VariableType>Float</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>18C</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>360</ID>
+                              <Description>"m_useMinMaxAimOverride"</Description>
+                              <VariableType>Byte</VariableType>
+                              <Address>[characteraiming_ptr]+A8</Address>
+                              <Offsets>
+                                <Offset>190</Offset>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>68</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"m_heldThrowableProjectile"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>380</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>382</ID>
+                      <Description>"m_startingLifeTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>383</ID>
+                      <Description>"m_environmentOnlyCollision"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>384</ID>
+                      <Description>"m_angularVelocity"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>385</ID>
+                      <Description>"m_lifeTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>386</ID>
+                      <Description>"m_sourceFaction"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>387</ID>
+                      <Description>"m_flatDamageScalar"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>388</ID>
+                      <Description>"m_penetrationDamageScalar"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>389</ID>
+                      <Description>"m_disableImpactEffects"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>390</ID>
+                      <Description>"m_projectileDone"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>75</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>391</ID>
+                      <Description>"m_projectileDeflected"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>76</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>392</ID>
+                      <Description>"m_distanceTravelled"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>393</ID>
+                      <Description>"m_defaultTrailRendererTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>394</ID>
+                      <Description>"m_alreadyHitPassable"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B0</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>381</ID>
+                  <Description>"m_settings"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>395</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>396</ID>
+                          <Description>"m_sizeRadius"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>60</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>397</ID>
+                          <Description>"m_speed"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>64</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>398</ID>
+                          <Description>"m_angularVelocity"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>68</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>399</ID>
+                          <Description>"m_gravityScalar"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>6C</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>400</ID>
+                          <Description>"m_deflectedShotSpeedScale"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>70</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>401</ID>
+                          <Description>"m_hitPlatformEffectors"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>74</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>402</ID>
+                          <Description>"m_depthImpactRange"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>78</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>403</ID>
+                          <Description>"m_targetPenetration"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>7C</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>404</ID>
+                          <Description>"m_targetPenetrationChance"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>405</ID>
+                          <Description>"m_isArmorPiercing"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>406</ID>
+                          <Description>"m_persistAfterImpact"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>85</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>407</ID>
+                          <Description>"m_initialImpactDampening"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>408</ID>
+                          <Description>"m_spawnFireAmount_m_impactExplosion"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>409</ID>
+                          <Description>"m_spawnFireAmount_m_lifetimeExpiredExplosion"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                            <Offset>38</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>410</ID>
+                      <Description>"m_damageHitSettings"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>411</ID>
+                          <Description>"m_healthDamage"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>412</ID>
+                          <Description>"m_staggerMultiplier"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>413</ID>
+                          <Description>"m_impactType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>414</ID>
+                          <Description>"m_impactReactDireaction"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>415</ID>
+                          <Description>"m_hitFlags"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"m_characterInventory"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"m_useTempInventory"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"m_queuedItemClearTimer"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"m_complexInventoryActionsAllowed"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>116</ID>
+                      <Description>"m_isShowingItemWheel"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>117</ID>
+                      <Description>"m_isRequestingShowItemWheel"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>118</ID>
+                      <Description>"m_weaponSwappingAllowed"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>66</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>119</ID>
+                      <Description>"m_isShowingQuickItemPanel"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>67</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>120</ID>
+                      <Description>"m_isRequestingQuickItemPanel"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"m_instantQuickWeaponSwitch"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>69</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>122</ID>
+                      <Description>"m_lastQuicKWeaponSwitchTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characteraiming_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"m_inventory"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>123</ID>
+                          <Description>"m_maxEquippedArtifactsCount"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>108</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>124</ID>
+                          <Description>"m_maxUpgradeInventorySlots"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>10C</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>125</ID>
+                          <Description>"m_money"</Description>
+                          <Color>808040</Color>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>110</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>126</ID>
+                          <Description>"m_pickedUpMoney"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>114</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"m_items"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>127</ID>
+                          <Description>"_size"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <Color>000000</Color>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>128</ID>
+                          <Description>"Count"</Description>
+                          <Color>000000</Color>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>249</ID>
+                          <Description>"m_stackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>250</ID>
+                          <Description>"m_stackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>251</ID>
+                          <Description>"m_stackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>252</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>253</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>254</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>48</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>255</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>50</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>256</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>58</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>257</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>60</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>258</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>68</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>259</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>70</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>260</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>78</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>261</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>80</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>262</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>88</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>263</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>90</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>264</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>98</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>265</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>266</ID>
+                          <Description>"m_stackSize"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>10</Offset>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>169</ID>
+              <Description>"m_characterDirection"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"m_setFlippedShaderValue"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>174</ID>
+                  <Description>"m_shaderPropertyId"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>175</ID>
+                  <Description>"m_startingDirection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>176</ID>
+                  <Description>"m_currentDirection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>177</ID>
+                  <Description>"m_desiredDirection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>178</ID>
+                  <Description>"m_isTurning"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>179</ID>
+                  <Description>"HasTurnAnimation"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>65</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>172</ID>
+              <Description>"m_characterStamina"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>180</ID>
+                  <Description>"m_staminaRechargeDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>181</ID>
+                  <Description>"m_staminaExhaustRechargeDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>182</ID>
+                  <Description>"m_staminaRechargeRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"m_maxStamina"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>184</ID>
+                  <Description>"m_maxStaminaUpgradeAmount"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>185</ID>
+                  <Description>"m_minimumStamina"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>186</ID>
+                  <Description>"m_exhaustStartPoint"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>187</ID>
+                  <Description>"m_exhaustExitPoint"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>188</ID>
+                  <Description>"m_staminaRechargeRateExhausted"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>189</ID>
+                  <Description>"m_staminaConsumptionScalar"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>190</ID>
+                  <Description>"m_maxStaminaReserve"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>191</ID>
+                  <Description>"m_isExhausted"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>192</ID>
+                  <Description>"m_stamina"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>193</ID>
+                  <Description>"m_staminaReserve"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>194</ID>
+                  <Description>"m_staminaRechargeBlockTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>171</ID>
+              <Description>"m_characterEquipment"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>216</ID>
+                  <Description>"m_enableMeleeWeaponByDefault"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>217</ID>
+                  <Description>"m_isWeaponBroken"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>91</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>267</ID>
+                  <Description>"m_activeWeapon"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>275</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>268</ID>
+                          <Description>"m_bloodReductionRate"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>48</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>269</ID>
+                          <Description>"m_damageScale"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>4C</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>270</ID>
+                          <Description>"m_staggerScale"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>271</ID>
+                          <Description>"m_bloodAmount"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>272</ID>
+                          <Description>"m_shaderPropertyID"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>58</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>273</ID>
+                          <Description>"m_lastShownTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>5C</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>274</ID>
+                          <Description>"m_currentDurability_m_meleeWeaponItemInstance"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                            <Offset>38</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>276</ID>
+                      <Description>"m_associatedWeaponType"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>277</ID>
+                          <Description>"m_useItemPostResult"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>D0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>278</ID>
+                          <Description>"m_canBeActivated"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>D4</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>279</ID>
+                          <Description>"m_isKey"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>D5</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>280</ID>
+                          <Description>"m_maxStackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>E0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>281</ID>
+                          <Description>"m_baseShopPrice"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>E4</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>282</ID>
+                          <Description>"m_shopStackSize"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>E8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>283</ID>
+                          <Description>"m_isImportantItem"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>F8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>284</ID>
+                          <Description>"m_inventoryItemCellSpriteSizeScalar"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>FC</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>285</ID>
+                          <Description>"m_vendingMachineSizeScalar"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>100</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>286</ID>
+                          <Description>"m_hideFromQuickItem"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>104</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>287</ID>
+                          <Description>"m_meleeAnimationSpeed"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>198</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>288</ID>
+                          <Description>"m_staminaUseScalar"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>19C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>289</ID>
+                          <Description>"m_maxDurability"</Description>
+                          <Color>808040</Color>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>290</ID>
+                          <Description>"m_durabilityPips"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1A4</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>291</ID>
+                          <Description>"m_durabilityLossOnHit"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>292</ID>
+                          <Description>"m_durabilityLossOnBlock"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1AC</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>293</ID>
+                          <Description>"m_durabilityLossOnParry"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1B0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>294</ID>
+                          <Description>"m_durabilityLossOnThrownHit"</Description>
+                          <Color>808040</Color>
+                          <VariableType>Float</VariableType>
+                          <Address>[characteraiming_ptr]+D0</Address>
+                          <Offsets>
+                            <Offset>1B4</Offset>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>170</ID>
+              <Description>"m_inputPlayer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>195</ID>
+                  <Description>"m_jumpWindow"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>196</ID>
+                  <Description>"m_mouseAimRadius"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>197</ID>
+                  <Description>"m_mouseAimMinDistance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>198</ID>
+                  <Description>"m_gamepadAimingSensitivity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>104</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>199</ID>
+                  <Description>"m_isCrouching"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>200</ID>
+                  <Description>"m_isSprintButtonDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>109</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>201</ID>
+                  <Description>"m_isSprinting"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>10A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>202</ID>
+                  <Description>"m_requestedJump"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>114</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>203</ID>
+                  <Description>"m_isFiring"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>115</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>204</ID>
+                  <Description>"m_isAiming"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>116</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>205</ID>
+                  <Description>"m_forceAimingInput"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>118</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>206</ID>
+                  <Description>"m_isThrowAiming"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>11C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>207</ID>
+                  <Description>"m_isUsingQuickMap"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>130</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>208</ID>
+                  <Description>"m_inputTempDisable"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>131</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"m_inputPaused"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>132</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>210</ID>
+                  <Description>"m_itemWheelOpen"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>133</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"m_inputBlockTimer"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>134</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>212</ID>
+                  <Description>"m_isTryingToShowQuickItemPanel"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>138</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>213</ID>
+                  <Description>"m_inputOverride"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>13C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>214</ID>
+                  <Description>"m_parryInputTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>140</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>215</ID>
+                  <Description>"m_turnDisabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characteraiming_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>14C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>3</ID>
+          <Description>"CharacterLedgeGrab"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterLedgeGrab:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterLedgeGrab:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [characterledgegrab_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+characterledgegrab_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(characterledgegrab_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(characterledgegrab_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterLedgeGrab:Update
+
+StatusEffectReceiver:IsStatusEffectActive+1c9: 48 8D 65 00                    - lea rsp,[rbp+00]
+StatusEffectReceiver:IsStatusEffectActive+1cd: 5D                             - pop rbp
+StatusEffectReceiver:IsStatusEffectActive+1ce: C3                             - ret 
+244B631E72F: 00 01                          - add [rcx],al
+244B631E731: 04 02                          - add al,02
+244B631E733: 05 04 03 01 50                 - add eax,50010304
+244B631E738: 00 00                          - add [rax],al
+244B631E73A: 00 00                          - add [rax],al
+244B631E73C: 00 00                          - add [rax],al
+244B631E73E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+CharacterLedgeGrab:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterLedgeGrab:Update+1: 48 8B EC                       - mov rbp,rsp
+CharacterLedgeGrab:Update+4: 48 83 EC 30                    - sub rsp,30
+CharacterLedgeGrab:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+CharacterLedgeGrab:Update+c: 48 8B F1                       - mov rsi,rcx
+CharacterLedgeGrab:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+CharacterLedgeGrab:Update+16: 49 BB D0 5D 1C B4 44 02 00 00  - mov r11,UnityEngine.Time:get_time
+CharacterLedgeGrab:Update+20: 41 FF D3                       - call r11
+CharacterLedgeGrab:Update+23: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+CharacterLedgeGrab:Update+27: F3 0F 10 8E B8 01 00 00        - movss xmm1,[rsi+000001B8]
+CharacterLedgeGrab:Update+2f: F3 0F 5A C9                    - cvtss2sd xmm1,xmm1
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>characterledgegrab_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"m_height"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"m_climbUpHeightMin"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"m_climbUpHeightMax"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"m_climbUpForwardAmount"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"m_climbUpOffsetIterations"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterledgegrab_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"m_climbUpOffsetAmount"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"m_climbDownCornerOffsetFar"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"m_climbDownCornerOffsetClose"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+154</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"m_climbDownHeightMin"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+158</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"m_climbDownHeightMax"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+15C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"m_climbDownForwardAmount"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+160</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"m_swingHangYOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+184</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"m_raycastDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+190</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"m_wallEdgeDetectionIterations"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterledgegrab_ptr]+194</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"m_validWallDotProduct"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+198</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>73</ID>
+              <Description>"m_exitCharacterHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+19C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>74</ID>
+              <Description>"m_exitCharacterWidth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+1A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"m_overrideEnabled"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterledgegrab_ptr]+1B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"m_lastLedgeGrabTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterledgegrab_ptr]+1B8</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>5</ID>
+          <Description>"CharacterMovement"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterMovement:Update)
+define(bytes,55 48 8B EC 48 81 EC A0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterMovement:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [charactermovement_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000A0
+  jmp return
+
+charactermovement_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(charactermovement_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000A0
+
+dealloc(newmem)
+unregistersymbol(charactermovement_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterMovement:Update
+
+&lt;Module&gt;:runtime_invoke_void__this___object+138: 41 FF D3              - call r11
+244B631AE0B: 00 00                 - add [rax],al
+244B631AE0D: 00 00                 - add [rax],al
+244B631AE0F: 00 01                 - add [rcx],al
+244B631AE11: 04 02                 - add al,02
+244B631AE13: 05 04 03 01 50        - add eax,50010304
+244B631AE18: 00 00                 - add [rax],al
+244B631AE1A: 00 00                 - add [rax],al
+244B631AE1C: 00 00                 - add [rax],al
+244B631AE1E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+CharacterMovement:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterMovement:Update+1: 48 8B EC              - mov rbp,rsp
+CharacterMovement:Update+4: 48 81 EC A0 00 00 00  - sub rsp,000000A0
+CharacterMovement:Update+b: 48 89 75 E0           - mov [rbp-20],rsi
+CharacterMovement:Update+f: 48 89 7D E8           - mov [rbp-18],rdi
+CharacterMovement:Update+13: 4C 89 75 F0           - mov [rbp-10],r14
+CharacterMovement:Update+17: 4C 89 7D F8           - mov [rbp-08],r15
+CharacterMovement:Update+1b: 48 8B F1              - mov rsi,rcx
+CharacterMovement:Update+1e: 48 85 F6              - test rsi,rsi
+CharacterMovement:Update+21: 0F 84 91 05 00 00     - je CharacterMovement:Update+5b8
+CharacterMovement:Update+27: 48 8D 86 64 01 00 00  - lea rax,[rsi+00000164]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>charactermovement_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"m_skinWidth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+110</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"m_movementBlockingType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[charactermovement_ptr]+114</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"m_maxSlopeAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"m_gravity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+11C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"m_coyoteTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+120</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"m_isNearGroundDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"m_defaultMovementBehavior"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[charactermovement_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"m_zOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"m_useRandomZOffsetAdjustment"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"m_randomZOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"m_zMaxMoveSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"m_verticalSize"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"m_characterCollisionOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"m_horizontalFootProportion"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"m_zDepthMoveSpeedOverride"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"m_predictedPositionTrackSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"m_persistentPosition"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"m_useMovementRestrictions"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+151</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"m_collisionMaskMode"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[charactermovement_ptr]+15C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"m_allowCharacterPassthrough"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+160</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"m_offGroundTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+16C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"m_forceFallTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+170</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"m_snapToGroundIgnoreYTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+174</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"m_ignoreNextUpdate"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+178</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"m_movementOverriden"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+179</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"m_collisionDisabled"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+17A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"m_isJumpingTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+17C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"m_stepUpTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+180</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"m_allowedStepHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+1E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"m_zStateOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+248</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"m_zForceDepthOverride"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+24C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"m_fixedDepthMovement"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+250</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"m_stairsForceAttachTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[charactermovement_ptr]+25C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"m_stairsDirection"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[charactermovement_ptr]+260</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"m_isUsingStairs"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+264</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"m_forcedMovementStairsBehaviour"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[charactermovement_ptr]+265</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>6</ID>
+          <Description>"CharacterHealth"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterHealth:get_HealthPercentage)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterHealth:get_HealthPercentage)
+
+label(code)
+label(return)
+
+newmem:
+mov [characterhealth_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+characterhealth_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(characterhealth_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(characterhealth_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterHealth:get_HealthPercentage
+
+244B62F3837: D3 08                          - ror [rax],cl
+244B62F3839: C0 8C 57 25 44 02 00 00        - ror byte ptr [rdi+rdx*2+00024425],00
+244B62F3841: 00 00                          - add [rax],al
+244B62F3843: 00 00                          - add [rax],al
+244B62F3845: 00 00                          - add [rax],al
+244B62F3847: 00 00                          - add [rax],al
+244B62F3849: 00 00                          - add [rax],al
+244B62F384B: 00 00                          - add [rax],al
+244B62F384D: 00 00                          - add [rax],al
+244B62F384F: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+CharacterHealth:get_HealthPercentage: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterHealth:get_HealthPercentage+1: 48 8B EC                       - mov rbp,rsp
+CharacterHealth:get_HealthPercentage+4: 48 83 EC 40                    - sub rsp,40
+CharacterHealth:get_HealthPercentage+8: 48 89 75 F0                    - mov [rbp-10],rsi
+CharacterHealth:get_HealthPercentage+c: 4C 89 7D F8                    - mov [rbp-08],r15
+CharacterHealth:get_HealthPercentage+10: 48 8B F1                       - mov rsi,rcx
+CharacterHealth:get_HealthPercentage+13: 48 8B 4E 20                    - mov rcx,[rsi+20]
+CharacterHealth:get_HealthPercentage+17: 33 D2                          - xor edx,edx
+CharacterHealth:get_HealthPercentage+19: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+CharacterHealth:get_HealthPercentage+1e: 49 BB 30 17 54 67 44 02 00 00  - mov r11,UnityEngine.Object:op_Inequality
+CharacterHealth:get_HealthPercentage+28: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>characterhealth_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"m_maxHealth"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"m_startingHealth"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"m_damagesScalingMode"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"m_deathStatType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"m_diedFromWeakpoint"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterhealth_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"m_damageReceivedScalar"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterhealth_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"m_minimumHealth"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"m_currentHealth"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"m_value_m_maxHealthVariable"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+20</Address>
+              <Offsets>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"m_value_m_healthVariable"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterhealth_ptr]+28</Address>
+              <Offsets>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"m_value_m_healthVariablePercentage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterhealth_ptr]+30</Address>
+              <Offsets>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>218</ID>
+          <Description>"CharacterInteractor (For Locked Door's)"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterInteractor:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterInteractor:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [characterinteractor_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+characterinteractor_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(characterinteractor_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(characterinteractor_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterInteractor:Update
+
+244B632D7EC: 44 02 00                       - add r8b,[rax]
+244B632D7EF: 00 00                          - add [rax],al
+244B632D7F1: 00 00                          - add [rax],al
+244B632D7F3: 00 00                          - add [rax],al
+244B632D7F5: 00 00                          - add [rax],al
+244B632D7F7: 00 00                          - add [rax],al
+244B632D7F9: 00 00                          - add [rax],al
+244B632D7FB: 00 00                          - add [rax],al
+244B632D7FD: 00 00                          - add [rax],al
+244B632D7FF: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+CharacterInteractor:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterInteractor:Update+1: 48 8B EC                       - mov rbp,rsp
+CharacterInteractor:Update+4: 48 83 EC 30                    - sub rsp,30
+CharacterInteractor:Update+8: 48 89 75 F0                    - mov [rbp-10],rsi
+CharacterInteractor:Update+c: 48 89 7D F8                    - mov [rbp-08],rdi
+CharacterInteractor:Update+10: 48 8B F1                       - mov rsi,rcx
+CharacterInteractor:Update+13: 0F B6 86 92 00 00 00           - movzx eax,byte ptr [rsi+00000092]
+CharacterInteractor:Update+1a: 85 C0                          - test eax,eax
+CharacterInteractor:Update+1c: 0F 84 81 00 00 00              - je CharacterInteractor:Update+a3
+CharacterInteractor:Update+22: 48 8B 4E 58                    - mov rcx,[rsi+58]
+CharacterInteractor:Update+26: 49 BB 60 40 2F AB 44 02 00 00  - mov r11,UnityEngine.Object:op_Implicit
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>361</ID>
+              <Description>"Value Update When Near to Interactive Objects like door, PhoneBooth, Vending Machine, Etc"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>219</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>characterinteractor_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>224</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>220</ID>
+                  <Description>"m_isInteracting"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characterinteractor_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>221</ID>
+                  <Description>"m_previousInteractEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characterinteractor_ptr]+91</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>222</ID>
+                  <Description>"m_interactEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[characterinteractor_ptr]+92</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>223</ID>
+                  <Description>"m_interactableCommandRequestFlag"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characterinteractor_ptr]+94</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>225</ID>
+              <Description>"m_nearbyInteracatables"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>226</ID>
+                  <Description>"_size"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characterinteractor_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>227</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[characterinteractor_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>228</ID>
+                  <Description>"[0]BaseInteractable"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>229</ID>
+                      <Description>"m_autoInteract"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>230</ID>
+                      <Description>"m_autoInteractOnce"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>71</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>231</ID>
+                      <Description>"m_perspectiveAdjustedInteract"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>232</ID>
+                      <Description>"m_forcedPlayerMovement"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>228</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>233</ID>
+                      <Description>"m_impactPunchVibrato"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>244</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>234</ID>
+                      <Description>"m_impactPunchDuration"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>248</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>235</ID>
+                      <Description>"m_impactPunchElasticity"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>24C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>236</ID>
+                      <Description>"m_impactPunchDistance"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>250</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>237</ID>
+                      <Description>"m_indestructibleWhileLocked"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>254</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>238</ID>
+                      <Description>"m_forceIndestructible"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>255</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>239</ID>
+                      <Description>"m_doorDestroyedDamageDelay"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>258</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>240</ID>
+                      <Description>"m_interactionDone"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>25C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>241</ID>
+                      <Description>"m_isVisible"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>25D</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>242</ID>
+                      <Description>"m_doorDisable"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>25E</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>243</ID>
+                      <Description>"m_damageStateIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>260</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>244</ID>
+                      <Description>"m_currentHealth"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>264</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>245</ID>
+                      <Description>"m_hasBeenUnlocked"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Locked
+1:Unlocked
+</DropDownList>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>274</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>246</ID>
+                      <Description>"m_hasBeenDestroyed"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>275</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>247</ID>
+                      <Description>"m_doorAnimationActive"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>276</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>248</ID>
+                      <Description>"m_doorState"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[characterinteractor_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>278</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>362</ID>
+          <Description>"Weather"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-19
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Weather:Update)
+define(bytes,55 48 8B EC 48 83 EC 70)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Weather:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [weather_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,70
+  jmp return
+
+weather_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(weather_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,70
+
+dealloc(newmem)
+unregistersymbol(weather_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Weather:Update
+
+2DEA718706D: 00 00           - add [rax],al
+2DEA718706F: 00 00           - add [rax],al
+2DEA7187071: 00 00           - add [rax],al
+2DEA7187073: 00 00           - add [rax],al
+2DEA7187075: 00 00           - add [rax],al
+2DEA7187077: 00 00           - add [rax],al
+2DEA7187079: 00 00           - add [rax],al
+2DEA718707B: 00 00           - add [rax],al
+2DEA718707D: 00 00           - add [rax],al
+2DEA718707F: 00              - db 00 
+// ---------- INJECTING HERE ----------
+Weather:Update: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+Weather:Update+1: 48 8B EC        - mov rbp,rsp
+Weather:Update+4: 48 83 EC 70     - sub rsp,70
+Weather:Update+8: 48 89 75 F8     - mov [rbp-08],rsi
+Weather:Update+c: 48 8B F1        - mov rsi,rcx
+Weather:Update+f: F3 0F 10 46 28  - movss xmm0,[rsi+28]
+Weather:Update+14: F3 0F 5A C0     - cvtss2sd xmm0,xmm0
+Weather:Update+18: F2 0F 11 45 E8  - movsd [rbp-18],xmm0
+Weather:Update+1d: 48 8B 4E 20     - mov rcx,[rsi+20]
+Weather:Update+21: 33 D2           - xor edx,edx
+Weather:Update+23: 66 66 90        - nop 3
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>363</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>weather_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>374</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>364</ID>
+                  <Description>"m_currentRainAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+28</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>365</ID>
+                  <Description>"m_currentWindAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+2C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>366</ID>
+                  <Description>"m_transitionSpeed"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+30</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>367</ID>
+              <Description>"m_activeWeatherSettings"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>368</ID>
+                  <Description>"m_baseRainAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>369</ID>
+                  <Description>"m_rainVarianceAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>370</ID>
+                  <Description>"m_rainVarianceFrequency"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>371</ID>
+                  <Description>"m_baseWindAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>372</ID>
+                  <Description>"m_windVarianceAmount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>373</ID>
+                  <Description>"m_windVarianceFrequency"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[weather_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>375</ID>
+          <Description>"CodeCombinationMinigame"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-19
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CodeCombinationMinigame:Start)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CodeCombinationMinigame:Start)
+
+label(code)
+label(return)
+
+newmem:
+mov [codecombinationminigame_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+codecombinationminigame_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(codecombinationminigame_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(codecombinationminigame_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CodeCombinationMinigame:Start
+
+2DEA742FAB6: 08 38                       - or [rax],bh
+2DEA742FAB8: A0 EE 98 DF 02 00 00 00 00  - mov al,[02DF98EE]
+2DEA742FAC1: 00 00                       - add [rax],al
+2DEA742FAC3: 00 00                       - add [rax],al
+2DEA742FAC5: 00 00                       - add [rax],al
+2DEA742FAC7: 00 00                       - add [rax],al
+2DEA742FAC9: 00 00                       - add [rax],al
+2DEA742FACB: 00 00                       - add [rax],al
+2DEA742FACD: 00 00                       - add [rax],al
+2DEA742FACF: 00                          - db 00 
+// ---------- INJECTING HERE ----------
+CodeCombinationMinigame:Start: 55                          - push rbp
+// ---------- DONE INJECTING  ----------
+CodeCombinationMinigame:Start+1: 48 8B EC                    - mov rbp,rsp
+CodeCombinationMinigame:Start+4: 48 83 EC 60                 - sub rsp,60
+CodeCombinationMinigame:Start+8: 48 89 75 D8                 - mov [rbp-28],rsi
+CodeCombinationMinigame:Start+c: 48 89 7D E0                 - mov [rbp-20],rdi
+CodeCombinationMinigame:Start+10: 4C 89 6D E8                 - mov [rbp-18],r13
+CodeCombinationMinigame:Start+14: 4C 89 75 F0                 - mov [rbp-10],r14
+CodeCombinationMinigame:Start+18: 4C 89 7D F8                 - mov [rbp-08],r15
+CodeCombinationMinigame:Start+1c: 48 8B F1                    - mov rsi,rcx
+CodeCombinationMinigame:Start+1f: 48 8B 7E 20                 - mov rdi,[rsi+20]
+CodeCombinationMinigame:Start+23: 45 33 FF                    - xor r15d,r15d
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>379</ID>
+              <Description>"Value Show/Update When Show Minigame Screen"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>378</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>codecombinationminigame_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>376</ID>
+              <Description>"m_targetCode"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>[codecombinationminigame_ptr]+28</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>377</ID>
+              <Description>"m_targetCode_m_minigameData"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>[codecombinationminigame_ptr]+40</Address>
+              <Offsets>
+                <Offset>14</Offset>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>416</ID>
+          <Description>"EnemyPresence"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Carpenter.exe
+  Version: 
+  Date   : 2026-06-19
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,EnemyPresence:Update)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,EnemyPresence:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [enemypresence_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+enemypresence_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(enemypresence_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(enemypresence_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: EnemyPresence:Update
+
+2DEA74980ED: 00 00                          - add [rax],al
+2DEA74980EF: 00 00                          - add [rax],al
+2DEA74980F1: 00 00                          - add [rax],al
+2DEA74980F3: 00 00                          - add [rax],al
+2DEA74980F5: 00 00                          - add [rax],al
+2DEA74980F7: 00 00                          - add [rax],al
+2DEA74980F9: 00 00                          - add [rax],al
+2DEA74980FB: 00 00                          - add [rax],al
+2DEA74980FD: 00 00                          - add [rax],al
+2DEA74980FF: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+EnemyPresence:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+EnemyPresence:Update+1: 48 8B EC                       - mov rbp,rsp
+EnemyPresence:Update+4: 48 83 EC 60                    - sub rsp,60
+EnemyPresence:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+EnemyPresence:Update+c: 48 8B F1                       - mov rsi,rcx
+EnemyPresence:Update+f: 48 8B D5                       - mov rdx,rbp
+EnemyPresence:Update+12: 48 83 C2 C8                    - add rdx,-38
+EnemyPresence:Update+16: 48 8B CE                       - mov rcx,rsi
+EnemyPresence:Update+19: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+EnemyPresence:Update+1e: 49 BB 20 82 49 A7 DE 02 00 00  - mov r11,EnemyPresence:get_Bounds
+EnemyPresence:Update+28: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>417</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>enemypresence_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>418</ID>
+              <Description>"m_type"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemypresence_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>419</ID>
+              <Description>"m_hasEverBeenSeen"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemypresence_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>420</ID>
+              <Description>"m_isVisible"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemypresence_ptr]+4D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>429</ID>
+              <Description>"m_characterHealth"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>421</ID>
+                  <Description>"m_maxHealth"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>422</ID>
+                  <Description>"m_startingHealth"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>423</ID>
+                  <Description>"m_damagesScalingMode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>424</ID>
+                  <Description>"m_deathStatType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>425</ID>
+                  <Description>"m_diedFromWeakpoint"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>426</ID>
+                  <Description>"m_damageReceivedScalar"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>427</ID>
+                  <Description>"m_minimumHealth"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>428</ID>
+                  <Description>"m_currentHealth"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[enemypresence_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>296</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>297</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <Comments>aiming        - weapon,heldthrowableprojectile,inventory,direction,stamina,equipment,inputplayer
+direction     - 
+inventory     - 
+ledgegrab     - 
+meleeblock    - 
+movement      - 
+</Comments>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Silver Pines - DEMO ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

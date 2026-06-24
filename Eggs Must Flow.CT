@@ -1,0 +1,965 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>73</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Eggs Must Flow.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"CurrencyManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Eggs Must Flow.exe
+  Version: 
+  Date   : 2026-06-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+48A940)
+define(bytes,40 53 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+48A940)
+
+label(code)
+label(return)
+
+newmem:
+mov [currencymanager_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,30
+  jmp return
+
+currencymanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(currencymanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(currencymanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CurrencyManager.AddCurrency
+
+GameAssembly.dll+48A90F: CC                       - int 3 
+CurrencyManager.Add500000Currency: F2 0F 10 0D 28 B4 E4 01  - movsd xmm1,[GameAssembly.dll+22D5D40]
+GameAssembly.dll+48A918: 45 33 C0                 - xor r8d,r8d
+GameAssembly.dll+48A91B: E9 20 00 00 00           - jmp CurrencyManager.AddCurrency
+CurrencyManager.Add5000Currency: F2 0F 10 0D 10 B4 E4 01  - movsd xmm1,[GameAssembly.dll+22D5D38]
+GameAssembly.dll+48A928: 45 33 C0                 - xor r8d,r8d
+GameAssembly.dll+48A92B: E9 10 00 00 00           - jmp CurrencyManager.AddCurrency
+CurrencyManager.Add500Currency: F2 0F 10 0D E8 B3 E4 01  - movsd xmm1,[GameAssembly.dll+22D5D20]
+GameAssembly.dll+48A938: 45 33 C0                 - xor r8d,r8d
+GameAssembly.dll+48A93B: E9 00 00 00 00           - jmp CurrencyManager.AddCurrency
+// ---------- INJECTING HERE ----------
+CurrencyManager.AddCurrency: 40 53                    - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+48A942: 48 83 EC 30              - sub rsp,30
+GameAssembly.dll+48A946: 80 3D 0E D2 A4 02 00     - cmp byte ptr [GameAssembly.dll+2ED7B5B],00
+GameAssembly.dll+48A94D: 48 8B D9                 - mov rbx,rcx
+GameAssembly.dll+48A950: 0F 29 74 24 20           - movaps [rsp+20],xmm6
+GameAssembly.dll+48A955: 0F 28 F1                 - movaps xmm6,xmm1
+GameAssembly.dll+48A958: 75 1F                    - jne GameAssembly.dll+48A979
+GameAssembly.dll+48A95A: 48 8D 0D 67 BF 86 02     - lea rcx,[GameAssembly.dll+2CF68C8]
+GameAssembly.dll+48A961: E8 4A 94 F1 FF           - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+48A966: 48 8D 0D F3 0A 8A 02     - lea rcx,[GameAssembly.dll+2D2B460]
+GameAssembly.dll+48A96D: E8 3E 94 F1 FF           - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"Value Show When Add Currency"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000016E10E2E900" RealAddress="7FF97A8F0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>currencymanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"shouldSave"</Description>
+              <LastState Value="1" RealAddress="16E10E2E920"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[currencymanager_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"&lt;Currency&gt;"</Description>
+              <LastState Value="1E255" RealAddress="16E10E2E928"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[currencymanager_ptr]+28</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>5</ID>
+          <Description>"ChickenManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Eggs Must Flow.exe
+  Version: 
+  Date   : 2026-06-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+476890)
+define(bytes,48 89 74 24 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+476890)
+
+label(code)
+label(return)
+
+newmem:
+mov [chickenmanager_ptr],rcx
+
+code:
+  mov [rsp+20],rsi
+  jmp return
+
+chickenmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(chickenmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+20],rsi
+
+dealloc(newmem)
+unregistersymbol(chickenmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ChickenManager.SpawnChicken
+
+GameAssembly.dll+476886: CC                    - int 3 
+GameAssembly.dll+476887: CC                    - int 3 
+GameAssembly.dll+476888: CC                    - int 3 
+GameAssembly.dll+476889: CC                    - int 3 
+GameAssembly.dll+47688A: CC                    - int 3 
+GameAssembly.dll+47688B: CC                    - int 3 
+GameAssembly.dll+47688C: CC                    - int 3 
+GameAssembly.dll+47688D: CC                    - int 3 
+GameAssembly.dll+47688E: CC                    - int 3 
+GameAssembly.dll+47688F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+ChickenManager.SpawnChicken: 48 89 74 24 20        - mov [rsp+20],rsi
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+476895: 57                    - push rdi
+GameAssembly.dll+476896: 48 81 EC 80 00 00 00  - sub rsp,00000080
+GameAssembly.dll+47689D: 80 3D 70 12 A6 02 00  - cmp byte ptr [GameAssembly.dll+2ED7B14],00
+GameAssembly.dll+4768A4: 48 8B FA              - mov rdi,rdx
+GameAssembly.dll+4768A7: 48 8B F1              - mov rsi,rcx
+GameAssembly.dll+4768AA: 75 67                 - jne GameAssembly.dll+476913
+GameAssembly.dll+4768AC: 48 8D 0D 9D 87 8D 02  - lea rcx,[GameAssembly.dll+2D4F050]
+GameAssembly.dll+4768B3: E8 F8 D4 F2 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+4768B8: 48 8D 0D B1 7C 88 02  - lea rcx,[GameAssembly.dll+2CFE570]
+GameAssembly.dll+4768BF: E8 EC D4 F2 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Value Show When Spawn Chicken"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000016D07A66C30" RealAddress="7FF97A8E0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>chickenmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"criticalValueMultiplier"</Description>
+                  <LastState Value="10" RealAddress="16D07A66C78"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"criticalLayChance"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"fatigueClickPercent"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C80"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"fatigueRecoveryBonusPercent"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C84"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"nightRestBonus"</Description>
+                  <LastState Value="0.1000000015" RealAddress="16D07A66C88"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"eggValueBonusPercent"</Description>
+                  <LastState Value="7" RealAddress="16D07A66C8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"hydraulicPressSpeedBonus"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C90"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"vacuumSpeedBonus"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C94"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"punchSpeedBonus"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C98"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"vetStationSpeedBonus"</Description>
+                  <LastState Value="0" RealAddress="16D07A66C9C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+6C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"hasLoaded"</Description>
+                  <LastState Value="1" RealAddress="16D07A66CB0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[chickenmanager_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"bonusMarblesPerLay"</Description>
+                  <LastState Value="0" RealAddress="16D07A66CB4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"clickThresholdReduction"</Description>
+                  <LastState Value="0" RealAddress="16D07A66CB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"autoLayUnlocked"</Description>
+                  <LastState Value="0" RealAddress="16D07A66CBC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[chickenmanager_ptr]+8C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"autoLaySpeedBonus"</Description>
+                  <LastState Value="0" RealAddress="16D07A66CC0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"introducedLoaded"</Description>
+                  <LastState Value="1" RealAddress="16D07A66CD0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[chickenmanager_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"whistleUnlocked"</Description>
+                  <LastState Value="1" RealAddress="16D07A66CD1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[chickenmanager_ptr]+A1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"traitAdjacencyRadius"</Description>
+                  <LastState Value="5" RealAddress="16D07A66CD4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"earlyRiserWindowSeconds"</Description>
+                  <LastState Value="30" RealAddress="16D07A66CD8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"ownedCountsPreloaded"</Description>
+                  <LastState Value="1" RealAddress="16D07A66D10"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[chickenmanager_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"bonusClicksPerClick"</Description>
+                  <LastState Value="1" RealAddress="16D07A66D14"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+E4</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"availableChickens"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="15" RealAddress="16D07A61DD8"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="10" RealAddress="16D07B11D68"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="100" RealAddress="16D07B11CD8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="2500" RealAddress="16D07B11C48"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="75000" RealAddress="16D07B11BB8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="500000" RealAddress="16D07B11B28"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="50000000" RealAddress="16D07B11A98"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="5000000000" RealAddress="16D07B11A08"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="25000000000" RealAddress="16D07B11978"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="600000000000" RealAddress="16D07B118E8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="15000000000000" RealAddress="16D07B11858"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="400000000000000" RealAddress="16D07B117C8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="1E16" RealAddress="16D07B11738"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="2.5E17" RealAddress="16D07B116A8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="6E18" RealAddress="16D07B11618"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"unlockCost"</Description>
+                  <LastState Value="1.5E20" RealAddress="16D07B11588"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[chickenmanager_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"spawned"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"_size"</Description>
+                  <LastState Value="50" RealAddress="16E10EA8948"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="64" RealAddress="16E11157258"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="1.534154415" RealAddress="16E11C01DAC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="0.6091617346" RealAddress="16E11C01BEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="1.682132006" RealAddress="16E11C01A2C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="0.159863025" RealAddress="16E11C0186C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="1.090016007" RealAddress="16E11C016AC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="0.7053222656" RealAddress="16E11C014EC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="-0.1751502305" RealAddress="16E11C0132C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="1.352891684" RealAddress="16E11C0116C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>58</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="2.340135813" RealAddress="16E1268CF6C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>60</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"layTimer"</Description>
+                  <LastState Value="1.243899822" RealAddress="16E1268CDAC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[chickenmanager_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                    <Offset>68</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>60</ID>
+          <Description>"Belt"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Eggs Must Flow.exe
+  Version: 
+  Date   : 2026-06-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+46C760)
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+46C760)
+
+label(code)
+label(return)
+
+newmem:
+mov [belt_ptr],rcx
+
+code:
+  mov [rsp+08],rbx
+  jmp return
+
+belt_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(belt_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+unregistersymbol(belt_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Belt.Update
+
+GameAssembly.dll+46C73D: F3 0F 5E C8           - divss xmm1,xmm0
+GameAssembly.dll+46C741: F3 0F 58 CE           - addss xmm1,xmm6
+GameAssembly.dll+46C745: 48 8B 5C 24 40        - mov rbx,[rsp+40]
+GameAssembly.dll+46C74A: 0F 28 74 24 20        - movaps xmm6,[rsp+20]
+GameAssembly.dll+46C74F: 48 83 C4 30           - add rsp,30
+GameAssembly.dll+46C753: 5F                    - pop rdi
+GameAssembly.dll+46C754: E9 87 9E 0F 00        - jmp Dreamteck.Splines.ObjectController.set_evaluateOffset
+GameAssembly.dll+46C759: E8 D2 78 F3 FF        - call GameAssembly.il2cpp_method_get_declaring_type+B0
+GameAssembly.dll+46C75E: CC                    - int 3 
+GameAssembly.dll+46C75F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+Belt.Update: 48 89 5C 24 08        - mov [rsp+08],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+46C765: 57                    - push rdi
+GameAssembly.dll+46C766: 48 83 EC 40           - sub rsp,40
+GameAssembly.dll+46C76A: 80 3D FA B2 A6 02 00  - cmp byte ptr [GameAssembly.dll+2ED7A6B],00
+GameAssembly.dll+46C771: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+46C774: 75 1F                 - jne GameAssembly.dll+46C795
+GameAssembly.dll+46C776: 48 8D 0D 7B EC 89 02  - lea rcx,[GameAssembly.dll+2D0B3F8]
+GameAssembly.dll+46C77D: E8 2E 76 F3 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+46C782: 48 8D 0D D7 EC 8B 02  - lea rcx,[GameAssembly.dll+2D2B460]
+GameAssembly.dll+46C789: E8 22 76 F3 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+46C78E: C6 05 D6 B2 A6 02 01  - mov byte ptr [GameAssembly.dll+2ED7A6B],01
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000016E37499780" RealAddress="7FF97A8D0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>belt_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"rollPercent"</Description>
+              <LastState Value="-0.2972693443" Activated="1" RealAddress="16E374997C0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"baseRollSpeed"</Description>
+              <LastState Value="0.05000000075" RealAddress="16E374997C4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"rollSpeed"</Description>
+              <LastState Value="0.3300000131" RealAddress="16E374997C8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"skillSpeedMultiplier"</Description>
+              <LastState Value="0" RealAddress="16E374997CC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"prestigeSpeedBonus"</Description>
+              <LastState Value="0" RealAddress="16E374997D0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"rollStep"</Description>
+              <LastState Value="0.09090909362" RealAddress="16E374997D4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"currentSpotIndex"</Description>
+              <LastState Value="1" RealAddress="16E374997D8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[belt_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"moveNextDuration"</Description>
+              <LastState Value="0.5" RealAddress="16E374997E8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"baggageMoveDuration"</Description>
+              <LastState Value="0.200000003" RealAddress="16E374997EC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[belt_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"isBusy"</Description>
+              <LastState Value="0" RealAddress="16E374997F0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[belt_ptr]+70</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>72</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>74</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Eggs Must Flow - v1.12 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

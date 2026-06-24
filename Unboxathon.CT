@@ -1,0 +1,1400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>104</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Unboxathon.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"BubbleManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Unboxathon.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+570AB0)
+define(bytes,48 89 74 24 18)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+570AB0)
+
+label(code)
+label(return)
+
+newmem:
+mov [bubblemanager_ptr],rcx
+
+code:
+  mov [rsp+18],rsi
+  jmp return
+
+bubblemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(bubblemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+18],rsi
+
+dealloc(newmem)
+unregistersymbol(bubblemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BubbleManager.Update
+
+GameAssembly.dll+570A90: 4C 8D 9C 24 50 01 00 00  - lea r11,[rsp+00000150]
+GameAssembly.dll+570A98: 49 8B 6B 38              - mov rbp,[r11+38]
+GameAssembly.dll+570A9C: 45 0F 28 4B C0           - movaps xmm9,[r11-40]
+GameAssembly.dll+570AA1: 49 8B E3                 - mov rsp,r11
+GameAssembly.dll+570AA4: 41 5F                    - pop r15
+GameAssembly.dll+570AA6: 41 5E                    - pop r14
+GameAssembly.dll+570AA8: 5E                       - pop rsi
+GameAssembly.dll+570AA9: C3                       - ret 
+GameAssembly.dll+570AAA: E8 01 3E EC FF           - call GameAssembly.il2cpp_method_get_declaring_type+B0
+GameAssembly.dll+570AAF: CC                       - int 3 
+// ---------- INJECTING HERE ----------
+BubbleManager.Update: 48 89 74 24 18           - mov [rsp+18],rsi
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+570AB5: 48 89 7C 24 20           - mov [rsp+20],rdi
+GameAssembly.dll+570ABA: 55                       - push rbp
+GameAssembly.dll+570ABB: 48 8B EC                 - mov rbp,rsp
+GameAssembly.dll+570ABE: 48 81 EC 80 00 00 00     - sub rsp,00000080
+GameAssembly.dll+570AC5: 80 3D 25 79 A0 03 00     - cmp byte ptr [GameAssembly.dll+3F783F1],00
+GameAssembly.dll+570ACC: 48 8B F9                 - mov rdi,rcx
+GameAssembly.dll+570ACF: 75 1F                    - jne GameAssembly.dll+570AF0
+GameAssembly.dll+570AD1: 48 8D 0D B0 52 79 03     - lea rcx,[GameAssembly.dll+3D05D88]
+GameAssembly.dll+570AD8: E8 33 3B EC FF           - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+570ADD: 48 8D 0D 94 17 7A 03     - lea rcx,[GameAssembly.dll+3D12278]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"spawnBubblesAutomatically"</Description>
+              <LastState Value="1" RealAddress="1E9A29BABE8"/>
+              <VariableType>Byte</VariableType>
+              <Address>[bubblemanager_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"isPaused"</Description>
+              <LastState Value="0" RealAddress="1E9A29BAC10"/>
+              <VariableType>Byte</VariableType>
+              <Address>[bubblemanager_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"bubbleSpawnTimer"</Description>
+              <LastState Value="0.6834850907" RealAddress="1E9A29BAC14"/>
+              <VariableType>Float</VariableType>
+              <Address>[bubblemanager_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"randomMultiplier"</Description>
+              <LastState Value="1.155769587" RealAddress="1E9A29BAC18"/>
+              <VariableType>Float</VariableType>
+              <Address>[bubblemanager_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"needleSpawnTimer"</Description>
+              <LastState Value="0" RealAddress="1E9A29BAC1C"/>
+              <VariableType>Float</VariableType>
+              <Address>[bubblemanager_ptr]+BC</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"BoxOpeningManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Unboxathon.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+56D6C0)
+define(bytes,48 89 5C 24 18)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+56D6C0)
+
+label(code)
+label(return)
+
+newmem:
+mov [boxopeningmanager_ptr],rcx
+
+code:
+  mov [rsp+18],rbx
+  jmp return
+
+boxopeningmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(boxopeningmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+18],rbx
+
+dealloc(newmem)
+unregistersymbol(boxopeningmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BoxOpeningManager.Update
+
+GameAssembly.dll+56D6AB: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+56D6AF: 5B                    - pop rbx
+GameAssembly.dll+56D6B0: E9 7B 19 00 00        - jmp BubbleManager.Pause
+GameAssembly.dll+56D6B5: E8 F6 71 EC FF        - call GameAssembly.il2cpp_method_get_declaring_type+B0
+GameAssembly.dll+56D6BA: CC                    - int 3 
+GameAssembly.dll+56D6BB: CC                    - int 3 
+GameAssembly.dll+56D6BC: CC                    - int 3 
+GameAssembly.dll+56D6BD: CC                    - int 3 
+GameAssembly.dll+56D6BE: CC                    - int 3 
+GameAssembly.dll+56D6BF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+BoxOpeningManager.Update: 48 89 5C 24 18        - mov [rsp+18],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+56D6C5: 55                    - push rbp
+GameAssembly.dll+56D6C6: 48 8D 6C 24 E0        - lea rbp,[rsp-20]
+GameAssembly.dll+56D6CB: 48 81 EC 20 01 00 00  - sub rsp,00000120
+GameAssembly.dll+56D6D2: 80 3D EA AC A0 03 00  - cmp byte ptr [GameAssembly.dll+3F783C3],00
+GameAssembly.dll+56D6D9: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+56D6DC: 75 43                 - jne GameAssembly.dll+56D721
+GameAssembly.dll+56D6DE: 48 8D 0D A3 74 79 03  - lea rcx,[GameAssembly.dll+3D04B88]
+GameAssembly.dll+56D6E5: E8 26 6F EC FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+56D6EA: 48 8D 0D 57 75 79 03  - lea rcx,[GameAssembly.dll+3D04C48]
+GameAssembly.dll+56D6F1: E8 1A 6F EC FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"isCutting"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2DF0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[boxopeningmanager_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"isOpened"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2DF1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[boxopeningmanager_ptr]+D1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"cuttingProgress"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2DF4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[boxopeningmanager_ptr]+D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"numberOfItems"</Description>
+                  <LastState Value="3" RealAddress="1EA6A4A2DF8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"itemsSpawned"</Description>
+                  <LastState Value="3" RealAddress="1EA6A4A2DFC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"itemsCollected"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2E00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"shardsSpawned"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2E04"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"cogsSpawned"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2E08"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"miscSpawned"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2E0C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"hasClickedOnFinalBox"</Description>
+                  <LastState Value="0" RealAddress="1EA6A4A2E30"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[boxopeningmanager_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"currentBandIndex"</Description>
+                  <LastState Value="1" RealAddress="1EA6A4A2E58"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[boxopeningmanager_ptr]+138</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"defaultCogSpawnRate"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"minValue"</Description>
+                  <LastState Value="1" RealAddress="1EAAECC4B50"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[boxopeningmanager_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"maxValue"</Description>
+                  <LastState Value="8" RealAddress="1EAAECC4B54"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[boxopeningmanager_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"boxButton"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"playClickSound"</Description>
+                      <LastState Value="0" RealAddress="1EAAE99D650"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"&lt;IgnoreNextUpEvent&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE99D678"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"canClick"</Description>
+                      <LastState Value="0" RealAddress="1EAAE99D679"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>59</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"hasEntered"</Description>
+                      <LastState Value="0" RealAddress="1EAAE99D67A"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>5A</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"mmfPlayer"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"InitializationMode"</Description>
+                      <LastState Value="2" RealAddress="1EAAE9D7A28"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"AutoInitialization"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A2C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"SafeMode"</Description>
+                      <LastState Value="3" RealAddress="1EAAE9D7A30"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"Direction"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A34"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"AutoChangeDirectionOnEnd"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A38"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"AutoPlayOnStart"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A39"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>39</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"AutoPlayOnEnable"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A3A"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>3A</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"ForceTimescaleMode"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A3B"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>3B</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"ForcedTimescaleMode"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A3C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"DurationMultiplier"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A40"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"TimescaleMultiplier"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A44"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"RandomizeDuration"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A48"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"DisplayFullDurationDetails"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A54"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"PlayerTimescaleMode"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A58"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"OnlyPlayIfWithinRange"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A5C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"RangeDistance"</Description>
+                      <LastState Value="5" RealAddress="1EAAE9D7A68"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"UseRangeFalloff"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A6C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"IgnoreRangeEvents"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A80"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"CooldownDuration"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A84"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"InitialDelay"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7A88"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"CanPlay"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A8C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"CanPlayWhileAlreadyPlaying"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A8D"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>8D</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"ChanceToPlay"</Description>
+                      <LastState Value="100" RealAddress="1EAAE9D7A90"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"FeedbacksIntensity"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7A94"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"DebugActive"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AA0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"&lt;IsPlaying&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AA1"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"&lt;TimesPlayed&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AA4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>A4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"InScriptDrivenPause"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AA8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"&lt;ContainsLoop&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AA9"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>A9</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"&lt;ShouldChangeDirectionOnNextPlay&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AAA"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>AA</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"_startTime"</Description>
+                      <LastState Value="558.739624" RealAddress="1EAAE9D7AAC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>AC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"_holdingMax"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AB0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"_lastStartAt"</Description>
+                      <LastState Value="558.739624" RealAddress="1EAAE9D7AB4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"_lastStartFrame"</Description>
+                      <LastState Value="31204" RealAddress="1EAAE9D7AB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"_pauseFound"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7ABC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"_totalDuration"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AC0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"_shouldStop"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AC4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>C4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"_randomDurationMultiplier"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7AC8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"_lastOnEnableFrame"</Description>
+                      <LastState Value="-1" RealAddress="1EAAE9D7ACC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>CC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"KeepPlayModeChanges"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AD8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>D8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"PerformanceMode"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AD9"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>D9</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"RestoreInitialValuesOnDisable"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7ADA"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>DA</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"StopFeedbacksOnDisable"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7ADB"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>DB</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"PlayCount"</Description>
+                      <LastState Value="6" RealAddress="1EAAE9D7ADC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>DC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"&lt;SkippingToTheEnd&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="1EAAE9D7AE0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"_cachedTotalDuration"</Description>
+                      <LastState Value="0.3000000119" RealAddress="1EAAE9D7AF0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"_initialized"</Description>
+                      <LastState Value="1" RealAddress="1EAAE9D7AF4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[boxopeningmanager_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>F4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>77</ID>
+          <Description>"CurrencyManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Unboxathon.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+585830)
+define(bytes,48 89 5C 24 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+585830)
+
+label(code)
+label(return)
+
+newmem:
+mov [currencymanager_ptr],rcx
+
+code:
+  mov [rsp+10],rbx
+  jmp return
+
+currencymanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(currencymanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+10],rbx
+
+dealloc(newmem)
+unregistersymbol(currencymanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CurrencyManager.Update
+
+GameAssembly.dll+585826: C3                    - ret 
+GameAssembly.dll+585827: CC                    - int 3 
+GameAssembly.dll+585828: CC                    - int 3 
+GameAssembly.dll+585829: CC                    - int 3 
+GameAssembly.dll+58582A: CC                    - int 3 
+GameAssembly.dll+58582B: CC                    - int 3 
+GameAssembly.dll+58582C: CC                    - int 3 
+GameAssembly.dll+58582D: CC                    - int 3 
+GameAssembly.dll+58582E: CC                    - int 3 
+GameAssembly.dll+58582F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+CurrencyManager.Update: 48 89 5C 24 10        - mov [rsp+10],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+585835: 57                    - push rdi
+GameAssembly.dll+585836: 48 81 EC 80 00 00 00  - sub rsp,00000080
+GameAssembly.dll+58583D: 80 3D C8 2C 9F 03 00  - cmp byte ptr [GameAssembly.dll+3F7850C],00
+GameAssembly.dll+585844: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+585847: 0F 85 8B 00 00 00     - jne GameAssembly.dll+5858D8
+GameAssembly.dll+58584D: 48 8D 0D F4 ED 78 03  - lea rcx,[GameAssembly.dll+3D14648]
+GameAssembly.dll+585854: E8 B7 ED EA FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+585859: 48 8D 0D 48 96 7B 03  - lea rcx,[GameAssembly.dll+3D3EEA8]
+GameAssembly.dll+585860: E8 AB ED EA FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+585865: 48 8D 0D 4C C3 7B 03  - lea rcx,[GameAssembly.dll+3D41BB8]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"XPUntilLevelUp"</Description>
+              <LastState Value="6.8808868217336" RealAddress="1EAAE99DEA0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[currencymanager_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"levelGoal"</Description>
+              <LastState Value="2.56647658348084" RealAddress="1EAAE99DEB0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[currencymanager_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"currencies"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="11" RealAddress="1E9A2BE8898"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="1.00000001300889" Activated="1" RealAddress="1EAAE9E3398"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="1" RealAddress="1EAAE9E3318"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAE9E3298"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAE9E3218"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAE9E3198"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAE9E3118"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="1.87838789105415" RealAddress="1EAAE9E3098"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="3" RealAddress="1EAAE9E3018"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>58</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAEEDFF98"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>60</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAEEDFF18"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>68</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"&lt;AmountOfCurrency&gt;k__BackingField"</Description>
+                  <LastState Value="0" RealAddress="1EAAEEDFE98"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencymanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>70</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>93</ID>
+          <Description>"Upgrade"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Unboxathon.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+5B6510)
+define(bytes,48 89 5C 24 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+5B6510)
+
+label(code)
+label(return)
+
+newmem:
+mov [upgrade_ptr],rcx
+
+code:
+  mov [rsp+10],rbx
+  jmp return
+
+upgrade_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(upgrade_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+10],rbx
+
+dealloc(newmem)
+unregistersymbol(upgrade_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Upgrade.TryUpgrade
+
+GameAssembly.dll+5B6506: CC                    - int 3 
+GameAssembly.dll+5B6507: CC                    - int 3 
+GameAssembly.dll+5B6508: CC                    - int 3 
+GameAssembly.dll+5B6509: CC                    - int 3 
+GameAssembly.dll+5B650A: CC                    - int 3 
+GameAssembly.dll+5B650B: CC                    - int 3 
+GameAssembly.dll+5B650C: CC                    - int 3 
+GameAssembly.dll+5B650D: CC                    - int 3 
+GameAssembly.dll+5B650E: CC                    - int 3 
+GameAssembly.dll+5B650F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+Upgrade.TryUpgrade: 48 89 5C 24 10        - mov [rsp+10],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+5B6515: 57                    - push rdi
+GameAssembly.dll+5B6516: 48 81 EC C0 00 00 00  - sub rsp,000000C0
+GameAssembly.dll+5B651D: 80 3D 4D 21 9C 03 00  - cmp byte ptr [GameAssembly.dll+3F78671],00
+GameAssembly.dll+5B6524: 8B FA                 - mov edi,edx
+GameAssembly.dll+5B6526: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+5B6529: 75 1F                 - jne GameAssembly.dll+5B654A
+GameAssembly.dll+5B652B: 48 8D 0D 16 E1 75 03  - lea rcx,[GameAssembly.dll+3D14648]
+GameAssembly.dll+5B6532: E8 D9 E0 E7 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+5B6537: 48 8D 0D F2 23 78 03  - lea rcx,[GameAssembly.dll+3D38930]
+GameAssembly.dll+5B653E: E8 CD E0 E7 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"Value Show When Try To Upgrade"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"upgradeID"</Description>
+              <LastState RealAddress="1EAAED22884"/>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>[upgrade_ptr]+18</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"overrideNameID"</Description>
+              <LastState RealAddress="1E9A29B4F54"/>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>[upgrade_ptr]+20</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"nameTableID"</Description>
+              <LastState RealAddress="1EAAED3CB54"/>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>[upgrade_ptr]+28</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"costMultiplierOnBuy"</Description>
+              <LastState Value="5" RealAddress="1EA6A4BC4C0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[upgrade_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"&lt;TimesUpgraded&gt;k__BackingField"</Description>
+              <LastState Value="8" RealAddress="1EA6A4BC4D8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[upgrade_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"upgradeCostMultiplier"</Description>
+              <LastState Value="0" RealAddress="1EA6A4BC4E0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[upgrade_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>100</ID>
+              <Description>"useUpgradeCostMultiplier"</Description>
+              <LastState Value="0" RealAddress="1EA6A4BC4F0"/>
+              <VariableType>Byte</VariableType>
+              <Address>[upgrade_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"maxLevel"</Description>
+              <LastState Value="8" RealAddress="1EA6A4BC4F4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[upgrade_ptr]+94</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>105</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>106</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Unboxathon - v1.0.3 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

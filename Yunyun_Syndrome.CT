@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>54</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Yunyun_Syndrome.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"GameController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Yunyun_Syndrome.exe
+  Version: 
+  Date   : 2026-04-25
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,App.InGame.GameController:Update)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,App.InGame.GameController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamecontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+gamecontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gamecontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(gamecontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: App.InGame.GameController:Update
+
+1BE582198D8: 01 04 02           - add [rdx+rax],eax
+1BE582198DB: 05 04 03 01 50     - add eax,50010304
+1BE582198E0: 00 00              - add [rax],al
+1BE582198E2: 00 00              - add [rax],al
+1BE582198E4: 00 00              - add [rax],al
+1BE582198E6: 00 00              - add [rax],al
+1BE582198E8: 00 00              - add [rax],al
+1BE582198EA: 00 00              - add [rax],al
+1BE582198EC: 00 00              - add [rax],al
+1BE582198EE: 00 00              - add [rax],al
+// ---------- INJECTING HERE ----------
+App.InGame.GameController:Update: 55                 - push rbp
+// ---------- DONE INJECTING  ----------
+App.InGame.GameController:Update+1: 48 8B EC           - mov rbp,rsp
+App.InGame.GameController:Update+4: 48 83 EC 60        - sub rsp,60
+App.InGame.GameController:Update+8: 48 89 75 F8        - mov [rbp-08],rsi
+App.InGame.GameController:Update+c: 48 8B F1           - mov rsi,rcx
+App.InGame.GameController:Update+f: 48 8B 46 38        - mov rax,[rsi+38]
+App.InGame.GameController:Update+13: 48 85 C0           - test rax,rax
+App.InGame.GameController:Update+16: 0F 84 3F 00 00 00  - je App.InGame.GameController:Update+5b
+App.InGame.GameController:Update+1c: 48 8B 46 38        - mov rax,[rsi+38]
+App.InGame.GameController:Update+20: 48 8B C8           - mov rcx,rax
+App.InGame.GameController:Update+23: 83 38 00           - cmp dword ptr [rax],00
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000244DEE5DDD0" RealAddress="244A1690014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>gamecontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"m_Time"</Description>
+                  <LastState Value="1.23326612624714E-311" RealAddress="244DEE5DE88"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"m_Delta"</Description>
+                  <LastState Value="1.23326612631038E-311" RealAddress="244DEE5DE90"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"m_PrevTime"</Description>
+                  <LastState Value="1.2332661261839E-311" RealAddress="244DEE5DE98"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"m_Play"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEA0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"m_WaitTime"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEA8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"m_ScheduleTime"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEB0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"m_Mode"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"m_GoodRange"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEBC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"m_PerfectRange"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEC0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"m_SuprePerfectRange"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEC4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_ptr]+F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"m_Pause"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEC8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"m_Suspension"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DEC9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_ptr]+F9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"m_AutoPlay"</Description>
+                  <LastState Value="1" Activated="1" RealAddress="244DEE5DECA"/>
+                  <Color>808040</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_ptr]+FA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"m_DoResult"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DECB"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_ptr]+FB</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"m_PostCheckTime"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DED0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+100</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"m_PostTimer"</Description>
+                  <LastState Value="0" RealAddress="244DEE5DED8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+108</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"m_Data"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"MusicName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gamecontroller_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"Level"</Description>
+                  <LastState Value="0" RealAddress="2443B2AFF98"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"Difficulty"</Description>
+                  <LastState Value="256" RealAddress="2443B2AFF9C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"Group"</Description>
+                  <LastState Value="4" RealAddress="2443B2AFFA0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"Order"</Description>
+                  <LastState Value="0" RealAddress="2443B2AFFA4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"m_PointCalculator"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"m_MaxCombo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"m_CurrentTime"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"m_BaseMaxPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"m_MaxPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"m_CardGetPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"m_AoriStartTime"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"m_BasePoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"m_BoostPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"m_RawBorderCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"m_RawBoostCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"&lt;EndTime&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"m_Debug"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>38</ID>
+          <Description>"InGameResultScene"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Yunyun_Syndrome.exe
+  Version: 
+  Date   : 2026-04-25
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,App.InGameResultScene:PlayResult)
+define(bytes,55 48 8B EC 48 81 EC 30 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,App.InGameResultScene:PlayResult)
+
+label(code)
+label(return)
+
+newmem:
+mov [ingameresultscene_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000130
+  jmp return
+
+ingameresultscene_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(ingameresultscene_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000130
+
+dealloc(newmem)
+unregistersymbol(ingameresultscene_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: App.InGameResultScene:PlayResult
+
+1BE41562A1B: 00 00                 - add [rax],al
+1BE41562A1D: 00 00                 - add [rax],al
+1BE41562A1F: 00 01                 - add [rcx],al
+1BE41562A21: 04 01                 - add al,01
+1BE41562A23: 00 04 02              - add [rdx+rax],al
+1BE41562A26: 00 00                 - add [rax],al
+1BE41562A28: 00 00                 - add [rax],al
+1BE41562A2A: 00 00                 - add [rax],al
+1BE41562A2C: 00 00                 - add [rax],al
+1BE41562A2E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+App.InGameResultScene:PlayResult: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+App.InGameResultScene:PlayResult+1: 48 8B EC              - mov rbp,rsp
+App.InGameResultScene:PlayResult+4: 48 81 EC 30 01 00 00  - sub rsp,00000130
+App.InGameResultScene:PlayResult+b: 48 89 7D F0           - mov [rbp-10],rdi
+App.InGameResultScene:PlayResult+f: 4C 89 7D F8           - mov [rbp-08],r15
+App.InGameResultScene:PlayResult+13: 48 89 55 E8           - mov [rbp-18],rdx
+App.InGameResultScene:PlayResult+17: 4C 8B F9              - mov r15,rcx
+App.InGameResultScene:PlayResult+1a: 49 8B F8              - mov rdi,r8
+App.InGameResultScene:PlayResult+1d: 48 8B CD              - mov rcx,rbp
+App.InGameResultScene:PlayResult+20: 48 81 C1 08 FF FF FF  - add rcx,FFFFFFFFFFFFFF08
+App.InGameResultScene:PlayResult+27: 33 D2                 - xor edx,edx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"Value Show When Show Result"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002452F4649B0" RealAddress="244A16A0017"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>ingameresultscene_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"Complete"</Description>
+              <LastState Value="128" RealAddress="2443BCDA1F8"/>
+              <VariableType>Byte</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"Point"</Description>
+              <LastState Value="580" RealAddress="2443BCDA1FC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>1C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"Rate"</Description>
+              <LastState Value="0" RealAddress="2443BCDA200"/>
+              <VariableType>Double</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"Rank"</Description>
+              <LastState Value="0" RealAddress="2443BCDA208"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"MaxCombo"</Description>
+              <LastState Value="0" RealAddress="2443BCDA20C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>2C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"PerfectCount"</Description>
+              <LastState Value="0" RealAddress="2443BCDA210"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"GreatCount"</Description>
+              <LastState Value="0" RealAddress="2443BCDA214"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>34</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"GoodCount"</Description>
+              <LastState Value="0" RealAddress="2443BCDA218"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>38</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"MissCount"</Description>
+              <LastState Value="0" RealAddress="2443BCDA21C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>3C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"FastCount"</Description>
+              <LastState Value="1" RealAddress="2443BCDA220"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>40</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"LateCount"</Description>
+              <LastState Value="4294967295" RealAddress="2443BCDA224"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>44</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"AverageJudgeDiff"</Description>
+              <LastState Value="2.12199579096527E-314" RealAddress="2443BCDA228"/>
+              <VariableType>Double</VariableType>
+              <Address>[ingameresultscene_ptr]+30</Address>
+              <Offsets>
+                <Offset>48</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>53</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>55</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Yunyun Syndrome!? Rhythm Psychosis - v1.0.5 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,1561 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>94</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "night_swarm.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>174</ID>
+          <Description>"GameManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : night_swarm.exe
+  Version: 
+  Date   : 2026-04-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,GameManager:set_killedEnemyCount)
+define(bytes,55 48 8B EC 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GameManager:set_killedEnemyCount)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamemanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,50
+  jmp return
+
+gamemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gamemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(gamemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameManager:set_killedEnemyCount
+
+260C7805579: 00 00              - add [rax],al
+260C780557B: 00 00              - add [rax],al
+260C780557D: 00 00              - add [rax],al
+260C780557F: 00 01              - add [rcx],al
+260C7805581: 04 02              - add al,02
+260C7805583: 05 04 03 01 50     - add eax,50010304
+260C7805588: 00 00              - add [rax],al
+260C780558A: 00 00              - add [rax],al
+260C780558C: 00 00              - add [rax],al
+260C780558E: 00 00              - add [rax],al
+// ---------- INJECTING HERE ----------
+GameManager:set_killedEnemyCount: 55                 - push rbp
+// ---------- DONE INJECTING  ----------
+GameManager:set_killedEnemyCount+1: 48 8B EC           - mov rbp,rsp
+GameManager:set_killedEnemyCount+4: 48 83 EC 50        - sub rsp,50
+GameManager:set_killedEnemyCount+8: 48 89 75 D8        - mov [rbp-28],rsi
+GameManager:set_killedEnemyCount+c: 48 89 7D E0        - mov [rbp-20],rdi
+GameManager:set_killedEnemyCount+10: 4C 89 6D E8        - mov [rbp-18],r13
+GameManager:set_killedEnemyCount+14: 4C 89 75 F0        - mov [rbp-10],r14
+GameManager:set_killedEnemyCount+18: 4C 89 7D F8        - mov [rbp-08],r15
+GameManager:set_killedEnemyCount+1c: 48 8B F9           - mov rdi,rcx
+GameManager:set_killedEnemyCount+1f: 48 8B F2           - mov rsi,rdx
+GameManager:set_killedEnemyCount+22: 89 B7 24 01 00 00  - mov [rdi+00000124],esi
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>175</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>gamemanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>176</ID>
+              <Description>"Value Show When Kill One Enemy"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>177</ID>
+              <Description>"&lt;fixedTime&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[gamemanager_ptr]+F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>178</ID>
+              <Description>"pauseCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>179</ID>
+              <Description>"focusMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[gamemanager_ptr]+F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>180</ID>
+              <Description>"scaleOnLostFocus"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[gamemanager_ptr]+FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>181</ID>
+              <Description>"isFightScene"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+100</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>182</ID>
+              <Description>"startTimer"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+101</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>183</ID>
+              <Description>"&lt;isLevelCompleted&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+102</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>184</ID>
+              <Description>"&lt;isGameEnded&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+103</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>185</ID>
+              <Description>"&lt;IsCastle&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+104</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>186</ID>
+              <Description>"&lt;isBossScene&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+105</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>187</ID>
+              <Description>"&lt;IsStoppedForSequences&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+106</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"isTimeStoppedForMiniBoss"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+107</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"&lt;CompletedRunCount&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+108</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>190</ID>
+              <Description>"&lt;EnteredRoomCount&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+10C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"&lt;IsCollectPhase&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+110</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"stage"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+114</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"level"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"difficulty"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+11C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"corruption"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+120</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"_killedEnemyCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"lastCoinSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"lastPurpleEssenceSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"lastReputationSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"lastShadowSilkSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>201</ID>
+              <Description>"lastBloodStoneSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>202</ID>
+              <Description>"lastEchoesOfGrandeurSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>203</ID>
+              <Description>"lastOwnedScrollSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"lastKilledEnemyCountSave"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>205</ID>
+              <Description>"foundRelicCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>206</ID>
+              <Description>"bossCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>207</ID>
+              <Description>"skipLevel"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[gamemanager_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>208</ID>
+              <Description>"levelStartTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[gamemanager_ptr]+154</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>209</ID>
+              <Description>"_playerLiveTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[gamemanager_ptr]+158</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>210</ID>
+              <Description>"testTier"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+15C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>211</ID>
+              <Description>"testDifficultyLevel"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamemanager_ptr]+160</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>97</ID>
+          <Description>"PlayerBehaviour"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : night_swarm.exe
+  Version: 
+  Date   : 2026-01-25
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Player.PlayerBehaviour:Update)
+define(bytes,55 48 8B EC 48 81 EC 40 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Player.PlayerBehaviour:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playerbehaviour_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000140
+  jmp return
+
+playerbehaviour_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(playerbehaviour_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000140
+
+dealloc(newmem)
+unregistersymbol(playerbehaviour_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Player.PlayerBehaviour:Update
+
+UnityEngine.InputSystem.UI.InputSystemUIInputModule:get_shouldIgnoreFocus+6a: C3                             - ret 
+20FF57B760B: 00 00                          - add [rax],al
+20FF57B760D: 00 00                          - add [rax],al
+20FF57B760F: 00 01                          - add [rcx],al
+20FF57B7611: 04 02                          - add al,02
+20FF57B7613: 05 04 03 01 50                 - add eax,50010304
+20FF57B7618: 00 00                          - add [rax],al
+20FF57B761A: 00 00                          - add [rax],al
+20FF57B761C: 00 00                          - add [rax],al
+20FF57B761E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Player.PlayerBehaviour:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Player.PlayerBehaviour:Update+1: 48 8B EC                       - mov rbp,rsp
+Player.PlayerBehaviour:Update+4: 48 81 EC 40 01 00 00           - sub rsp,00000140
+Player.PlayerBehaviour:Update+b: 48 89 75 F0                    - mov [rbp-10],rsi
+Player.PlayerBehaviour:Update+f: 48 89 7D F8                    - mov [rbp-08],rdi
+Player.PlayerBehaviour:Update+13: 48 8B F1                       - mov rsi,rcx
+Player.PlayerBehaviour:Update+16: 49 BB E2 7D 7B F5 0F 02 00 00  - mov r11,0000020FF57B7DE2
+Player.PlayerBehaviour:Update+20: 41 FF D3                       - call r11
+Player.PlayerBehaviour:Update+23: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+Player.PlayerBehaviour:Update+27: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+Player.PlayerBehaviour:Update+2b: F3 0F 11 AD F8 FE FF FF        - movss [rbp-00000108],xmm5
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>134</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>playerbehaviour_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"experience"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>137</ID>
+                  <Description>"level"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+1BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>138</ID>
+                  <Description>"experienceStep"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"followOffset"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"baseCompanionCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+1C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"maxCompanionCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+1CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"tameAnimalHPOfferPerSecond"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>143</ID>
+                  <Description>"afterCompanionAttackWanderRadius"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>144</ID>
+                  <Description>"afterTameWaitDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"tamingDistance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>146</ID>
+                  <Description>"afterWarHealingCompanionsDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>147</ID>
+                  <Description>"afterWarHealingCompanionsAmount"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>148</ID>
+                  <Description>"collectRange"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>149</ID>
+                  <Description>"addDefaultRelic"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+1EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>150</ID>
+                  <Description>"loadCompanions"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+1ED</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"defaultHpRegen"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"&lt;PhysicalDamageOffset&gt;"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+1F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"isInHealingWellArea"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+1F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"_isImperviousCounter"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+20C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>155</ID>
+                  <Description>"collectRangeActiveCounter"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+210</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>156</ID>
+                  <Description>"lastDemonShieldTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+214</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>157</ID>
+                  <Description>"lastFugitivesEyeballTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+218</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>158</ID>
+                  <Description>"killedEnemyCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+21C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"givenHpRegen"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+220</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>160</ID>
+                  <Description>"oneHitShieldRemainingDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+224</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"&lt;MaxCompanionDistance&gt;"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+228</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>162</ID>
+                  <Description>"&lt;IsDead&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+22C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"addedCompanionCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+230</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"&lt;LastTakeDamageTime&gt;"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+234</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"oneShotShieldActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+238</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"collectRangeBoost"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+23C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>167</ID>
+                  <Description>"xpBoost"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+240</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>168</ID>
+                  <Description>"isRed"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+244</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>169</ID>
+                  <Description>"isLevelingUp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+248</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>170</ID>
+                  <Description>"_totalTakeDamage"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+24C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>171</ID>
+                  <Description>"stopCounter"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+250</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"lastAnimTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerbehaviour_ptr]+254</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"attackAnimationIndex"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerbehaviour_ptr]+258</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"hp"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"maxHp"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"_currentHp"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"_currentShield"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"_maxShield"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"_baseMaxHp"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"hpBar"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>108</ID>
+                      <Description>"delay"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerbehaviour_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"delayForHide"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerbehaviour_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"hpWriteType"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerbehaviour_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"castToInt"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerbehaviour_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"hideWhenNoDamage"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>75</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"separateHPAmount"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"max"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"maxHP"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"hp"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"maxShield"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"shield"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerbehaviour_ptr</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>107</ID>
+                      <Description>"lastChangeTime"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerbehaviour_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"horde"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"hordeRadius"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"checkPlayerDistance"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"ceaseDuration"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"rangeMultiplier"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"healPerSecond"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"reviveDuration"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"isTest"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerbehaviour_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"isAnimalsTamable"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>6D</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"setOnStart"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>6E</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"getElementsFromSetter"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>6F</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"tameChance"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"certainTamableAnimal"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"maxWanderDistanceForHorde"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"wanderCooldown"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"wanderSpeed"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"maxWanderPathCount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"spawnForTame"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"&lt;IsAttacking&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>89</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"&lt;lastAttackTime&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"maxDistanceFromHorde"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"animalCount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"lastWanderTime"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"isWandering"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerbehaviour_ptr</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>98</ID>
+          <Description>"CurrenciesHandler"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : night_swarm.exe
+  Version: 
+  Date   : 2026-01-25
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CurrenciesHandler:UpdateCurrency)
+define(bytes,55 48 8B EC 48 81 EC 80 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CurrenciesHandler:UpdateCurrency)
+
+label(code)
+label(return)
+
+newmem:
+mov [currencieshandler_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000080
+  jmp return
+
+currencieshandler_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(currencieshandler_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000080
+
+dealloc(newmem)
+unregistersymbol(currencieshandler_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CurrenciesHandler:UpdateCurrency
+
+20FF57B801B: 08 30                          - or [rax],dh
+20FF57B801D: 31 3B                          - xor [rbx],edi
+20FF57B801F: F2 0F 02 00                    - lar eax,[rax]
+20FF57B8023: 00 00                          - add [rax],al
+20FF57B8025: 00 00                          - add [rax],al
+20FF57B8027: 00 00                          - add [rax],al
+20FF57B8029: 00 00                          - add [rax],al
+20FF57B802B: 00 00                          - add [rax],al
+20FF57B802D: 00 00                          - add [rax],al
+20FF57B802F: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+CurrenciesHandler:UpdateCurrency: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CurrenciesHandler:UpdateCurrency+1: 48 8B EC                       - mov rbp,rsp
+CurrenciesHandler:UpdateCurrency+4: 48 81 EC 80 00 00 00           - sub rsp,00000080
+CurrenciesHandler:UpdateCurrency+b: 48 89 75 E8                    - mov [rbp-18],rsi
+CurrenciesHandler:UpdateCurrency+f: 48 89 7D F0                    - mov [rbp-10],rdi
+CurrenciesHandler:UpdateCurrency+13: 4C 89 65 F8                    - mov [rbp-08],r12
+CurrenciesHandler:UpdateCurrency+17: 4C 8B E1                       - mov r12,rcx
+CurrenciesHandler:UpdateCurrency+1a: F2 0F 11 4D D8                 - movsd [rbp-28],xmm1
+CurrenciesHandler:UpdateCurrency+1f: 4C 89 45 D0                    - mov [rbp-30],r8
+CurrenciesHandler:UpdateCurrency+23: 4C 89 4D C8                    - mov [rbp-38],r9
+CurrenciesHandler:UpdateCurrency+27: 48 B9 60 2F 3B F2 0F 02 00 00  - mov rcx,0000020FF23B2F60
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>currencieshandler_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"Value Show When Update Currency"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"multiplier"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>currencieshandler_ptr</Address>
+              <Offsets>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"currencies"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"Count"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>currencieshandler_ptr</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>125</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>127</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>130</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>131</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>132</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"&lt;amount&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>[currencieshandler_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>96</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>95</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " NIGHT SWARM - v1.3.0.2 ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

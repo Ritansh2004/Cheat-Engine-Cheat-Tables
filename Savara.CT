@@ -1,0 +1,1945 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>81</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Savara.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PlayerPawn"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Savara.exe
+  Version: 
+  Date   : 2026-01-05
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+21089C0)
+define(bytes,40 53 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+21089C0)
+
+label(code)
+label(return)
+
+newmem:
+mov [playerpawn_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,40
+  jmp return
+
+playerpawn_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(playerpawn_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(playerpawn_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerPawn.Update
+
+GameAssembly.dll+21089B6: CC                       - int 3 
+GameAssembly.dll+21089B7: CC                       - int 3 
+GameAssembly.dll+21089B8: CC                       - int 3 
+GameAssembly.dll+21089B9: CC                       - int 3 
+GameAssembly.dll+21089BA: CC                       - int 3 
+GameAssembly.dll+21089BB: CC                       - int 3 
+GameAssembly.dll+21089BC: CC                       - int 3 
+GameAssembly.dll+21089BD: CC                       - int 3 
+GameAssembly.dll+21089BE: CC                       - int 3 
+GameAssembly.dll+21089BF: CC                       - int 3 
+// ---------- INJECTING HERE ----------
+PlayerPawn.Update: 40 53                    - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+21089C2: 48 83 EC 40              - sub rsp,40
+GameAssembly.dll+21089C6: 48 8B D9                 - mov rbx,rcx
+GameAssembly.dll+21089C9: C6 81 77 01 00 00 00     - mov byte ptr [rcx+00000177],00
+GameAssembly.dll+21089D0: 48 8B 49 58              - mov rcx,[rcx+58]
+GameAssembly.dll+21089D4: 0F 29 7C 24 20           - movaps [rsp+20],xmm7
+GameAssembly.dll+21089D9: 48 85 C9                 - test rcx,rcx
+GameAssembly.dll+21089DC: 74 07                    - je GameAssembly.dll+21089E5
+GameAssembly.dll+21089DE: 33 D2                    - xor edx,edx
+GameAssembly.dll+21089E0: E8 9B A6 FE FF           - call PlayerFightUnit.Update
+GameAssembly.dll+21089E5: F3 0F 10 83 C4 00 00 00  - movss xmm0,[rbx+000000C4]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"m_dodgeTimer"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC04"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"m_isKnockedDown"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC08"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"m_isBeingProjected"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC09"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+C9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"m_projectionSpeed"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC0C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"m_projectionEarlyStop"</Description>
+                  <LastState Value="0.4499999881" RealAddress="2B81B6FCC10"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"m_ignoreNavmesh"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC14"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"PTWhenReceivingDamage"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC48"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"PTTimeOfModification"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC4C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+10C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"InflictedPoise"</Description>
+                  <LastState Value="1.399999976" RealAddress="2B81B6FCC50"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"UltimateAddedCharge"</Description>
+                  <LastState Value="35.88000107" RealAddress="2B81B6FCC54"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"IsSpeedAboveThreshold"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC58"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"HealthFeedbackEnabled"</Description>
+                  <LastState Value="1" RealAddress="2B81B6FCC59"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+119</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"&lt;IsAutoMoving&gt;"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC5A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+11A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"m_attackInput"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC98"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"m_chargeValue"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCC9C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"m_maxChargeValue"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCA0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"m_hitCD"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCA4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"m_crtHitCD"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCA8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"m_crtAnimationSpeed"</Description>
+                  <LastState Value="1" RealAddress="2B81B6FCCAC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"m_pendingAttackTimer"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"m_hasCancelledCharge"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"m_canExecutePerfectTiming"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+175</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"m_isPerfectTimingExecuted"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB6"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+176</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"m_reorientedThisFrame"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB7"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+177</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"m_hasHit"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCB8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"IsCancellable"</Description>
+                  <LastState Value="1" RealAddress="2B81B6FCCF8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+1B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"IsCancellableWithDodge"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCF9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+1B9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"IsChainingCombo"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCFA"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+1BA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"CanBufferAttack"</Description>
+                  <LastState Value="0" RealAddress="2B81B6FCCFB"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerpawn_ptr]+1BB</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"CrtDamageMult"</Description>
+                  <LastState Value="1" RealAddress="2B81B6FCCFC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerpawn_ptr]+1BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"&lt;CurrentComboCount&gt;"</Description>
+                  <LastState Value="2" RealAddress="2B81B6FCD00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerpawn_ptr]+1C0</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"m_unit"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"m_crtHealth"</Description>
+                      <LastState Value="100" Activated="1" RealAddress="2B9597DD210"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"m_prevCharValue"</Description>
+                      <LastState Value="25" RealAddress="2B9597DD238"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"m_crtStamina"</Description>
+                      <LastState Value="50" Activated="1" RealAddress="2B9597DD260"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"m_crtImmune"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD264"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"m_crtArmor"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD268"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"m_crtTemporaryHP"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD26C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"m_crtParticipationTicket"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD270"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"m_crtWeaponIndex"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD274"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"m_crtPotionUse"</Description>
+                      <LastState Value="1" RealAddress="2B9597DD278"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"m_isStaminaFilled"</Description>
+                      <LastState Value="1" RealAddress="2B9597DD27C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"m_isSprinting"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD27D"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>7D</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"m_isDrinkingPotion"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD27E"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>7E</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"m_weaponSwapCD"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD280"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"m_sprintElapsedTime"</Description>
+                      <LastState Value="264.8943176" RealAddress="2B9597DD284"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"m_lowLifeSoundPlayed"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD288"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"CanRegenStamina"</Description>
+                      <LastState Value="1" RealAddress="2B9597DD2F0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"IsFlinched"</Description>
+                      <LastState Value="0" RealAddress="2B9597DD2F1"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>F1</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"m_data"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"animTransitionIn"</Description>
+                      <LastState Value="0" RealAddress="2B9580383B0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"animTransitionOut"</Description>
+                      <LastState Value="0" RealAddress="2B9580383B4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"moveSpeed"</Description>
+                      <LastState Value="5" RealAddress="2B9580383B8"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"sprintSpeed"</Description>
+                      <LastState Value="1.5" RealAddress="2B9580383BC"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"sprintStaminaCost"</Description>
+                      <LastState Value="15" RealAddress="2B9580383C0"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"rotationSpeed"</Description>
+                      <LastState Value="1500" RealAddress="2B9580383C4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"maxStamina"</Description>
+                      <LastState Value="40" RealAddress="2B9580383C8"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"staminaRegenSpeed"</Description>
+                      <LastState Value="25" RealAddress="2B9580383CC"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"maxArmor"</Description>
+                      <LastState Value="0.150000006" RealAddress="2B9580383D8"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"lowLifeLimitRatio"</Description>
+                      <LastState Value="0.25" RealAddress="2B9580383DC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"ultimatePerDamagePoint"</Description>
+                      <LastState Value="1" RealAddress="2B9580383E0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"weaponSwapCooldown"</Description>
+                      <LastState Value="0" RealAddress="2B9580383E4"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"knockoutDuration"</Description>
+                      <LastState Value="0" RealAddress="2B9580383E8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"swapImmuneDuration"</Description>
+                      <LastState Value="0" RealAddress="2B9580383EC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"hitEffectDuration"</Description>
+                      <LastState Value="0.5" RealAddress="2B958038408"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"dodgeDistance"</Description>
+                      <LastState Value="3.5" RealAddress="2B9580384A0"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>120</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"dodgeDuration"</Description>
+                      <LastState Value="0.6600000262" RealAddress="2B9580384A4"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>124</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"dodgeStaminaCost"</Description>
+                      <LastState Value="20" RealAddress="2B9580384A8"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>128</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"dodgeImmuneDuration"</Description>
+                      <LastState Value="0.3000000119" RealAddress="2B9580384AC"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>12C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"maxPotionUse"</Description>
+                      <LastState Value="4" RealAddress="2B9580384B8"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"potionNbOnRunStart"</Description>
+                      <LastState Value="1" RealAddress="2B9580384BC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>13C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"potionHealthRegen"</Description>
+                      <LastState Value="0" RealAddress="2B9580384C0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>140</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"potionAnimMoveSpeed"</Description>
+                      <LastState Value="0" RealAddress="2B9580384C4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>144</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"maxBadgeAmount"</Description>
+                      <LastState Value="4" RealAddress="2B9580384E8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>168</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"maxTalentSlot"</Description>
+                      <LastState Value="0" RealAddress="2B9580384EC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>16C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"startMerchantPriceMultiplier"</Description>
+                      <LastState Value="1" RealAddress="2B9580384F0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>170</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"startMerchantTradeAmountModifier"</Description>
+                      <LastState Value="0" RealAddress="2B9580384F4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>174</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"m_weapons"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="4" RealAddress="2B952F0BB58"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playerpawn_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>85</ID>
+                      <Description>"[0]FightWeapon"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>95</ID>
+                          <Description>"Main"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>86</ID>
+                              <Description>"&lt;MaxComboCounter&gt;"</Description>
+                              <LastState Value="3" RealAddress="2B952F8E628"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>87</ID>
+                              <Description>"hitFxScaleMult"</Description>
+                              <LastState Value="1" RealAddress="2B9554F3648"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>108</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>88</ID>
+                              <Description>"damage"</Description>
+                              <LastState Value="999" Activated="1" RealAddress="2B9554F364C"/>
+                              <Color>808040</Color>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>10C</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>89</ID>
+                              <Description>"moveSpeedMult"</Description>
+                              <LastState Value="1" RealAddress="2B9554F3650"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>90</ID>
+                              <Description>"breakablePartDmgMult"</Description>
+                              <LastState Value="2" RealAddress="2B9554F3654"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>114</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>91</ID>
+                              <Description>"brokenPartDmgMult"</Description>
+                              <LastState Value="1.299999952" RealAddress="2B9554F3658"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>118</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>92</ID>
+                              <Description>"poiseDmgMult"</Description>
+                              <LastState Value="2.5" RealAddress="2B9554F365C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>11C</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>93</ID>
+                              <Description>"ultimateNeededCharge"</Description>
+                              <LastState Value="2500" RealAddress="2B9554F3660"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>120</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>94</ID>
+                              <Description>"type"</Description>
+                              <LastState Value="2" RealAddress="2B9554F3664"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>124</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>96</ID>
+                          <Description>"attack1"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>97</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1.100000024" RealAddress="2B95572C110"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>98</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="5" RealAddress="2B95572C114"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>99</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B95572C118"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>100</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95572C11C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>101</ID>
+                          <Description>"attack2"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>102</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1.100000024" RealAddress="2B957E01E30"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>103</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="15" RealAddress="2B957E01E34"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>104</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="90" RealAddress="2B957E01E38"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>105</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B957E01E3C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>106</ID>
+                          <Description>"attack3"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>107</ID>
+                              <Description>"animationSpeed"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>108</ID>
+                              <Description>"consumedStamina"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>109</ID>
+                              <Description>"reorientValue"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>110</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>111</ID>
+                          <Description>"attack4"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>112</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1.100000024" RealAddress="2B957E01D50"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>113</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B957E01D54"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>114</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B957E01D58"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>115</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B957E01D5C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>116</ID>
+                          <Description>"attack5"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>117</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1.100000024" RealAddress="2B957E01C70"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>118</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B957E01C74"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>119</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B957E01C78"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>120</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="5" RealAddress="2B957E01C7C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>20</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"[1]FightWeapon"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>122</ID>
+                          <Description>"Main"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>123</ID>
+                              <Description>"&lt;MaxComboCounter&gt;"</Description>
+                              <LastState Value="2" RealAddress="2B952F8E538"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>124</ID>
+                              <Description>"hitFxScaleMult"</Description>
+                              <LastState Value="0.8000000119" RealAddress="2B958035B88"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>108</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>125</ID>
+                              <Description>"damage"</Description>
+                              <LastState Value="999" Activated="1" RealAddress="2B958035B8C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <Color>808040</Color>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>10C</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>126</ID>
+                              <Description>"moveSpeedMult"</Description>
+                              <LastState Value="1" RealAddress="2B958035B90"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>110</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>127</ID>
+                              <Description>"breakablePartDmgMult"</Description>
+                              <LastState Value="2" RealAddress="2B958035B94"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>114</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>128</ID>
+                              <Description>"brokenPartDmgMult"</Description>
+                              <LastState Value="1.299999952" RealAddress="2B958035B98"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>118</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>129</ID>
+                              <Description>"poiseDmgMult"</Description>
+                              <LastState Value="0.5" RealAddress="2B958035B9C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>11C</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>130</ID>
+                              <Description>"ultimateNeededCharge"</Description>
+                              <LastState Value="1500" RealAddress="2B958035BA0"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>120</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>131</ID>
+                              <Description>"type"</Description>
+                              <LastState Value="1" RealAddress="2B958035BA4"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>124</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>132</ID>
+                          <Description>"attack1"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>133</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1" RealAddress="2B95555B8F0"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>134</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="7" RealAddress="2B95555B8F4"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>135</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B95555B8F8"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>136</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B8FC"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>148</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>137</ID>
+                          <Description>"attack2"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>138</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1" RealAddress="2B95555B810"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>139</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="20" RealAddress="2B95555B814"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>140</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B95555B818"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>141</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B81C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>150</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>142</ID>
+                          <Description>"attack3"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>143</ID>
+                              <Description>"animationSpeed"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>144</ID>
+                              <Description>"consumedStamina"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>145</ID>
+                              <Description>"reorientValue"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>146</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>158</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>147</ID>
+                          <Description>"attack4"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>148</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1" RealAddress="2B95555B730"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>149</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B734"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>150</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="0" RealAddress="2B95555B738"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>151</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B73C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>160</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>152</ID>
+                          <Description>"attack5"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" Activated="1" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>153</ID>
+                              <Description>"animationSpeed"</Description>
+                              <LastState Value="1" RealAddress="2B95555B650"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>154</ID>
+                              <Description>"consumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B654"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>34</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>155</ID>
+                              <Description>"reorientValue"</Description>
+                              <LastState Value="180" RealAddress="2B95555B658"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>156</ID>
+                              <Description>"chargeConsumedStamina"</Description>
+                              <LastState Value="0" RealAddress="2B95555B65C"/>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Float</VariableType>
+                              <Address>[playerpawn_ptr]+58</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>168</Offset>
+                                <Offset>18</Offset>
+                                <Offset>28</Offset>
+                                <Offset>10</Offset>
+                                <Offset>50</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>80</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>82</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Savara - v1.2.2 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

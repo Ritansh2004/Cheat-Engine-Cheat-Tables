@@ -1,0 +1,1067 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>811</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Tales Of Bloomrise.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"[ AUTO-INJECT ] Player Instance Resolver"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+{$lua}
+local function log(msg) print("[Bloomrise] "..tostring(msg)) end
+local function hex(n) if not n or n==0 then return "0x0" end return string.format("0x%X",n) end
+local function readQ(a) if not a or a==0 then return 0 end local ok,v=pcall(readQword,a) return (ok and v) or 0 end
+local function readF(a) if not a or a==0 then return 0.0 end local ok,v=pcall(readFloat,a) return (ok and v) or 0.0 end
+local function readI(a) if not a or a==0 then return 0 end local ok,v=pcall(readInteger,a) return (ok and v) or 0 end
+local function sym(name,addr) if addr and addr~=0 then registerSymbol(name,addr,true) end end
+
+local function resolveAll()
+  mono_OnProcessOpened()
+  if not mono_isValid() then log("FATAL: Mono not valid") return nil end
+  local cls=mono_findClass("","Player")
+  if not cls or cls==0 then log("FATAL: Player class not found") return nil end
+  local method=mono_class_findMethod(cls,"get_Instance",0)
+  if not method or method==0 then log("FATAL: get_Instance not found") return nil end
+  local jit=mono_compile_method(method)
+  if not jit or jit==0 then log("FATAL: JIT compile failed") return nil end
+  local staticSlot=0
+  for i=0,64 do
+    local b=readBytes(jit+i,2,true)
+    if b and b[1]==0x48 and b[2]==0xB8 then
+      local s=readQword(jit+i+2)
+      if s and s~=0 then staticSlot=s break end
+    end
+  end
+  if staticSlot==0 then staticSlot=0x124E74734E0 log("WARNING: Using hardcoded fallback slot") end
+  local P={}
+  P.slot=staticSlot
+  P.player=readQ(staticSlot)
+  if P.player==0 then log("WARNING: Player* NULL - not in gameplay scene") return P end
+  P.pStats=readQ(P.player+0x030)
+  P.rs=readQ(P.pStats+0x018)
+  P.pStam=readQ(P.player+0x048)
+  P.inv=readQ(P.player+0x050)
+  P.pMove=readQ(P.player+0x058)
+  P.pAtk=readQ(P.player+0x060)
+  P.pHealth=readQ(P.player+0x068)
+  P.pExp=readQ(P.player+0x070)
+  return P
+end
+
+local function registerAll(P)
+  sym("BLOOMRISE_STATIC_SLOT",P.slot)
+  sym("BLOOMRISE_PLAYER",P.player)
+  sym("BLOOMRISE_PLAYERSTATS",P.pStats)
+  sym("BLOOMRISE_RUNTIMESTATS",P.rs)
+  sym("BLOOMRISE_PLAYERSTAMINA",P.pStam)
+  sym("BLOOMRISE_INVENTORY",P.inv)
+  sym("BLOOMRISE_PLAYERMOVEMENT",P.pMove)
+  sym("BLOOMRISE_PLAYERATTACK",P.pAtk)
+  sym("BLOOMRISE_PLAYERHEALTH",P.pHealth)
+  sym("BLOOMRISE_PLAYEREXP",P.pExp)
+  local rs=P.rs
+  sym("RS_Level",rs+0x010) sym("RS_Health",rs+0x014) sym("RS_MaxHealth",rs+0x018)
+  sym("RS_Stamina",rs+0x01C) sym("RS_MaxStamina",rs+0x020) sym("RS_CurrentExp",rs+0x024)
+  sym("RS_NextLevelExp",rs+0x028) sym("RS_BaseDamage",rs+0x02C) sym("RS_CriticalChance",rs+0x030)
+  sym("RS_CriticalDamage",rs+0x034) sym("RS_AttrPoints",rs+0x038) sym("RS_Strenght",rs+0x03C)
+  sym("RS_Dexterity",rs+0x040) sym("RS_Intelligence",rs+0x044) sym("RS_TotalExp",rs+0x048)
+  sym("RS_TotalDmg",rs+0x04C) sym("RS_GoldAmount",rs+0x050) sym("RS_DodgeChance",rs+0x054)
+  sym("RS_RegenAmount",rs+0x058) sym("RS_HasRegenSkill",rs+0x05C) sym("RS_DropChanceMult",rs+0x060)
+  sym("RS_HasLastResort",rs+0x064) sym("RS_LastResortCooldown",rs+0x068) sym("RS_LastResortTimer",rs+0x06C)
+  local ps=P.pStats
+  sym("PS_initialLevel",ps+0x020) sym("PS_initialMaxHealth",ps+0x024) sym("PS_initialMaxStamina",ps+0x028)
+  sym("PS_initialNextLevelExp",ps+0x02C) sym("PS_ExpMultiplier",ps+0x030) sym("PS_initialBaseDamage",ps+0x034)
+  sym("PS_initialCriticalChance",ps+0x038) sym("PS_initialCriticalDamage",ps+0x03C)
+  sym("PS_initialDodgeChance",ps+0x040) sym("PS_initialRegenAmount",ps+0x044) sym("PS_initialDropChanceMult",ps+0x048)
+  local pm=P.pMove
+  sym("PM_speed",pm+0x078) sym("PM_dashSpeed",pm+0x07C) sym("PM_dashDuration",pm+0x080)
+  sym("PM_dashStaminaCost",pm+0x084) sym("PM_controlMultiplier",pm+0x08C) sym("PM_speedMultiplier",pm+0x090)
+  sym("PM_CanDash",pm+0x09C) sym("PM_canMove",pm+0x0A8) sym("PM_isDashing",pm+0x0A9)
+  sym("PM_isFrozen",pm+0x0AA) sym("PM_isJuiceLocked",pm+0x0AB)
+  local pa=P.pAtk
+  sym("PA_attackVolume",pa+0x10C) sym("PA_hitStopDuration",pa+0x110) sym("PA_fishingCheckRadius",pa+0x118)
+  sym("PA_attackRange",pa+0x11C) sym("PA_attackArcDegrees",pa+0x120) sym("PA_minDistanceMeleeAttack",pa+0x128)
+  sym("PA_knockbackForce",pa+0x12C) sym("PA_cameraShakeForce",pa+0x130) sym("PA_knockbackDuration",pa+0x134)
+  sym("PA_damageMultiplier",pa+0x13C) sym("PA_currentAttackRotation",pa+0x140) sym("PA_hasHitThisAnimation",pa+0x144)
+  local ph=P.pHealth
+  sym("PH_respawnSlideDuration",ph+0x098) sym("PH_hasdamage",ph+0x09C) sym("PH_damageTest",ph+0x0A0)
+  sym("PH_healthBeforeOneLife",ph+0x0A4) sym("PH_hasOneHp",ph+0x0A8)
+  local pst=P.pStam
+  sym("PST_staminaToRecover",pst+0x048) sym("PST_staminaRegenInterval",pst+0x04C)
+  sym("PL_healTimer",P.player+0x0A0) sym("PL_fadeDuration",P.player+0x0A4)
+end
+
+local P=resolveAll()
+if P then
+  registerAll(P)
+  _G.BLOOMRISE_P=P
+  _G.BLOOMRISE_SLOT=P.slot
+  _G.BLOOMRISE_LAST_PLAYER=P.player
+  if P.rs and P.rs~=0 then
+    log(string.format("=== Player Stats === Level:%d HP:%.1f/%.1f Stamina:%.1f/%.1f Gold:%d Exp:%d BaseDmg:%.1f CritChance:%.1f%% Speed:%.2f",
+      readI(P.rs+0x010),readF(P.rs+0x014),readF(P.rs+0x018),
+      readF(P.rs+0x01C),readF(P.rs+0x020),readI(P.rs+0x050),
+      readI(P.rs+0x024),readF(P.rs+0x02C),readF(P.rs+0x030),readF(P.pMove+0x078)))
+  end
+end
+
+if _G.BLOOMRISE_TIMER then _G.BLOOMRISE_TIMER.Enabled=false pcall(function() _G.BLOOMRISE_TIMER.destroy() end) end
+_G.BLOOMRISE_TIMER=createTimer(nil,false)
+_G.BLOOMRISE_TIMER.Interval=3000
+_G.BLOOMRISE_TIMER.OnTimer=function()
+  local slot=_G.BLOOMRISE_SLOT
+  if not slot or slot==0 then return end
+  local ok,np=pcall(readQword,slot)
+  if not ok or not np or np==0 then return end
+  if np==_G.BLOOMRISE_LAST_PLAYER then return end
+  local ns=readQword(np+0x030) if not ns or ns==0 then return end
+  local nr=readQword(ns+0x018) if not nr or nr==0 then return end
+  local NP={slot=slot,player=np,pStats=ns,rs=nr,
+    pStam=readQword(np+0x048) or 0,inv=readQword(np+0x050) or 0,
+    pMove=readQword(np+0x058) or 0,pAtk=readQword(np+0x060) or 0,
+    pHealth=readQword(np+0x068) or 0,pExp=readQword(np+0x070) or 0}
+  _G.BLOOMRISE_LAST_PLAYER=np
+  _G.BLOOMRISE_P=NP
+  registerAll(NP)
+  print("[Bloomrise] Scene reload — pointers refreshed. Player @ "..hex(np))
+end
+_G.BLOOMRISE_TIMER.Enabled=true
+log("ENABLED — all symbols registered. Enable this script FIRST before using any entry below.")
+{$asm}
+
+[DISABLE]
+{$lua}
+if _G.BLOOMRISE_TIMER then _G.BLOOMRISE_TIMER.Enabled=false pcall(function() _G.BLOOMRISE_TIMER.destroy() end) _G.BLOOMRISE_TIMER=nil end
+local syms={"BLOOMRISE_STATIC_SLOT","BLOOMRISE_PLAYER","BLOOMRISE_PLAYERSTATS","BLOOMRISE_RUNTIMESTATS",
+  "BLOOMRISE_PLAYERSTAMINA","BLOOMRISE_INVENTORY","BLOOMRISE_PLAYERMOVEMENT","BLOOMRISE_PLAYERATTACK",
+  "BLOOMRISE_PLAYERHEALTH","BLOOMRISE_PLAYEREXP",
+  "RS_Level","RS_Health","RS_MaxHealth","RS_Stamina","RS_MaxStamina","RS_CurrentExp","RS_NextLevelExp",
+  "RS_BaseDamage","RS_CriticalChance","RS_CriticalDamage","RS_AttrPoints","RS_Strenght","RS_Dexterity",
+  "RS_Intelligence","RS_TotalExp","RS_TotalDmg","RS_GoldAmount","RS_DodgeChance","RS_RegenAmount",
+  "RS_HasRegenSkill","RS_DropChanceMult","RS_HasLastResort","RS_LastResortCooldown","RS_LastResortTimer",
+  "PS_initialLevel","PS_initialMaxHealth","PS_initialMaxStamina","PS_initialNextLevelExp","PS_ExpMultiplier",
+  "PS_initialBaseDamage","PS_initialCriticalChance","PS_initialCriticalDamage","PS_initialDodgeChance",
+  "PS_initialRegenAmount","PS_initialDropChanceMult",
+  "PM_speed","PM_dashSpeed","PM_dashDuration","PM_dashStaminaCost","PM_controlMultiplier","PM_speedMultiplier",
+  "PM_CanDash","PM_canMove","PM_isDashing","PM_isFrozen","PM_isJuiceLocked",
+  "PA_attackVolume","PA_hitStopDuration","PA_fishingCheckRadius","PA_attackRange","PA_attackArcDegrees",
+  "PA_minDistanceMeleeAttack","PA_knockbackForce","PA_cameraShakeForce","PA_knockbackDuration",
+  "PA_damageMultiplier","PA_currentAttackRotation","PA_hasHitThisAnimation",
+  "PH_respawnSlideDuration","PH_hasdamage","PH_damageTest","PH_healthBeforeOneLife","PH_hasOneHp",
+  "PST_staminaToRecover","PST_staminaRegenInterval","PL_healTimer","PL_fadeDuration"}
+for _,n in ipairs(syms) do unregisterSymbol(n) end
+_G.BLOOMRISE_P=nil _G.BLOOMRISE_SLOT=nil _G.BLOOMRISE_LAST_PLAYER=nil
+print("[Bloomrise] DISABLED — all symbols unregistered.")
+{$asm}
+      
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>803</ID>
+              <Description>"★ CHEATS (Enable script above first, then tick these)"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"God Mode (Infinite Health)"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+if _G.BLOOMRISE_P and _G.BLOOMRISE_P.rs~=0 then
+  writeFloat(_G.BLOOMRISE_P.rs+0x014, 9999)
+  writeFloat(_G.BLOOMRISE_P.rs+0x018, 9999)
+  print("[Bloomrise] God Mode ON")
+end
+if _G.BLOOMRISE_GODTIMER then _G.BLOOMRISE_GODTIMER.Enabled=false pcall(function() _G.BLOOMRISE_GODTIMER.destroy() end) end
+_G.BLOOMRISE_GODTIMER=createTimer(nil,false)
+_G.BLOOMRISE_GODTIMER.Interval=500
+_G.BLOOMRISE_GODTIMER.OnTimer=function()
+  local P=_G.BLOOMRISE_P
+  if P and P.rs and P.rs~=0 then
+    writeFloat(P.rs+0x014,9999) writeFloat(P.rs+0x018,9999)
+  end
+end
+_G.BLOOMRISE_GODTIMER.Enabled=true
+{$asm}
+[DISABLE]
+{$lua}
+if _G.BLOOMRISE_GODTIMER then _G.BLOOMRISE_GODTIMER.Enabled=false pcall(function() _G.BLOOMRISE_GODTIMER.destroy() end) _G.BLOOMRISE_GODTIMER=nil end
+print("[Bloomrise] God Mode OFF")
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"Infinite Stamina"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+if _G.BLOOMRISE_STAMTIMER then _G.BLOOMRISE_STAMTIMER.Enabled=false pcall(function() _G.BLOOMRISE_STAMTIMER.destroy() end) end
+_G.BLOOMRISE_STAMTIMER=createTimer(nil,false)
+_G.BLOOMRISE_STAMTIMER.Interval=500
+_G.BLOOMRISE_STAMTIMER.OnTimer=function()
+  local P=_G.BLOOMRISE_P
+  if P and P.rs and P.rs~=0 then
+    writeFloat(P.rs+0x01C,9999) writeFloat(P.rs+0x020,9999)
+  end
+end
+_G.BLOOMRISE_STAMTIMER.Enabled=true
+print("[Bloomrise] Infinite Stamina ON")
+{$asm}
+[DISABLE]
+{$lua}
+if _G.BLOOMRISE_STAMTIMER then _G.BLOOMRISE_STAMTIMER.Enabled=false pcall(function() _G.BLOOMRISE_STAMTIMER.destroy() end) _G.BLOOMRISE_STAMTIMER=nil end
+print("[Bloomrise] Infinite Stamina OFF")
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"Infinite Gold"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+if _G.BLOOMRISE_GOLDTIMER then _G.BLOOMRISE_GOLDTIMER.Enabled=false pcall(function() _G.BLOOMRISE_GOLDTIMER.destroy() end) end
+_G.BLOOMRISE_GOLDTIMER=createTimer(nil,false)
+_G.BLOOMRISE_GOLDTIMER.Interval=1000
+_G.BLOOMRISE_GOLDTIMER.OnTimer=function()
+  local P=_G.BLOOMRISE_P
+  if P and P.rs and P.rs~=0 then writeInteger(P.rs+0x050,999999) end
+end
+_G.BLOOMRISE_GOLDTIMER.Enabled=true
+print("[Bloomrise] Infinite Gold ON")
+{$asm}
+[DISABLE]
+{$lua}
+if _G.BLOOMRISE_GOLDTIMER then _G.BLOOMRISE_GOLDTIMER.Enabled=false pcall(function() _G.BLOOMRISE_GOLDTIMER.destroy() end) _G.BLOOMRISE_GOLDTIMER=nil end
+print("[Bloomrise] Infinite Gold OFF")
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"One Hit Kill (Max Damage)"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P then
+  if P.rs~=0 then writeFloat(P.rs+0x02C,99999) end
+  if P.pAtk~=0 then writeFloat(P.pAtk+0x13C,100) end
+  print("[Bloomrise] One Hit Kill ON")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P then
+  if P.rs~=0 then writeFloat(P.rs+0x02C,0) end
+  if P.pAtk~=0 then writeFloat(P.pAtk+0x13C,1) end
+  print("[Bloomrise] One Hit Kill OFF")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"Always Critical Hit"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x030,100) writeFloat(P.rs+0x034,10)
+  print("[Bloomrise] Always Crit ON — Chance:100% Damage:10x")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x030,10) writeFloat(P.rs+0x034,4)
+  print("[Bloomrise] Always Crit OFF — restored defaults")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"Max Level + Attributes"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeInteger(P.rs+0x010,99)
+  writeInteger(P.rs+0x024,0)
+  writeInteger(P.rs+0x028,100)
+  writeInteger(P.rs+0x038,99)
+  writeInteger(P.rs+0x03C,99)
+  writeInteger(P.rs+0x040,99)
+  writeInteger(P.rs+0x044,99)
+  print("[Bloomrise] Max Level+Attrs ON — Level:99 all attrs:99")
+end
+{$asm}
+[DISABLE]
+{$lua}
+print("[Bloomrise] Max Level+Attrs OFF — values remain, re-enable to re-apply")
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"Speed Hack (3x Movement)"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pMove~=0 then
+  writeFloat(P.pMove+0x078,10)
+  writeFloat(P.pMove+0x07C,45)
+  writeFloat(P.pMove+0x090,3)
+  print("[Bloomrise] Speed Hack ON — speed:10 dashSpeed:45 multiplier:3")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pMove~=0 then
+  writeFloat(P.pMove+0x078,3.3)
+  writeFloat(P.pMove+0x07C,15)
+  writeFloat(P.pMove+0x090,1)
+  print("[Bloomrise] Speed Hack OFF — restored defaults")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"No Dash Stamina Cost"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pMove~=0 then writeFloat(P.pMove+0x084,0) print("[Bloomrise] No Dash Cost ON") end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pMove~=0 then writeFloat(P.pMove+0x084,3) print("[Bloomrise] No Dash Cost OFF") end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"Max Drop Chance + Dodge"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x054,100)
+  writeFloat(P.rs+0x060,10)
+  print("[Bloomrise] Max Drop+Dodge ON — dodge:100% dropMult:10x")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x054,0) writeFloat(P.rs+0x060,1)
+  print("[Bloomrise] Max Drop+Dodge OFF")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"No Knockback"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pAtk~=0 then
+  writeFloat(P.pAtk+0x12C,0) writeFloat(P.pAtk+0x134,0)
+  print("[Bloomrise] No Knockback ON")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pAtk~=0 then
+  writeFloat(P.pAtk+0x12C,2) writeFloat(P.pAtk+0x134,0.2)
+  print("[Bloomrise] No Knockback OFF")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"Extended Attack Range (360 Arc)"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pAtk~=0 then
+  writeFloat(P.pAtk+0x11C,15)
+  writeFloat(P.pAtk+0x120,360)
+  print("[Bloomrise] Extended Range ON — range:15 arc:360")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.pAtk~=0 then
+  writeFloat(P.pAtk+0x11C,1.4)
+  writeFloat(P.pAtk+0x120,90)
+  print("[Bloomrise] Extended Range OFF — restored defaults")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"Last Resort Always Available"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeInteger(P.rs+0x064,1)
+  writeFloat(P.rs+0x068,0)
+  writeFloat(P.rs+0x06C,0)
+  print("[Bloomrise] Last Resort Always Ready ON")
+end
+{$asm}
+[DISABLE]
+{$lua}
+print("[Bloomrise] Last Resort OFF")
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"Max Regen (Constant Health Recovery)"</Description>
+                  <LastState/>
+                  <Color>80FFFF</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x058,999)
+  writeInteger(P.rs+0x05C,1)
+  print("[Bloomrise] Max Regen ON")
+end
+{$asm}
+[DISABLE]
+{$lua}
+local P=_G.BLOOMRISE_P
+if P and P.rs~=0 then
+  writeFloat(P.rs+0x058,0) writeInteger(P.rs+0x05C,0)
+  print("[Bloomrise] Max Regen OFF")
+end
+{$asm}
+          
+</AssemblerScript>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>804</ID>
+              <Description>"── RuntimeStats ──────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>201</ID>
+                  <Description>"Level"</Description>
+                  <LastState Value="1" RealAddress="18C396E9B70"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_Level</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>202</ID>
+                  <Description>"Health"</Description>
+                  <LastState Value="10" RealAddress="18C396E9B74"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_Health</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>203</ID>
+                  <Description>"Max Health"</Description>
+                  <LastState Value="10" RealAddress="18C396E9B78"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_MaxHealth</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>204</ID>
+                  <Description>"Stamina"</Description>
+                  <LastState Value="12" RealAddress="18C396E9B7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_Stamina</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>205</ID>
+                  <Description>"Max Stamina"</Description>
+                  <LastState Value="20" RealAddress="18C396E9B80"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_MaxStamina</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>206</ID>
+                  <Description>"Current EXP"</Description>
+                  <LastState Value="1084227584" RealAddress="18C396E9B84"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_CurrentExp</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>207</ID>
+                  <Description>"Next Level EXP"</Description>
+                  <LastState Value="1125515264" RealAddress="18C396E9B88"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_NextLevelExp</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>208</ID>
+                  <Description>"Base Damage"</Description>
+                  <LastState Value="0" RealAddress="18C396E9B8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_BaseDamage</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"Critical Chance (%)"</Description>
+                  <LastState Value="10" RealAddress="18C396E9B90"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_CriticalChance</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>210</ID>
+                  <Description>"Critical Damage (x)"</Description>
+                  <LastState Value="4" RealAddress="18C396E9B94"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_CriticalDamage</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"Attribute Points"</Description>
+                  <LastState Value="0" RealAddress="18C396E9B98"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_AttrPoints</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>212</ID>
+                  <Description>"Strenght"</Description>
+                  <LastState Value="0" RealAddress="18C396E9B9C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_Strenght</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>213</ID>
+                  <Description>"Dexterity"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BA0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_Dexterity</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>214</ID>
+                  <Description>"Intelligence"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BA4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_Intelligence</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>215</ID>
+                  <Description>"Total EXP"</Description>
+                  <LastState Value="1084227584" RealAddress="18C396E9BA8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_TotalExp</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>216</ID>
+                  <Description>"Total Damage"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BAC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_TotalDmg</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>217</ID>
+                  <Description>"Gold Amount"</Description>
+                  <LastState Value="50" RealAddress="18C396E9BB0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_GoldAmount</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>218</ID>
+                  <Description>"Dodge Chance (%)"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BB4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_DodgeChance</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>219</ID>
+                  <Description>"Regen Amount"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BB8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_RegenAmount</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>220</ID>
+                  <Description>"Has Regen Skill"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BBC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_HasRegenSkill</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>221</ID>
+                  <Description>"Drop Chance Multiplier"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BC0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_DropChanceMult</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>222</ID>
+                  <Description>"Has Last Resort"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BC4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_HasLastResort</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>223</ID>
+                  <Description>"Last Resort Cooldown (s)"</Description>
+                  <LastState Value="600" RealAddress="18C396E9BC8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>RS_LastResortCooldown</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>224</ID>
+                  <Description>"Last Resort Timer"</Description>
+                  <LastState Value="0" RealAddress="18C396E9BCC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>RS_LastResortTimer</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>805</ID>
+              <Description>"── PlayerStats (Config) ──────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>301</ID>
+                  <Description>"Initial Level"</Description>
+                  <LastState Value="1.401298464E-45" RealAddress="18C11CE2B10"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialLevel</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>302</ID>
+                  <Description>"Initial Max Health"</Description>
+                  <LastState Value="12" RealAddress="18C11CE2B14"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialMaxHealth</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>303</ID>
+                  <Description>"Initial Max Stamina"</Description>
+                  <LastState Value="20" RealAddress="18C11CE2B18"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialMaxStamina</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>304</ID>
+                  <Description>"Initial Next Level EXP"</Description>
+                  <LastState Value="100" RealAddress="18C11CE2B1C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialNextLevelExp</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>305</ID>
+                  <Description>"EXP Multiplier"</Description>
+                  <LastState Value="50" RealAddress="18C11CE2B20"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_ExpMultiplier</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>306</ID>
+                  <Description>"Initial Base Damage"</Description>
+                  <LastState Value="0" RealAddress="18C11CE2B24"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialBaseDamage</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>307</ID>
+                  <Description>"Initial Critical Chance"</Description>
+                  <LastState Value="10" RealAddress="18C11CE2B28"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialCriticalChance</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>308</ID>
+                  <Description>"Initial Critical Damage"</Description>
+                  <LastState Value="4" RealAddress="18C11CE2B2C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialCriticalDamage</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>309</ID>
+                  <Description>"Initial Dodge Chance"</Description>
+                  <LastState Value="0" RealAddress="18C11CE2B30"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialDodgeChance</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>310</ID>
+                  <Description>"Initial Regen Amount"</Description>
+                  <LastState Value="0" RealAddress="18C11CE2B34"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialRegenAmount</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>311</ID>
+                  <Description>"Initial Drop Chance Multiplier"</Description>
+                  <LastState Value="1" RealAddress="18C11CE2B38"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PS_initialDropChanceMult</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>806</ID>
+              <Description>"── PlayerMovement ────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>401</ID>
+                  <Description>"Speed"</Description>
+                  <LastState Value="3.299999952" RealAddress="18C3351CC78"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_speed</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>402</ID>
+                  <Description>"Dash Speed"</Description>
+                  <LastState Value="15" RealAddress="18C3351CC7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_dashSpeed</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>403</ID>
+                  <Description>"Dash Duration (s)"</Description>
+                  <LastState Value="0.3000000119" RealAddress="18C3351CC80"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_dashDuration</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>404</ID>
+                  <Description>"Dash Stamina Cost"</Description>
+                  <LastState Value="3" RealAddress="18C3351CC84"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_dashStaminaCost</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>405</ID>
+                  <Description>"Control Multiplier"</Description>
+                  <LastState Value="1" RealAddress="18C3351CC8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_controlMultiplier</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>406</ID>
+                  <Description>"Speed Multiplier"</Description>
+                  <LastState Value="1" RealAddress="18C3351CC90"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PM_speedMultiplier</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>407</ID>
+                  <Description>"Can Dash"</Description>
+                  <LastState Value="1" RealAddress="18C3351CC9C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>PM_CanDash</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>408</ID>
+                  <Description>"Can Move"</Description>
+                  <LastState Value="1" RealAddress="18C3351CCA8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>PM_canMove</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>409</ID>
+                  <Description>"Is Frozen"</Description>
+                  <LastState Value="0" RealAddress="18C3351CCAA"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>PM_isFrozen</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>807</ID>
+              <Description>"── PlayerAttack ──────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>501</ID>
+                  <Description>"Attack Range"</Description>
+                  <LastState Value="1.399999976" RealAddress="18C11CC450C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_attackRange</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>502</ID>
+                  <Description>"Attack Arc Degrees"</Description>
+                  <LastState Value="90" RealAddress="18C11CC4510"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_attackArcDegrees</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>503</ID>
+                  <Description>"Damage Multiplier"</Description>
+                  <LastState Value="1" RealAddress="18C11CC452C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_damageMultiplier</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>504</ID>
+                  <Description>"Knockback Force"</Description>
+                  <LastState Value="2" RealAddress="18C11CC451C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_knockbackForce</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>505</ID>
+                  <Description>"Knockback Duration (s)"</Description>
+                  <LastState Value="0.200000003" RealAddress="18C11CC4524"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_knockbackDuration</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>506</ID>
+                  <Description>"Camera Shake Force"</Description>
+                  <LastState Value="2" RealAddress="18C11CC4520"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_cameraShakeForce</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>507</ID>
+                  <Description>"Hit Stop Duration"</Description>
+                  <LastState Value="0.05000000075" RealAddress="18C11CC4500"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_hitStopDuration</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>508</ID>
+                  <Description>"Min Distance Melee Attack"</Description>
+                  <LastState Value="1.399999976" RealAddress="18C11CC4518"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_minDistanceMeleeAttack</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>509</ID>
+                  <Description>"Attack Volume"</Description>
+                  <LastState Value="0.200000003" RealAddress="18C11CC44FC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PA_attackVolume</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>808</ID>
+              <Description>"── PlayerHealth ──────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>601</ID>
+                  <Description>"Respawn Slide Duration"</Description>
+                  <LastState Value="2" RealAddress="18B704FF618"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PH_respawnSlideDuration</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>602</ID>
+                  <Description>"Health Before One Life"</Description>
+                  <LastState Value="0" RealAddress="18B704FF624"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PH_healthBeforeOneLife</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>603</ID>
+                  <Description>"Has One HP (0=off 1=on)"</Description>
+                  <LastState Value="0" RealAddress="18B704FF628"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>PH_hasOneHp</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>809</ID>
+              <Description>"── PlayerStamina ─────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>701</ID>
+                  <Description>"Stamina To Recover"</Description>
+                  <LastState Value="1" RealAddress="18C359FA548"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PST_staminaToRecover</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>810</ID>
+              <Description>"── Player Root ───────────────────────────────"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>801</ID>
+                  <Description>"Heal Timer"</Description>
+                  <LastState Value="10" RealAddress="18B704FF6D0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PL_healTimer</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>802</ID>
+                  <Description>"Fade Duration"</Description>
+                  <LastState Value="0.5" RealAddress="18B704FF6D4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>PL_fadeDuration</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>812</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>813</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Tales of Bloomrise - v1.0.02 ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

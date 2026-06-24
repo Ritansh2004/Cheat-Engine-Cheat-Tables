@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>65</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Solateria.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Solateria.exe
+  Version: 
+  Date   : 2026-04-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerController:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController:Update
+
+1C7800D3309: 04 02                          - add al,02
+1C7800D330B: 05 04 03 01 50                 - add eax,50010304
+1C7800D3310: 00 00                          - add [rax],al
+1C7800D3312: 00 00                          - add [rax],al
+1C7800D3314: 00 00                          - add [rax],al
+1C7800D3316: 00 00                          - add [rax],al
+1C7800D3318: 00 00                          - add [rax],al
+1C7800D331A: 00 00                          - add [rax],al
+1C7800D331C: 00 00                          - add [rax],al
+1C7800D331E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+PlayerController:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+PlayerController:Update+1: 48 8B EC                       - mov rbp,rsp
+PlayerController:Update+4: 48 83 EC 30                    - sub rsp,30
+PlayerController:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+PlayerController:Update+c: 48 8B F1                       - mov rsi,rcx
+PlayerController:Update+f: 48 8B 46 48                    - mov rax,[rsi+48]
+PlayerController:Update+13: 48 8B C8                       - mov rcx,rax
+PlayerController:Update+16: 83 38 00                       - cmp dword ptr [rax],00
+PlayerController:Update+19: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+PlayerController:Update+1e: 49 BB 10 36 AB 51 C7 01 00 00  - mov r11,PlayerMover:get_PSM
+PlayerController:Update+28: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>playercontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"horizontal"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"vertical"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+74</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"jump"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"attackDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+79</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"attackUp"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"attack"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7B</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"dashDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"dashUp"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"healDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"interact"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+7F</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"skillA"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"skillB"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+81</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"action"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+82</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"heat"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+83</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"heatDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"overheat"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+85</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"guardUp"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+86</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"guardDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+87</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"specialParry"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"isDead"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+89</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"sightHorizontal"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+8C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"sightVertical"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"teleportDown"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+94</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"teleportUp"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+95</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"&lt;IsInSceneLoadSequence&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+96</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"&lt;ForceWalk&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+97</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"useSpecialDropInfo"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+B8</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"&lt;PlayerStat&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"&lt;Level&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"&lt;Money&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"experience"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"defaultMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"&lt;ResidualHeat&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"&lt;Active&gt;"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"currentValue"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"&lt;HealthPerValue&gt;"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"blockHeal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"stats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"_size"</Description>
+                      <Color>008000</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"Count"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"&lt;Current&gt;_Warmth/Health"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"&lt;Current&gt;_Stamina"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"&lt;Current&gt;_StaminaRecoverySpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"&lt;Current&gt;_ATK"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"&lt;Current&gt;_CurrencyPreservation"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>48</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"&lt;Current&gt;_CurrencyCollectionRange"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>50</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"&lt;Current&gt;_Flame"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>58</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"&lt;Current&gt;_Counter"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>60</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>68</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"&lt;Current&gt;_GuardReductionRate"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>70</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>78</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"&lt;Current&gt;_ResidualHeatEfficiency"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"&lt;Current&gt;_ResidualHealRecovery"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"&lt;Current&gt;_ParryEfficiency"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>A8</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"&lt;Current&gt;_Unknown"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[playercontroller_ptr]+40</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>B0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>64</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>66</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " SOLATERIA - v1.0.34 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

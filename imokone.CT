@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>61</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("imokone.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"Calender"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : imokone.exe
+  Version: 
+  Date   : 2025-12-13
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Calendar:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Calendar:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [calender_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+calender_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(calender_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(calender_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Calendar:Update
+
+23E9A662649: 04 02                          - add al,02
+23E9A66264B: 05 04 03 01 50                 - add eax,50010304
+23E9A662650: 00 00                          - add [rax],al
+23E9A662652: 00 00                          - add [rax],al
+23E9A662654: 00 00                          - add [rax],al
+23E9A662656: 00 00                          - add [rax],al
+23E9A662658: 00 00                          - add [rax],al
+23E9A66265A: 00 00                          - add [rax],al
+23E9A66265C: 00 00                          - add [rax],al
+23E9A66265E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Calendar:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Calendar:Update+1: 48 8B EC                       - mov rbp,rsp
+Calendar:Update+4: 48 83 EC 30                    - sub rsp,30
+Calendar:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+Calendar:Update+c: 48 8B F1                       - mov rsi,rcx
+Calendar:Update+f: 48 63 46 44                    - movsxd  rax,dword ptr [rsi+44]
+Calendar:Update+13: 83 F8 04                       - cmp eax,04
+Calendar:Update+16: 0F 8F AC 01 00 00              - jg Calendar:Update+1c8
+Calendar:Update+1c: 48 8B CE                       - mov rcx,rsi
+Calendar:Update+1f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+Calendar:Update+26: 49 BB 90 F5 6A CE 3D 02 00 00  - mov r11,UnityEngine.Component:get_transform
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"first_day_weekday"</Description>
+              <LastState Value="1" RealAddress="1FCCE7A86C0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"total_days_this_month"</Description>
+              <LastState Value="30" RealAddress="1FCCE7A86C4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"this_day"</Description>
+              <LastState Value="3" RealAddress="1FCCE7A86C8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"this_wday"</Description>
+              <LastState Value="3" RealAddress="1FCCE7A86CC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"this_month"</Description>
+              <LastState Value="4" RealAddress="1FCCE7A86D0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"look_month"</Description>
+              <LastState Value="4" RealAddress="1FCCE7A86D4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"obj_day_num_this_day"</Description>
+              <LastState Value="3" RealAddress="1FCCE7A86D8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"set_btn_enter"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A86DC"/>
+              <VariableType>Byte</VariableType>
+              <Address>[calender_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"is_pos_inited"</Description>
+              <LastState Value="1" RealAddress="1FCCE7A86EC"/>
+              <VariableType>Byte</VariableType>
+              <Address>[calender_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"enable_click_event"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A86ED"/>
+              <VariableType>Byte</VariableType>
+              <Address>[calender_ptr]+5D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"ani_index"</Description>
+              <LastState Value="7" RealAddress="1FCCE7A86F0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[calender_ptr]+60</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>12</ID>
+          <Description>"Clock"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : imokone.exe
+  Version: 
+  Date   : 2025-12-13
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Clock:Update)
+define(bytes,55 48 8B EC 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Clock:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [clock_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,50
+  jmp return
+
+clock_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(clock_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(clock_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Clock:Update
+
+23E9A66B539: 04 02                          - add al,02
+23E9A66B53B: 05 04 03 01 50                 - add eax,50010304
+23E9A66B540: 00 00                          - add [rax],al
+23E9A66B542: 00 00                          - add [rax],al
+23E9A66B544: 00 00                          - add [rax],al
+23E9A66B546: 00 00                          - add [rax],al
+23E9A66B548: 00 00                          - add [rax],al
+23E9A66B54A: 00 00                          - add [rax],al
+23E9A66B54C: 00 00                          - add [rax],al
+23E9A66B54E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Clock:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Clock:Update+1: 48 8B EC                       - mov rbp,rsp
+Clock:Update+4: 48 83 EC 50                    - sub rsp,50
+Clock:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+Clock:Update+c: 48 8B F1                       - mov rsi,rcx
+Clock:Update+f: 48 8B 46 30                    - mov rax,[rsi+30]
+Clock:Update+13: 48 89 45 D8                    - mov [rbp-28],rax
+Clock:Update+17: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+Clock:Update+1e: 49 BB 50 F4 6A CE 3D 02 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+Clock:Update+28: 41 FF D3                       - call r11
+Clock:Update+2b: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"init_pos"</Description>
+                  <LastState Value="842" RealAddress="1FCCE7A8A58"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"date_init_pos"</Description>
+                  <LastState Value="694.5" RealAddress="1FCCE7A8A64"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"inited"</Description>
+                  <LastState Value="1" RealAddress="1FCCE7A8A70"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[clock_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"pos_string_now"</Description>
+                  <LastState RealAddress="1FD9AB83F14"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[clock_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"pos_now"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"x"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>21</ID>
+                      <Description>"start"</Description>
+                      <LastState Value="842" RealAddress="1FE0E7AC670"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"end"</Description>
+                      <LastState Value="1042" RealAddress="1FE0E7AC674"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"now"</Description>
+                      <LastState Value="1042" RealAddress="1FE0E7AC678"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"total_time"</Description>
+                      <LastState Value="0.3000000119" RealAddress="1FE0E7AC67C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"_is_end"</Description>
+                      <LastState Value="1" RealAddress="1FE0E7AC680"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"y"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"start"</Description>
+                      <LastState Value="420.5" RealAddress="1FE0E7AC580"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"end"</Description>
+                      <LastState Value="420.5" RealAddress="1FE0E7AC584"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>28</ID>
+                      <Description>"now"</Description>
+                      <LastState Value="420.5" RealAddress="1FE0E7AC588"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"total_time"</Description>
+                      <LastState Value="0" RealAddress="1FE0E7AC58C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"_is_end"</Description>
+                      <LastState Value="1" RealAddress="1FE0E7AC590"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"z"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"start"</Description>
+                      <LastState Value="0" RealAddress="1FE0E7AC280"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"end"</Description>
+                      <LastState Value="0" RealAddress="1FE0E7AC284"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"now"</Description>
+                      <LastState Value="0" RealAddress="1FE0E7AC288"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"total_time"</Description>
+                      <LastState Value="0" RealAddress="1FE0E7AC28C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"_is_end"</Description>
+                      <LastState Value="1" RealAddress="1FE0E7AC290"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[clock_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"hour_now"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"start"</Description>
+                  <LastState Value="7" RealAddress="1FD9AAD5880"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"end"</Description>
+                  <LastState Value="7" RealAddress="1FD9AAD5884"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"now"</Description>
+                  <LastState Value="7" RealAddress="1FD9AAD5888"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"total_time"</Description>
+                  <LastState Value="0" RealAddress="1FD9AAD588C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[clock_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"_is_end"</Description>
+                  <LastState Value="1" RealAddress="1FD9AAD5890"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[clock_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>43</ID>
+          <Description>"LovePanel"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : imokone.exe
+  Version: 
+  Date   : 2025-12-13
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,LovePanel:Update)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,LovePanel:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [lovepanel_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+lovepanel_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(lovepanel_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(lovepanel_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LovePanel:Update
+
+23E9A67CE4C: 00 00                          - add [rax],al
+23E9A67CE4E: 00 00                          - add [rax],al
+23E9A67CE50: 00 00                          - add [rax],al
+23E9A67CE52: 00 00                          - add [rax],al
+23E9A67CE54: 00 00                          - add [rax],al
+23E9A67CE56: 00 00                          - add [rax],al
+23E9A67CE58: 00 00                          - add [rax],al
+23E9A67CE5A: 00 00                          - add [rax],al
+23E9A67CE5C: 00 00                          - add [rax],al
+23E9A67CE5E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+LovePanel:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+LovePanel:Update+1: 48 8B EC                       - mov rbp,rsp
+LovePanel:Update+4: 48 83 EC 40                    - sub rsp,40
+LovePanel:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+LovePanel:Update+c: 48 8B F1                       - mov rsi,rcx
+LovePanel:Update+f: 48 8B 46 20                    - mov rax,[rsi+20]
+LovePanel:Update+13: 48 89 45 E8                    - mov [rbp-18],rax
+LovePanel:Update+17: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+LovePanel:Update+1e: 49 BB 50 F4 6A CE 3D 02 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+LovePanel:Update+28: 41 FF D3                       - call r11
+LovePanel:Update+2b: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"inited"</Description>
+                  <LastState Value="1" RealAddress="1FCCE7A49A4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lovepanel_ptr]+44</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"real_love_point"</Description>
+                  <LastState Value="0" RealAddress="1FCCE7A49A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[lovepanel_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"is_running_suo_anim"</Description>
+                  <LastState Value="0" RealAddress="1FCCE7A49AC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lovepanel_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"do_heroine_now"</Description>
+                  <LastState RealAddress="1FD95E267B4"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[lovepanel_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"act_love_point"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"start"</Description>
+                  <LastState Value="0" RealAddress="1FD9AAB90A0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[lovepanel_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"end"</Description>
+                  <LastState Value="0" RealAddress="1FD9AAB90A4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[lovepanel_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"now"</Description>
+                  <LastState Value="0" RealAddress="1FD9AAB90A8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[lovepanel_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"total_time"</Description>
+                  <LastState Value="0" RealAddress="1FD9AAB90AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[lovepanel_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"_is_end"</Description>
+                  <LastState Value="1" RealAddress="1FD9AAB90B0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lovepanel_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>55</ID>
+          <Description>"LoveStatus"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : imokone.exe
+  Version: 
+  Date   : 2025-12-13
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,LoveStatus:Update)
+define(bytes,55 48 8B EC 48 81 EC E0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,LoveStatus:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [lovestatus_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000E0
+  jmp return
+
+lovestatus_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(lovestatus_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000E0
+
+dealloc(newmem)
+unregistersymbol(lovestatus_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LoveStatus:Update
+
+23E9A66BBB9: 04 02                          - add al,02
+23E9A66BBBB: 05 04 03 01 50                 - add eax,50010304
+23E9A66BBC0: 00 00                          - add [rax],al
+23E9A66BBC2: 00 00                          - add [rax],al
+23E9A66BBC4: 00 00                          - add [rax],al
+23E9A66BBC6: 00 00                          - add [rax],al
+23E9A66BBC8: 00 00                          - add [rax],al
+23E9A66BBCA: 00 00                          - add [rax],al
+23E9A66BBCC: 00 00                          - add [rax],al
+23E9A66BBCE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+LoveStatus:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+LoveStatus:Update+1: 48 8B EC                       - mov rbp,rsp
+LoveStatus:Update+4: 48 81 EC E0 00 00 00           - sub rsp,000000E0
+LoveStatus:Update+b: 48 89 75 F8                    - mov [rbp-08],rsi
+LoveStatus:Update+f: 48 8B F1                       - mov rsi,rcx
+LoveStatus:Update+12: C7 85 68 FF FF FF 00 00 00 00  - mov [rbp-00000098],00000000
+LoveStatus:Update+1c: C7 85 6C FF FF FF 00 00 00 00  - mov [rbp-00000094],00000000
+LoveStatus:Update+26: C7 85 70 FF FF FF 00 00 00 00  - mov [rbp-00000090],00000000
+LoveStatus:Update+30: 48 8B 46 18                    - mov rax,[rsi+18]
+LoveStatus:Update+34: 48 89 85 50 FF FF FF           - mov [rbp-000000B0],rax
+LoveStatus:Update+3b: 66 66 90                       - nop 3
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"inited"</Description>
+              <LastState Value="1" RealAddress="1FCCE7A8AD4"/>
+              <VariableType>Byte</VariableType>
+              <Address>[lovestatus_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"is_enter_panel"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A8AD5"/>
+              <VariableType>Byte</VariableType>
+              <Address>[lovestatus_ptr]+55</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"sry_real_love_point"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A8AD8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[lovestatus_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"my_real_love_point"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A8ADC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[lovestatus_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"stuck_panel_cnt"</Description>
+              <LastState Value="0" RealAddress="1FCCE7A8AE0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[lovestatus_ptr]+60</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>62</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>63</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Sisters Connect ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,2428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>234</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Rhythm Doctor.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"ScnGame"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Rhythm Doctor.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,scnGame:Update)
+define(bytes,55 48 8B EC 48 81 EC 50 03 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,scnGame:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [scngame_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000350
+  jmp return
+
+scngame_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(scngame_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000350
+
+dealloc(newmem)
+unregistersymbol(scngame_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: scnGame:Update
+
+24556796EBD: 00 00                 - add [rax],al
+24556796EBF: 00 01                 - add [rcx],al
+24556796EC1: 00 00                 - add [rax],al
+24556796EC3: 00 00                 - add [rax],al
+24556796EC5: 00 00                 - add [rax],al
+24556796EC7: 00 00                 - add [rax],al
+24556796EC9: 00 00                 - add [rax],al
+24556796ECB: 00 00                 - add [rax],al
+24556796ECD: 00 00                 - add [rax],al
+24556796ECF: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+scnGame:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+scnGame:Update+1: 48 8B EC              - mov rbp,rsp
+scnGame:Update+4: 48 81 EC 50 03 00 00  - sub rsp,00000350
+scnGame:Update+b: 48 89 5D C8           - mov [rbp-38],rbx
+scnGame:Update+f: 48 89 75 D0           - mov [rbp-30],rsi
+scnGame:Update+13: 48 89 7D D8           - mov [rbp-28],rdi
+scnGame:Update+17: 4C 89 65 E0           - mov [rbp-20],r12
+scnGame:Update+1b: 4C 89 6D E8           - mov [rbp-18],r13
+scnGame:Update+1f: 4C 89 75 F0           - mov [rbp-10],r14
+scnGame:Update+23: 4C 89 7D F8           - mov [rbp-08],r15
+scnGame:Update+27: 48 89 8D 50 FD FF FF  - mov [rbp-000002B0],rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1</ID>
+                  <Description>"muteWhenGameUnfocused"</Description>
+                  <LastState Value="0" RealAddress="2732116AAC8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"timeSinceLastDebugMessage"</Description>
+                  <LastState Value="0" RealAddress="2732116AACC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"previousTypingSound"</Description>
+                  <LastState Value="0" RealAddress="2732116AAD0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"debugMessageDuration"</Description>
+                  <LastState Value="4" RealAddress="2732116AAD4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"lastTypingFrame"</Description>
+                  <LastState Value="0" RealAddress="2732116AAD8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"barToSkipToOnSlash"</Description>
+                  <LastState Value="0" RealAddress="2732116ADE0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+360</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"leftMarkPos"</Description>
+                  <LastState Value="-45" RealAddress="2732116ADE4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+364</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"rightMarkPos"</Description>
+                  <LastState Value="45" RealAddress="2732116ADF0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+370</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"levelFinishedLoading"</Description>
+                  <LastState Value="1" RealAddress="2732116ADFC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+37C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"failedLevel"</Description>
+                  <LastState Value="0" RealAddress="2732116ADFD"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+37D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"repositionRows"</Description>
+                  <LastState Value="1" RealAddress="2732116ADFE"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+37E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"multiplayerAppearance"</Description>
+                  <LastState Value="0" RealAddress="2732116AE00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+380</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"nurseCount"</Description>
+                  <LastState Value="0" RealAddress="2732116AE04"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+384</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"spacebarOnNothing"</Description>
+                  <LastState Value="1" RealAddress="2732116AE05"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+385</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"autoHeldBeatCounter"</Description>
+                  <LastState Value="0" RealAddress="2732116AE08"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+388</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"ignoreInput"</Description>
+                  <LastState Value="0" RealAddress="2732116AE0C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+38C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"skippedLastSkippableCutscene"</Description>
+                  <LastState Value="0" RealAddress="2732116AE0D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+38D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"oneshotSlowdownMultiplier"</Description>
+                  <LastState Value="1" RealAddress="2732116AE10"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+390</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"paused"</Description>
+                  <LastState Value="0" RealAddress="2732116AE14"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+394</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"HoldDurationToSkipCutscene"</Description>
+                  <LastState Value="0.6818181872" RealAddress="2732116AE18"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+398</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"barToScrubTo"</Description>
+                  <LastState Value="0" RealAddress="2732116AE1C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+39C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"syncHitRemainingTime"</Description>
+                  <LastState Value="0" RealAddress="2732116AE20"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"lastBeepTime"</Description>
+                  <LastState Value="0" RealAddress="2732116AE24"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"visualSpeed"</Description>
+                  <LastState Value="1" RealAddress="2732116AE28"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"getScreenshot"</Description>
+                  <LastState Value="0" RealAddress="2732116AE2C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"leftFinger"</Description>
+                  <LastState Value="4294967295" RealAddress="2732116AE30"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"rightFinger"</Description>
+                  <LastState Value="4294967295" RealAddress="2732116AE34"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"windowDanceEventCalled"</Description>
+                  <LastState Value="0" RealAddress="2732116AE38"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"unpauseAudioOnResume"</Description>
+                  <LastState Value="1" RealAddress="2732116AE39"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3B9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"gameStateWatcher"</Description>
+                  <LastState Value="3" RealAddress="2732116AE3C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"hasEnteredLowHealth"</Description>
+                  <LastState Value="0" RealAddress="2732116AE40"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"skippingCutsceneElapsedTime"</Description>
+                  <LastState Value="0" RealAddress="2732116AE44"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"p1WentDownTimeStamp"</Description>
+                  <LastState Value="0" RealAddress="2732116AE48"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"p2WentDownTimeStamp"</Description>
+                  <LastState Value="0" RealAddress="2732116AE4C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"debugKey"</Description>
+                  <LastState Value="0" RealAddress="2732116AE50"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"beginNarrationTime"</Description>
+                  <LastState Value="0" RealAddress="2732116AE54"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"lastBeginNarrationTime"</Description>
+                  <LastState Value="0" RealAddress="2732116AE58"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+3D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"_gameState"</Description>
+                  <LastState Value="3" RealAddress="2732116AE5C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"doOnce"</Description>
+                  <LastState Value="0" RealAddress="2732116AE60"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"narratedLevelReady"</Description>
+                  <LastState Value="0" RealAddress="2732116AE61"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"narratedSkipLabel"</Description>
+                  <LastState Value="0" RealAddress="2732116AE62"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"narratedKeepHoldingLabel"</Description>
+                  <LastState Value="0" RealAddress="2732116AE63"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E3</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"narratedSkippingLabel"</Description>
+                  <LastState Value="0" RealAddress="2732116AE64"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"dontLetGameStateToggleHands"</Description>
+                  <LastState Value="0" RealAddress="2732116AE65"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+3E5</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"shadowIdBeatOffset"</Description>
+                  <LastState Value="100" RealAddress="2732116AE68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"shadowRowStyle"</Description>
+                  <LastState Value="1" RealAddress="2732116AE6C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+3EC</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>240</ID>
+              <Description>"HOW TO USE IT : It hasn't been cracked yet"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"debugModeCheat"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>237</ID>
+                      <Description>"TEXT - despacit0"</Description>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>4080FF</Color>
+                      <GroupHeader>1</GroupHeader>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="9" RealAddress="27271027BF8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"[0]KeyCode"</Description>
+                      <LastState Value="100" RealAddress="27271027C00"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"[1]KeyCode"</Description>
+                      <LastState Value="101" RealAddress="27271027C04"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"[2]KeyCode"</Description>
+                      <LastState Value="115" RealAddress="27271027C08"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"[3]KeyCode"</Description>
+                      <LastState Value="112" RealAddress="27271027C0C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"[4]KeyCode"</Description>
+                      <LastState Value="97" RealAddress="27271027C10"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"[5]KeyCode"</Description>
+                      <LastState Value="99" RealAddress="27271027C14"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"[6]KeyCode"</Description>
+                      <LastState Value="105" RealAddress="27271027C18"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"[7]KeyCode"</Description>
+                      <LastState Value="116" RealAddress="27271027C1C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"[8]KeyCode"</Description>
+                      <LastState Value="48" RealAddress="27271027C20"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"samuraiModeCheat"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>238</ID>
+                      <Description>"TEXT - samurai."</Description>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>4080FF</Color>
+                      <GroupHeader>1</GroupHeader>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="9" RealAddress="27271027BA8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"[0]KeyCode (?)"</Description>
+                      <LastState Value="304" RealAddress="27271027BB0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"[1]KeyCode"</Description>
+                      <LastState Value="115" RealAddress="27271027BB4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"[2]KeyCode"</Description>
+                      <LastState Value="97" RealAddress="27271027BB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"[3]KeyCode"</Description>
+                      <LastState Value="109" RealAddress="27271027BBC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"[4]KeyCode"</Description>
+                      <LastState Value="117" RealAddress="27271027BC0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"[5]KeyCode"</Description>
+                      <LastState Value="114" RealAddress="27271027BC4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"[6]KeyCode"</Description>
+                      <LastState Value="97" RealAddress="27271027BC8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"[7]KeyCode"</Description>
+                      <LastState Value="105" RealAddress="27271027BCC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"[8]KeyCode"</Description>
+                      <LastState Value="46" RealAddress="27271027BD0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+30</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"songOfTheSeaCheat"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>239</ID>
+                      <Description>"TEXT - jjdf"</Description>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>4080FF</Color>
+                      <GroupHeader>1</GroupHeader>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="4" RealAddress="27271020258"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"[0]KeyCode"</Description>
+                      <LastState Value="106" RealAddress="27271020260"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"[1]KeyCode"</Description>
+                      <LastState Value="106" RealAddress="27271020264"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"[2]KeyCode"</Description>
+                      <LastState Value="100" RealAddress="27271020268"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"[3]KeyCode"</Description>
+                      <LastState Value="102" RealAddress="2727102026C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"rankscreen"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"previousFrameWasSkippable"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DB0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"secondsToExit"</Description>
+                  <LastState Value="-100000" RealAddress="27320CF1DB4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"exiting"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DB8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"closeBlades"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DB9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>B9</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"rankscreenShowReferenceTime"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DBC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"timeToNarrate"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DC0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"narratedPress"</Description>
+                  <LastState Value="1" RealAddress="27320CF1DC4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"trueGameover"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DC8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"autoGameover"</Description>
+                  <LastState Value="0" RealAddress="27320CF1DCC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"hpController"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"settingVisibilityManually"</Description>
+                      <LastState Value="0" RealAddress="27320BAA1D0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"showingVirus"</Description>
+                      <LastState Value="1" RealAddress="27320BAA1D1"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>51</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>89</ID>
+                      <Description>"noP2BossBar"</Description>
+                      <LastState Value="0" RealAddress="27320BAA1D2"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>52</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>90</ID>
+                      <Description>"visible"</Description>
+                      <LastState Value="0" RealAddress="27320BAA1D3"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>53</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"player1HP"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>94</ID>
+                      <Description>"maxHP"</Description>
+                      <LastState Value="1" RealAddress="27320DBE0C8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>95</ID>
+                      <Description>"damageDealt"</Description>
+                      <LastState Value="0" RealAddress="27320DBE0CC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>96</ID>
+                      <Description>"compensatedDamage"</Description>
+                      <LastState Value="0" RealAddress="27320DBE0D0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>97</ID>
+                      <Description>"compensateMisses"</Description>
+                      <LastState Value="0" RealAddress="27320DBE0D4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>98</ID>
+                      <Description>"useMistakes"</Description>
+                      <LastState Value="0" RealAddress="27320DBE0D5"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>99</ID>
+                      <Description>"lastNarratedHealth"</Description>
+                      <LastState Value="100" RealAddress="27320DBE0D8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>100</ID>
+                      <Description>"startCalled"</Description>
+                      <LastState Value="1" RealAddress="27320DBE0DC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"player2HP"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>101</ID>
+                      <Description>"maxHP"</Description>
+                      <LastState Value="1" RealAddress="27320824FA8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>102</ID>
+                      <Description>"damageDealt"</Description>
+                      <LastState Value="0" RealAddress="27320824FAC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>103</ID>
+                      <Description>"compensatedDamage"</Description>
+                      <LastState Value="0" RealAddress="27320824FB0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>104</ID>
+                      <Description>"compensateMisses"</Description>
+                      <LastState Value="0" RealAddress="27320824FB4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>105</ID>
+                      <Description>"useMistakes"</Description>
+                      <LastState Value="0" RealAddress="27320824FB5"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>106</ID>
+                      <Description>"lastNarratedHealth"</Description>
+                      <LastState Value="100" RealAddress="27320824FB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>107</ID>
+                      <Description>"startCalled"</Description>
+                      <LastState Value="1" RealAddress="27320824FBC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"bossHP"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"maxHP"</Description>
+                      <LastState Value="1" RealAddress="27320824D08"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"damageDealt"</Description>
+                      <LastState Value="0" RealAddress="27320824D0C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"compensatedDamage"</Description>
+                      <LastState Value="0" RealAddress="27320824D10"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"compensateMisses"</Description>
+                      <LastState Value="0" RealAddress="27320824D14"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"useMistakes"</Description>
+                      <LastState Value="0" RealAddress="27320824D15"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"lastNarratedHealth"</Description>
+                      <LastState Value="100" RealAddress="27320824D18"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"startCalled"</Description>
+                      <LastState Value="1" RealAddress="27320824D1C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[scngame_ptr]+C0</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"mistakesManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"earlyOffsetsSumP1"</Description>
+                  <LastState Value="26" RealAddress="2731E3B22E0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"earlyOffsetsSumP2"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22E4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"lateOffsetsSumP1"</Description>
+                  <LastState Value="9" RealAddress="2731E3B22E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"lateOffsetsSumP2"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"mistakesCountP1"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22F0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"mistakesCountP2"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22F4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"consecutiveMistakesP1"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22F8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"consecutiveMistakesP2"</Description>
+                  <LastState Value="0" RealAddress="2731E3B22FC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"currentLevel"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"loadingSuccessful"</Description>
+                  <LastState Value="1" RealAddress="273210B3120"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>127</ID>
+                  <Description>"songPlaysAtFirstBar"</Description>
+                  <LastState Value="0" RealAddress="273210B3121"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>121</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"firstBPMFound"</Description>
+                  <LastState Value="88" RealAddress="273210B3124"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>124</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"floatingTextsCreatedCount"</Description>
+                  <LastState Value="0" RealAddress="273210B3128"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>128</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>130</ID>
+                  <Description>"runningFromTag"</Description>
+                  <LastState Value="0" RealAddress="273210B312C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>12C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>131</ID>
+                  <Description>"runningTagEventType"</Description>
+                  <LastState Value="0" RealAddress="273210B3130"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>130</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>132</ID>
+                  <Description>"levelToSkipTo"</Description>
+                  <LastState Value="4" RealAddress="273210B3134"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>134</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"levelType"</Description>
+                  <LastState Value="0" RealAddress="273210B3138"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>138</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>134</ID>
+                  <Description>"bossActNum"</Description>
+                  <LastState Value="4294967295" RealAddress="273210B313C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>13C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>135</ID>
+                  <Description>"multiroom"</Description>
+                  <LastState Value="1" RealAddress="273210B3140"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>140</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"statusSignWidth"</Description>
+                  <LastState Value="-1" RealAddress="273210B3144"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>144</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>137</ID>
+                  <Description>"subdivisionMissWeight"</Description>
+                  <LastState Value="0" RealAddress="273210B3148"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>148</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>138</ID>
+                  <Description>"noHitFlashBorder"</Description>
+                  <LastState Value="0" RealAddress="273210B314C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>14C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"showHitstripOnlyOnActiveBeats"</Description>
+                  <LastState Value="0" RealAddress="273210B314D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>14D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"noHitStrips"</Description>
+                  <LastState Value="0" RealAddress="273210B314E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>14E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"activeDialogues"</Description>
+                  <LastState Value="0" RealAddress="273210B314F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>14F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"activeDialoguesImmediately"</Description>
+                  <LastState Value="0" RealAddress="273210B3150"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>150</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>143</ID>
+                  <Description>"crotchetsToExplode"</Description>
+                  <LastState Value="1" RealAddress="273210B3154"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>154</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>144</ID>
+                  <Description>"wobblyLines"</Description>
+                  <LastState Value="0" RealAddress="273210B3158"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>158</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"doublePulse"</Description>
+                  <LastState Value="1" RealAddress="273210B3159"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>159</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>146</ID>
+                  <Description>"pauseOn7thBeat"</Description>
+                  <LastState Value="0" RealAddress="273210B315A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>147</ID>
+                  <Description>"fullResolutionRenderTextures"</Description>
+                  <LastState Value="0" RealAddress="273210B315B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15B</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>148</ID>
+                  <Description>"dontAddEmptyStripsForPlayers"</Description>
+                  <LastState Value="0" RealAddress="273210B315C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>149</ID>
+                  <Description>"noSmartJudgment"</Description>
+                  <LastState Value="0" RealAddress="273210B315D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>150</ID>
+                  <Description>"bombBeats"</Description>
+                  <LastState Value="0" RealAddress="273210B315E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"smoothShake"</Description>
+                  <LastState Value="0" RealAddress="273210B315F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>15F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"rotateShake"</Description>
+                  <LastState Value="0" RealAddress="273210B3160"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>160</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"invisibleChars"</Description>
+                  <LastState Value="0" RealAddress="273210B3161"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>161</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"invisibleHeart"</Description>
+                  <LastState Value="0" RealAddress="273210B3162"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>162</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>155</ID>
+                  <Description>"disableRowChangeWarningFlashes"</Description>
+                  <LastState Value="0" RealAddress="273210B3163"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>163</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>156</ID>
+                  <Description>"instantRowChange"</Description>
+                  <LastState Value="0" RealAddress="273210B3164"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>164</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>157</ID>
+                  <Description>"dogMode"</Description>
+                  <LastState Value="0" RealAddress="273210B3165"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>165</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>158</ID>
+                  <Description>"noBananaBeats"</Description>
+                  <LastState Value="0" RealAddress="273210B3166"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>166</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"noOneshotShadows"</Description>
+                  <LastState Value="0" RealAddress="273210B3167"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>167</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>160</ID>
+                  <Description>"hideHandsOnStart"</Description>
+                  <LastState Value="0" RealAddress="273210B3168"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>168</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"noHands"</Description>
+                  <LastState Value="0" RealAddress="273210B3169"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>169</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>162</ID>
+                  <Description>"noRowAnimsOnStart"</Description>
+                  <LastState Value="0" RealAddress="273210B316A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"charsOnlyOnStart"</Description>
+                  <LastState Value="0" RealAddress="273210B316B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16B</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"subdivisions"</Description>
+                  <LastState Value="0" RealAddress="273210B316C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"rowReflections"</Description>
+                  <LastState Value="0" RealAddress="273210B316D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"rowReflectionsJumping"</Description>
+                  <LastState Value="0" RealAddress="273210B316E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>167</ID>
+                  <Description>"cpuIsP2On2P"</Description>
+                  <LastState Value="0" RealAddress="273210B316F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>16F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>168</ID>
+                  <Description>"shadowRowsCopyExpressions"</Description>
+                  <LastState Value="0" RealAddress="273210B3170"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>170</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>169</ID>
+                  <Description>"skipRankText"</Description>
+                  <LastState Value="0" RealAddress="273210B3171"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>171</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>170</ID>
+                  <Description>"useScore"</Description>
+                  <LastState Value="0" RealAddress="273210B3172"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>172</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>171</ID>
+                  <Description>"alternativeMatrix"</Description>
+                  <LastState Value="0" RealAddress="273210B3173"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>173</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"classicHitParticles"</Description>
+                  <LastState Value="1" RealAddress="273210B3174"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>174</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"legacyTaggedEvents"</Description>
+                  <LastState Value="0" RealAddress="273210B3175"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>175</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>174</ID>
+                  <Description>"playerDrives7thBeat"</Description>
+                  <LastState Value="0" RealAddress="273210B3176"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>176</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>175</ID>
+                  <Description>"useFlashFontForFloatingText"</Description>
+                  <LastState Value="0" RealAddress="273210B3177"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>177</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>176</ID>
+                  <Description>"manualLyricAlpha"</Description>
+                  <LastState Value="0" RealAddress="273210B3178"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>178</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>177</ID>
+                  <Description>"flashTextEnabled"</Description>
+                  <LastState Value="0" RealAddress="273210B3179"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>179</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>178</ID>
+                  <Description>"noCutsceneLetterbox"</Description>
+                  <LastState Value="0" RealAddress="273210B317A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>179</ID>
+                  <Description>"alwaysSkippableCutscene"</Description>
+                  <LastState Value="0" RealAddress="273210B317B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17B</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>180</ID>
+                  <Description>"runTaggedEventsWhileScrubbing"</Description>
+                  <LastState Value="1" RealAddress="273210B317C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>181</ID>
+                  <Description>"noPopHitstrips"</Description>
+                  <LastState Value="0" RealAddress="273210B317D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>182</ID>
+                  <Description>"noShadowRowWeighting"</Description>
+                  <LastState Value="0" RealAddress="273210B317E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"noHitParticles"</Description>
+                  <LastState Value="0" RealAddress="273210B317F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>17F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>184</ID>
+                  <Description>"cutsceneLevel"</Description>
+                  <LastState Value="0" RealAddress="273210B3180"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>180</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>185</ID>
+                  <Description>"useSyncoPitchShift"</Description>
+                  <LastState Value="0" RealAddress="273210B3181"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>181</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>186</ID>
+                  <Description>"oldRoomBlending"</Description>
+                  <LastState Value="0" RealAddress="273210B3182"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>182</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>187</ID>
+                  <Description>"oldBassDrop"</Description>
+                  <LastState Value="0" RealAddress="273210B3183"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>183</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>188</ID>
+                  <Description>"oldSubdivFriendBehavior"</Description>
+                  <LastState Value="0" RealAddress="273210B3184"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>184</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>189</ID>
+                  <Description>"booleansDefaultToTrue"</Description>
+                  <LastState Value="0" RealAddress="273210B3185"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>185</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>190</ID>
+                  <Description>"score"</Description>
+                  <LastState Value="0" RealAddress="273210B3188"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>188</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>191</ID>
+                  <Description>"startImmediately"</Description>
+                  <LastState Value="0" RealAddress="273210B318C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>18C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>192</ID>
+                  <Description>"noGetSet"</Description>
+                  <LastState Value="0" RealAddress="273210B318D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>18D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>193</ID>
+                  <Description>"gentleBassDrop"</Description>
+                  <LastState Value="0" RealAddress="273210B318E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>18E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>194</ID>
+                  <Description>"dialogTickerSounds"</Description>
+                  <LastState Value="0" RealAddress="273210B318F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>18F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>195</ID>
+                  <Description>"countHeldPresses"</Description>
+                  <LastState Value="0" RealAddress="273210B3190"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>190</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>196</ID>
+                  <Description>"mistakeWeight"</Description>
+                  <LastState Value="1" RealAddress="273210B3194"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>194</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>197</ID>
+                  <Description>"hitMarginMultiplier"</Description>
+                  <LastState Value="1" RealAddress="273210B3198"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>198</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>198</ID>
+                  <Description>"heartExplodeType"</Description>
+                  <LastState Value="1" RealAddress="273210B319C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>19C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>199</ID>
+                  <Description>"hideHandsAfterStart"</Description>
+                  <LastState Value="1" RealAddress="273210B31A0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>200</ID>
+                  <Description>"PanExplodeSound"</Description>
+                  <LastState Value="0" RealAddress="273210B31A1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1A1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>201</ID>
+                  <Description>"shockwaveSizeMultiplier"</Description>
+                  <LastState Value="1" RealAddress="273210B31A4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>202</ID>
+                  <Description>"shockwaveDistortionMultiplier"</Description>
+                  <LastState Value="1" RealAddress="273210B31A8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>203</ID>
+                  <Description>"shockwaveDurationMultiplier"</Description>
+                  <LastState Value="1" RealAddress="273210B31AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>204</ID>
+                  <Description>"forceNoFrameOffsets"</Description>
+                  <LastState Value="0" RealAddress="273210B31B0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>205</ID>
+                  <Description>"noFreezeshotExplosion"</Description>
+                  <LastState Value="0" RealAddress="273210B31B1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1B1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>206</ID>
+                  <Description>"earlyFreezeshotExplosion"</Description>
+                  <LastState Value="0" RealAddress="273210B31B2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1B2</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>207</ID>
+                  <Description>"missesToCrackHeart"</Description>
+                  <LastState Value="10" RealAddress="273210B31B4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>208</ID>
+                  <Description>"heartExplodeMultiplier"</Description>
+                  <LastState Value="0.6000000238" RealAddress="273210B31B8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"noBossFail"</Description>
+                  <LastState Value="0" RealAddress="273210B31BC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>210</ID>
+                  <Description>"manualHeartCrack"</Description>
+                  <LastState Value="0" RealAddress="273210B31BD"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1BD</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"narrateHP"</Description>
+                  <LastState Value="1" RealAddress="273210B31BE"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1BE</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>212</ID>
+                  <Description>"shouldJyiSayOneshot"</Description>
+                  <LastState Value="1" RealAddress="273210B31BF"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1BF</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>213</ID>
+                  <Description>"failedLevel"</Description>
+                  <LastState Value="0" RealAddress="273210B31C0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>214</ID>
+                  <Description>"skippable"</Description>
+                  <LastState Value="0" RealAddress="273210B31C1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>215</ID>
+                  <Description>"skippableRankScreen"</Description>
+                  <LastState Value="1" RealAddress="273210B31C2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C2</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>216</ID>
+                  <Description>"runFirstActionBarInPreactions"</Description>
+                  <LastState Value="0" RealAddress="273210B31C3"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C3</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>217</ID>
+                  <Description>"keepHandsInFront"</Description>
+                  <LastState Value="0" RealAddress="273210B31C4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>218</ID>
+                  <Description>"missedAny"</Description>
+                  <LastState Value="1" RealAddress="273210B31C5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C5</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>219</ID>
+                  <Description>"delayRankVoice"</Description>
+                  <LastState Value="0" RealAddress="273210B31C6"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C6</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>220</ID>
+                  <Description>"museDashResults"</Description>
+                  <LastState Value="0" RealAddress="273210B31C7"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C7</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>221</ID>
+                  <Description>"loadedHeldBeatSounds"</Description>
+                  <LastState Value="0" RealAddress="273210B31C8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>222</ID>
+                  <Description>"deltaTime"</Description>
+                  <LastState Value="0.009712100029" RealAddress="273210B31CC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>223</ID>
+                  <Description>"specialSpeedHack"</Description>
+                  <LastState Value="0" RealAddress="273210B31D0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>224</ID>
+                  <Description>"hasWarnedMargin"</Description>
+                  <LastState Value="0" RealAddress="273210B31D4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>225</ID>
+                  <Description>"usingBrightness"</Description>
+                  <LastState Value="0" RealAddress="273210B31D5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D5</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>226</ID>
+                  <Description>"usingContrast"</Description>
+                  <LastState Value="0" RealAddress="273210B31D6"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D6</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>227</ID>
+                  <Description>"usingSaturation"</Description>
+                  <LastState Value="0" RealAddress="273210B31D7"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D7</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>228</ID>
+                  <Description>"buttonPressCount"</Description>
+                  <LastState Value="80" RealAddress="273210B31D8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>1D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>229</ID>
+                  <Description>"buttonPressCountPrevious"</Description>
+                  <LastState Value="0" RealAddress="273210B3238"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>238</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>230</ID>
+                  <Description>"lastHeldPress"</Description>
+                  <LastState Value="0" RealAddress="273210B323C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>23C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>231</ID>
+                  <Description>"lastHeldRelease"</Description>
+                  <LastState Value="0" RealAddress="273210B3240"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>240</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>232</ID>
+                  <Description>"dontKillWindowDanceOnGameOverUntilExit"</Description>
+                  <LastState Value="0" RealAddress="273210B3244"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>244</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>233</ID>
+                  <Description>"glitchObstructionOnGameOverExit"</Description>
+                  <LastState Value="0" RealAddress="273210B3245"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[scngame_ptr]+2B8</Address>
+                  <Offsets>
+                    <Offset>245</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>235</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>236</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <Comments>samurai.</Comments>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Rhythm Doctor - v1.0.1 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

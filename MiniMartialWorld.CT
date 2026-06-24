@@ -1,0 +1,2315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>217</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("MiniMartialWorld.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"GameData"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MiniMartialWorld.exe
+  Version: 
+  Date   : 2025-12-15
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,GameData:SetCurrentEnergy)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GameData:SetCurrentEnergy)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamedata_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+gamedata_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gamedata_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(gamedata_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameData:SetCurrentEnergy
+
+198CB92DD19: 30 BF 6D 71 98 01              - xor [rdi+0198716D],bh
+198CB92DD1F: 00 00                          - add [rax],al
+198CB92DD21: 00 00                          - add [rax],al
+198CB92DD23: 00 00                          - add [rax],al
+198CB92DD25: 00 00                          - add [rax],al
+198CB92DD27: 00 00                          - add [rax],al
+198CB92DD29: 00 00                          - add [rax],al
+198CB92DD2B: 00 00                          - add [rax],al
+198CB92DD2D: 00 00                          - add [rax],al
+198CB92DD2F: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+GameData:SetCurrentEnergy: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+GameData:SetCurrentEnergy+1: 48 8B EC                       - mov rbp,rsp
+GameData:SetCurrentEnergy+4: 48 83 EC 30                    - sub rsp,30
+GameData:SetCurrentEnergy+8: 48 89 7D F8                    - mov [rbp-08],rdi
+GameData:SetCurrentEnergy+c: 48 8B F9                       - mov rdi,rcx
+GameData:SetCurrentEnergy+f: 48 89 55 F0                    - mov [rbp-10],rdx
+GameData:SetCurrentEnergy+13: 48 8B CA                       - mov rcx,rdx
+GameData:SetCurrentEnergy+16: 33 D2                          - xor edx,edx
+GameData:SetCurrentEnergy+18: 41 B8 E7 03 00 00              - mov r8d,000003E7
+GameData:SetCurrentEnergy+1e: 49 BB D0 09 D4 E3 97 01 00 00  - mov r11,UnityEngine.Mathf:Clamp
+GameData:SetCurrentEnergy+28: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Value Show When Change Energy"</Description>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"EventTimeModifier"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"MoodLimit"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"CurrentMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"EnergyLimit"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+8C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"CurrentEnergy"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"TrustLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+94</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"Money"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"SecurityLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+9C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"Time"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"ExtraLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"NewLibraryContent"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamedata_ptr]+A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"Seed"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"RandomTrainingKey"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"TalentPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"SkillSlotNum"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"BuffUpper"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"AutoUseClose"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamedata_ptr]+C0</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"actionTask"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"taskName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gamedata_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"imageName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gamedata_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"energyCost"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"Immediate"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamedata_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"CurrentTraining"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"name"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"&lt;Quality&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"&lt;Type&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"&lt;TrainingLimit&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"&lt;CurrentTrainingCount&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"EnergyCost"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"ExpGain"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"ValueRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"BasicTraining"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"IsLoop"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamedata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>35</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"TrainingPart"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"StrengthLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"ArtLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"IntelligenceLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"AgilityLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"ProtectionLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"CharmLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"StrengthExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"ArtExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"IntelligenceExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"AgilityExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"ProtectionExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"CharmExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"MinePart"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"MoodCostPerMine"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"EnergyCostPerMine"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"MiningNumber"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"OreNum"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamedata_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"Player"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"&lt;TalentPart&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"MiningTalent"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>61</ID>
+                          <Description>"&lt;EnergyEfficiencyLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>62</ID>
+                          <Description>"&lt;MoodStabilityLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>63</ID>
+                          <Description>"&lt;VeinExplorationLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>64</ID>
+                          <Description>"&lt;OreValueBoostLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>65</ID>
+                          <Description>"&lt;ExperienceGainLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>66</ID>
+                          <Description>"&lt;RareOreFinderLevel&gt;"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>10</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"IntellectualTalent"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>67</ID>
+                          <Description>"LevelUpExperienceReductionPercentage"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>68</ID>
+                          <Description>"MinimumCompatibilityIncrease"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>69</ID>
+                          <Description>"MaximumAttributeRequirementReductionPercentage"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>70</ID>
+                          <Description>"StudyEnergyConsumptionReduction"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>71</ID>
+                          <Description>"StudyMoodRecover"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"ArtTalent"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>72</ID>
+                          <Description>"PriceReductionPercentage"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>73</ID>
+                          <Description>"ShopCapacity"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>74</ID>
+                          <Description>"ShopOccurrence"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>75</ID>
+                          <Description>"ShopQuality"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>76</ID>
+                          <Description>"SkillExtraEfficiency"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>77</ID>
+                          <Description>"UltimateItemUseInBattle"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"&lt;SkillList&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"Mining"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>91</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>92</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>93</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>94</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>95</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"Farm"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>96</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>97</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>98</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>99</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>100</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"Fish"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>101</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>102</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>103</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>104</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>105</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"Cooking"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>106</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>107</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>108</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>109</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>110</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"Eloquence"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>111</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>112</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>113</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>114</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>115</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>82</ID>
+                      <Description>"Commerce"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>116</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>117</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>118</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>119</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>120</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>83</ID>
+                      <Description>"Medicine"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>121</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>122</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>123</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>124</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>125</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>40</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"Painting"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>126</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>127</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>128</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>129</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>130</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>85</ID>
+                      <Description>"Forging"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>131</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>132</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>133</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>134</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>135</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>86</ID>
+                      <Description>"Theft"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>136</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>58</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>137</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>58</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>138</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>58</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>139</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>58</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>140</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>58</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"Hunting"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>141</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>60</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>142</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>60</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>143</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>60</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>144</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>60</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>145</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>60</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>90</ID>
+                      <Description>"GatherHerbs"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>146</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>68</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>147</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>68</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>148</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>68</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>149</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>68</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>150</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>68</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>89</ID>
+                      <Description>"Lumberjacking"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>151</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>70</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>152</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>70</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>153</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>70</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>154</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>70</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>155</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>70</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"TalismanMaking"</Description>
+                      <Options moHideChildren="1"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>156</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>78</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>157</ID>
+                          <Description>"Exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>78</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>158</ID>
+                          <Description>"BasicCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>78</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>159</ID>
+                          <Description>"LevelCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>78</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>160</ID>
+                          <Description>"MaxLevel"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamedata_ptr]+10</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>78</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"&lt;PersonalData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>162</ID>
+                      <Description>"&lt;FamilyName&gt;"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>163</ID>
+                      <Description>"&lt;SecondName&gt;"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>164</ID>
+                      <Description>"Identity"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>165</ID>
+                      <Description>"SpriteName"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>30</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>166</ID>
+                      <Description>"&lt;Age&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>167</ID>
+                      <Description>"&lt;Birth&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>168</ID>
+                      <Description>"&lt;Gender&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>169</ID>
+                      <Description>"&lt;ID&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>170</ID>
+                      <Description>"&lt;SpriteID&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>171</ID>
+                      <Description>"Hide"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"Work"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>173</ID>
+                      <Description>"&lt;Name&gt;"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>174</ID>
+                      <Description>"SpriteName"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>175</ID>
+                      <Description>"&lt;TaskType&gt;"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>176</ID>
+                      <Description>"Limit"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>177</ID>
+                      <Description>"Process"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>178</ID>
+                      <Description>"BaseMoodCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>179</ID>
+                      <Description>"BaseEnergyCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>180</ID>
+                      <Description>"&lt;quality&gt;"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>181</ID>
+                      <Description>"InitialUnlocked"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>182</ID>
+                      <Description>"_description"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>40</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"&lt;AttributePart&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>184</ID>
+                      <Description>"Strength"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>185</ID>
+                      <Description>"Charm"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>186</ID>
+                      <Description>"Speed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>187</ID>
+                      <Description>"Comprehension"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>188</ID>
+                      <Description>"Physique"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>189</ID>
+                      <Description>"Concentrate"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>190</ID>
+                      <Description>"Lucky"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>191</ID>
+                      <Description>"Health"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>192</ID>
+                      <Description>"Manner"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>193</ID>
+                      <Description>"MaxHealth"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>194</ID>
+                      <Description>"MaxManner"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>195</ID>
+                      <Description>"Atk"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>196</ID>
+                      <Description>"Def"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>197</ID>
+                      <Description>"Agi"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>198</ID>
+                      <Description>"HitRate"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>199</ID>
+                      <Description>"Evasion"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>200</ID>
+                      <Description>"CriticalRate"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>201</ID>
+                      <Description>"CriticalMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>202</ID>
+                      <Description>"ItemDamageFactor"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>203</ID>
+                      <Description>"MaxHealthMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>204</ID>
+                      <Description>"MaxMannerMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>205</ID>
+                      <Description>"AtkMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>206</ID>
+                      <Description>"DefMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>207</ID>
+                      <Description>"AgiMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>208</ID>
+                      <Description>"HitRateMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>209</ID>
+                      <Description>"EvasionMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>210</ID>
+                      <Description>"CriticalRateMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>211</ID>
+                      <Description>"CriticalMultiplierMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>212</ID>
+                      <Description>"DamageMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>213</ID>
+                      <Description>"Level"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>214</ID>
+                      <Description>"Stage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>215</ID>
+                      <Description>"Exp"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamedata_ptr]+10</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>216</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>218</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Mini Martial World ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

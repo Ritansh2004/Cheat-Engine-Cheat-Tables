@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>36</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Ntraholic.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"CharacterStats"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Ntraholic.exe
+  Version: 
+  Date   : 2025-12-19
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CharacterStats:save)
+define(bytes,55 48 8B EC 48 83 EC 30 48 89 4D F8 48 89 55 F0)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CharacterStats:save)
+
+label(code)
+label(return)
+
+newmem:
+mov [characterstats_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  mov [rbp-08],rcx
+  mov [rbp-10],rdx
+  jmp return
+
+characterstats_ptr:
+dq 0
+
+address:
+  jmp far newmem
+  nop 2
+return:
+registersymbol(characterstats_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+  // mov [rbp-08],rcx
+  // mov [rbp-10],rdx
+
+dealloc(newmem)
+unregistersymbol(characterstats_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CharacterStats:save
+
+UnityEngine.Input:GetKeyDownInt+f9: 75 CC                          - jne UnityEngine.Input:GetKeyDownInt+c7
+UnityEngine.Input:GetKeyDownInt+fb: EB 8A                          - jmp UnityEngine.Input:GetKeyDownInt+87
+2744ED886BD: 00 00                          - add [rax],al
+2744ED886BF: 00 01                          - add [rcx],al
+2744ED886C1: 04 02                          - add al,02
+2744ED886C3: 05 04 03 01 50                 - add eax,50010304
+2744ED886C8: 00 00                          - add [rax],al
+2744ED886CA: 00 00                          - add [rax],al
+2744ED886CC: 00 00                          - add [rax],al
+2744ED886CE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+CharacterStats:save: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CharacterStats:save+1: 48 8B EC                       - mov rbp,rsp
+CharacterStats:save+4: 48 83 EC 30                    - sub rsp,30
+CharacterStats:save+8: 48 89 4D F8                    - mov [rbp-08],rcx
+CharacterStats:save+c: 48 89 55 F0                    - mov [rbp-10],rdx
+CharacterStats:save+10: 48 8B C1                       - mov rax,rcx
+CharacterStats:save+13: 48 8B 50 18                    - mov rdx,[rax+18]
+CharacterStats:save+17: 48 63 4D F0                    - movsxd  rcx,dword ptr [rbp-10]
+CharacterStats:save+1b: 66 66 90                       - nop 3
+CharacterStats:save+1e: 49 BB D0 86 94 F7 74 02 00 00  - mov r11,save_system:Save
+CharacterStats:save+28: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Value Show When Save Game"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"stamina"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"maxStamina"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>84</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"money"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>88</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"days"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>8C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"time"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>90</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"levels"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>94</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"progress"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>98</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"gym_increase"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>9C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"salary"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>A0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"chiho_status"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>A4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"lilith_energy"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>A8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"instruction_read"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>AC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"chiho_where"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>B0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"alice_level"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>B4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"ex_level"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>B8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"shota_attention"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>BC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"shota_corruption"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>C0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"best_run"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>C4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"love_potion_trigger"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>C8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"nm_first"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>C9</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"dinner_sex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>CC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"chiho_home_sex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>D0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"story10_day"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>D4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"prologue_hot_spring_day"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>D8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"count_down_to_hot_spring"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>DC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"sperm"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"pregnant"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>E4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"exposure"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>E8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"pleasure"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>EC</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"submissive"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>F0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"pregnant_status"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>F4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"mohawk_saw"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>F8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"female_question"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[characterstats_ptr]+18</Address>
+              <Offsets>
+                <Offset>F9</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>37</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>38</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " NTRAHOLIC R-18 - v5.0.5s ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

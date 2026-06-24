@@ -1,0 +1,1162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>123</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Pirates Outlaws 2 Heritage.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PlayerState"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Pirates Outlaws 2 Heritage.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Characters.PlayerState:set_Hp)
+define(bytes,55 48 8B EC 48 83 EC 30 48 89 7D F8 48 8B F9)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Characters.PlayerState:set_Hp)
+
+label(code)
+label(return)
+
+newmem:
+mov [playerstate_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  mov [rbp-08],rdi
+  mov rdi,rcx
+  jmp return
+
+playerstate_ptr:
+dq 0
+
+address:
+  jmp far newmem
+  nop
+return:
+registersymbol(playerstate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+  // mov [rbp-08],rdi
+  // mov rdi,rcx
+
+dealloc(newmem)
+unregistersymbol(playerstate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Characters.PlayerState:set_Hp
+
+UnityEngine.UI.Selectable:EvaluateAndTransitionToSelectionState+59: 48 8D 65 00                    - lea rsp,[rbp+00]
+UnityEngine.UI.Selectable:EvaluateAndTransitionToSelectionState+5d: 5D                             - pop rbp
+UnityEngine.UI.Selectable:EvaluateAndTransitionToSelectionState+5e: C3                             - ret 
+24C040D43DF: 00 01                          - add [rcx],al
+24C040D43E1: 04 02                          - add al,02
+24C040D43E3: 05 04 03 01 50                 - add eax,50010304
+24C040D43E8: 00 00                          - add [rax],al
+24C040D43EA: 00 00                          - add [rax],al
+24C040D43EC: 00 00                          - add [rax],al
+24C040D43EE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Characters.PlayerState:set_Hp: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Characters.PlayerState:set_Hp+1: 48 8B EC                       - mov rbp,rsp
+Characters.PlayerState:set_Hp+4: 48 83 EC 30                    - sub rsp,30
+Characters.PlayerState:set_Hp+8: 48 89 7D F8                    - mov [rbp-08],rdi
+Characters.PlayerState:set_Hp+c: 48 8B F9                       - mov rdi,rcx
+Characters.PlayerState:set_Hp+f: 48 89 55 F0                    - mov [rbp-10],rdx
+Characters.PlayerState:set_Hp+13: 66 66 90                       - nop 3
+Characters.PlayerState:set_Hp+16: 49 BB 10 69 00 FB 4C 02 00 00  - mov r11,Characters.PlayerState:get_RecoverableHp
+Characters.PlayerState:set_Hp+20: 41 FF D3                       - call r11
+Characters.PlayerState:set_Hp+23: 4C 8B C0                       - mov r8,rax
+Characters.PlayerState:set_Hp+26: 48 63 4D F0                    - movsxd  rcx,dword ptr [rbp-10]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Value Show When Set HP"</Description>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"characterName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[playerstate_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"className"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[playerstate_ptr]+18</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"characterID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"classID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"companionId"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"wins"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"maxHp"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"hp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+134</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"corruption"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+138</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"coins"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+13C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"maxAmmo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+140</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"maxShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+144</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"startShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+148</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"maxShipAp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"shipAp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+150</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"maxRedrawCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+154</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"maxHand"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"cardUpgradeCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"cardRefresh"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"baseRelicSlot"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"extraMaxHp"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"maxHpCoefficient"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"extraMaxAmmo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"extraHand"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"extraMaxShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"extraMaxShipAp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+17C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"extraMaxRedrawCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"extraRelicSlot"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"extraRelicSellMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"unlockedRelicSlot"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+18C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"doubleShield"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+190</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"giveUpBounty"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+191</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"exchangeCardAfterRedraw"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+192</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"freeRedrawEachBattle"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+193</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"maximumRandom"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+194</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"extraRewardCard"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"extraRewardCardPickNumber"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+19C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"extraEliteRewardCard"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+1A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"extraEliteRewardCardPickNumber"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+1A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"extraEliteCoins"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+1A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"extraMarketSlot"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+1AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"freeRefresh"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+1B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"discountInMarket"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+1B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"firstRoundCardLock"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+1B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"marketOutfitTipActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playerstate_ptr]+1B9</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"initialData"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"classId"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"unlockGold"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"gamePlayDifficulty"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"maxHp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"coins"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"maxAmmo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"maxShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"startShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"maxShipAp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"maxRedrawPoint"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"maxHand"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"maxRelics"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"unlockRelicSlotPrice"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"[0]Int32"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"[1]Int32"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"[2]Int32"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"healModifyHandler"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"enhance"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"extraMulti"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"protection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"multiplierProtection"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"lifeStealFixed"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"lifeStealExtraMulti"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"lifeStealProtection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"lifeStealMultiplierProtection"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+E8</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"baseStatistics"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"timeDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"explorationGolds"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"explorationRepute"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"gemStoneCollected"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"coinsEared"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"hightestDamageDeal"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"blocks"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"healTaken"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"evolve2"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"evolve3"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"upgradeCards"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+108</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87</ID>
+              <Description>"navigateStatistics"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"rationUsed"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"tavernHeal"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"explorationGolds"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"explorationRepute"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playerstate_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>92</ID>
+          <Description>"Character"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Pirates Outlaws 2 Heritage.exe
+  Version: 
+  Date   : 2025-12-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Characters.Character:Update)
+define(bytes,55 48 8B EC 48 83 EC 70)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Characters.Character:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [character_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,70
+  jmp return
+
+character_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(character_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,70
+
+dealloc(newmem)
+unregistersymbol(character_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Characters.Character:Update
+
+24CFAFFCC5C: 08 28              - or [rax],ch
+24CFAFFCC5E: 5B                 - pop rbx
+24CFAFFCC5F: 2A 50 4B           - sub dl,[rax+4B]
+24CFAFFCC62: 02 00              - add al,[rax]
+24CFAFFCC64: 00 00              - add [rax],al
+24CFAFFCC66: 00 00              - add [rax],al
+24CFAFFCC68: 00 00              - add [rax],al
+24CFAFFCC6A: 00 00              - add [rax],al
+24CFAFFCC6C: 00 00              - add [rax],al
+24CFAFFCC6E: 00 00              - add [rax],al
+// ---------- INJECTING HERE ----------
+Characters.Character:Update: 55                 - push rbp
+// ---------- DONE INJECTING  ----------
+Characters.Character:Update+1: 48 8B EC           - mov rbp,rsp
+Characters.Character:Update+4: 48 83 EC 70        - sub rsp,70
+Characters.Character:Update+8: 48 89 75 F0        - mov [rbp-10],rsi
+Characters.Character:Update+c: 48 89 7D F8        - mov [rbp-08],rdi
+Characters.Character:Update+10: 48 8B F1           - mov rsi,rcx
+Characters.Character:Update+13: 48 8B 46 28        - mov rax,[rsi+28]
+Characters.Character:Update+17: 48 89 45 B8        - mov [rbp-48],rax
+Characters.Character:Update+1b: 48 8B CE           - mov rcx,rsi
+Characters.Character:Update+1e: 48 8B 06           - mov rax,[rsi]
+Characters.Character:Update+21: FF 90 A8 00 00 00  - call qword ptr [rax+000000A8]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"maxHp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"corruption"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+18C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"hp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+190</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"criticalDamage"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+194</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"drunkCritRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"drunkMissRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+19C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"alive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[character_ptr]+1A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"removeMarker"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[character_ptr]+1A1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"doubleShield"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[character_ptr]+1A2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"criticalTimes"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+1A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"missTimes"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+1A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"bearPoseType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+240</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"classID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+244</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"maxAmmo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+248</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"ammo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+24C</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"shieldHandler"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"maxShieldLimit"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"isDouble"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[character_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"maxShield"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"blocks"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>114</ID>
+              <Description>"healModifyHandler"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"enhance"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"extraMulti"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"protection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"multiplierProtection"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"lifeStealFixed"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"lifeStealExtraMulti"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"lifeStealProtection"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"lifeStealMultiplierProtection"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[character_ptr]+128</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>124</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>125</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Pirates Outlaws 2 Heritage - v0.70 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

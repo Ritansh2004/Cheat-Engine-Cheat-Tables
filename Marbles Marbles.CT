@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>21</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Marbles Marbles.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+    showMessage("Made By DANGER DASH...!!!")
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"LevelManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Marbles Marbles.exe
+  Version: 
+  Date   : 2026-01-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+35FAA0)
+define(bytes,48 8B C4 48 89 58 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+35FAA0)
+
+label(code)
+label(return)
+
+newmem:
+mov [levelmanager_ptr],rcx
+
+code:
+  mov rax,rsp
+  mov [rax+08],rbx
+  jmp return
+
+levelmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registersymbol(levelmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov rax,rsp
+  // mov [rax+08],rbx
+
+dealloc(newmem)
+unregistersymbol(levelmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LevelManager.Update
+
+GameAssembly.dll+35FA96: C3                    - ret 
+GameAssembly.dll+35FA97: CC                    - int 3 
+GameAssembly.dll+35FA98: CC                    - int 3 
+GameAssembly.dll+35FA99: CC                    - int 3 
+GameAssembly.dll+35FA9A: CC                    - int 3 
+GameAssembly.dll+35FA9B: CC                    - int 3 
+GameAssembly.dll+35FA9C: CC                    - int 3 
+GameAssembly.dll+35FA9D: CC                    - int 3 
+GameAssembly.dll+35FA9E: CC                    - int 3 
+GameAssembly.dll+35FA9F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+LevelManager.Update: 48 8B C4              - mov rax,rsp
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+35FAA3: 48 89 58 08           - mov [rax+08],rbx
+GameAssembly.dll+35FAA7: 48 89 70 10           - mov [rax+10],rsi
+GameAssembly.dll+35FAAB: 48 89 78 18           - mov [rax+18],rdi
+GameAssembly.dll+35FAAF: 4C 89 70 20           - mov [rax+20],r14
+GameAssembly.dll+35FAB3: 55                    - push rbp
+GameAssembly.dll+35FAB4: 48 8D 68 A1           - lea rbp,[rax-5F]
+GameAssembly.dll+35FAB8: 48 81 EC 90 00 00 00  - sub rsp,00000090
+GameAssembly.dll+35FABF: 80 3D EA 8D 3B 02 00  - cmp byte ptr [GameAssembly.dll+27188B0],00
+GameAssembly.dll+35FAC6: 48 8B F9              - mov rdi,rcx
+GameAssembly.dll+35FAC9: 0F 29 70 E8           - movaps [rax-18],xmm6
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"playerId"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"indexMusic"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"levelTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[levelmanager_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"indexSpawn"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"isDying"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"levelNumber"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"totalLevels"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+11C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"worldNumber"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+120</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"numberHourglasses"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"totalHourglasses"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"deaths"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"isPaused"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+148</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>13</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Marbles Marbles.exe
+  Version: 
+  Date   : 2026-01-09
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+377510)
+define(bytes,40 53 48 83 EC 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+377510)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,20
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,20
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController.Update
+
+GameAssembly.dll+377506: CC                    - int 3 
+GameAssembly.dll+377507: CC                    - int 3 
+GameAssembly.dll+377508: CC                    - int 3 
+GameAssembly.dll+377509: CC                    - int 3 
+GameAssembly.dll+37750A: CC                    - int 3 
+GameAssembly.dll+37750B: CC                    - int 3 
+GameAssembly.dll+37750C: CC                    - int 3 
+GameAssembly.dll+37750D: CC                    - int 3 
+GameAssembly.dll+37750E: CC                    - int 3 
+GameAssembly.dll+37750F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+PlayerController.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+377512: 48 83 EC 20           - sub rsp,20
+GameAssembly.dll+377516: 80 3D 81 14 3A 02 00  - cmp byte ptr [GameAssembly.dll+271899E],00
+GameAssembly.dll+37751D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+377520: 75 13                 - jne GameAssembly.dll+377535
+GameAssembly.dll+377522: 48 8D 0D 27 CC 20 02  - lea rcx,[GameAssembly.dll+2584150]
+GameAssembly.dll+377529: E8 B2 86 EF FF        - call GameAssembly.il2cpp_get_exception_argument_null+3C0
+GameAssembly.dll+37752E: C6 05 69 14 3A 02 01  - mov byte ptr [GameAssembly.dll+271899E],01
+GameAssembly.dll+377535: 48 8B 05 14 CC 20 02  - mov rax,[GameAssembly.dll+2584150]
+GameAssembly.dll+37753C: 48 8B 90 B8 00 00 00  - mov rdx,[rax+000000B8]
+GameAssembly.dll+377543: 48 8B 02              - mov rax,[rdx]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"playerId"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"speed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"deathHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"stickResponseExponent"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"movementX"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"movementY"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+4C</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>20</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>22</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Marbles Marbles - v1.0.2 ^*^*Created By DANGER DASH ^*^*"
+
+
+
+
+
+
+
+
+
+</LuaScript>
+</CheatTable>

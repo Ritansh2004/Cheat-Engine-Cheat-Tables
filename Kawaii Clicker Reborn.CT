@@ -1,0 +1,1182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>122</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Kawaii Clicker Reborn.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"GameManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Kawaii Clicker Reborn.exe
+  Version: 
+  Date   : 2026-02-01
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,GameManager:Update)
+define(bytes,55 48 8B EC 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GameManager:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamemanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,50
+  jmp return
+
+gamemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gamemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(gamemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameManager:Update
+
+UnityEngine.Time:get_deltaTime+116: 75 AD                          - jne UnityEngine.Time:get_deltaTime+c5
+UnityEngine.Time:get_deltaTime+118: E9 6C FF FF FF                 - jmp UnityEngine.Time:get_deltaTime+89
+1EC66C159BD: 00 00                          - add [rax],al
+1EC66C159BF: 00 01                          - add [rcx],al
+1EC66C159C1: 04 02                          - add al,02
+1EC66C159C3: 05 04 03 01 50                 - add eax,50010304
+1EC66C159C8: 00 00                          - add [rax],al
+1EC66C159CA: 00 00                          - add [rax],al
+1EC66C159CC: 00 00                          - add [rax],al
+1EC66C159CE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+GameManager:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+GameManager:Update+1: 48 8B EC                       - mov rbp,rsp
+GameManager:Update+4: 48 83 EC 50                    - sub rsp,50
+GameManager:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+GameManager:Update+c: 48 8B F1                       - mov rsi,rcx
+GameManager:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+GameManager:Update+16: 49 BB A0 58 C1 66 EC 01 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+GameManager:Update+20: 41 FF D3                       - call r11
+GameManager:Update+23: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+GameManager:Update+27: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+GameManager:Update+2e: 49 BB 50 5D C1 66 EC 01 00 00  - mov r11,System.TimeSpan:FromSeconds
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"autoSaveFrameCount"</Description>
+                  <LastState Value="47.73073578" RealAddress="1CBE20B54E8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"isLoadedData"</Description>
+                  <LastState Value="0" RealAddress="1CBE20B54EC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"&lt;runnningTime&gt;"</Description>
+                  <LastState Value="000000001C76FCC0" RealAddress="1CBE20B54F0"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+F0</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"&lt;heartPointManager&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"&lt;heartPoint&gt;"</Description>
+                  <LastState Value="0000000000000000" RealAddress="1CD17D59E28"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"&lt;heartPerSecond&gt;"</Description>
+                  <LastState Value="0000000000000000" RealAddress="1CD17D59E38"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"clickProduction"</Description>
+                  <LastState Value="0000000000000001" RealAddress="1CD17D59E48"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"&lt;statistics_TotalHeart&gt;"</Description>
+                  <LastState Value="0000000000000000" RealAddress="1CD17D59E58"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"&lt;statistics_ClickProduct&gt;"</Description>
+                  <LastState Value="0000000000000000" RealAddress="1CD17D59E68"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"&lt;statistics_ClickTimes&gt;"</Description>
+                  <LastState Value="0000000000000000" RealAddress="1CD17D59E78"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"&lt;cookieMulti&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CD17D59EB0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"&lt;cookieMulti_RP&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CD17D59EB8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"&lt;clickHpSMulti&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CD17D59EC0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"&lt;offlineMulti&gt;"</Description>
+                  <LastState Value="0.1000000015" RealAddress="1CD17D59ED0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"rpCookieMaxID"</Description>
+                  <LastState Value="0" RealAddress="1CD17D59ED4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>104</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"itemProductionTime"</Description>
+                  <LastState Value="0.746581316" RealAddress="1CD17D59ED8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"remainFrenzyTime"</Description>
+                  <LastState Value="-1" RealAddress="1CD17D59EDC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>10C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"&lt;feverManager&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"feverPower"</Description>
+                  <LastState Value="2" RealAddress="1CD17D2FC88"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>208</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"feverCharge"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FC8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>20C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"feverAddPower"</Description>
+                  <LastState Value="0.006000000052" RealAddress="1CD17D2FC90"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>210</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"remainFeverTime"</Description>
+                  <LastState Value="-1" RealAddress="1CD17D2FC94"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>214</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"maxFeverTime"</Description>
+                  <LastState Value="12" RealAddress="1CD17D2FC98"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>218</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"holdNum"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FC9C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>21C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"holdCalcedMulti"</Description>
+                  <LastState Value="1" RealAddress="1CD17D2FCA0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>220</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"&lt;isUltra&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCA4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>224</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"ultraChance"</Description>
+                  <LastState Value="0.1000000015" RealAddress="1CD17D2FCA8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>228</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"ultraMulti"</Description>
+                  <LastState Value="2" RealAddress="1CD17D2FCAC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>22C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"&lt;nowFeverType&gt;"</Description>
+                  <LastState Value="7" RealAddress="1CD17D2FCB0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>230</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"&lt;statistics_FeverTimes&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCB4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>234</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"&lt;statistics_FeverTimesOnCurrentR&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>238</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"clickF_ClickNum"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCBC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>23C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"monsterLevel"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCC0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>240</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"monsterNowHP"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCC4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>244</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"monsterMaxHP"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCC8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>248</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"remainClickTime"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCCC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>24C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"spinF_TotalSpinNum"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCD0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>250</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"spinF_RemainSpinNum"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCD4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>254</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"spinF_BonusMulti"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCD8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>258</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"currentReelIndex"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCE0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>260</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"isSpinning"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCE4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>264</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"slotReelSpeedMulti"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCE8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>268</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"nextSlotReelSpeedMulti"</Description>
+                  <LastState Value="0" RealAddress="1CD17D2FCEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>26C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"&lt;magicManager&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"spawnFrameCount"</Description>
+                  <LastState Value="47.75585938" RealAddress="1CBE20A0068"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"drawsCount"</Description>
+                  <LastState Value="0" RealAddress="1CBE20A006C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"&lt;magicRatio&gt;"</Description>
+                  <LastState Value="0.3400000036" RealAddress="1CBE20A0070"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"&lt;boostMulti&gt;"</Description>
+                  <LastState Value="2" RealAddress="1CBE20A0074"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"&lt;frenzyMulti&gt;"</Description>
+                  <LastState Value="2" RealAddress="1CBE20A0078"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"&lt;statistics_MagicTimes&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE20A007C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"&lt;statistics_MagicTimesOnCurrentR&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE20A0080"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"&lt;reincarnationWindow&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"isPressingReinc"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF78"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"reincButtonTime"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"isDecidedReinc"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF80"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"&lt;isEffect_PowerClick&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF90"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"&lt;isEffect_DoubleClick&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF91"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"&lt;isEffect_Handshake&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF92"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F2</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"&lt;isEffect_GodHand&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF93"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F3</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"&lt;isEffect_MiracleFever&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF94"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"&lt;isEffect_Legacy&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF95"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F5</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"&lt;isEffect_ClickPlus&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF96"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F6</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"&lt;isEffect_FeverPlus&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF97"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F7</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"&lt;isEffect_RPMania&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF98"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"&lt;isEffect_Restful&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBF99"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>F9</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"&lt;rpEffect_ItemDiscount&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE21DBFA0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"&lt;rpEffect_UpgradeDiscount&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE21DBFA8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"&lt;isEffect_TimeIsMoney&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBFB0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>110</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"closeWaitTime"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBFB4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>114</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"&lt;statistics_ReincTimes&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE21DBFB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>118</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"&lt;plantationWindow&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"&lt;farmData_Level&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE20BFD80"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"&lt;farmData_LevelProg&gt;"</Description>
+                  <LastState Value="0" RealAddress="1CBE20BFD84"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>124</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"alchemy_Crops"</Description>
+                  <LastState Value="0" RealAddress="1CBE20BFD90"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>130</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"closeWaitTime"</Description>
+                  <LastState Value="0" RealAddress="1CBE20BFD94"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>134</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"isHoveringWateringInfo"</Description>
+                  <LastState Value="0" RealAddress="1CBE20BFD98"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>138</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"&lt;cropEffect_Hps&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE20BFDA0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>140</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"&lt;cropEffect_FeverHps&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE20BFDA8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>148</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"&lt;cropEffect_ClickProduct&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE20BFDB0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>150</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"&lt;cropEffect_MagicTime&gt;"</Description>
+                  <LastState Value="1" RealAddress="1CBE20BFDB8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[gamemanager_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>158</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"&lt;gameSettingSO&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>104</ID>
+                      <Description>"isDebugMode"</Description>
+                      <LastState Value="0" RealAddress="1CCF6765DE0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>105</ID>
+                      <Description>"isTrialMode"</Description>
+                      <LastState Value="0" RealAddress="1CCF6765DE1"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>51</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>106</ID>
+                      <Description>"isMosaicMode"</Description>
+                      <LastState Value="0" RealAddress="1CCF6765DE2"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>52</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>107</ID>
+                      <Description>"buyPriceMulti"</Description>
+                      <LastState Value="1.120000005" RealAddress="1CCF6765DE4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>108</ID>
+                      <Description>"offlineMulti"</Description>
+                      <LastState Value="0.1000000015" RealAddress="1CCF6765DE8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"magic_Interval"</Description>
+                      <LastState Value="180" RealAddress="1CCF6765DEC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"magic_Ratio"</Description>
+                      <LastState Value="0.3400000036" RealAddress="1CCF6765DF0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"magic_RatioAdd"</Description>
+                      <LastState Value="0.3300000131" RealAddress="1CCF6765DF4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"magic_Length"</Description>
+                      <LastState Value="12" RealAddress="1CCF6765DF8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"gameSetting_Fever_SO"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"feverAdd"</Description>
+                      <LastState Value="0.006000000052" RealAddress="1CD17D27218"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"feverTime"</Description>
+                      <LastState Value="12" RealAddress="1CD17D2721C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"feverPower"</Description>
+                      <LastState Value="2" RealAddress="1CD17D27220"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>116</ID>
+                      <Description>"holdNum"</Description>
+                      <LastState Value="5" RealAddress="1CD17D27224"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>117</ID>
+                      <Description>"holdMulti"</Description>
+                      <LastState Value="0.8999999762" RealAddress="1CD17D27228"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>118</ID>
+                      <Description>"ultraChance"</Description>
+                      <LastState Value="0.1000000015" RealAddress="1CD17D2722C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>119</ID>
+                      <Description>"ultraEffect"</Description>
+                      <LastState Value="2" RealAddress="1CD17D27230"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>120</ID>
+                      <Description>"feverPopMagicRatio"</Description>
+                      <LastState Value="0.05000000075" RealAddress="1CD17D27234"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+E0</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>121</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>123</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Kawaii Clicker Reborn ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

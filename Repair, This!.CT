@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Repair, This!.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PlayerCharacter"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Repair, This!.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerCharacter:AddMoney)
+define(bytes,55 48 8B EC 48 81 EC E0 02 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerCharacter:AddMoney)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercharacter_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000002E0
+  jmp return
+
+playercharacter_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(playercharacter_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000002E0
+
+dealloc(newmem)
+unregistersymbol(playercharacter_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerCharacter:AddMoney
+
+2401BDF3448: 01 04 02              - add [rdx+rax],eax
+2401BDF344B: 05 04 03 01 50        - add eax,50010304
+2401BDF3450: 00 00                 - add [rax],al
+2401BDF3452: 00 00                 - add [rax],al
+2401BDF3454: 00 00                 - add [rax],al
+2401BDF3456: 00 00                 - add [rax],al
+2401BDF3458: 00 00                 - add [rax],al
+2401BDF345A: 00 00                 - add [rax],al
+2401BDF345C: 00 00                 - add [rax],al
+2401BDF345E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+PlayerCharacter:AddMoney: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PlayerCharacter:AddMoney+1: 48 8B EC              - mov rbp,rsp
+PlayerCharacter:AddMoney+4: 48 81 EC E0 02 00 00  - sub rsp,000002E0
+PlayerCharacter:AddMoney+b: 4C 89 6D E8           - mov [rbp-18],r13
+PlayerCharacter:AddMoney+f: 4C 89 75 F0           - mov [rbp-10],r14
+PlayerCharacter:AddMoney+13: 4C 89 7D F8           - mov [rbp-08],r15
+PlayerCharacter:AddMoney+17: 4C 8B F9              - mov r15,rcx
+PlayerCharacter:AddMoney+1a: 48 89 95 70 FD FF FF  - mov [rbp-00000290],rdx
+PlayerCharacter:AddMoney+21: 4C 89 85 68 FD FF FF  - mov [rbp-00000298],r8
+PlayerCharacter:AddMoney+28: 4C 89 8D 60 FD FF FF  - mov [rbp-000002A0],r9
+PlayerCharacter:AddMoney+2f: 49 63 87 98 00 00 00  - movsxd  rax,dword ptr [r15+00000098]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Value Show When Add Money"</Description>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"money"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"raiting"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercharacter_ptr]+9C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"countPeopleRaitingVoice"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"allRaiting"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercharacter_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"choiceMoneyAdd"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"tax"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercharacter_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"penaltyCop"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"criminalMoney"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"dream"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"debt"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"currentMafiaMen"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"creditPlayer"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"percentCredit"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"deliverChance"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"girl"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"insuranceBool"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"flowerBool"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"sherifStarBool"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"leaveCatomer"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercharacter_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"currentTrashMan"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"collectorDay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercharacter_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"colectionDay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercharacter_ptr]+E9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"minPeopleDay"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"marry"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"thisIsPolice"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercharacter_ptr]+F4</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>28</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>29</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Repair, This! - v1.2706a ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

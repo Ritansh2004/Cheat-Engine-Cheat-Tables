@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>73</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("NEON INFERNO.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : NEON INFERNO.exe
+  Version: 
+  Date   : 2025-12-29
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerController:Update)
+define(bytes,55 48 8B EC 48 81 EC 90 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000190
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000190
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController:Update
+
+UnityEngine.Physics:SendOnCollisionEnter_Injected+e9: 75 C1                          - jne UnityEngine.Physics:SendOnCollisionEnter_Injected+ac
+UnityEngine.Physics:SendOnCollisionEnter_Injected+eb: EB 96                          - jmp UnityEngine.Physics:SendOnCollisionEnter_Injected+83
+24212F43ABD: 00 00                          - add [rax],al
+24212F43ABF: 00 01                          - add [rcx],al
+24212F43AC1: 04 02                          - add al,02
+24212F43AC3: 05 04 03 01 50                 - add eax,50010304
+24212F43AC8: 00 00                          - add [rax],al
+24212F43ACA: 00 00                          - add [rax],al
+24212F43ACC: 00 00                          - add [rax],al
+24212F43ACE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+PlayerController:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+PlayerController:Update+1: 48 8B EC                       - mov rbp,rsp
+PlayerController:Update+4: 48 81 EC 90 01 00 00           - sub rsp,00000190
+PlayerController:Update+b: 48 89 75 D0                    - mov [rbp-30],rsi
+PlayerController:Update+f: 48 89 7D D8                    - mov [rbp-28],rdi
+PlayerController:Update+13: 4C 89 65 E0                    - mov [rbp-20],r12
+PlayerController:Update+17: 4C 89 6D E8                    - mov [rbp-18],r13
+PlayerController:Update+1b: 4C 89 75 F0                    - mov [rbp-10],r14
+PlayerController:Update+1f: 4C 89 7D F8                    - mov [rbp-08],r15
+PlayerController:Update+23: 48 8B F1                       - mov rsi,rcx
+PlayerController:Update+26: C7 85 18 FF FF FF 00 00 00 00  - mov [rbp-000000E8],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"Decelerate"</Description>
+                  <LastState Value="1" RealAddress="245949F9B78"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"IsOnGround"</Description>
+                  <LastState Value="1" RealAddress="245949F9B79"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+F9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"PrevOnGround"</Description>
+                  <LastState Value="1" RealAddress="245949F9B7A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+FA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"PrevCrouching"</Description>
+                  <LastState Value="0" RealAddress="245949F9B7B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+FB</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"PrevShooting"</Description>
+                  <LastState Value="0" RealAddress="245949F9B7C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"Angelo"</Description>
+                  <LastState Value="0" RealAddress="245949F9B88"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"PlayerNum"</Description>
+                  <LastState Value="1" RealAddress="245949F9B8C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+10C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"Local"</Description>
+                  <LastState Value="1" RealAddress="245949F9B90"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"MotorcycleFireAngle"</Description>
+                  <LastState Value="180" RealAddress="245949F9B94"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"MotorcycleBaseAngle"</Description>
+                  <LastState Value="180" RealAddress="245949F9B98"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"LastLandingHeight"</Description>
+                  <LastState Value="-1002.51001" RealAddress="245949F9B9C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"FootstepSounds"</Description>
+                  <LastState Value="1" RealAddress="245949F9BA0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"FootstepSpacing"</Description>
+                  <LastState Value="16" RealAddress="245949F9BA4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"GAngle"</Description>
+                  <LastState Value="0" RealAddress="245949F9BB0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"LSMaxY"</Description>
+                  <LastState Value="-1000" RealAddress="245949F9BB4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+134</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"InventoryOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+138</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"AmmoOverride"</Description>
+                  <LastState Value="4294967295" RealAddress="245949F9BBC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+13C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"Invulnerable"</Description>
+                  <LastState Value="1" Activated="1" RealAddress="245949F9BC8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>808040</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+148</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"InvulnerableCtr"</Description>
+                  <LastState Value="0" RealAddress="245949F9BCC"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"DeflectSlomo"</Description>
+                  <LastState Value="0" RealAddress="245949F9BD0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+150</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"DeflectSlomoCtr"</Description>
+                  <LastState Value="0" RealAddress="245949F9BD4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+154</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"DeflectGrayscale"</Description>
+                  <LastState Value="0" RealAddress="245949F9BD8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"DeflectBGAimHeld"</Description>
+                  <LastState Value="0" RealAddress="245949F9BDC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"DeflectTargetFG"</Description>
+                  <LastState Value="1" RealAddress="245949F9BDD"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+15D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"DeflectDecremented"</Description>
+                  <LastState Value="0" RealAddress="245949F9BDE"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+15E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"DebugBulletTimeOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BDF"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+15F</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"PrevDebugBulletTimeOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BE0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"HitStopSlomo"</Description>
+                  <LastState Value="0" RealAddress="245949F9BE1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+161</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"HitStopSlomoCtr"</Description>
+                  <LastState Value="0" RealAddress="245949F9BE4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"HitStopDelay"</Description>
+                  <LastState Value="0" RealAddress="245949F9BE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"HitStopFrames"</Description>
+                  <LastState Value="5" RealAddress="245949F9BEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"CanLeaveScreen"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"CutsceneMode"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+171</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"CutsceneWalkOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+172</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"CutsceneTurnOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF3"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+173</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"CutsceneGravityOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"CutsceneClimbUpOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+175</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"CutsceneBGFaceOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF6"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+176</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"CutsceneCrouchOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9BF7"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+177</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"KnockbackCtr"</Description>
+                  <LastState Value="0" RealAddress="245949F9C04"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"Enabled"</Description>
+                  <LastState Value="1" RealAddress="245949F9C08"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"FireAngle"</Description>
+                  <LastState Value="180" RealAddress="245949F9C0C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+18C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"StabCooldown"</Description>
+                  <LastState Value="0" RealAddress="245949F9C10"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+190</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"AltStab"</Description>
+                  <LastState Value="1" RealAddress="245949F9C14"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+194</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"BGShootLastOverride"</Description>
+                  <LastState Value="0" RealAddress="245949F9C15"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+195</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"CrowdTime"</Description>
+                  <LastState Value="0" RealAddress="245949F9C18"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"MashFireCtr"</Description>
+                  <LastState Value="0" RealAddress="245949F9C1C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+19C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"MashFireTimes"</Description>
+                  <LastState Value="0" RealAddress="245949F9C20"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+1A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"playedStab"</Description>
+                  <LastState Value="0" RealAddress="245949F9C24"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+1A4</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"MoveState"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"mult"</Description>
+                  <LastState Value="2.802596929E-45" RealAddress="246AC0C9990"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"jumping"</Description>
+                  <LastState Value="85" RealAddress="246AC0C9994"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"variableJump"</Description>
+                  <LastState Value="0" RealAddress="246AC0C9995"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>15</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"doubleJump"</Description>
+                  <LastState Value="83" RealAddress="246AC0C9996"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>16</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"jumpControl"</Description>
+                  <LastState Value="0" RealAddress="246AC0C9997"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>17</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"initialPush"</Description>
+                  <LastState Value="0" RealAddress="246AC0C9998"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"ropeCooldown"</Description>
+                  <LastState Value="0" RealAddress="246AC0C999C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"collCooldown"</Description>
+                  <LastState Value="1237165848" RealAddress="246AC0C99A0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"counter"</Description>
+                  <LastState Value="580" RealAddress="246AC0C99A4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"Motorcycle"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"SwitchingLanes"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"SwitchCtr"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"JustSwitched"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"CustomBGScale"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"fg"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"Crashed"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>A1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"CrashCtr"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"Invulnerable"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"InvulnerableCtr"</Description>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"TransitionCtr"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[playercontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>74</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>75</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " NEON INFERNO ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

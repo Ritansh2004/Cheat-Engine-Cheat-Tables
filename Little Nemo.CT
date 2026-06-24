@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>55</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Little Nemo.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"NemoPlayerData"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Little Nemo.exe
+  Version: 
+  Date   : 2026-04-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+9FD820)
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+9FD820)
+
+label(code)
+label(return)
+
+newmem:
+mov [nemoplayerdata_ptr],rcx
+
+code:
+  mov [rsp+08],rbx
+  jmp return
+
+nemoplayerdata_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(nemoplayerdata_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+unregistersymbol(nemoplayerdata_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DieSoft.LittleNemo.PlayerData.NemoPlayerData.UpdateFromSaveData
+
+GameAssembly.dll+9FD809: 48 8B 5C 24 30        - mov rbx,[rsp+30]
+GameAssembly.dll+9FD80E: 0F 9D C0              - setge al
+GameAssembly.dll+9FD811: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+9FD815: 5F                    - pop rdi
+GameAssembly.dll+9FD816: C3                    - ret 
+GameAssembly.dll+9FD817: E8 D4 64 A3 FF        - call GameAssembly.dll+433CF0
+GameAssembly.dll+9FD81C: CC                    - int 3 
+GameAssembly.dll+9FD81D: CC                    - int 3 
+GameAssembly.dll+9FD81E: CC                    - int 3 
+GameAssembly.dll+9FD81F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+DieSoft.LittleNemo.PlayerData.NemoPlayerData.UpdateFromSaveData: 48 89 5C 24 08        - mov [rsp+08],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+9FD825: 48 89 7C 24 10        - mov [rsp+10],rdi
+GameAssembly.dll+9FD82A: 55                    - push rbp
+GameAssembly.dll+9FD82B: 48 8D 6C 24 F0        - lea rbp,[rsp-10]
+GameAssembly.dll+9FD830: 48 81 EC 10 01 00 00  - sub rsp,00000110
+GameAssembly.dll+9FD837: 80 3D 71 50 FF 02 00  - cmp byte ptr [GameAssembly.dll+39F28AF],00
+GameAssembly.dll+9FD83E: 48 8B FA              - mov rdi,rdx
+GameAssembly.dll+9FD841: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+9FD844: 75 37                 - jne GameAssembly.dll+9FD87D
+GameAssembly.dll+9FD846: 48 8D 0D C3 8A E0 02  - lea rcx,[GameAssembly.dll+3806310]
+GameAssembly.dll+9FD84D: E8 7E 62 A3 FF        - call GameAssembly.dll+433AD0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Value Show or Change When Sleep or Wake Up By Using Bed"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>0</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000017B18B17170" RealAddress="7FFD8D7C0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>nemoplayerdata_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"GuardianSigilsUnlocked"</Description>
+                  <LastState Value="0" RealAddress="17B18B171F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"PalaceGateUnlocked"</Description>
+                  <LastState Value="0" RealAddress="17B18B171F4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[nemoplayerdata_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"SweetbeardRelationship"</Description>
+                  <LastState Value="0" RealAddress="17B18B17210"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"HighestDifficultyLevelUsed"</Description>
+                  <LastState Value="0" RealAddress="17B18B17250"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"GameCartridgesCollected"</Description>
+                  <LastState Value="0" RealAddress="17B18B17254"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"CogsCollected"</Description>
+                  <LastState Value="0" RealAddress="17B18B17258"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"DinoPhotosTakenCount"</Description>
+                  <LastState Value="0" RealAddress="17B18B1725C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"FastTravelUnlockedForDomains"</Description>
+                  <LastState Value="0" RealAddress="17B18B17260"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"HotlineTipsPurchased"</Description>
+                  <LastState Value="0" RealAddress="17B18B17264"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"FlipPhoneCallsReceived"</Description>
+                  <LastState Value="0" RealAddress="17B18B17268"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"MostRecentCartridgeCollected"</Description>
+                  <LastState Value="0" RealAddress="17B18B17290"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"MostRecentCogCollected"</Description>
+                  <LastState Value="0" RealAddress="17B18B17294"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"&lt;PrevCandyCount&gt;"</Description>
+                  <LastState Value="12" RealAddress="17B18B17298"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"IsInBedroom"</Description>
+                  <LastState Value="1" RealAddress="17B18B1729C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[nemoplayerdata_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"MoonMeterRankUpAmount"</Description>
+                  <LastState Value="60" RealAddress="17B18B172A0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"LastCollectedCandyColoringTheme"</Description>
+                  <LastState Value="1" RealAddress="17B18B172BC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <LastState Value="1" RealAddress="17B18B172C8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[nemoplayerdata_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"UpgradesCollected"</Description>
+                  <LastState Value="0" RealAddress="17C04138D28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+18</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"CurrentHealth"</Description>
+                  <LastState Value="3" RealAddress="17C04138CA8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"CandyCount"</Description>
+                  <LastState Value="0" RealAddress="17C04138C68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"ExperienceCount"</Description>
+                  <LastState Value="0" RealAddress="17C04138C28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"Rank"</Description>
+                  <LastState Value="0" RealAddress="17C04138BE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"PJsCollected"</Description>
+                  <LastState Value="5" RealAddress="17C04138B28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"CurrentPJs"</Description>
+                  <LastState Value="4" RealAddress="17C04138AE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"BuddiesCollected"</Description>
+                  <LastState Value="0" RealAddress="17C04138AA8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"CurrentBuddy"</Description>
+                  <LastState Value="0" RealAddress="17C04138A68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"GuardiansSaved"</Description>
+                  <LastState Value="0" RealAddress="17C04138A28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"CoinShardCount"</Description>
+                  <LastState Value="0" RealAddress="17C041389E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"MusicTracksCollected"</Description>
+                  <LastState Value="0" RealAddress="17C041389A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"ArtbookPagesCollected"</Description>
+                  <LastState Value="0" RealAddress="17C04138968"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"CandyLedgerCount"</Description>
+                  <LastState Value="64" RealAddress="17C041388A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+A8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"SweetbeardCandyCount"</Description>
+                  <LastState Value="64" RealAddress="17C04138868"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+B0</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"BonBonCandyCount"</Description>
+                  <LastState Value="20" RealAddress="17C04138828"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"PoppyQuestState"</Description>
+                  <LastState Value="0" RealAddress="17C041387E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+C0</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"DifficultyLevel"</Description>
+                  <LastState Value="0" RealAddress="17C041387A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+C8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"HealthModifier"</Description>
+                  <LastState Value="0" RealAddress="17C04138768"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"TimeScale"</Description>
+                  <LastState Value="1" RealAddress="17C04138728"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[nemoplayerdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"IsCollidingBottom"</Description>
+                  <LastState Value="0" RealAddress="17C04138928"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[nemoplayerdata_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"Stats"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"m_DiegeticPlaytime"</Description>
+                  <LastState Value="1213.139893" RealAddress="17C03FBD598"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"m_RealtimePlaytime"</Description>
+                  <LastState Value="2553.794922" RealAddress="17C03FBD59C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"CandyCollected"</Description>
+                  <LastState Value="118" RealAddress="17C041386E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"ExperienceCollected"</Description>
+                  <LastState Value="170" RealAddress="17C041386A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"DamageTaken"</Description>
+                  <LastState Value="10" RealAddress="17C04138668"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"DamageBlocked"</Description>
+                  <LastState Value="0" RealAddress="17C04138628"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"EnemiesKilled"</Description>
+                  <LastState Value="14" RealAddress="17C041385E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"DeathCount"</Description>
+                  <LastState Value="2" RealAddress="17C041385A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"JumpCount"</Description>
+                  <LastState Value="235" RealAddress="17C04138568"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"DistanceTraveled"</Description>
+                  <LastState Value="2240.243408" RealAddress="17C04138528"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"PeacefulWakeUpCount"</Description>
+                  <LastState Value="6" RealAddress="17C041384E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"FriendsPettedCount"</Description>
+                  <LastState Value="0" RealAddress="17C041384A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[nemoplayerdata_ptr]+100</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>56</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>57</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>Change of mov [rsp+08],rbx</Description>
+      <AddressString>GameAssembly.dll+1D51DC0</AddressString>
+      <Before>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>5C</Byte>
+        <Byte>24</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>57</Byte>
+        <Byte>48</Byte>
+        <Byte>83</Byte>
+        <Byte>EC</Byte>
+        <Byte>20</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Little Nemo and the Guardians of Slumberland - v1.0.1 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

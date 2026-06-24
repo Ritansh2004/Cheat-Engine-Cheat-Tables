@@ -1,0 +1,2364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>158</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("My Sexy Neighbor.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>169</ID>
+          <Description>"DoorUsable"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DoorUsable:set_CurrentState)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DoorUsable:set_CurrentState)
+
+label(code)
+label(return)
+
+newmem:
+mov [doorusable_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+doorusable_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(doorusable_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(doorusable_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DoorUsable:set_CurrentState
+
+1D0EDCEEDBD: 00 00                 - add [rax],al
+1D0EDCEEDBF: 00 00                 - add [rax],al
+1D0EDCEEDC1: 00 00                 - add [rax],al
+1D0EDCEEDC3: 00 00                 - add [rax],al
+1D0EDCEEDC5: 00 00                 - add [rax],al
+1D0EDCEEDC7: 00 00                 - add [rax],al
+1D0EDCEEDC9: 00 00                 - add [rax],al
+1D0EDCEEDCB: 00 00                 - add [rax],al
+1D0EDCEEDCD: 00 00                 - add [rax],al
+1D0EDCEEDCF: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+DoorUsable:set_CurrentState: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+DoorUsable:set_CurrentState+1: 48 8B EC              - mov rbp,rsp
+DoorUsable:set_CurrentState+4: 48 83 EC 30           - sub rsp,30
+DoorUsable:set_CurrentState+8: 48 89 75 F0           - mov [rbp-10],rsi
+DoorUsable:set_CurrentState+c: 48 89 7D F8           - mov [rbp-08],rdi
+DoorUsable:set_CurrentState+10: 48 8B F9              - mov rdi,rcx
+DoorUsable:set_CurrentState+13: 48 8B F2              - mov rsi,rdx
+DoorUsable:set_CurrentState+16: 89 B7 90 00 00 00     - mov [rdi+00000090],esi
+DoorUsable:set_CurrentState+1c: 48 8B 87 88 00 00 00  - mov rax,[rdi+00000088]
+DoorUsable:set_CurrentState+23: 48 8B C8              - mov rcx,rax
+DoorUsable:set_CurrentState+26: 48 8B F1              - mov rsi,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>170</ID>
+              <Description>"Value Show When Open/Close Door"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>168</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1</ID>
+                  <Description>"_active"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[doorusable_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"_currentState"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[doorusable_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"&lt;IsLocked&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[doorusable_ptr]+94</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"&lt;ActiveByDefault&gt;"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[doorusable_ptr]+95</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"_usableID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[doorusable_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"_noiseVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[doorusable_ptr]+9C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"_playCloseSFXOnComplete"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[doorusable_ptr]+A0</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>162</ID>
+              <Description>"_lockpickingController"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[doorusable_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"_progress"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[doorusable_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"_targetProgress"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[doorusable_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"_value"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[doorusable_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>28</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>167</ID>
+                  <Description>"_maxValue"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[doorusable_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>28</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>171</ID>
+          <Description>"LockedDoorUsable"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,LockedDoorUsable:Use)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,LockedDoorUsable:Use)
+
+label(code)
+label(return)
+
+newmem:
+mov [lockeddoorusable_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+lockeddoorusable_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(lockeddoorusable_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(lockeddoorusable_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LockedDoorUsable:Use
+
+1D0E811BCAB: 00 04 22        - add [rdx],al
+1D0E811BCAE: 00 00           - add [rax],al
+1D0E811BCB0: 00 00           - add [rax],al
+1D0E811BCB2: 00 00           - add [rax],al
+1D0E811BCB4: 00 00           - add [rax],al
+1D0E811BCB6: 00 00           - add [rax],al
+1D0E811BCB8: 00 00           - add [rax],al
+1D0E811BCBA: 00 00           - add [rax],al
+1D0E811BCBC: 00 00           - add [rax],al
+1D0E811BCBE: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+LockedDoorUsable:Use: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+LockedDoorUsable:Use+1: 48 8B EC        - mov rbp,rsp
+LockedDoorUsable:Use+4: 48 83 EC 40     - sub rsp,40
+LockedDoorUsable:Use+8: 48 89 75 E8     - mov [rbp-18],rsi
+LockedDoorUsable:Use+c: 48 89 7D F0     - mov [rbp-10],rdi
+LockedDoorUsable:Use+10: 4C 89 7D F8     - mov [rbp-08],r15
+LockedDoorUsable:Use+14: 48 8B F9        - mov rdi,rcx
+LockedDoorUsable:Use+17: 48 8B F2        - mov rsi,rdx
+LockedDoorUsable:Use+1a: 48 8B 4F 60     - mov rcx,[rdi+60]
+LockedDoorUsable:Use+1e: 33 D2           - xor edx,edx
+LockedDoorUsable:Use+20: 48 8D 64 24 00  - lea rsp,[rsp+00]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"Value Show When Try to Use"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>172</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>180</ID>
+                  <Description>"_description"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[lockeddoorusable_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"_active"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>174</ID>
+                  <Description>"_activeByDefault"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>175</ID>
+                  <Description>"_visibleByDefault"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+51</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>176</ID>
+                  <Description>"_usableID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[lockeddoorusable_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>177</ID>
+                  <Description>"_hideOnUse"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>178</ID>
+                  <Description>"_deactivateOnUse"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+59</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>179</ID>
+                  <Description>"&lt;InfluencedUsableID&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[lockeddoorusable_ptr]+90</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>181</ID>
+              <Description>"_influencedUsable"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>182</ID>
+                  <Description>"_active"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"_currentState"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>184</ID>
+                  <Description>"&lt;IsLocked&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>185</ID>
+                  <Description>"&lt;ActiveByDefault&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>95</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>186</ID>
+                  <Description>"_usableID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>187</ID>
+                  <Description>"_noiseVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>188</ID>
+                  <Description>"_playCloseSFXOnComplete"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[lockeddoorusable_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>8</ID>
+          <Description>"DynamicBone"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DynamicBone:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DynamicBone:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [dynamicbone_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+dynamicbone_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(dynamicbone_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(dynamicbone_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DynamicBone:Update
+
+UnityEngine.Transform:set_localRotation_Injected+158: 41 FF D3                 - call r11
+1FEB547CD7B: 00 00                    - add [rax],al
+1FEB547CD7D: 00 00                    - add [rax],al
+1FEB547CD7F: 00 01                    - add [rcx],al
+1FEB547CD81: 04 02                    - add al,02
+1FEB547CD83: 05 04 03 01 50           - add eax,50010304
+1FEB547CD88: 00 00                    - add [rax],al
+1FEB547CD8A: 00 00                    - add [rax],al
+1FEB547CD8C: 00 00                    - add [rax],al
+1FEB547CD8E: 00 00                    - add [rax],al
+// ---------- INJECTING HERE ----------
+DynamicBone:Update: 55                       - push rbp
+// ---------- DONE INJECTING  ----------
+DynamicBone:Update+1: 48 8B EC                 - mov rbp,rsp
+DynamicBone:Update+4: 48 83 EC 30              - sub rsp,30
+DynamicBone:Update+8: 48 89 75 F8              - mov [rbp-08],rsi
+DynamicBone:Update+c: 48 8B F1                 - mov rsi,rcx
+DynamicBone:Update+f: F3 0F 10 86 EC 00 00 00  - movss xmm0,[rsi+000000EC]
+DynamicBone:Update+17: F3 0F 5A C0              - cvtss2sd xmm0,xmm0
+DynamicBone:Update+1b: 66 0F 57 C9              - xorpd xmm1,xmm1
+DynamicBone:Update+1f: 66 0F 2F C8              - comisd xmm1,xmm0
+DynamicBone:Update+23: 7A 2E                    - jp DynamicBone:Update+53
+DynamicBone:Update+25: 73 2C                    - jae DynamicBone:Update+53
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"m_UpdateRate"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"m_Damping"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"m_Elasticity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"m_Stiffness"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"m_Inert"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"m_Radius"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"m_EndLength"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"m_FreezeAxis"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dynamicbone_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"m_DistantDisable"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[dynamicbone_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"m_DistanceToObject"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"m_BoneTotalLength"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"m_ObjectScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"m_Time"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"m_Weight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dynamicbone_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"m_DistantDisabled"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[dynamicbone_ptr]+F0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"EyesSensor"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,EyesSensor:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,EyesSensor:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [eyessensor_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+eyessensor_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(eyessensor_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(eyessensor_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: EyesSensor:Update
+
+Footsteps:Update+1b8: 41 FF D3                       - call r11
+1FEBDCB9DFB: 00 00                          - add [rax],al
+1FEBDCB9DFD: 00 00                          - add [rax],al
+1FEBDCB9DFF: 00 01                          - add [rcx],al
+1FEBDCB9E01: 04 02                          - add al,02
+1FEBDCB9E03: 05 04 03 01 50                 - add eax,50010304
+1FEBDCB9E08: 00 00                          - add [rax],al
+1FEBDCB9E0A: 00 00                          - add [rax],al
+1FEBDCB9E0C: 00 00                          - add [rax],al
+1FEBDCB9E0E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+EyesSensor:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+EyesSensor:Update+1: 48 8B EC                       - mov rbp,rsp
+EyesSensor:Update+4: 48 83 EC 30                    - sub rsp,30
+EyesSensor:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+EyesSensor:Update+c: 48 8B F1                       - mov rsi,rcx
+EyesSensor:Update+f: 0F B6 46 58                    - movzx eax,byte ptr [rsi+58]
+EyesSensor:Update+13: 85 C0                          - test eax,eax
+EyesSensor:Update+15: 74 14                          - je EyesSensor:Update+2b
+EyesSensor:Update+17: 48 8B CE                       - mov rcx,rsi
+EyesSensor:Update+1a: 48 8D 6D 00                    - lea rbp,[rbp+00]
+EyesSensor:Update+1e: 49 BB 63 9E CB BD FE 01 00 00  - mov r11,000001FEBDCB9E63
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[eyessensor_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"&lt;CurrentState&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[eyessensor_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"_calmAngle"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"_suspiciousAngle"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"_viewAngle"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"_alertTimeSec"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+6C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"_preAlertTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"_distance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[eyessensor_ptr]+74</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"_settingsManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"&lt;GameSettingsSO&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"isFullscreen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"qualityIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"musicVolume"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"sfxVolume"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"sensitivity"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"selectedLanguage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"difficultyLevel"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"&lt;DifficultyLevelSettings&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"Count"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[eyessensor_ptr]+50</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"[0]DifficultySettings"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>48</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>49</ID>
+                          <Description>"AlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>50</ID>
+                          <Description>"PreAlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>51</ID>
+                          <Description>"HearDistance"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>52</ID>
+                          <Description>"Paranoia"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>53</ID>
+                          <Description>"Volume"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"[1]DifficultySettings"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>54</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>55</ID>
+                          <Description>"AlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>56</ID>
+                          <Description>"PreAlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>57</ID>
+                          <Description>"HearDistance"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>58</ID>
+                          <Description>"Paranoia"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>59</ID>
+                          <Description>"Volume"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"[2]DifficultySettings"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>60</ID>
+                          <Description>"Level"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>61</ID>
+                          <Description>"AlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>62</ID>
+                          <Description>"PreAlertTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>63</ID>
+                          <Description>"HearDistance"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>64</ID>
+                          <Description>"Paranoia"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>65</ID>
+                          <Description>"Volume"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[eyessensor_ptr]+50</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>66</ID>
+          <Description>"FirstPersonMovement"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,FirstPersonMovement:Update)
+define(bytes,55 48 8B EC 48 81 EC F0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,FirstPersonMovement:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [FPM_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000F0
+  jmp return
+
+FPM_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(FPM_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000F0
+
+dealloc(newmem)
+unregistersymbol(FPM_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FirstPersonMovement:Update
+
+1FEB547E3E3: DA B4 FC 01 00 00 41           - fidiv dword ptr [rsp+rdi*8+41000001]
+1FEB547E3EA: FF D3                          - call rbx
+1FEB547E3EC: 08 B0 CC AB FB FD              - or [rax-02045434],dh
+1FEB547E3F2: 01 00                          - add [rax],eax
+1FEB547E3F4: 00 00                          - add [rax],al
+1FEB547E3F6: 00 00                          - add [rax],al
+1FEB547E3F8: 00 00                          - add [rax],al
+1FEB547E3FA: 00 00                          - add [rax],al
+1FEB547E3FC: 00 00                          - add [rax],al
+1FEB547E3FE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+FirstPersonMovement:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+FirstPersonMovement:Update+1: 48 8B EC                       - mov rbp,rsp
+FirstPersonMovement:Update+4: 48 81 EC F0 00 00 00           - sub rsp,000000F0
+FirstPersonMovement:Update+b: 48 89 75 F8                    - mov [rbp-08],rsi
+FirstPersonMovement:Update+f: 48 8B F1                       - mov rsi,rcx
+FirstPersonMovement:Update+12: 0F B6 86 A0 00 00 00           - movzx eax,byte ptr [rsi+000000A0]
+FirstPersonMovement:Update+19: 85 C0                          - test eax,eax
+FirstPersonMovement:Update+1b: 0F 84 26 06 00 00              - je FirstPersonMovement:Update+647
+FirstPersonMovement:Update+21: 48 8B CE                       - mov rcx,rsi
+FirstPersonMovement:Update+24: 66 90                          - nop 2
+FirstPersonMovement:Update+26: 49 BB 60 12 CF BD FE 01 00 00  - mov r11,FirstPersonMovement:Move
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"_noiseVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"MoveSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"SprintSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"_speed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"SpeedChangeRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"deltaPos"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"speedMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+9C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"&lt;IsSprinting&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+A1</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"_crouch"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"&lt;IsCrouched&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>61</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"_prevIsCrouched"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>62</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"CrouchMoveSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"CrouchSpeedMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"CrouchColliderHeightMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"_defaultColliderHeight"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"_defaultColliderCenterY"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"_jump"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"landingNoise"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"JumpHeight"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"Gravity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"JumpTimeout"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"FallTimeout"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"Grounded"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"GroundedOffset"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"GroundedRadius"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"_jumpTimeoutDelta"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"_fallTimeoutDelta"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"_verticalVelocity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"_terminalVelocity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"_prevGrounded"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"&lt;IsInitialized&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>95</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"_gameDataManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"gameDataSO"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>106</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>103</ID>
+                          <Description>"isSavingEnabled"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>104</ID>
+                          <Description>"useEncryption"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>21</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>105</ID>
+                          <Description>"demoVersion"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>22</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>107</ID>
+                      <Description>"gameData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>108</ID>
+                          <Description>"GameTime"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>109</ID>
+                          <Description>"Distance"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>110</ID>
+                          <Description>"PhotoNumber"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>111</ID>
+                          <Description>"FailureNumber"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>112</ID>
+                          <Description>"Souveniers"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>113</ID>
+                          <Description>"HiddenCameras"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>114</ID>
+                          <Description>"StaticContent"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>115</ID>
+                          <Description>"VideoContent"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>48</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>116</ID>
+                          <Description>"exp"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>117</ID>
+                          <Description>"firstLaunch"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>118</ID>
+                          <Description>"difficultyTutorialShowed"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>55</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>119</ID>
+                          <Description>"tutorialShowed"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[FPM_ptr]+38</Address>
+                          <Offsets>
+                            <Offset>56</Offset>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"_expDataSO"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"Count"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>122</ID>
+                      <Description>"[0]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>123</ID>
+                      <Description>"[1]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>124</ID>
+                      <Description>"[2]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>125</ID>
+                      <Description>"[3]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>126</ID>
+                      <Description>"[4]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>127</ID>
+                      <Description>"[5]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>128</ID>
+                      <Description>"[6]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>129</ID>
+                      <Description>"[7]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>130</ID>
+                      <Description>"[8]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>131</ID>
+                      <Description>"[9]Int32"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>132</ID>
+                      <Description>"[10]Int32"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>133</ID>
+                      <Description>"[11]Int32"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>4c</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>134</ID>
+                      <Description>"[12]Int32"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[FPM_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>18</Offset>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"_input"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"MovingEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>137</ID>
+                  <Description>"CameraLookEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>29</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>138</ID>
+                  <Description>"JumpingEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>2A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"CrouchingEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>2B</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"UsingEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"PhotoCameraEnabled"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>2D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"jump"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>143</ID>
+                  <Description>"sprint"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>41</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>144</ID>
+                  <Description>"crouch"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>42</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"analogMovement"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>43</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>146</ID>
+                  <Description>"cursorLocked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>147</ID>
+                  <Description>"cursorInputForLook"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[FPM_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>45</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>148</ID>
+          <Description>"GirlNoiseReciever"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,GirlNoiseReciever:set_AlertValue)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GirlNoiseReciever:set_AlertValue)
+
+label(code)
+label(return)
+
+newmem:
+mov [girlnoisereciever_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+girlnoisereciever_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(girlnoisereciever_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(girlnoisereciever_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GirlNoiseReciever:set_AlertValue
+
+1FEBE97C458: 01 04 02                 - add [rdx+rax],eax
+1FEBE97C45B: 05 04 03 01 50           - add eax,50010304
+1FEBE97C460: 00 00                    - add [rax],al
+1FEBE97C462: 00 00                    - add [rax],al
+1FEBE97C464: 00 00                    - add [rax],al
+1FEBE97C466: 00 00                    - add [rax],al
+1FEBE97C468: 00 00                    - add [rax],al
+1FEBE97C46A: 00 00                    - add [rax],al
+1FEBE97C46C: 00 00                    - add [rax],al
+1FEBE97C46E: 00 00                    - add [rax],al
+// ---------- INJECTING HERE ----------
+GirlNoiseReciever:set_AlertValue: 55                       - push rbp
+// ---------- DONE INJECTING  ----------
+GirlNoiseReciever:set_AlertValue+1: 48 8B EC                 - mov rbp,rsp
+GirlNoiseReciever:set_AlertValue+4: 48 83 EC 40              - sub rsp,40
+GirlNoiseReciever:set_AlertValue+8: 48 89 75 F0              - mov [rbp-10],rsi
+GirlNoiseReciever:set_AlertValue+c: 48 89 7D F8              - mov [rbp-08],rdi
+GirlNoiseReciever:set_AlertValue+10: 48 8B F1                 - mov rsi,rcx
+GirlNoiseReciever:set_AlertValue+13: F3 0F 11 4D E0           - movss [rbp-20],xmm1
+GirlNoiseReciever:set_AlertValue+18: F3 0F 10 45 E0           - movss xmm0,[rbp-20]
+GirlNoiseReciever:set_AlertValue+1d: F3 0F 5A C0              - cvtss2sd xmm0,xmm0
+GirlNoiseReciever:set_AlertValue+21: F3 0F 10 8E 8C 00 00 00  - movss xmm1,[rsi+0000008C]
+GirlNoiseReciever:set_AlertValue+29: F3 0F 5A C9              - cvtss2sd xmm1,xmm1
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>157</ID>
+              <Description>"Value Show When Change Alert Value"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>149</ID>
+              <Description>"&lt;IsInitialized&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[girlnoisereciever_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>150</ID>
+              <Description>"&lt;CurrentAlertState&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[girlnoisereciever_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>151</ID>
+              <Description>"&lt;PreviousAlertState&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[girlnoisereciever_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>152</ID>
+              <Description>"_alertValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[girlnoisereciever_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>153</ID>
+              <Description>"&lt;ParanoiaTreshold&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[girlnoisereciever_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>154</ID>
+              <Description>"_paranoiaValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[girlnoisereciever_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>155</ID>
+              <Description>"_alertDecrementPerSec"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[girlnoisereciever_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>156</ID>
+              <Description>"&lt;AggregatedInShealthHud&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[girlnoisereciever_ptr]+98</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>190</ID>
+          <Description>"PhotoCamera"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : My Sexy Neighbor.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PhotoCamera:Update)
+define(bytes,55 48 8B EC 48 81 EC A0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PhotoCamera:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [photocamera_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000A0
+  jmp return
+
+photocamera_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(photocamera_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000A0
+
+dealloc(newmem)
+unregistersymbol(photocamera_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PhotoCamera:Update
+
+18F3F7E3D1E: AE                       - scasb 
+18F3F7E3D1F: 75 8D                    - jne StealthHudView:Update+47e
+18F3F7E3D21: 01 00                    - add [rax],eax
+18F3F7E3D23: 00 00                    - add [rax],al
+18F3F7E3D25: 00 00                    - add [rax],al
+18F3F7E3D27: 00 00                    - add [rax],al
+18F3F7E3D29: 00 00                    - add [rax],al
+18F3F7E3D2B: 00 00                    - add [rax],al
+18F3F7E3D2D: 00 00                    - add [rax],al
+18F3F7E3D2F: 00                       - db 00 
+// ---------- INJECTING HERE ----------
+PhotoCamera:Update: 55                       - push rbp
+// ---------- DONE INJECTING  ----------
+PhotoCamera:Update+1: 48 8B EC                 - mov rbp,rsp
+PhotoCamera:Update+4: 48 81 EC A0 00 00 00     - sub rsp,000000A0
+PhotoCamera:Update+b: 48 89 75 F8              - mov [rbp-08],rsi
+PhotoCamera:Update+f: 48 8B F1                 - mov rsi,rcx
+PhotoCamera:Update+12: 48 C7 45 A0 00 00 00 00  - mov qword ptr [rbp-60],00000000
+PhotoCamera:Update+1a: 48 C7 45 A8 00 00 00 00  - mov qword ptr [rbp-58],00000000
+PhotoCamera:Update+22: 48 C7 45 98 00 00 00 00  - mov qword ptr [rbp-68],00000000
+PhotoCamera:Update+2a: 0F B6 86 90 00 00 00     - movzx eax,byte ptr [rsi+00000090]
+PhotoCamera:Update+31: 85 C0                    - test eax,eax
+PhotoCamera:Update+33: 0F 84 2A 03 00 00        - je PhotoCamera:Update+363
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"&lt;IsInitialized&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[photocamera_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"&lt;CurrentState&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[photocamera_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"_focus"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"_focusDelta"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+9C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"_defaultCamFOV"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"_zoomValue"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[photocamera_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"_zoomMaxValue"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[photocamera_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"_zoomIncrement"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"_limitimgAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"_distance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[photocamera_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>201</ID>
+              <Description>"&lt;CanBeUsed&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[photocamera_ptr]+C0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>159</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>160</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " My Sexy Neighbor ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

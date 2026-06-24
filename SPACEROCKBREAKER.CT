@@ -1,0 +1,1757 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>207</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("SPACEROCKBREAKER.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"Fuel"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : SPACEROCKBREAKER.exe
+  Version: 
+  Date   : 2025-12-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Fuel:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Fuel:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [fuel_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+fuel_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(fuel_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(fuel_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Fuel:Update
+
+18BD239276B: 00 00                          - add [rax],al
+18BD239276D: 00 00                          - add [rax],al
+18BD239276F: 00 01                          - add [rcx],al
+18BD2392771: 04 01                          - add al,01
+18BD2392773: 00 04 02                       - add [rdx+rax],al
+18BD2392776: 00 00                          - add [rax],al
+18BD2392778: 00 00                          - add [rax],al
+18BD239277A: 00 00                          - add [rax],al
+18BD239277C: 00 00                          - add [rax],al
+18BD239277E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Fuel:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Fuel:Update+1: 48 8B EC                       - mov rbp,rsp
+Fuel:Update+4: 48 83 EC 30                    - sub rsp,30
+Fuel:Update+8: 48 89 4D F8                    - mov [rbp-08],rcx
+Fuel:Update+c: 66 90                          - nop 2
+Fuel:Update+e: 49 BB E0 27 39 D2 8B 01 00 00  - mov r11,Fuel:IncrementExtraFuelDrainCounter
+Fuel:Update+18: 41 FF D3                       - call r11
+Fuel:Update+1b: 48 8D 65 00                    - lea rsp,[rbp+00]
+Fuel:Update+1f: 5D                             - pop rbp
+Fuel:Update+20: C3                             - ret 
+18BD23927A1: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"fuelAmount"</Description>
+              <LastState Value="9" RealAddress="2A5088A9CE0"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"fuelDrainAmountDebug"</Description>
+              <LastState Value="0.05000000075" RealAddress="2A5088A9CE4"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+64</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"baseFuelDrainMultiplier"</Description>
+              <LastState Value="0.400000006" RealAddress="2A5088A9CE8"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"extraFuelDrainInterval"</Description>
+              <LastState Value="3" RealAddress="2A5088A9CEC"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"extraFuelDrainTimer"</Description>
+              <LastState Value="1.56658864" RealAddress="2A5088A9CF0"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"extraFuelDrainIncrements"</Description>
+              <LastState Value="9" RealAddress="2A5088A9CF4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[fuel_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"widthIncreasePerFuel"</Description>
+              <LastState Value="2" RealAddress="2A5088A9CF8"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"baseWidth"</Description>
+              <LastState Value="290" RealAddress="2A5088A9CFC"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"antifarmTimer"</Description>
+              <LastState Value="28.91538239" RealAddress="2A5088A9D00"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"antifarmActivationTime"</Description>
+              <LastState Value="30" RealAddress="2A5088A9D04"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"isFuelDrainEnabled"</Description>
+              <LastState Value="1" RealAddress="2A5088A9D08"/>
+              <VariableType>Byte</VariableType>
+              <Address>[fuel_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"isOutOfFuel"</Description>
+              <LastState Value="0" RealAddress="2A5088A9D09"/>
+              <VariableType>Byte</VariableType>
+              <Address>[fuel_ptr]+89</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"debugMultiplier"</Description>
+              <LastState Value="1" RealAddress="2A5088A9D0C"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"drainFuelSlowerForSector1Rare"</Description>
+              <LastState Value="0" RealAddress="2A5088A9D10"/>
+              <VariableType>Byte</VariableType>
+              <Address>[fuel_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"qRefuelCounter"</Description>
+              <LastState Value="0" RealAddress="2A5088A9D14"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[fuel_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"selfRepairTimer"</Description>
+              <LastState Value="0" RealAddress="2A5088A9D18"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"Sector10ExtraFuelDrain"</Description>
+              <LastState Value="1.5" RealAddress="2A5088A9D1C"/>
+              <VariableType>Float</VariableType>
+              <Address>[fuel_ptr]+9C</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"Bullet"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : SPACEROCKBREAKER.exe
+  Version: 
+  Date   : 2025-12-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Bullet:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Bullet:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [bullet_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+bullet_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(bullet_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(bullet_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Bullet:Update
+
+18BDAD45749: 04 02                          - add al,02
+18BDAD4574B: 05 04 03 01 50                 - add eax,50010304
+18BDAD45750: 00 00                          - add [rax],al
+18BDAD45752: 00 00                          - add [rax],al
+18BDAD45754: 00 00                          - add [rax],al
+18BDAD45756: 00 00                          - add [rax],al
+18BDAD45758: 00 00                          - add [rax],al
+18BDAD4575A: 00 00                          - add [rax],al
+18BDAD4575C: 00 00                          - add [rax],al
+18BDAD4575E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Bullet:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Bullet:Update+1: 48 8B EC                       - mov rbp,rsp
+Bullet:Update+4: 48 83 EC 30                    - sub rsp,30
+Bullet:Update+8: 48 89 4D F8                    - mov [rbp-08],rcx
+Bullet:Update+c: 66 90                          - nop 2
+Bullet:Update+e: 49 BB C0 57 D4 DA 8B 01 00 00  - mov r11,Bullet:MoveBullet
+Bullet:Update+18: 41 FF D3                       - call r11
+Bullet:Update+1b: 48 8D 65 00                    - lea rsp,[rbp+00]
+Bullet:Update+1f: 5D                             - pop rbp
+Bullet:Update+20: C3                             - ret 
+18BDAD45781: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"speed"</Description>
+              <LastState Value="120" RealAddress="2A61BCADAC0"/>
+              <VariableType>Float</VariableType>
+              <Address>[bullet_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"lifetime"</Description>
+              <LastState Value="2" RealAddress="2A61BCADAC4"/>
+              <VariableType>Float</VariableType>
+              <Address>[bullet_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"lifeTimer"</Description>
+              <LastState Value="1.883371949" RealAddress="2A61BCADAD4"/>
+              <VariableType>Float</VariableType>
+              <Address>[bullet_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"projectileType"</Description>
+              <LastState Value="0" RealAddress="2A61BCADAD8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[bullet_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"ammoType"</Description>
+              <LastState Value="0" RealAddress="2A61BCADADC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[bullet_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"piercesLeft"</Description>
+              <LastState Value="1" RealAddress="2A61BCADAE0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[bullet_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"isChainGunAmmo"</Description>
+              <LastState Value="0" RealAddress="2A61BCADAF0"/>
+              <VariableType>Byte</VariableType>
+              <Address>[bullet_ptr]+70</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>26</ID>
+          <Description>"GameStats"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : SPACEROCKBREAKER.exe
+  Version: 
+  Date   : 2025-12-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,GameStats:AddCredits)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GameStats:AddCredits)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamestats_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+gamestats_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(gamestats_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(gamestats_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameStats:AddCredits
+
+18BDDDC3519: 04 02                 - add al,02
+18BDDDC351B: 05 04 03 01 50        - add eax,50010304
+18BDDDC3520: 00 00                 - add [rax],al
+18BDDDC3522: 00 00                 - add [rax],al
+18BDDDC3524: 00 00                 - add [rax],al
+18BDDDC3526: 00 00                 - add [rax],al
+18BDDDC3528: 00 00                 - add [rax],al
+18BDDDC352A: 00 00                 - add [rax],al
+18BDDDC352C: 00 00                 - add [rax],al
+18BDDDC352E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+GameStats:AddCredits: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+GameStats:AddCredits+1: 48 8B EC              - mov rbp,rsp
+GameStats:AddCredits+4: 48 83 EC 40           - sub rsp,40
+GameStats:AddCredits+8: 48 89 75 E8           - mov [rbp-18],rsi
+GameStats:AddCredits+c: 48 89 7D F0           - mov [rbp-10],rdi
+GameStats:AddCredits+10: 4C 89 7D F8           - mov [rbp-08],r15
+GameStats:AddCredits+14: 48 8B F9              - mov rdi,rcx
+GameStats:AddCredits+17: 48 8B F2              - mov rsi,rdx
+GameStats:AddCredits+1a: 48 8B 87 10 01 00 00  - mov rax,[rdi+00000110]
+GameStats:AddCredits+21: 48 03 C6              - add rax,rsi
+GameStats:AddCredits+24: 48 89 87 10 01 00 00  - mov [rdi+00000110],rax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>206</ID>
+              <Description>"Value Show When Add Credits"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"totalAsteroidsDestroyed"</Description>
+              <LastState Value="40" RealAddress="2A619143B20"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"runAsteroidsDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143B24"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"totalSpaceMinesDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143B28"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"runSpaceMinesDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143B2C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"totalSectorsTraversed"</Description>
+              <LastState Value="0" RealAddress="2A619143B30"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"runSectorsTraversed"</Description>
+              <LastState Value="0" RealAddress="2A619143B34"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"currentSector"</Description>
+              <LastState Value="0" RealAddress="2A619143B38"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"highestSectorReached"</Description>
+              <LastState Value="0" RealAddress="2A619143B3C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"decileDefinition"</Description>
+              <LastState Value="5" RealAddress="2A619143B40"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"spaceMineSpawnChance"</Description>
+              <LastState Value="0" RealAddress="2A619143B44"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"spaceMineBaseHealth"</Description>
+              <LastState Value="1" RealAddress="2A619143B48"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"spaceMineBaseDamageMultiplier"</Description>
+              <LastState Value="1" RealAddress="2A619143B4C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"spaceMineExplosionRadius"</Description>
+              <LastState Value="10" RealAddress="2A619143B50"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"spaceMineStarterDamageMultiplier"</Description>
+              <LastState Value="1.5" RealAddress="2A619143B54"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"lootBoxBaseHealth"</Description>
+              <LastState Value="2" RealAddress="2A619143B58"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"artifactSpawnChance"</Description>
+              <LastState Value="0" RealAddress="2A619143B5C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"totalEssenceCount"</Description>
+              <LastState Value="0" RealAddress="2A619143B60"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"runEssenceCount"</Description>
+              <LastState Value="0" RealAddress="2A619143B64"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"minOreSpawn"</Description>
+              <LastState Value="1" RealAddress="2A619143B68"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"maxOreSpawn"</Description>
+              <LastState Value="1" RealAddress="2A619143B6C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"playerMaxHealth"</Description>
+              <LastState Value="1" RealAddress="2A619143B70"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"playerHealth"</Description>
+              <LastState Value="1" RealAddress="2A619143B74"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"playerBulletDamage"</Description>
+              <LastState Value="3" RealAddress="2A619143B78"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"playerMissileDamage"</Description>
+              <LastState Value="5" RealAddress="2A619143B7C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"playerLazerDamage"</Description>
+              <LastState Value="3" RealAddress="2A619143B80"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+100</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"missileSpawnChance"</Description>
+              <LastState Value="0" RealAddress="2A619143B84"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+104</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"lazerSpawnChance"</Description>
+              <LastState Value="0" RealAddress="2A619143B88"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+108</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"playerCreditsAmount"</Description>
+              <LastState Value="105" RealAddress="2A619143B90"/>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[gamestats_ptr]+110</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"alltimeCreditsAmount"</Description>
+              <LastState Value="18" RealAddress="2A619143B98"/>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[gamestats_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"expandCollectionCircleAbilityRangeBonus"</Description>
+              <LastState Value="600" RealAddress="2A619143BA0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+120</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"collectionCircleRadius"</Description>
+              <LastState Value="15" RealAddress="2A619143BA4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"clickCoolDown"</Description>
+              <LastState Value="2" RealAddress="2A619143BA8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"critChance"</Description>
+              <LastState Value="0" RealAddress="2A619143BAC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"critDamageMultiplier"</Description>
+              <LastState Value="2" RealAddress="2A619143BB0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"gunsUnlocked"</Description>
+              <LastState Value="1" RealAddress="2A619143BB4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"maxPlayerSpeed"</Description>
+              <LastState Value="5" RealAddress="2A619143BB8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"gunFireInterval"</Description>
+              <LastState Value="2" RealAddress="2A619143BBC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"bulletPierceLevel"</Description>
+              <LastState Value="1" RealAddress="2A619143BC0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"bulletExplosionMultiplier"</Description>
+              <LastState Value="2" RealAddress="2A619143BC4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"bullextExplosionRadius"</Description>
+              <LastState Value="5" RealAddress="2A619143BC8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"baseFuelDrainPerShot"</Description>
+              <LastState Value="0" RealAddress="2A619143BCC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"fuelDrainPerShotMultiplier"</Description>
+              <LastState Value="0.150000006" RealAddress="2A619143BD0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"sectorDecileFuelDrainPerClickMultiplier"</Description>
+              <LastState Value="1" RealAddress="2A619143BD4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+154</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"fuelAmountMax"</Description>
+              <LastState Value="9" RealAddress="2A619143BD8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+158</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"fuelDrainRateInSeconds"</Description>
+              <LastState Value="0.3000000119" RealAddress="2A619143BDC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+15C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"basefuelDrainAmount"</Description>
+              <LastState Value="0.05000000075" RealAddress="2A619143BE0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+160</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>73</ID>
+              <Description>"fuelDrainAmountMultiplier"</Description>
+              <LastState Value="0.07999999821" RealAddress="2A619143BE4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+164</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>74</ID>
+              <Description>"sectorDecileFuelDrainMultiplier"</Description>
+              <LastState Value="2" RealAddress="2A619143BE8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+168</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"playerLevel"</Description>
+              <LastState Value="0" RealAddress="2A619143BEC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+16C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"playerXP"</Description>
+              <LastState Value="51" RealAddress="2A619143BF0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+170</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"xpToNextLevel"</Description>
+              <LastState Value="100" RealAddress="2A619143BF4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+174</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"xpGainedThisRun"</Description>
+              <LastState Value="0" RealAddress="2A619143BF8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+178</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"xpGainPerAsteroid"</Description>
+              <LastState Value="3" RealAddress="2A619143BFC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+17C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"asteroidBaseHealth"</Description>
+              <LastState Value="3" RealAddress="2A619143C00"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+180</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>81</ID>
+              <Description>"asteroidHealthStaticDecileIncrease"</Description>
+              <LastState Value="10" RealAddress="2A619143C04"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+184</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"asteroidHealthSectorMultiplier"</Description>
+              <LastState Value="2" RealAddress="2A619143C08"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+188</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"asteroidHealthSectorMultiplierDecileIncrease"</Description>
+              <LastState Value="3" RealAddress="2A619143C0C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+18C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"asteroidHealthMultiplierPerDecile"</Description>
+              <LastState Value="1.5" RealAddress="2A619143C10"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+190</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>85</ID>
+              <Description>"hasBeginProccessingButtonBeenPressed"</Description>
+              <LastState Value="1" RealAddress="2A619143C14"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+194</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"emptyCargoTimeBetweenDrops"</Description>
+              <LastState Value="0.05000000075" RealAddress="2A619143C18"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+198</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87</ID>
+              <Description>"timeBetweenPlinkoDrops"</Description>
+              <LastState Value="1" RealAddress="2A619143C1C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+19C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"bonusSectorProgressCounter"</Description>
+              <LastState Value="0" RealAddress="2A619143C20"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"currentSectorSelected"</Description>
+              <LastState Value="0" RealAddress="2A619143C24"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>90</ID>
+              <Description>"detectionRange"</Description>
+              <LastState Value="20" RealAddress="2A619143C28"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>91</ID>
+              <Description>"gun1Unlocked"</Description>
+              <LastState Value="1" RealAddress="2A619143C2C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"gun2Unlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C2D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1AD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"gun3Unlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C2E"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1AE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"gun4Unlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C2F"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1AF</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"normalWeight"</Description>
+              <LastState Value="60" RealAddress="2A619143C30"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"explosiveWeight"</Description>
+              <LastState Value="0" RealAddress="2A619143C34"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"pierceWeight"</Description>
+              <LastState Value="0" RealAddress="2A619143C38"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"playerTotalKeyCount"</Description>
+              <LastState Value="0" RealAddress="2A619143C3C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"playerTotalKeysCollected"</Description>
+              <LastState Value="0" RealAddress="2A619143C40"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>100</ID>
+              <Description>"playerRunKeyCount"</Description>
+              <LastState Value="0" RealAddress="2A619143C44"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"lootCratesDestroyedTotal"</Description>
+              <LastState Value="0" RealAddress="2A619143C48"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>102</ID>
+              <Description>"lootCratesDestroyedRun"</Description>
+              <LastState Value="0" RealAddress="2A619143C4C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"lazerDamageInterval"</Description>
+              <LastState Value="0.400000006" RealAddress="2A619143C50"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"hasLootBoxbeenUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C54"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"hasSectorBonusCounterBeenUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C55"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1D5</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"lootBoxesOpened"</Description>
+              <LastState Value="0" RealAddress="2A619143C58"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"hasSeenSector1AsRare"</Description>
+              <LastState Value="0" RealAddress="2A619143C5C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"didLastLootboxDropKey"</Description>
+              <LastState Value="0" RealAddress="2A619143C5D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1DD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"essenceAlltimeCount"</Description>
+              <LastState Value="0" RealAddress="2A619143C60"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"asteroidSpawnInterval"</Description>
+              <LastState Value="3" RealAddress="2A619143C64"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"isGoldRushUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C68"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>112</ID>
+              <Description>"isGoldRushInitialBonus"</Description>
+              <LastState Value="0" RealAddress="2A619143C69"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1E9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>113</ID>
+              <Description>"goldRushChance"</Description>
+              <LastState Value="0" RealAddress="2A619143C6C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>114</ID>
+              <Description>"duplicatorChance"</Description>
+              <LastState Value="0" RealAddress="2A619143C70"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+1F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"isQuotaBonusUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C74"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"quotaBonusStaticAmount"</Description>
+              <LastState Value="0" RealAddress="2A619143C78"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+1F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>117</ID>
+              <Description>"isWarpDriveUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C7C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>118</ID>
+              <Description>"isGemsInLootcratesUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C7D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1FD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>119</ID>
+              <Description>"isRefulOnAsteroidKillUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C7E"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+1FE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>120</ID>
+              <Description>"refuelOnAsteroidKillAmount"</Description>
+              <LastState Value="0" RealAddress="2A619143C80"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+200</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>121</ID>
+              <Description>"isQuantamRefuelingUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C84"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+204</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"quantamRefuelingChance"</Description>
+              <LastState Value="0" RealAddress="2A619143C88"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+208</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>123</ID>
+              <Description>"spacemineExplosionScale"</Description>
+              <LastState Value="1" RealAddress="2A619143C8C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+20C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>124</ID>
+              <Description>"isMissileSwarmUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C90"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+210</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"isFuelFromOreUnlocked"</Description>
+              <LastState Value="0" RealAddress="2A619143C91"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+211</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"fuelFromOreAmount"</Description>
+              <LastState Value="0" RealAddress="2A619143C94"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+214</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>127</ID>
+              <Description>"fuelGainedFromWarp"</Description>
+              <LastState Value="0" RealAddress="2A619143C98"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+218</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>128</ID>
+              <Description>"sectorFuelDrainReduction"</Description>
+              <LastState Value="0" RealAddress="2A619143C9C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+21C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>129</ID>
+              <Description>"lootboxOpenAmount"</Description>
+              <LastState Value="1" RealAddress="2A619143CA0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+220</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>130</ID>
+              <Description>"lootPerChest"</Description>
+              <LastState Value="4" RealAddress="2A619143CA4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+224</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>131</ID>
+              <Description>"godDrop"</Description>
+              <LastState Value="0" RealAddress="2A619143CA8"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+228</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>132</ID>
+              <Description>"duplipegAndRefinerTimer"</Description>
+              <LastState Value="0" RealAddress="2A619143CAC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+22C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>133</ID>
+              <Description>"duplipegAndRefinerThreshold"</Description>
+              <LastState Value="133" RealAddress="2A619143CB0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+230</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>134</ID>
+              <Description>"duplipegsAwarded"</Description>
+              <LastState Value="0" RealAddress="2A619143CB4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+234</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"refinersAwarded"</Description>
+              <LastState Value="0" RealAddress="2A619143CB8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+238</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>136</ID>
+              <Description>"wormholeTimer"</Description>
+              <LastState Value="0" RealAddress="2A619143CBC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+23C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>137</ID>
+              <Description>"wormholeThreshold"</Description>
+              <LastState Value="121" RealAddress="2A619143CC0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+240</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>138</ID>
+              <Description>"wormholesAwarded"</Description>
+              <LastState Value="0" RealAddress="2A619143CC4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+244</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>139</ID>
+              <Description>"starterAsteroidMaxCount"</Description>
+              <LastState Value="7" RealAddress="2A619143CC8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+248</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>140</ID>
+              <Description>"bonusLazerDamagePerTick"</Description>
+              <LastState Value="0" RealAddress="2A619143CCC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+24C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>141</ID>
+              <Description>"chanceForBasicLoot"</Description>
+              <LastState Value="0.5" RealAddress="2A619143CD0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+250</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>142</ID>
+              <Description>"hasPrestiged"</Description>
+              <LastState Value="0" RealAddress="2A619143CD4"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+254</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>143</ID>
+              <Description>"weaponsCrateSpawnInterval"</Description>
+              <LastState Value="200" RealAddress="2A619143CD8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+258</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>144</ID>
+              <Description>"hasUnlockedWeaponsCrate"</Description>
+              <LastState Value="0" RealAddress="2A619143CDC"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+25C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>145</ID>
+              <Description>"bonusAmmoDuration"</Description>
+              <LastState Value="3" RealAddress="2A619143CE0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+260</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>146</ID>
+              <Description>"chaingunFireTimer"</Description>
+              <LastState Value="0.200000003" RealAddress="2A619143CE4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+264</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>147</ID>
+              <Description>"minerBonusDamage"</Description>
+              <LastState Value="0" RealAddress="2A619143CE8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+268</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>148</ID>
+              <Description>"minerAttackSpeedInSeconds"</Description>
+              <LastState Value="0.3000000119" RealAddress="2A619143CEC"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+26C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>149</ID>
+              <Description>"electricAsteroidChance"</Description>
+              <LastState Value="0" RealAddress="2A619143CF0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+270</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>150</ID>
+              <Description>"electricAsteroidDamage"</Description>
+              <LastState Value="50" RealAddress="2A619143CF4"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+274</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>151</ID>
+              <Description>"maxElectricityJumps"</Description>
+              <LastState Value="3" RealAddress="2A619143CF8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+278</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>152</ID>
+              <Description>"plasmaDamage"</Description>
+              <LastState Value="50" RealAddress="2A619143CFC"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+27C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>153</ID>
+              <Description>"maxPlasmaJumps"</Description>
+              <LastState Value="3" RealAddress="2A619143D00"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+280</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>154</ID>
+              <Description>"hasUnlockedArtifacts"</Description>
+              <LastState Value="0" RealAddress="2A619143D04"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+284</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>155</ID>
+              <Description>"artifactSpawnInterval"</Description>
+              <LastState Value="200" RealAddress="2A619143D08"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+288</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>156</ID>
+              <Description>"hasPlayedArtifactPodiumIntro"</Description>
+              <LastState Value="0" RealAddress="2A619143D0C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+28C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>157</ID>
+              <Description>"hasPlayedAllArtifactsObtainedAnimation"</Description>
+              <LastState Value="0" RealAddress="2A619143D0D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+28D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>158</ID>
+              <Description>"hasUnlockedStats"</Description>
+              <LastState Value="0" RealAddress="2A619143D0E"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+28E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>159</ID>
+              <Description>"totalOreProcessed"</Description>
+              <LastState Value="17" RealAddress="2A619143D10"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+290</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>160</ID>
+              <Description>"totalArtifactsCollected"</Description>
+              <LastState Value="0" RealAddress="2A619143D14"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+294</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>161</ID>
+              <Description>"expeditionsStarted"</Description>
+              <LastState Value="10" RealAddress="2A619143D18"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+298</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>162</ID>
+              <Description>"totalBossAsteroidsDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143D1C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+29C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>163</ID>
+              <Description>"totalWeaponsCratesDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143D20"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>164</ID>
+              <Description>"totalElectricAsteroidsDestroyed"</Description>
+              <LastState Value="0" RealAddress="2A619143D24"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>165</ID>
+              <Description>"longestRunTime"</Description>
+              <LastState Value="28.91538239" RealAddress="2A619143D28"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>166</ID>
+              <Description>"totalRunTime"</Description>
+              <LastState Value="170.0585327" RealAddress="2A619143D2C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>167</ID>
+              <Description>"shipsCrashed"</Description>
+              <LastState Value="4" RealAddress="2A619143D30"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>168</ID>
+              <Description>"damageDealt"</Description>
+              <LastState Value="167" RealAddress="2A619143D34"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>169</ID>
+              <Description>"bulletsFired"</Description>
+              <LastState Value="80" RealAddress="2A619143D38"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>170</ID>
+              <Description>"missilesFired"</Description>
+              <LastState Value="0" RealAddress="2A619143D3C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>171</ID>
+              <Description>"lazersFired"</Description>
+              <LastState Value="0" RealAddress="2A619143D40"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>172</ID>
+              <Description>"fuelConsumed"</Description>
+              <LastState Value="57.39994431" RealAddress="2A619143D44"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>173</ID>
+              <Description>"highestEarningStoneOre"</Description>
+              <LastState Value="2" RealAddress="2A619143D48"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>174</ID>
+              <Description>"hasUnlockedWhiteHole"</Description>
+              <LastState Value="0" RealAddress="2A619143D4C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+2CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>175</ID>
+              <Description>"whiteHoleSpawnInterval"</Description>
+              <LastState Value="200" RealAddress="2A619143D50"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>176</ID>
+              <Description>"firstArtifact"</Description>
+              <LastState Value="0" RealAddress="2A619143D54"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+2D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>177</ID>
+              <Description>"hasUnlockedAutonomy"</Description>
+              <LastState Value="0" RealAddress="2A619143D55"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+2D5</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>178</ID>
+              <Description>"autoCollectChance"</Description>
+              <LastState Value="0" RealAddress="2A619143D58"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>179</ID>
+              <Description>"lazerRelocationCount"</Description>
+              <LastState Value="1" RealAddress="2A619143D5C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>180</ID>
+              <Description>"bonusFuelOnLazerKill"</Description>
+              <LastState Value="0" RealAddress="2A619143D60"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>181</ID>
+              <Description>"lazerLifetime"</Description>
+              <LastState Value="1" RealAddress="2A619143D64"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>182</ID>
+              <Description>"bonusFuelOnQuotaCompleteLevel"</Description>
+              <LastState Value="0" RealAddress="2A619143D68"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>183</ID>
+              <Description>"hasUnlockedMagneticMissiles"</Description>
+              <LastState Value="0" RealAddress="2A619143D6C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+2EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>184</ID>
+              <Description>"chaingunAmmoBonusMultiplier"</Description>
+              <LastState Value="0.5" RealAddress="2A619143D70"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>185</ID>
+              <Description>"bonusPlinkoIntake"</Description>
+              <LastState Value="0" RealAddress="2A619143D74"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+2F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>186</ID>
+              <Description>"bossLifestealPercent"</Description>
+              <LastState Value="0" RealAddress="2A619143D78"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>187</ID>
+              <Description>"bossBonusDamageMultiplier"</Description>
+              <LastState Value="1" RealAddress="2A619143D7C"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+2FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"selfRepairPercentage"</Description>
+              <LastState Value="0" RealAddress="2A619143D80"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+300</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"chanceToCollectAllOreOnOutOfFuel"</Description>
+              <LastState Value="0" RealAddress="2A619143D84"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+304</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>190</ID>
+              <Description>"nextSectorFillSpeed"</Description>
+              <LastState Value="0.5" RealAddress="2A619143D88"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+308</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"hasUnlockedFeedbackLoop"</Description>
+              <LastState Value="0" RealAddress="2A619143D8C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+30C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"bulletLifestealPercent"</Description>
+              <LastState Value="0" RealAddress="2A619143D90"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+310</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"bonusFuelOnMissileKill"</Description>
+              <LastState Value="0" RealAddress="2A619143D94"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+314</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"pierceBonusDamage"</Description>
+              <LastState Value="0" RealAddress="2A619143D98"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+318</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"keycutLevel"</Description>
+              <LastState Value="0" RealAddress="2A619143D9C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+31C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"bonusMissilesToFire"</Description>
+              <LastState Value="0" RealAddress="2A619143DA0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+320</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"bonusLazersToFire"</Description>
+              <LastState Value="0" RealAddress="2A619143DA4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[gamestats_ptr]+324</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"gunDrainFuelReductionPercent"</Description>
+              <LastState Value="0" RealAddress="2A619143DA8"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+328</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"hasUnlockedLazerRecall"</Description>
+              <LastState Value="0" RealAddress="2A619143DAC"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+32C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"hasUnlockedShieldRecharge"</Description>
+              <LastState Value="0" RealAddress="2A619143DAD"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+32D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>201</ID>
+              <Description>"quotaWhiteHoleChance"</Description>
+              <LastState Value="0" RealAddress="2A619143DB0"/>
+              <VariableType>Float</VariableType>
+              <Address>[gamestats_ptr]+330</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>202</ID>
+              <Description>"consolationDrop"</Description>
+              <LastState Value="0" RealAddress="2A619143DB4"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+334</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>203</ID>
+              <Description>"triedStoneOreAchievement"</Description>
+              <LastState Value="0" RealAddress="2A619143DB5"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+335</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"triedMillionaireAchievement"</Description>
+              <LastState Value="0" RealAddress="2A619143DB6"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+336</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>205</ID>
+              <Description>"triedBajillionaireAchievement"</Description>
+              <LastState Value="0" RealAddress="2A619143DB7"/>
+              <VariableType>Byte</VariableType>
+              <Address>[gamestats_ptr]+337</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>208</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>209</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " SPACE ROCK BREAKER ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>151</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("In Woods.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"AttackController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : In Woods.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,AttackController:Update)
+define(bytes,55 48 8B EC 48 81 EC 70 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,AttackController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [attackcontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000170
+  jmp return
+
+attackcontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(attackcontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000170
+
+dealloc(newmem)
+unregistersymbol(attackcontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: AttackController:Update
+
+13DF8282058: 01 04 02                       - add [rdx+rax],eax
+13DF828205B: 05 04 03 01 50                 - add eax,50010304
+13DF8282060: 00 00                          - add [rax],al
+13DF8282062: 00 00                          - add [rax],al
+13DF8282064: 00 00                          - add [rax],al
+13DF8282066: 00 00                          - add [rax],al
+13DF8282068: 00 00                          - add [rax],al
+13DF828206A: 00 00                          - add [rax],al
+13DF828206C: 00 00                          - add [rax],al
+13DF828206E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+AttackController:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+AttackController:Update+1: 48 8B EC                       - mov rbp,rsp
+AttackController:Update+4: 48 81 EC 70 01 00 00           - sub rsp,00000170
+AttackController:Update+b: 48 89 75 F0                    - mov [rbp-10],rsi
+AttackController:Update+f: 48 89 7D F8                    - mov [rbp-08],rdi
+AttackController:Update+13: 48 8B F1                       - mov rsi,rcx
+AttackController:Update+16: C7 85 D8 FE FF FF 00 00 00 00  - mov [rbp-00000128],00000000
+AttackController:Update+20: C7 85 DC FE FF FF 00 00 00 00  - mov [rbp-00000124],00000000
+AttackController:Update+2a: C7 85 E0 FE FF FF 00 00 00 00  - mov [rbp-00000120],00000000
+AttackController:Update+34: 66 90                          - nop 2
+AttackController:Update+36: 49 BB 10 71 5E DA 3D 01 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"existTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"colliderExistTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"moveSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"moveRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"areaAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"crashAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+81</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"ranged"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+82</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"autoTrace"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+83</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"penetrate"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[attackcontroller_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"effectFollowEnemy"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"playerMelee"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+89</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"playerRanged"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+8A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"timer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"knockbackAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"split"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[attackcontroller_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"splitedAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"movedRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"positionParentFollowTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"damage"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"critChance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"critDmgInc"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"knockbackForce"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"stunForce"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"fireDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"iceDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"lightningDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"poisonDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"trueDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[attackcontroller_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"peak"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"hitCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[attackcontroller_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"explosion"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[attackcontroller_ptr]+E0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>113</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : In Woods.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerController:FixedUpdate)
+define(bytes,55 48 8B EC 48 81 EC 30 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerController:FixedUpdate)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000130
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000130
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController:FixedUpdate
+
+13DF820EDFC: 00 00                 - add [rax],al
+13DF820EDFE: 00 00                 - add [rax],al
+13DF820EE00: 00 00                 - add [rax],al
+13DF820EE02: 00 00                 - add [rax],al
+13DF820EE04: 00 00                 - add [rax],al
+13DF820EE06: 00 00                 - add [rax],al
+13DF820EE08: 00 00                 - add [rax],al
+13DF820EE0A: 00 00                 - add [rax],al
+13DF820EE0C: 00 00                 - add [rax],al
+13DF820EE0E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+PlayerController:FixedUpdate: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PlayerController:FixedUpdate+1: 48 8B EC              - mov rbp,rsp
+PlayerController:FixedUpdate+4: 48 81 EC 30 01 00 00  - sub rsp,00000130
+PlayerController:FixedUpdate+b: 48 89 75 F8           - mov [rbp-08],rsi
+PlayerController:FixedUpdate+f: 48 8B F1              - mov rsi,rcx
+PlayerController:FixedUpdate+12: 48 8B 86 20 03 00 00  - mov rax,[rsi+00000320]
+PlayerController:FixedUpdate+19: 48 8B D5              - mov rdx,rbp
+PlayerController:FixedUpdate+1c: 48 81 C2 78 FF FF FF  - add rdx,FFFFFFFFFFFFFF78
+PlayerController:FixedUpdate+23: 48 8B C8              - mov rcx,rax
+PlayerController:FixedUpdate+26: 83 38 00              - cmp dword ptr [rax],00
+PlayerController:FixedUpdate+29: 48 8D 64 24 00        - lea rsp,[rsp+00]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>114</ID>
+              <Description>"lookAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+36C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"walkDirection"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+370</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"animeDirection"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+374</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>117</ID>
+              <Description>"beamDamageTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+378</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>118</ID>
+              <Description>"currentHealth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+37C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>119</ID>
+              <Description>"isDead"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+380</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>120</ID>
+              <Description>"isStill"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+381</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>121</ID>
+              <Description>"isUnhealthy"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+382</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"isPoision"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+383</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>123</ID>
+              <Description>"leftPress"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+384</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>124</ID>
+              <Description>"rightPress"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+385</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"autoLeftAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+386</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"attackCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+388</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>127</ID>
+              <Description>"projectilesCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+38C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>128</ID>
+              <Description>"meleeStack"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+390</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>129</ID>
+              <Description>"rangedStack"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+394</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>130</ID>
+              <Description>"lookAction"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+398</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"EnemyController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : In Woods.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,EnemyController:LateUpdate)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,EnemyController:LateUpdate)
+
+label(code)
+label(return)
+
+newmem:
+mov [enemycontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+enemycontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(enemycontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(enemycontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: EnemyController:LateUpdate
+
+13DF82706F9: 04 02                          - add al,02
+13DF82706FB: 05 04 03 01 50                 - add eax,50010304
+13DF8270700: 00 00                          - add [rax],al
+13DF8270702: 00 00                          - add [rax],al
+13DF8270704: 00 00                          - add [rax],al
+13DF8270706: 00 00                          - add [rax],al
+13DF8270708: 00 00                          - add [rax],al
+13DF827070A: 00 00                          - add [rax],al
+13DF827070C: 00 00                          - add [rax],al
+13DF827070E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+EnemyController:LateUpdate: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+EnemyController:LateUpdate+1: 48 8B EC                       - mov rbp,rsp
+EnemyController:LateUpdate+4: 48 83 EC 30                    - sub rsp,30
+EnemyController:LateUpdate+8: 48 89 75 F8                    - mov [rbp-08],rsi
+EnemyController:LateUpdate+c: 48 8B F1                       - mov rsi,rcx
+EnemyController:LateUpdate+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+EnemyController:LateUpdate+16: 49 BB 00 09 27 F8 3D 01 00 00  - mov r11,EnemyController:FireUpdate
+EnemyController:LateUpdate+20: 41 FF D3                       - call r11
+EnemyController:LateUpdate+23: 48 8B CE                       - mov rcx,rsi
+EnemyController:LateUpdate+26: 49 BB D0 0E 27 F8 3D 01 00 00  - mov r11,EnemyController:IceUpdate
+EnemyController:LateUpdate+30: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"monsterCardDropRate"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+170</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"minCoinDrop"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+174</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"maxCoinDrop"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+178</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"blueGemDrop"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+17C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"redGemDrop"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+180</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"whiteGemDrop"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+184</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"redGemDropRate"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+188</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"whiteGemDropRate"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+18C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"experience"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+190</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"maxHealth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+194</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"defense"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+198</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"knockbackResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+19C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"stunResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"fireResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"fireRecover"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"iceResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"iceRecover"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"lightningResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"lightningRecover"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"poisonResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"attackDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"attackRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"walkSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"tree"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"boss"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1CD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"finalBoss"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1CE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"smoothAfterAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1CF</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"dashAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"teleport"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D1</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"walkBack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D2</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"knockbackAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D3</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"specialAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"specialAttackChangeRange"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1D5</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"specialAttackRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"attackFollow"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"deadAfterAttack"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1DD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"moveforwardWhenNoPath"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+1DE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"levelStarIndex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[enemycontroller_ptr]+1E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"currentMaxHealth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"currentHealth"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>73</ID>
+              <Description>"currentWalkSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>74</ID>
+              <Description>"currentDefense"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"currentAttackDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"currentAttackSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"currentFireResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+1FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"currentIceResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+200</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"currentLightningResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+204</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"currentPoisonResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+208</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>81</ID>
+              <Description>"currentKnockbackResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+20C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"currentStunResistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+210</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"currentFireRecovery"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+214</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"currentIceRecovery"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+218</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>85</ID>
+              <Description>"currentLightningRecovery"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+21C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"currentKnockbackValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+220</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87</ID>
+              <Description>"currentStunValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+224</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"currentFireValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+228</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"currentIceValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+22C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>90</ID>
+              <Description>"currentLightningValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+230</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>91</ID>
+              <Description>"currentPoisonValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+234</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"fireTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+238</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"iceTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+23C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"lightningTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+240</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"poisonTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+244</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"existTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+248</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"isDead"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+24C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"isBuffed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+24D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"endlessBoss"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+24E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>100</ID>
+              <Description>"takedDamage"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+250</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"stunTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>102</ID>
+              <Description>"freezeTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"repathCooldownTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"lockDashTarget"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+2B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"reachDashTarget"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[enemycontroller_ptr]+2B9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"specialAttackTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"walkbackTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"teleportTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"teleportTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"currentFreezeTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"playerDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+2FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>112</ID>
+              <Description>"pathTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[enemycontroller_ptr]+300</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>131</ID>
+          <Description>"ResourcesManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : In Woods.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,ResourcesManager:AddWood)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,ResourcesManager:AddWood)
+
+label(code)
+label(return)
+
+newmem:
+mov [resourcesmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+resourcesmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(resourcesmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(resourcesmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ResourcesManager:AddWood
+
+13DF82D76CD: 36 37        - aaa 
+13DF82D76CF: FE           - db -02
+13DF82D76D0: 3C 01        - cmp al,01
+13DF82D76D2: 00 00        - add [rax],al
+13DF82D76D4: 00 00        - add [rax],al
+13DF82D76D6: 00 00        - add [rax],al
+13DF82D76D8: 00 00        - add [rax],al
+13DF82D76DA: 00 00        - add [rax],al
+13DF82D76DC: 00 00        - add [rax],al
+13DF82D76DE: 00 00        - add [rax],al
+// ---------- INJECTING HERE ----------
+ResourcesManager:AddWood: 55           - push rbp
+// ---------- DONE INJECTING  ----------
+ResourcesManager:AddWood+1: 48 8B EC     - mov rbp,rsp
+ResourcesManager:AddWood+4: 48 83 EC 30  - sub rsp,30
+ResourcesManager:AddWood+8: 48 89 75 F0  - mov [rbp-10],rsi
+ResourcesManager:AddWood+c: 48 89 7D F8  - mov [rbp-08],rdi
+ResourcesManager:AddWood+10: 48 8B F9     - mov rdi,rcx
+ResourcesManager:AddWood+13: 48 8B F2     - mov rsi,rdx
+ResourcesManager:AddWood+16: 48 63 47 20  - movsxd  rax,dword ptr [rdi+20]
+ResourcesManager:AddWood+1a: 03 C6        - add eax,esi
+ResourcesManager:AddWood+1c: 89 47 20     - mov [rdi+20],eax
+ResourcesManager:AddWood+1f: 48 63 47 24  - movsxd  rax,dword ptr [rdi+24]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>132</ID>
+              <Description>"Value Show When Add Wood"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>133</ID>
+              <Description>"totalWood"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[resourcesmanager_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>134</ID>
+              <Description>"woodCount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[resourcesmanager_ptr]+24</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"coinCount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[resourcesmanager_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>136</ID>
+              <Description>"totalDamage"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Double</VariableType>
+              <Address>[resourcesmanager_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>137</ID>
+              <Description>"totalKill"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[resourcesmanager_ptr]+38</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>138</ID>
+          <Description>"LevelManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : In Woods.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,LevelManager:LevelUpdate)
+define(bytes,55 48 8B EC 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,LevelManager:LevelUpdate)
+
+label(code)
+label(return)
+
+newmem:
+mov [levelmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,50
+  jmp return
+
+levelmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(levelmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(levelmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LevelManager:LevelUpdate
+
+TreeModelController:LateUpdate+d9: 48 8D 65 00                    - lea rsp,[rbp+00]
+TreeModelController:LateUpdate+dd: 5D                             - pop rbp
+TreeModelController:LateUpdate+de: C3                             - ret 
+13DF827355F: 00 01                          - add [rcx],al
+13DF8273561: 04 02                          - add al,02
+13DF8273563: 05 04 03 01 50                 - add eax,50010304
+13DF8273568: 00 00                          - add [rax],al
+13DF827356A: 00 00                          - add [rax],al
+13DF827356C: 00 00                          - add [rax],al
+13DF827356E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+LevelManager:LevelUpdate: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+LevelManager:LevelUpdate+1: 48 8B EC                       - mov rbp,rsp
+LevelManager:LevelUpdate+4: 48 83 EC 50                    - sub rsp,50
+LevelManager:LevelUpdate+8: 48 89 75 F8                    - mov [rbp-08],rsi
+LevelManager:LevelUpdate+c: 48 8B F1                       - mov rsi,rcx
+LevelManager:LevelUpdate+f: 48 B8 C0 19 82 B8 3D 01 00 00  - mov rax,0000013DB88219C0
+LevelManager:LevelUpdate+19: 48 8B 00                       - mov rax,[rax]
+LevelManager:LevelUpdate+1c: 48 8B C8                       - mov rcx,rax
+LevelManager:LevelUpdate+1f: 83 38 00                       - cmp dword ptr [rax],00
+LevelManager:LevelUpdate+22: 48 8D 6D 00                    - lea rbp,[rbp+00]
+LevelManager:LevelUpdate+26: 49 BB D0 1E 26 F8 3D 01 00 00  - mov r11,EnemyManager:EnemiesCount
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>139</ID>
+              <Description>"levelTimer"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[levelmanager_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>140</ID>
+              <Description>"enemyCount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+2C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>141</ID>
+              <Description>"speedUpSpawner"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>142</ID>
+              <Description>"slowDownSpawner"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+31</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>143</ID>
+              <Description>"startStarCount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>144</ID>
+              <Description>"reinforceMode"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>145</ID>
+              <Description>"hypervariantLevel"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>146</ID>
+              <Description>"x2Mode"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>147</ID>
+              <Description>"x2ModeFinalBossKill"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>148</ID>
+              <Description>"orMode"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[levelmanager_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>149</ID>
+              <Description>"orModeLevel"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[levelmanager_ptr]+4C</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>150</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>152</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " In Woods - v2.10.1 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>23</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Mirai'sMidnightTraining.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"ValueSystem_Base"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Mirai'sMidnightTraining.exe
+  Version: 
+  Date   : 2026-04-25
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DemonFox.ValueSystem_Base:UpdateSystem)
+define(bytes,55 48 8B EC 48 81 EC 90 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DemonFox.ValueSystem_Base:UpdateSystem)
+
+label(code)
+label(return)
+
+newmem:
+mov [valuesystem_base_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000090
+  jmp return
+
+valuesystem_base_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(valuesystem_base_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000090
+
+dealloc(newmem)
+unregistersymbol(valuesystem_base_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DemonFox.ValueSystem_Base:UpdateSystem
+
+17883505CCD: 00 00                 - add [rax],al
+17883505CCF: 00 00                 - add [rax],al
+17883505CD1: 00 00                 - add [rax],al
+17883505CD3: 00 00                 - add [rax],al
+17883505CD5: 00 00                 - add [rax],al
+17883505CD7: 00 00                 - add [rax],al
+17883505CD9: 00 00                 - add [rax],al
+17883505CDB: 00 00                 - add [rax],al
+17883505CDD: 00 00                 - add [rax],al
+17883505CDF: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+DemonFox.ValueSystem_Base:UpdateSystem: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+DemonFox.ValueSystem_Base:UpdateSystem+1: 48 8B EC              - mov rbp,rsp
+DemonFox.ValueSystem_Base:UpdateSystem+4: 48 81 EC 90 00 00 00  - sub rsp,00000090
+DemonFox.ValueSystem_Base:UpdateSystem+b: 48 89 75 E8           - mov [rbp-18],rsi
+DemonFox.ValueSystem_Base:UpdateSystem+f: 48 89 7D F0           - mov [rbp-10],rdi
+DemonFox.ValueSystem_Base:UpdateSystem+13: 4C 89 75 F8           - mov [rbp-08],r14
+DemonFox.ValueSystem_Base:UpdateSystem+17: 48 8B F1              - mov rsi,rcx
+DemonFox.ValueSystem_Base:UpdateSystem+1a: F3 0F 11 4D A0        - movss [rbp-60],xmm1
+DemonFox.ValueSystem_Base:UpdateSystem+1f: F3 0F 10 45 A0        - movss xmm0,[rbp-60]
+DemonFox.ValueSystem_Base:UpdateSystem+24: F3 0F 5A C0           - cvtss2sd xmm0,xmm0
+DemonFox.ValueSystem_Base:UpdateSystem+28: 48 8B CE              - mov rcx,rsi
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>valuesystem_base_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"climaxState"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[valuesystem_base_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"cumState"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[valuesystem_base_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"_lustEnabled"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[valuesystem_base_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"lustReadyEmitted"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[valuesystem_base_ptr]+59</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"lustRecoveryTimer"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"climaxTimer"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"recoveryTimer"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"cooldownTimer"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+68</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"data"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"maxPleasure"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"currentPleasure"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"maxLust"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"currentLust"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"climaxCount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"cumCount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"basePleasureGrowthRate"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"baseLustGrowthRate"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[valuesystem_base_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>22</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>24</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Mirai's Midnight Training ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>124</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "HoloType.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"InGameLoopState"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : HoloType.exe
+  Version: 
+  Date   : 2026-02-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,App.GameFlow.States.InGame.InGameLoopState:OnTextInput)
+define(bytes,55 48 8B EC 48 81 EC 80 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,App.GameFlow.States.InGame.InGameLoopState:OnTextInput)
+
+label(code)
+label(return)
+
+newmem:
+mov [ingameloopstate_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000080
+  jmp return
+
+ingameloopstate_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(ingameloopstate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000080
+
+dealloc(newmem)
+unregistersymbol(ingameloopstate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: App.GameFlow.States.InGame.InGameLoopState:OnTextInput
+
+26650E94508: 00 E8                 - add al,ch
+26650E9450A: E2 C9                 - loop 26650E944D5
+26650E9450C: D8 01                 - fadd dword ptr [rcx]
+26650E9450E: 08 98 A9 8B 26 68     - or [rax+68268BA9],bl
+26650E94514: 02 00                 - add al,[rax]
+26650E94516: 00 00                 - add [rax],al
+26650E94518: 00 00                 - add [rax],al
+26650E9451A: 00 00                 - add [rax],al
+26650E9451C: 00 00                 - add [rax],al
+26650E9451E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+1: 48 8B EC              - mov rbp,rsp
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+4: 48 81 EC 80 00 00 00  - sub rsp,00000080
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+b: 48 89 75 D0           - mov [rbp-30],rsi
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+f: 48 89 7D D8           - mov [rbp-28],rdi
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+13: 4C 89 65 E0           - mov [rbp-20],r12
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+17: 4C 89 6D E8           - mov [rbp-18],r13
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+1b: 4C 89 75 F0           - mov [rbp-10],r14
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+1f: 4C 89 7D F8           - mov [rbp-08],r15
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+23: 48 8B F9              - mov rdi,rcx
+App.GameFlow.States.InGame.InGameLoopState:OnTextInput+26: 48 8B F2              - mov rsi,rdx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>127</ID>
+              <Description>"Value Show When Start Typing"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"m_phraseList (Set 0)"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"_size"</Description>
+                  <LastState Value="4" RealAddress="17FD00E0198"/>
+                  <Color>808000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="4" RealAddress="17FD00EA518"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17FD073E86C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17FD073E1DC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17FD00E0C8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17FD00E041C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17DD4C2005E"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"currentValue"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"currentValue"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"currentValue"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>58</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17D82C1B3AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>60</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17D82A572DC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>68</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17D823819CC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>70</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"currentValue"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>78</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17DD4C2005E"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>80</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"currentValue"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17DD4C2005E"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>80</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"currentValue"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>88</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"currentValue"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>90</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"currentValue"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>98</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"currentValue"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>70</Offset>
+                    <Offset>A0</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"m_parameter"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"&lt;Score&gt;"</Description>
+                  <LastState Value="20" RealAddress="17FD00DA060"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"&lt;ClearTime&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA064"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"&lt;MaxComboNum&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA068"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"&lt;Combo&gt;"</Description>
+                  <LastState Value="2" RealAddress="17FD00DA06C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"&lt;MaxHealth&gt;"</Description>
+                  <LastState Value="1" RealAddress="17FD00DA070"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"&lt;Health&gt;"</Description>
+                  <LastState Value="1" RealAddress="17FD00DA074"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"&lt;GetTreasureCount&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA078"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"&lt;TypeMissCount&gt;"</Description>
+                  <LastState Value="0" Activated="1" RealAddress="17FD00DA07C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"&lt;TypeSuccessCount&gt;"</Description>
+                  <LastState Value="2" RealAddress="17FD00DA080"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"&lt;PhraseIndicatesTime&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA084"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"&lt;PhraseSuccessCount&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA088"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"&lt;DecreaseScoreSum&gt;"</Description>
+                  <LastState Value="0" RealAddress="17FD00DA08C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"&lt;WaveCount&gt;"</Description>
+                  <LastState Value="1" RealAddress="17FD00DA090"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingameloopstate_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>125</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>126</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " HoloType Treasure Zombie Island - v1.0.1 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,1524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>60</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("MOCHI-O.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+    showMessage("Made By DANGER DASH...!!!")
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"BattleManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MOCHI-O.exe
+  Version: 
+  Date   : 2026-01-23
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,BattleManager:UpdateTimer)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,BattleManager:UpdateTimer)
+
+label(code)
+label(return)
+
+newmem:
+mov [battlemanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+battlemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(battlemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(battlemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BattleManager:UpdateTimer
+
+1C1F7B5BA79: 04 02           - add al,02
+1C1F7B5BA7B: 05 04 03 01 50  - add eax,50010304
+1C1F7B5BA80: 00 00           - add [rax],al
+1C1F7B5BA82: 00 00           - add [rax],al
+1C1F7B5BA84: 00 00           - add [rax],al
+1C1F7B5BA86: 00 00           - add [rax],al
+1C1F7B5BA88: 00 00           - add [rax],al
+1C1F7B5BA8A: 00 00           - add [rax],al
+1C1F7B5BA8C: 00 00           - add [rax],al
+1C1F7B5BA8E: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+BattleManager:UpdateTimer: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+BattleManager:UpdateTimer+1: 48 8B EC        - mov rbp,rsp
+BattleManager:UpdateTimer+4: 48 83 EC 60     - sub rsp,60
+BattleManager:UpdateTimer+8: 48 89 75 F8     - mov [rbp-08],rsi
+BattleManager:UpdateTimer+c: 48 8B F1        - mov rsi,rcx
+BattleManager:UpdateTimer+f: 66 0F 57 C9     - xorpd xmm1,xmm1
+BattleManager:UpdateTimer+13: 48 8B 46 58     - mov rax,[rsi+58]
+BattleManager:UpdateTimer+17: F3 0F 10 40 7C  - movss xmm0,[rax+7C]
+BattleManager:UpdateTimer+1c: F3 0F 5A C0     - cvtss2sd xmm0,xmm0
+BattleManager:UpdateTimer+20: F2 0F 5A E9     - cvtsd2ss xmm5,xmm1
+BattleManager:UpdateTimer+24: F3 0F 11 6D D4  - movss [rbp-2C],xmm5
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>130</ID>
+              <Description>"Value Show In Battle Screen"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"&lt;Started&gt;"</Description>
+                  <LastState Value="1" RealAddress="1F20E3F3ED8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"&lt;Status&gt;"</Description>
+                  <LastState Value="0" RealAddress="1F20E3F3EDC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"&lt;AutoHealTimer&gt;"</Description>
+                  <LastState Value="2.249896288" RealAddress="1F20E3F3EE0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"&lt;SeedUnifyTimer&gt;"</Description>
+                  <LastState Value="2.249896288" RealAddress="1F20E3F3EE4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"SeedUnifyInterval"</Description>
+                  <LastState Value="3" RealAddress="1F20E3F3EE8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"&lt;FirePowerUpSeedTimer&gt;"</Description>
+                  <LastState Value="-0.01664912887" RealAddress="1F20E3F3EEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"_prevTime"</Description>
+                  <LastState Value="297.7491455" RealAddress="1F20E3F3EF0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"&lt;BGM_Time_Resume&gt;"</Description>
+                  <LastState Value="0" RealAddress="1F20E3F3EF4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+F4</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"&lt;BattleData&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"Exp"</Description>
+                  <LastState Value="0" RealAddress="1F2126C23E0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"Exp_total"</Description>
+                  <LastState Value="0" RealAddress="1F2126C23E4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"NowLevel"</Description>
+                  <LastState Value="1" RealAddress="1F2126C23E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"RequiredExp"</Description>
+                  <LastState Value="3" RealAddress="1F2126C23EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"LevelCap"</Description>
+                  <LastState Value="80" RealAddress="1F2126C23F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"HP"</Description>
+                  <LastState Value="200" RealAddress="1F2126C23F4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"MaxHP"</Description>
+                  <LastState Value="200" RealAddress="1F2126C23F8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"LeftTime"</Description>
+                  <LastState Value="297.7491455" RealAddress="1F2126C23FC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"TotalTime"</Description>
+                  <LastState Value="300" RealAddress="1F2126C2400"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"ZangaiCount"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2404"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"Money"</Description>
+                  <LastState Value="1700" RealAddress="1F2126C2408"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"BossDestroyCount"</Description>
+                  <LastState Value="0" RealAddress="1F2126C240C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"Cleared"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2410"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"BossBluePrint"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2411"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>91</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"EnvironmentBluePrint"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2412"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>92</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"BluePrintCount"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2414"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"LoveSeed"</Description>
+                  <LastState Value="13" RealAddress="1F2126C2418"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"CriticalHitRatio"</Description>
+                  <LastState Value="0.02999999933" RealAddress="1F2126C241C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"CriticalDamageRatio"</Description>
+                  <LastState Value="1.549999952" RealAddress="1F2126C2420"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"DestroyObstacles"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2424"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"DestroyBuilding"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2428"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"Lottery_Perfect"</Description>
+                  <LastState Value="0" RealAddress="1F2126C242C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"Lottery_Normal"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2430"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"Lottery_Miss"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2434"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"BreakMission"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2438"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"NoDamage"</Description>
+                  <LastState Value="1" RealAddress="1F2126C2439"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>B9</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"Rewarded_Double"</Description>
+                  <LastState Value="0" RealAddress="1F2126C243A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>BA</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"Rewarded_Ressurect"</Description>
+                  <LastState Value="0" RealAddress="1F2126C243B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>BB</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"FirstBossAppeared"</Description>
+                  <LastState Value="0" RealAddress="1F2126C243C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"TotalEnemyDestroyCount"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2440"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"BossSortingOrder"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2444"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"GeneratedStorageBot"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2448"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"EndlessLoop"</Description>
+                  <LastState Value="0" RealAddress="1F2126C244C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"Suceed"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2450"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"LevelUpMax"</Description>
+                  <LastState Value="0" RealAddress="1F2126C2451"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>D1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"UpdateUnlockedSuperWeapon"</Description>
+                  <LastState Value="28" RealAddress="1F2126C2454"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"&lt;StageData&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"TitleID"</Description>
+                  <LastState RealAddress="1F212672FA4"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"ObstacleSetID"</Description>
+                  <LastState RealAddress="1F20E3F01C4"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"ImageFileName"</Description>
+                  <LastState RealAddress="1F20E3F01C4"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"Index"</Description>
+                  <LastState Value="1" RealAddress="1F210D93A60"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"Tutrial"</Description>
+                  <LastState Value="0" RealAddress="1F210D93A64"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"SubHamCharactorType"</Description>
+                  <LastState Value="999" RealAddress="1F210D93A68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"WallArtType"</Description>
+                  <LastState Value="56" RealAddress="1F210D93A6C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"StorageBotFrequency"</Description>
+                  <LastState Value="0" RealAddress="1F210D93A70"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"StageTime"</Description>
+                  <LastState Value="300" RealAddress="1F210D93A74"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"DereLevel"</Description>
+                  <LastState Value="0" RealAddress="1F210D93A78"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[battlemanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>62</ID>
+          <Description>"FeedEventManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MOCHI-O.exe
+  Version: 
+  Date   : 2026-01-23
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,FeedEventManager:OnShootSeed)
+define(bytes,55 48 8B EC 48 81 EC C0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,FeedEventManager:OnShootSeed)
+
+label(code)
+label(return)
+
+newmem:
+mov [feedeventmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000C0
+  jmp return
+
+feedeventmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(feedeventmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000C0
+
+dealloc(newmem)
+unregistersymbol(feedeventmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FeedEventManager:OnShootSeed
+
+24CFD625AF0: 00 00                          - add [rax],al
+24CFD625AF2: 49 BB 20 02 CD 08 4B 02 00 00  - mov r11,0000024B08CD0220
+24CFD625AFC: 41 FF D3                       - call r11
+24CFD625AFF: 08 90 9E 5D 70 4C              - or [rax+4C705D9E],dl
+24CFD625B05: 02 00                          - add al,[rax]
+24CFD625B07: 00 00                          - add [rax],al
+24CFD625B09: 00 00                          - add [rax],al
+24CFD625B0B: 00 00                          - add [rax],al
+24CFD625B0D: 00 00                          - add [rax],al
+24CFD625B0F: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+FeedEventManager:OnShootSeed: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+FeedEventManager:OnShootSeed+1: 48 8B EC                       - mov rbp,rsp
+FeedEventManager:OnShootSeed+4: 48 81 EC C0 00 00 00           - sub rsp,000000C0
+FeedEventManager:OnShootSeed+b: 48 89 75 E8                    - mov [rbp-18],rsi
+FeedEventManager:OnShootSeed+f: 48 89 7D F0                    - mov [rbp-10],rdi
+FeedEventManager:OnShootSeed+13: 4C 89 7D F8                    - mov [rbp-08],r15
+FeedEventManager:OnShootSeed+17: 48 8B F1                       - mov rsi,rcx
+FeedEventManager:OnShootSeed+1a: F3 0F 11 8D 78 FF FF FF        - movss [rbp-00000088],xmm1
+FeedEventManager:OnShootSeed+22: 48 8B CD                       - mov rcx,rbp
+FeedEventManager:OnShootSeed+25: 48 81 C1 78 FF FF FF           - add rcx,FFFFFFFFFFFFFF78
+FeedEventManager:OnShootSeed+2c: 66 90                          - nop 2
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>129</ID>
+              <Description>"Value Show When Shoot One Time"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"Distance_Perfect"</Description>
+                  <LastState Value="0.02500000037" RealAddress="1F1EE0C8450"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"Distance_Normal"</Description>
+                  <LastState Value="0.05000000075" RealAddress="1F1EE0C8454"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"&lt;RewardSeedCount&gt;"</Description>
+                  <LastState Value="67" RealAddress="1F1EE0C8458"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+68</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"&lt;RArm&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"&lt;Charging&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"&lt;ChargingAnimationPlayed&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>49</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"&lt;ChargePower&gt;"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"&lt;ChargeSpeed&gt;"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"ChargeSpeed_Min"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"ChargeSpeed_Max"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"MaxChargePower"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"Acceration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[feedeventmanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"&lt;FeedEventData&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"LeftLoveSeed"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"LoveExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"LoveLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"Combo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"MaxCombo"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"ShootedSeedCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"SeedEatCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"InitialLoveLevel"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"NeedExp"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"RewardCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"IncreasedLevelCap"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[feedeventmanager_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>88</ID>
+          <Description>"DataCR"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MOCHI-O.exe
+  Version: 
+  Date   : 2026-01-23
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DataCR:set_Point)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DataCR:set_Point)
+
+label(code)
+label(return)
+
+newmem:
+mov [datacr_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+datacr_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(datacr_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(datacr_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DataCR:set_Point
+
+24CFB0BC71D: 02 00              - add al,[rax]
+24CFB0BC71F: 00 00              - add [rax],al
+24CFB0BC721: 00 00              - add [rax],al
+24CFB0BC723: 00 00              - add [rax],al
+24CFB0BC725: 00 00              - add [rax],al
+24CFB0BC727: 00 00              - add [rax],al
+24CFB0BC729: 00 00              - add [rax],al
+24CFB0BC72B: 00 00              - add [rax],al
+24CFB0BC72D: 00 00              - add [rax],al
+24CFB0BC72F: 00                 - db 00 
+// ---------- INJECTING HERE ----------
+DataCR:set_Point: 55                 - push rbp
+// ---------- DONE INJECTING  ----------
+DataCR:set_Point+1: 48 8B EC           - mov rbp,rsp
+DataCR:set_Point+4: 48 83 EC 30        - sub rsp,30
+DataCR:set_Point+8: 48 89 75 F0        - mov [rbp-10],rsi
+DataCR:set_Point+c: 48 89 7D F8        - mov [rbp-08],rdi
+DataCR:set_Point+10: 48 8B F9           - mov rdi,rcx
+DataCR:set_Point+13: 48 8B F2           - mov rsi,rdx
+DataCR:set_Point+16: 48 8B CE           - mov rcx,rsi
+DataCR:set_Point+19: 33 D2              - xor edx,edx
+DataCR:set_Point+1b: 41 B8 7F 96 98 00  - mov r8d,0098967F
+DataCR:set_Point+21: 48 8D 64 24 00     - lea rsp,[rsp+00]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>128</ID>
+              <Description>"Value Show When Spend Coin/Point"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"&lt;_GameInfo&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"Point"</Description>
+                  <LastState Value="9992999" RealAddress="1F11FAE3BE0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"BluePrint"</Description>
+                  <LastState Value="2" RealAddress="1F11FAE3BE4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"LoveSeed"</Description>
+                  <LastState Value="9999995" RealAddress="1F11FAE3BE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"LastStageIndex"</Description>
+                  <LastState Value="1" RealAddress="1F11FAE3BEC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"LastStageIndex_Hard"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3BF0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"DestroyObstacles"</Description>
+                  <LastState Value="23" RealAddress="1F11FAE3BF4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"DestroyBuilding"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3BF8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"MissionClearCount"</Description>
+                  <LastState Value="1" RealAddress="1F11FAE3BFC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"MissionFailedCount"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"Lottery_Perfect"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C04"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"Lottery_Normal"</Description>
+                  <LastState Value="1" RealAddress="1F11FAE3C08"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"Lottery_Miss"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C0C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"Love_Exp"</Description>
+                  <LastState Value="999999" RealAddress="1F11FAE3C10"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"Love_Level"</Description>
+                  <LastState Value="300" RealAddress="1F11FAE3C14"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"MaxComto"</Description>
+                  <LastState Value="11" RealAddress="1F11FAE3C18"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"FeedRewardCount"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C1C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"LevelCap"</Description>
+                  <LastState Value="80" RealAddress="1F11FAE3C20"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"BestRecord_Endless"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C24"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"BestTime_Endless"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C28"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"Endless_Level"</Description>
+                  <LastState Value="1" RealAddress="1F11FAE3C2C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"Endless_Exp"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C30"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"StorageBotCallCount"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C34"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"ADOffTrialCount"</Description>
+                  <LastState Value="0" RealAddress="1F11FAE3C38"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>113</ID>
+              <Description>"&lt;_FixedInfo&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"NowSaveDataNo"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A20"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"NagesenCount_500"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A24"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"NagesenCount_5000"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A28"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"NagesenCount_10000"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A2C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"Volume_SE"</Description>
+                  <LastState Value="0.5" RealAddress="1F20E4F4A30"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"Volume_BGM"</Description>
+                  <LastState Value="0.5" RealAddress="1F20E4F4A34"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"Language"</Description>
+                  <LastState Value="10" RealAddress="1F20E4F4A38"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"ForceShowAD"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A3C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"FirstLanguageSetting"</Description>
+                  <LastState Value="1" RealAddress="1F20E4F4A3D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>3D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"ADShowCount"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A40"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"Sensitivity"</Description>
+                  <LastState Value="4" RealAddress="1F20E4F4A44"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>125</ID>
+                  <Description>"InvertX"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A48"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"InvertY"</Description>
+                  <LastState Value="0" RealAddress="1F20E4F4A49"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>49</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>127</ID>
+                  <Description>"FullScreen"</Description>
+                  <LastState Value="1" RealAddress="1F20E4F4A4A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacr_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>4A</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>59</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>61</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " MOCHI-O - v1.29 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

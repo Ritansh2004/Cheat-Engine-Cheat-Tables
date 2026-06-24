@@ -1,0 +1,3464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Tiny Aquarium.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"Coin / Tank Cleanness / Exp / Event"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-08-16
+  Author : DANGER DASH
+}
+
+define(address,"GameAssembly.dll"+472A20)
+define(bytes,48 83 EC 28 8B 41 14)
+
+[ENABLE]
+ 
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+472A20)
+
+label(code)
+label(return)
+
+newmem:
+
+mov [className_Ptr],rcx
+
+code:
+  sub rsp,28
+  mov eax,[rcx+14]
+  jmp return
+
+className_Ptr:
+  dq 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registerSymbol(className_Ptr)
+
+
+[DISABLE]
+address:
+  db bytes
+  // sub rsp,28
+  // mov eax,[rcx+14]
+
+dealloc(newmem)
+unregisterSymbol(className_Ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Stat.set_CurrentValue
+
+GameAssembly.dll+448B4D: 41 5E           - pop r14
+GameAssembly.dll+448B4F: 5F              - pop rdi
+GameAssembly.dll+448B50: C3              - ret
+GameAssembly.dll+448B51: 48 8B D6        - mov rdx,rsi
+GameAssembly.dll+448B54: 48 8B CF        - mov rcx,rdi
+GameAssembly.dll+448B57: E8 74 E1 E0 FF  - call GameAssembly.il2cpp_value_box+60
+GameAssembly.dll+448B5C: CC              - int 3
+GameAssembly.dll+448B5D: CC              - int 3
+GameAssembly.dll+448B5E: CC              - int 3
+GameAssembly.dll+448B5F: CC              - int 3
+// ---------- INJECTING HERE ----------
+Stat.set_CurrentValue: 48 83 EC 28     - sub rsp,28
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+448B64: 8B 41 14        - mov eax,[rcx+14]
+GameAssembly.dll+448B67: 44 8B 41 10     - mov r8d,[rcx+10]
+GameAssembly.dll+448B6B: 3B D0           - cmp edx,eax
+GameAssembly.dll+448B6D: 7C 07           - jl GameAssembly.dll+448B76
+GameAssembly.dll+448B6F: 8B 41 18        - mov eax,[rcx+18]
+GameAssembly.dll+448B72: 3B D0           - cmp edx,eax
+GameAssembly.dll+448B74: 7E 02           - jle GameAssembly.dll+448B78
+GameAssembly.dll+448B76: 8B D0           - mov edx,eax
+GameAssembly.dll+448B78: 48 8B 41 20     - mov rax,[rcx+20]
+GameAssembly.dll+448B7C: 89 51 10        - mov [rcx+10],edx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"Value Show When Changed"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"currentValue"</Description>
+              <LastState Value="1" RealAddress="22C3AA1BC70"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>className_Ptr</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"minValue"</Description>
+              <LastState Value="0" RealAddress="22C3AA1BC74"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>className_Ptr</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"maxValue"</Description>
+              <LastState Value="100" RealAddress="22C3AA1BC78"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>className_Ptr</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>17</ID>
+          <Description>"Inventory"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-08-31
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+393BB0)
+define(bytes,48 89 5C 24 18)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+393BB0)
+
+label(code)
+label(return)
+
+newmem:
+
+mov [inventory_ptr],rcx
+
+code:
+  mov [rsp+18],rbx
+  jmp return
+
+inventory_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(inventory_ptr)
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+18],rbx
+
+dealloc(newmem)
+unregistersymbol(inventory_ptr)
+{
+// ORIGINAL CODE - INJECTION POINT: InventorySlot.AssignOrUpdateInventoryItem
+
+GameAssembly.dll+3954A6: CC                    - int 3 
+GameAssembly.dll+3954A7: CC                    - int 3 
+GameAssembly.dll+3954A8: CC                    - int 3 
+GameAssembly.dll+3954A9: CC                    - int 3 
+GameAssembly.dll+3954AA: CC                    - int 3 
+GameAssembly.dll+3954AB: CC                    - int 3 
+GameAssembly.dll+3954AC: CC                    - int 3 
+GameAssembly.dll+3954AD: CC                    - int 3 
+GameAssembly.dll+3954AE: CC                    - int 3 
+GameAssembly.dll+3954AF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+InventorySlot.AssignOrUpdateInventoryItem: 48 89 5C 24 18        - mov [rsp+18],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3954B5: 57                    - push rdi
+GameAssembly.dll+3954B6: 48 83 EC 20           - sub rsp,20
+GameAssembly.dll+3954BA: 80 3D 64 49 AE 02 00  - cmp byte ptr [GameAssembly.dll+2E79E25],00
+GameAssembly.dll+3954C1: 48 8B FA              - mov rdi,rdx
+GameAssembly.dll+3954C4: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+3954C7: 75 13                 - jne GameAssembly.dll+3954DC
+GameAssembly.dll+3954C9: 48 8D 0D 58 1E 89 02  - lea rcx,[GameAssembly.dll+2C27328]
+GameAssembly.dll+3954D0: E8 6B 24 EC FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+3954D5: C6 05 49 49 AE 02 01  - mov byte ptr [GameAssembly.dll+2E79E25],01
+GameAssembly.dll+3954DC: 48 8D 4B 20           - lea rcx,[rbx+20]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"Value Show When Spend/Changed"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"InventoryItemData"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>19</ID>
+                      <Description>"amount"</Description>
+                      <LastState Value="58" RealAddress="22C4B41D318"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>20</ID>
+                      <Description>"upgradeable"</Description>
+                      <LastState Value="0" RealAddress="22C4B41D31C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>21</ID>
+                      <Description>"level"</Description>
+                      <LastState Value="0" RealAddress="22C4B41D320"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"itemType"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"DisplayName"</Description>
+                      <LastState RealAddress="22C305D99A4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>40</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>252</ID>
+                      <Description>"PromptName"</Description>
+                      <LastState RealAddress="22C305D9974"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>48</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"maxStackAmount"</Description>
+                      <LastState Value="60" RealAddress="22BE3A429E8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"consumable"</Description>
+                      <LastState Value="1" RealAddress="22BE3A429EC"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>253</ID>
+                      <Description>"allowHoldToUse"</Description>
+                      <LastState Value="0" RealAddress="22BE3A429F8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>404</ID>
+                      <Description>"healthPoints"</Description>
+                      <LastState Value="20" RealAddress="22BE3A42A10"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>inventory_ptr</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"BoatPlayer"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-08-31
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+3AE800)
+define(bytes,40 53 48 81 EC A0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+3AE800)
+
+label(code)
+label(return)
+
+newmem:
+
+mov [boat_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,000000A0
+  jmp return
+
+boat_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 4
+return:
+registersymbol(boat_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,000000A0
+
+dealloc(newmem)
+unregistersymbol(boat_ptr)
+{
+// ORIGINAL CODE - INJECTION POINT: BoatPlayer.Update
+
+GameAssembly.dll+3AED08: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+3AED0C: 5B                    - pop rbx
+GameAssembly.dll+3AED0D: E9 DE DD FF FF        - jmp BoatPlayer.CmdSetBoatLevel
+GameAssembly.dll+3AED12: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+3AED16: 5B                    - pop rbx
+GameAssembly.dll+3AED17: C3                    - ret 
+GameAssembly.dll+3AED18: E8 D3 8E EA FF        - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+3AED1D: CC                    - int 3 
+GameAssembly.dll+3AED1E: CC                    - int 3 
+GameAssembly.dll+3AED1F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+BoatPlayer.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3AED22: 48 81 EC A0 00 00 00  - sub rsp,000000A0
+GameAssembly.dll+3AED29: 33 D2                 - xor edx,edx
+GameAssembly.dll+3AED2B: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+3AED2E: E8 5D F3 FF FF        - call BoatPlayer.IsLocalPlayer
+GameAssembly.dll+3AED33: 84 C0                 - test al,al
+GameAssembly.dll+3AED35: 0F 84 BA 01 00 00     - je GameAssembly.dll+3AEEF5
+GameAssembly.dll+3AED3B: 33 D2                 - xor edx,edx
+GameAssembly.dll+3AED3D: 48 8B CB              - mov rcx,rbx
+GameAssembly.dll+3AED40: E8 4B E9 FF FF        - call BoatPlayer.HandleMovement
+GameAssembly.dll+3AED45: 80 3D 13 B2 AC 02 00  - cmp byte ptr [GameAssembly.dll+2E79F5F],00
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"Value Show when Go to Fishing"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"boatBaseSpeed"</Description>
+                  <LastState Value="3" RealAddress="22C6FF3BEA8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>boat_ptr</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"rotationSpeed"</Description>
+                  <LastState Value="200" RealAddress="22C6FF3BEAC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>boat_ptr</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"isMovingToTarget"</Description>
+                  <LastState Value="0" RealAddress="22C6FF3BEBC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>boat_ptr</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"wasRotating"</Description>
+                  <LastState Value="0" RealAddress="22C6FF3BF28"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>boat_ptr</Address>
+                  <Offsets>
+                    <Offset>e8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"wasMoving"</Description>
+                  <LastState Value="0" RealAddress="22C6FF3BF29"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>boat_ptr</Address>
+                  <Offsets>
+                    <Offset>e9</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>90</ID>
+          <Description>"FishingManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-09-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+3B86C0)
+define(bytes,48 89 5C 24 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+3B86C0)
+
+label(code)
+label(return)
+
+newmem:
+mov [fishing_manager_ptr],rcx
+
+code:
+  mov [rsp+10],rbx
+  jmp return
+
+fishing_manager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(fishing_manager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+18],rbx
+
+dealloc(newmem)
+unregistersymbol(fishing_manager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FishingManager.Update
+
+GameAssembly.dll+3B9672: E8 29 E8 E9 FF           - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+3B9677: CC                       - int 3 
+GameAssembly.dll+3B9678: CC                       - int 3 
+GameAssembly.dll+3B9679: CC                       - int 3 
+GameAssembly.dll+3B967A: CC                       - int 3 
+GameAssembly.dll+3B967B: CC                       - int 3 
+GameAssembly.dll+3B967C: CC                       - int 3 
+GameAssembly.dll+3B967D: CC                       - int 3 
+GameAssembly.dll+3B967E: CC                       - int 3 
+GameAssembly.dll+3B967F: CC                       - int 3 
+// ---------- INJECTING HERE ----------
+FishingManager.Update: 48 89 5C 24 18           - mov [rsp+18],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3B9685: 55                       - push rbp
+GameAssembly.dll+3B9686: 48 8B EC                 - mov rbp,rsp
+GameAssembly.dll+3B9689: 48 81 EC 80 00 00 00     - sub rsp,00000080
+GameAssembly.dll+3B9690: 80 B9 64 01 00 00 00     - cmp byte ptr [rcx+00000164],00
+GameAssembly.dll+3B9697: 48 8B D9                 - mov rbx,rcx
+GameAssembly.dll+3B969A: 0F 84 B1 04 00 00        - je GameAssembly.dll+3B9B51
+GameAssembly.dll+3B96A0: 48 89 BC 24 98 00 00 00  - mov [rsp+00000098],rdi
+GameAssembly.dll+3B96A8: 0F 29 74 24 70           - movaps [rsp+70],xmm6
+GameAssembly.dll+3B96AD: 33 D2                    - xor edx,edx
+GameAssembly.dll+3B96AF: E8 DC CB D2 00           - call Mirror.NetworkBehaviour.get_isLocalPlayer
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"Value Show when Go to Fishing"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"sinkerSpeed"</Description>
+                  <LastState Value="150" RealAddress="22C6FBBE928"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"fishingRodStrength"</Description>
+                  <LastState Value="1" RealAddress="22C6FBBE92C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"basePlayerEnergy"</Description>
+                  <LastState Value="5" RealAddress="22C6FBBE930"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"maxFishingDistance"</Description>
+                  <LastState Value="20" RealAddress="22C6FBBE934"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"baseFishSize"</Description>
+                  <LastState Value="0.8000000119" RealAddress="22C6FBBE940"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"baseFishStrength"</Description>
+                  <LastState Value="2" RealAddress="22C6FBBE944"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"fishBiteFrequency"</Description>
+                  <LastState Value="0.05999999866" RealAddress="22C6FBBE948"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"reelWindowDuration"</Description>
+                  <LastState Value="3" RealAddress="22C6FBBE94C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"minCastingDistance"</Description>
+                  <LastState Value="7" RealAddress="22C6FBBE950"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"maxFishingTime"</Description>
+                  <LastState Value="10" RealAddress="22C6FBBE954"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"castArcHeight"</Description>
+                  <LastState Value="1.5" RealAddress="22C6FBBE990"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"isCasting"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE994"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"isReelWindowActive"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE995"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>D5</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"lineAnimationComplete"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE996"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>D6</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"reelWindowTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE998"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>405</ID>
+                  <Description>"isMouseInsideCastingZone"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE9B4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>f4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>406</ID>
+                  <Description>"wasMoving"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE9C4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>104</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>407</ID>
+                  <Description>"fishingWaitTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE9C8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>408</ID>
+                  <Description>"castProgress"</Description>
+                  <LastState Value="0" RealAddress="22C6FBBE9CC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>fishing_manager_ptr</Address>
+                  <Offsets>
+                    <Offset>10c</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>107</ID>
+          <Description>"FishingMinigame"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-09-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+3BC500)
+define(bytes,40 53 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+3BC500)
+
+label(code)
+label(return)
+
+newmem:
+mov [fishing_minigame_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,50
+  jmp return
+
+fishing_minigame_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(fishing_minigame_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(fishing_minigame_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FishingMinigame.Update
+
+GameAssembly.dll+3BD33D: 48 8B CF                 - mov rcx,rdi
+GameAssembly.dll+3BD340: 66 48 0F 7E C2           - movq rdx,xmm0
+GameAssembly.dll+3BD345: 48 8B 5C 24 58           - mov rbx,[rsp+58]
+GameAssembly.dll+3BD34A: 0F 28 74 24 30           - movaps xmm6,[rsp+30]
+GameAssembly.dll+3BD34F: 48 83 C4 40              - add rsp,40
+GameAssembly.dll+3BD353: 5F                       - pop rdi
+GameAssembly.dll+3BD354: E9 87 C5 CF 01           - jmp UnityEngine.RectTransform.set_sizeDelta
+GameAssembly.dll+3BD359: E8 42 AB E9 FF           - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+3BD35E: CC                       - int 3 
+GameAssembly.dll+3BD35F: CC                       - int 3 
+// ---------- INJECTING HERE ----------
+FishingMinigame.Update: 40 53                    - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3BD362: 48 83 EC 50              - sub rsp,50
+GameAssembly.dll+3BD366: 80 B9 B8 00 00 00 00     - cmp byte ptr [rcx+000000B8],00
+GameAssembly.dll+3BD36D: 48 8B D9                 - mov rbx,rcx
+GameAssembly.dll+3BD370: 0F 84 F2 00 00 00        - je GameAssembly.dll+3BD468
+GameAssembly.dll+3BD376: 0F 29 74 24 40           - movaps [rsp+40],xmm6
+GameAssembly.dll+3BD37B: F3 0F 10 B1 68 01 00 00  - movss xmm6,[rcx+00000168]
+GameAssembly.dll+3BD383: 33 C9                    - xor ecx,ecx
+GameAssembly.dll+3BD385: E8 76 0A D0 01           - call UnityEngine.Time.get_unscaledDeltaTime
+GameAssembly.dll+3BD38A: F3 0F 58 C6              - addss xmm0,xmm6
+GameAssembly.dll+3BD38E: 0F 2F 83 64 01 00 00     - comiss xmm0,[rbx+00000164]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"Value Show when Go to Fishing"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>108</ID>
+                      <Description>"rodAcceleration"</Description>
+                      <LastState Value="300" RealAddress="22C4B843350"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"rodGravity"</Description>
+                      <LastState Value="-500" RealAddress="22C4B843354"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"maxRodSpeed"</Description>
+                      <LastState Value="600" RealAddress="22C4B843358"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"rodBounceDamping"</Description>
+                      <LastState Value="0.5" RealAddress="22C4B84335C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"smallestRodSizeAreaRatioInRelationToParent"</Description>
+                      <LastState Value="0.150000006" RealAddress="22C4B843360"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"biggestRodSizeAreaRatioInRelationToParent"</Description>
+                      <LastState Value="0.4499999881" RealAddress="22C4B843364"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"easyFishSpeed"</Description>
+                      <LastState Value="150" RealAddress="22C4B843368"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"hardFishSpeed"</Description>
+                      <LastState Value="250" RealAddress="22C4B84336C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>116</ID>
+                      <Description>"baseProgressChange"</Description>
+                      <LastState Value="1" RealAddress="22C4B843370"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>117</ID>
+                      <Description>"progressIncreaseFactor"</Description>
+                      <LastState Value="0.150000006" RealAddress="22C4B843374"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>118</ID>
+                      <Description>"progressDecreaseFactor"</Description>
+                      <LastState Value="0.1199999973" RealAddress="22C4B843378"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>119</ID>
+                      <Description>"progress"</Description>
+                      <LastState Value="0" RealAddress="22C4B84337C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>120</ID>
+                      <Description>"parentWidth"</Description>
+                      <LastState Value="1000" RealAddress="22C4B843390"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"rodStartX"</Description>
+                      <LastState Value="-402.394989" RealAddress="22C4B843394"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>122</ID>
+                      <Description>"rodWidth"</Description>
+                      <LastState Value="0" RealAddress="22C4B843398"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>123</ID>
+                      <Description>"fighting"</Description>
+                      <LastState Value="0" RealAddress="22C4B8433B8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>124</ID>
+                      <Description>"directionTimer"</Description>
+                      <LastState Value="0" RealAddress="22C4B843400"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>100</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>125</ID>
+                      <Description>"currentInterval"</Description>
+                      <LastState Value="0" RealAddress="22C4B843404"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>104</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>126</ID>
+                      <Description>"currentSpeed"</Description>
+                      <LastState Value="0" RealAddress="22C4B843408"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>127</ID>
+                      <Description>"fishDirection"</Description>
+                      <LastState Value="1" RealAddress="22C4B84340C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>10C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>128</ID>
+                      <Description>"rodVelocity"</Description>
+                      <LastState Value="0" RealAddress="22C4B843410"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>110</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>129</ID>
+                      <Description>"functionExecuted"</Description>
+                      <LastState Value="0" RealAddress="22C4B843438"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>130</ID>
+                      <Description>"isAtLeftLimit"</Description>
+                      <LastState Value="0" RealAddress="22C4B843439"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>139</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>131</ID>
+                      <Description>"spinDuration"</Description>
+                      <LastState Value="1" RealAddress="22C4B84343C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>13C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>132</ID>
+                      <Description>"spinningDirection"</Description>
+                      <LastState Value="0" RealAddress="22C4B843448"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>133</ID>
+                      <Description>"leftMarginPercentage"</Description>
+                      <LastState Value="0.200000003" RealAddress="22C4B84344C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>14C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>134</ID>
+                      <Description>"rightMarginPercentage"</Description>
+                      <LastState Value="0.01999999955" RealAddress="22C4B843450"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>135</ID>
+                      <Description>"progressGainMultiplierEasy"</Description>
+                      <LastState Value="1.5" RealAddress="22C4B843454"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>154</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>136</ID>
+                      <Description>"progressGainMultiplierHard"</Description>
+                      <LastState Value="0.75" RealAddress="22C4B843458"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>158</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>137</ID>
+                      <Description>"progressLossMultiplierEasy"</Description>
+                      <LastState Value="0.5" RealAddress="22C4B84345C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>15C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>138</ID>
+                      <Description>"progressLossMultiplierHard"</Description>
+                      <LastState Value="1.200000048" RealAddress="22C4B843460"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>160</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>139</ID>
+                      <Description>"tickInterval"</Description>
+                      <LastState Value="0.009999999776" RealAddress="22C4B843464"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>164</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>140</ID>
+                      <Description>"tickAccumulator"</Description>
+                      <LastState Value="0" RealAddress="22C4B843468"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>168</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>301</ID>
+                      <Description>"spinningDirection"</Description>
+                      <LastState Value="0" RealAddress="22C4B843448"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>302</ID>
+                      <Description>"leftMarginPercentage"</Description>
+                      <LastState Value="0.200000003" RealAddress="22C4B84344C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>14c</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>303</ID>
+                      <Description>"rightMarginPercentage"</Description>
+                      <LastState Value="0.01999999955" RealAddress="22C4B843450"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>304</ID>
+                      <Description>"progressGainMultiplierEasy"</Description>
+                      <LastState Value="1.5" RealAddress="22C4B843454"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>154</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>305</ID>
+                      <Description>"progressGainMultiplierHard"</Description>
+                      <LastState Value="0.75" RealAddress="22C4B843458"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>158</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>306</ID>
+                      <Description>"progressLossMultiplierEasy"</Description>
+                      <LastState Value="0.5" RealAddress="22C4B84345C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>15c</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>307</ID>
+                      <Description>"progressLossMultiplierHard"</Description>
+                      <LastState Value="1.200000048" RealAddress="22C4B843460"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>160</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>308</ID>
+                      <Description>"tickInterval"</Description>
+                      <LastState Value="0.009999999776" RealAddress="22C4B843464"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>164</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>309</ID>
+                      <Description>"tickAccumulator"</Description>
+                      <LastState Value="0" RealAddress="22C4B843468"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>168</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"rodLevel"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>142</ID>
+                      <Description>"currentValue"</Description>
+                      <LastState Value="0" RealAddress="22C6FA99A30"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>143</ID>
+                      <Description>"minValue"</Description>
+                      <LastState Value="0" RealAddress="22C6FA99A34"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>144</ID>
+                      <Description>"maxValue"</Description>
+                      <LastState Value="0" RealAddress="22C6FA99A38"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"catchDifficulty"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF80</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>146</ID>
+                      <Description>"currentValue"</Description>
+                      <LastState Value="0" RealAddress="22C4BA0E8B0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>147</ID>
+                      <Description>"minValue"</Description>
+                      <LastState Value="0" RealAddress="22C4BA0E8B4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>148</ID>
+                      <Description>"maxValue"</Description>
+                      <LastState Value="12" RealAddress="22C4BA0E8B8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>fishing_minigame_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>34</ID>
+          <Description>"Fish"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-08-31
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+409A80)
+define(bytes,40 53 48 83 EC 40)
+
+[ENABLE]
+
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+409A80)
+
+label(code)
+label(return)
+
+newmem:
+
+mov [fish_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,40
+  jmp return
+
+fish_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(fish_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(fish_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Fish.Update
+
+GameAssembly.dll+3F954F: 48 83 C4 50        - add rsp,50
+GameAssembly.dll+3F9553: 5B                 - pop rbx
+GameAssembly.dll+3F9554: C3                 - ret 
+GameAssembly.dll+3F9555: E8 96 E6 E5 FF     - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+3F955A: CC                 - int 3 
+GameAssembly.dll+3F955B: CC                 - int 3 
+GameAssembly.dll+3F955C: CC                 - int 3 
+GameAssembly.dll+3F955D: CC                 - int 3 
+GameAssembly.dll+3F955E: CC                 - int 3 
+GameAssembly.dll+3F955F: CC                 - int 3 
+// ---------- INJECTING HERE ----------
+Fish.Update: 40 53              - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3F9562: 48 83 EC 30        - sub rsp,30
+GameAssembly.dll+3F9566: 80 79 6E 00        - cmp byte ptr [rcx+6E],00
+GameAssembly.dll+3F956A: 48 8B D9           - mov rbx,rcx
+GameAssembly.dll+3F956D: 0F 84 BC 00 00 00  - je GameAssembly.dll+3F962F
+GameAssembly.dll+3F9573: 33 D2              - xor edx,edx
+GameAssembly.dll+3F9575: 48 89 7C 24 40     - mov [rsp+40],rdi
+GameAssembly.dll+3F957A: E8 C1 33 CA 01     - call UnityEngine.Component.get_transform
+GameAssembly.dll+3F957F: 48 85 C0           - test rax,rax
+GameAssembly.dll+3F9582: 0F 84 AD 00 00 00  - je GameAssembly.dll+3F9635
+GameAssembly.dll+3F9588: 45 33 C0           - xor r8d,r8d
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>255</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>312</ID>
+                  <Description>"deadFishFloatRate"</Description>
+                  <LastState Value="0.004999999888" RealAddress="22C6FC71840"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>313</ID>
+                  <Description>"startFloatingAfterDeadTimeInSeconds"</Description>
+                  <LastState Value="5" RealAddress="22C6FC71844"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>314</ID>
+                  <Description>"maxFloatHeightWhenDead"</Description>
+                  <LastState Value="12" RealAddress="22C6FC71848"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>315</ID>
+                  <Description>"isForSale"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7184C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+6C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>316</ID>
+                  <Description>"isFrozen"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7184D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+6D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>317</ID>
+                  <Description>"isFloating"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7184E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+6E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>318</ID>
+                  <Description>"isOnDeadList"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7184F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+6F</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>319</ID>
+                  <Description>"_badgeSizeMultiplier"</Description>
+                  <LastState Value="1" RealAddress="22C6FC71858"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>320</ID>
+                  <Description>"_badgeCapacityMultiplier"</Description>
+                  <LastState Value="1.200000048" RealAddress="22C6FC7185C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>321</ID>
+                  <Description>"_badgeSpeedMultiplier"</Description>
+                  <LastState Value="1" RealAddress="22C6FC71860"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>322</ID>
+                  <Description>"_badgeBackflipChancePerMinute"</Description>
+                  <LastState Value="0" RealAddress="22C6FC71864"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+84</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"FishData"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>265</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>323</ID>
+                      <Description>"_ageInMinutes"</Description>
+                      <LastState Value="42416.54688" RealAddress="22C3AA1CD90"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>324</ID>
+                      <Description>"_health"</Description>
+                      <LastState Value="115.2470474" RealAddress="22C3AA1CD94"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>325</ID>
+                      <Description>"_food"</Description>
+                      <LastState Value="96.23953247" RealAddress="22C3AA1CD98"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>326</ID>
+                      <Description>"lastUpdatedTicks"</Description>
+                      <LastState Value="639016082140183860" RealAddress="22C3AA1CDA8"/>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>327</ID>
+                      <Description>"lastCollectedPaymentFishAge"</Description>
+                      <LastState Value="42413.12891" RealAddress="22C3AA1CDB0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>328</ID>
+                      <Description>"_variant"</Description>
+                      <LastState Value="0" RealAddress="22C3AA1CDC8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>329</ID>
+                      <Description>"acquiredByTrading"</Description>
+                      <LastState Value="0" RealAddress="22C3AA1CDCC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>330</ID>
+                      <Description>"acquiredByFishing"</Description>
+                      <LastState Value="0" RealAddress="22C3AA1CDCD"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>4D</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>331</ID>
+                      <Description>"isLocalSaleLocked"</Description>
+                      <LastState Value="0" RealAddress="22C3AA1CDF8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"genetics"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>332</ID>
+                      <Description>"_size"</Description>
+                      <LastState Value="0.898024261" RealAddress="22C3A968820"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>333</ID>
+                      <Description>"_metabolism"</Description>
+                      <LastState Value="0.7678930759" RealAddress="22C3A968824"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>334</ID>
+                      <Description>"_fertility"</Description>
+                      <LastState Value="0.007581311744" RealAddress="22C3A968828"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>335</ID>
+                      <Description>"_fortune"</Description>
+                      <LastState Value="0.01000157837" RealAddress="22C3A96882C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[fish_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"fishType"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>336</ID>
+                  <Description>"modelScaleWhenFry"</Description>
+                  <LastState Value="0.3000000119" RealAddress="22B82CA8718"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>337</ID>
+                  <Description>"modelScaleWhenGrown"</Description>
+                  <LastState Value="1" RealAddress="22B82CA871C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>338</ID>
+                  <Description>"speed"</Description>
+                  <LastState Value="2" RealAddress="22B82CA8720"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>339</ID>
+                  <Description>"maxSwimHeight"</Description>
+                  <LastState Value="99" RealAddress="22B82CA8724"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>340</ID>
+                  <Description>"description"</Description>
+                  <LastState RealAddress="22BE3A18284"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>341</ID>
+                  <Description>"rarity"</Description>
+                  <LastState Value="4" RealAddress="22B82CA8748"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>342</ID>
+                  <Description>"isSpecial"</Description>
+                  <LastState Value="0" RealAddress="22B82CA874C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>343</ID>
+                  <Description>"isMusician"</Description>
+                  <LastState Value="0" RealAddress="22B82CA874D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>6D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>344</ID>
+                  <Description>"priceMultiplier"</Description>
+                  <LastState Value="1" RealAddress="22B82CA8758"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>345</ID>
+                  <Description>"conservationStatus"</Description>
+                  <LastState Value="0" RealAddress="22B82CA875C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>346</ID>
+                  <Description>"animalType"</Description>
+                  <LastState Value="0" RealAddress="22B82CA8760"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>347</ID>
+                  <Description>"DisplayName"</Description>
+                  <LastState RealAddress="22BE3A2DA34"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[fish_ptr]+30</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"fishBehaviour"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>348</ID>
+                  <Description>"maxSwimSpeed"</Description>
+                  <LastState Value="2" RealAddress="22C6FC7FF20"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>349</ID>
+                  <Description>"rotationSpeed"</Description>
+                  <LastState Value="1" RealAddress="22C6FC7FF24"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>350</ID>
+                  <Description>"directionChangeInterval"</Description>
+                  <LastState Value="5" RealAddress="22C6FC7FF28"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>351</ID>
+                  <Description>"currentSwimSpeed"</Description>
+                  <LastState Value="1.394088507" RealAddress="22C6FC7FF38"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>352</ID>
+                  <Description>"directionChangeTimer"</Description>
+                  <LastState Value="1.774966598" RealAddress="22C6FC7FF3C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>353</ID>
+                  <Description>"maxSwimHeight"</Description>
+                  <LastState Value="99" RealAddress="22C6FC7FF40"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>354</ID>
+                  <Description>"isEating"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF44"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>355</ID>
+                  <Description>"baseSwimSpeed"</Description>
+                  <LastState Value="1.672217846" RealAddress="22C6FC7FF50"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>356</ID>
+                  <Description>"eatCooldownTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF54"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>357</ID>
+                  <Description>"eatingTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF58"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>358</ID>
+                  <Description>"eatingCooldown"</Description>
+                  <LastState Value="1" RealAddress="22C6FC7FF7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>359</ID>
+                  <Description>"isBreeding"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF88"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>360</ID>
+                  <Description>"breedingTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>361</ID>
+                  <Description>"swirlFrequency"</Description>
+                  <LastState Value="2" RealAddress="22C6FC7FF90"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>362</ID>
+                  <Description>"swirlMagnitude"</Description>
+                  <LastState Value="0.5" RealAddress="22C6FC7FF94"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>363</ID>
+                  <Description>"breedingTimeOut"</Description>
+                  <LastState Value="5" RealAddress="22C6FC7FF98"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>364</ID>
+                  <Description>"breedingTimeOutTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FF9C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>365</ID>
+                  <Description>"raycastCheckTimer"</Description>
+                  <LastState Value="0.07729720324" RealAddress="22C6FC7FFA0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>366</ID>
+                  <Description>"raycastCheckInterval"</Description>
+                  <LastState Value="0.5" RealAddress="22C6FC7FFA4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>367</ID>
+                  <Description>"foodPelletLayerMask"</Description>
+                  <LastState Value="1024" RealAddress="22C6FC7FFB4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>368</ID>
+                  <Description>"fishLayerMask"</Description>
+                  <LastState Value="128" RealAddress="22C6FC7FFB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>369</ID>
+                  <Description>"flipsPerMinute"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FFD0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>370</ID>
+                  <Description>"backflipTimer"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FFD4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>371</ID>
+                  <Description>"isBackflipping"</Description>
+                  <LastState Value="0" RealAddress="22C6FC7FFD8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[fish_ptr]+38</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>150</ID>
+          <Description>"LootBubble"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-09-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+448B10)
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+448B10)
+
+label(code)
+label(return)
+
+newmem:
+mov [loot_bubble_ptr],rcx
+
+code:
+  mov [rsp+08],rbx
+  jmp return
+
+loot_bubble_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(loot_bubble_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+unregistersymbol(loot_bubble_ptr)
+{
+// ORIGINAL CODE - INJECTION POINT: LootBubble.Update
+
+GameAssembly.dll+43B436: 0F 28 74 24 50        - movaps xmm6,[rsp+50]
+GameAssembly.dll+43B43B: 44 0F 28 44 24 40     - movaps xmm8,[rsp+40]
+GameAssembly.dll+43B441: 48 83 C4 60           - add rsp,60
+GameAssembly.dll+43B445: 5F                    - pop rdi
+GameAssembly.dll+43B446: C3                    - ret 
+GameAssembly.dll+43B447: E8 54 CA E1 FF        - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+43B44C: CC                    - int 3 
+GameAssembly.dll+43B44D: CC                    - int 3 
+GameAssembly.dll+43B44E: CC                    - int 3 
+GameAssembly.dll+43B44F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+LootBubble.Update: 48 89 5C 24 08        - mov [rsp+08],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+43B455: 57                    - push rdi
+GameAssembly.dll+43B456: 48 83 EC 60           - sub rsp,60
+GameAssembly.dll+43B45A: 80 3D 66 F8 A4 02 00  - cmp byte ptr [GameAssembly.dll+2E8ACC7],00
+GameAssembly.dll+43B461: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+43B464: 0F 29 74 24 50        - movaps [rsp+50],xmm6
+GameAssembly.dll+43B469: 0F 29 7C 24 40        - movaps [rsp+40],xmm7
+GameAssembly.dll+43B46E: 44 0F 29 44 24 30     - movaps [rsp+30],xmm8
+GameAssembly.dll+43B474: 75 13                 - jne GameAssembly.dll+43B489
+GameAssembly.dll+43B476: 48 8D 0D 73 AB 7D 02  - lea rcx,[GameAssembly.dll+2C15FF0]
+GameAssembly.dll+43B47D: E8 6E C7 E1 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>151</ID>
+              <Description>"Main Value Show When Bubble Come on Aquarium"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>271</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"moveSpeed"</Description>
+                  <LastState Value="3" RealAddress="22C6FD729C8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"rotationSpeed"</Description>
+                  <LastState Value="45" RealAddress="22C6FD729CC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"lifetime"</Description>
+                  <LastState Value="10" RealAddress="22C6FD729D0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>155</ID>
+                  <Description>"eggChance"</Description>
+                  <LastState Value="0.009999999776" RealAddress="22C6FD729E8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>156</ID>
+              <Description>"rewards"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>272</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="10" RealAddress="22C3A769888"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>157</ID>
+                  <Description>"[0]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A769890"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>158</ID>
+                  <Description>"[1]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A769894"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"[2]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A769898"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>160</ID>
+                  <Description>"[3]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A76989C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"[4]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A7698A0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>162</ID>
+                  <Description>"[5]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A7698A4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"[6]Int32"</Description>
+                  <LastState Value="25" RealAddress="22C3A7698A8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"[7]Int32"</Description>
+                  <LastState Value="50" RealAddress="22C3A7698AC"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"[8]Int32"</Description>
+                  <LastState Value="50" RealAddress="22C3A7698B0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"[9]Int32"</Description>
+                  <LastState Value="100" RealAddress="22C3A7698B4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>167</ID>
+              <Description>"eggType"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>275</ID>
+                  <Description>"DisplayName"</Description>
+                  <LastState RealAddress="22C305D9B54"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>40</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>273</ID>
+                  <Description>"description"</Description>
+                  <LastState RealAddress="22BE3A43014"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>30</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>276</ID>
+                  <Description>"PromptName"</Description>
+                  <LastState RealAddress="22C305D9B24"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>48</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>168</ID>
+                  <Description>"maxStackAmount"</Description>
+                  <LastState Value="60" RealAddress="22BE3A42B08"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>169</ID>
+                  <Description>"consumable"</Description>
+                  <LastState Value="1" RealAddress="22BE3A42B0C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>274</ID>
+                  <Description>"allowHoldToUse"</Description>
+                  <LastState Value="1" RealAddress="22BE3A42B18"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>loot_bubble_ptr</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>190</ID>
+          <Description>"GameController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Tiny Aquarium.exe
+  Version:
+  Date   : 2025-10-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+427A20)
+define(bytes,48 89 5C 24 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+427A20)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamecontroller_updatefishstates_ptr],rcx
+
+code:
+  mov [rsp+10],rbx
+  jmp return
+
+gamecontroller_updatefishstates_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(gamecontroller_updatefishstates_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+10],rbx
+
+dealloc(newmem)
+unregistersymbol(gamecontroller_updatefishstates_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameController.UpdateFishStates
+
+GameAssembly.dll+4128F6: CC                    - int 3 
+GameAssembly.dll+4128F7: CC                    - int 3 
+GameAssembly.dll+4128F8: CC                    - int 3 
+GameAssembly.dll+4128F9: CC                    - int 3 
+GameAssembly.dll+4128FA: CC                    - int 3 
+GameAssembly.dll+4128FB: CC                    - int 3 
+GameAssembly.dll+4128FC: CC                    - int 3 
+GameAssembly.dll+4128FD: CC                    - int 3 
+GameAssembly.dll+4128FE: CC                    - int 3 
+GameAssembly.dll+4128FF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+GameController.UpdateFishStates: 48 89 5C 24 10        - mov [rsp+10],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+412905: 56                    - push rsi
+GameAssembly.dll+412906: 57                    - push rdi
+GameAssembly.dll+412907: 41 56                 - push r14
+GameAssembly.dll+412909: 48 83 EC 40           - sub rsp,40
+GameAssembly.dll+41290D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+412910: 80 3D 96 48 A6 02 00  - cmp byte ptr [GameAssembly.dll+2E771AD],00
+GameAssembly.dll+412917: 75 43                 - jne GameAssembly.dll+41295C
+GameAssembly.dll+412919: 48 8D 0D 28 9F 81 02  - lea rcx,[GameAssembly.dll+2C2C848]
+GameAssembly.dll+412920: E8 AB 7C E4 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+412925: 48 8D 0D 84 B0 81 02  - lea rcx,[GameAssembly.dll+2C2D9B0]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>208</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>372</ID>
+                  <Description>"gameLoaded"</Description>
+                  <LastState Value="1" RealAddress="22C309152C0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>373</ID>
+                  <Description>"usingGrowthPotion"</Description>
+                  <LastState Value="0" RealAddress="22C309152C1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>374</ID>
+                  <Description>"usingHealthPotion"</Description>
+                  <LastState Value="0" RealAddress="22C309152C2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>375</ID>
+                  <Description>"minimized"</Description>
+                  <LastState Value="0" RealAddress="22C309152C3"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C3</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>376</ID>
+                  <Description>"fastForwardSeconds"</Description>
+                  <LastState Value="0" RealAddress="22C309152C4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>377</ID>
+                  <Description>"newReactionsReceived"</Description>
+                  <LastState Value="0" RealAddress="22C309152C8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>378</ID>
+                  <Description>"timeMultiplier"</Description>
+                  <LastState Value="1" RealAddress="22C309152CC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>379</ID>
+                  <Description>"healthDepletionMultiplier"</Description>
+                  <LastState Value="0.002000000095" RealAddress="22C309152D0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>380</ID>
+                  <Description>"hungerMultiplier"</Description>
+                  <LastState Value="0.1000000015" RealAddress="22C309152D4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>381</ID>
+                  <Description>"maxFishRevenueHours"</Description>
+                  <LastState Value="12" RealAddress="22C309152D8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>382</ID>
+                  <Description>"uniqueChance"</Description>
+                  <LastState Value="60" RealAddress="22C309152DC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>383</ID>
+                  <Description>"uniqueChancePerParent"</Description>
+                  <LastState Value="4" RealAddress="22C309152E0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>384</ID>
+                  <Description>"goldenChance"</Description>
+                  <LastState Value="1000" RealAddress="22C309152E4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>385</ID>
+                  <Description>"baseFeedValue"</Description>
+                  <LastState Value="15" RealAddress="22C309152E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>386</ID>
+                  <Description>"baseBreedingCooldown"</Description>
+                  <LastState Value="2" RealAddress="22C309152EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>387</ID>
+                  <Description>"breedingCooldownPerRarity"</Description>
+                  <LastState Value="6" RealAddress="22C309152F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+2F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>388</ID>
+                  <Description>"minLevelForOnlineMarket"</Description>
+                  <LastState Value="10" RealAddress="22C30915300"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+300</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>389</ID>
+                  <Description>"fishSellPriceMultiplier"</Description>
+                  <LastState Value="1.350000024" RealAddress="22C30915304"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+304</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>390</ID>
+                  <Description>"&lt;IsTimePotionActive&gt;"</Description>
+                  <LastState Value="0" RealAddress="22C30915358"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+358</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>391</ID>
+                  <Description>"deletedProgress"</Description>
+                  <LastState Value="0" RealAddress="22C30915359"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+359</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>210</ID>
+              <Description>"dirtManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"speckCleanPower"</Description>
+                  <LastState Value="80" RealAddress="22C308A8DA0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>gamecontroller_updatefishstates_ptr</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>213</ID>
+                  <Description>"maxDirtSpecks"</Description>
+                  <LastState Value="50" RealAddress="22C308A8DB8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>gamecontroller_updatefishstates_ptr</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>214</ID>
+                  <Description>"totalDirtiness"</Description>
+                  <LastState Value="1" RealAddress="22C308A8DC4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>gamecontroller_updatefishstates_ptr</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>215</ID>
+                  <Description>"minutesUntilFullDirt"</Description>
+                  <LastState Value="1440" RealAddress="22C308A8DE0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>gamecontroller_updatefishstates_ptr</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>216</ID>
+              <Description>"levelingManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>299</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>217</ID>
+                      <Description>"maxLevel"</Description>
+                      <LastState Value="99" RealAddress="22C309D1EC0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>218</ID>
+                      <Description>"baseXP"</Description>
+                      <LastState Value="120" RealAddress="22C309D1EC4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>219</ID>
+                      <Description>"exponent"</Description>
+                      <LastState Value="2" RealAddress="22C309D1EC8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>220</ID>
+                  <Description>"expRequirement"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>221</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="99" RealAddress="22C30BDF558"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>222</ID>
+                      <Description>"[0]Int32"</Description>
+                      <LastState Value="132" RealAddress="22C30BDF560"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>223</ID>
+                      <Description>"[1]Int32"</Description>
+                      <LastState Value="168" RealAddress="22C30BDF564"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>224</ID>
+                      <Description>"[2]Int32"</Description>
+                      <LastState Value="228" RealAddress="22C30BDF568"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>225</ID>
+                      <Description>"[3]Int32"</Description>
+                      <LastState Value="312" RealAddress="22C30BDF56C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>226</ID>
+                      <Description>"[4]Int32"</Description>
+                      <LastState Value="420" RealAddress="22C30BDF570"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>227</ID>
+                      <Description>"[5]Int32"</Description>
+                      <LastState Value="552" RealAddress="22C30BDF574"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>228</ID>
+                      <Description>"[6]Int32"</Description>
+                      <LastState Value="708" RealAddress="22C30BDF578"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>229</ID>
+                      <Description>"[7]Int32"</Description>
+                      <LastState Value="888" RealAddress="22C30BDF57C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>230</ID>
+                      <Description>"[8]Int32"</Description>
+                      <LastState Value="1092" RealAddress="22C30BDF580"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>231</ID>
+                      <Description>"[9]Int32"</Description>
+                      <LastState Value="1320" RealAddress="22C30BDF584"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>FFFFFF</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>gamecontroller_updatefishstates_ptr</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>30</Offset>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>232</ID>
+              <Description>"aquariumCapacityConfig"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>392</ID>
+                  <Description>"baseCapacity"</Description>
+                  <LastState Value="20" RealAddress="22BE3A24288"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>234</ID>
+                  <Description>"upgrades"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>393</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="5" RealAddress="22B1B5AB478"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>236</ID>
+                      <Description>"[0]AquariumCapacityUpgrade"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>394</ID>
+                          <Description>"moneyCost"</Description>
+                          <LastState Value="500" RealAddress="22B82CCA790"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>395</ID>
+                          <Description>"newCapacity"</Description>
+                          <LastState Value="22" RealAddress="22B82CCA794"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>237</ID>
+                      <Description>"[1]AquariumCapacityUpgrade"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>396</ID>
+                          <Description>"moneyCost"</Description>
+                          <LastState Value="1000" RealAddress="22B82CCA770"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>397</ID>
+                          <Description>"newCapacity"</Description>
+                          <LastState Value="24" RealAddress="22B82CCA774"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>238</ID>
+                      <Description>"[2]AquariumCapacityUpgrade"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>398</ID>
+                          <Description>"moneyCost"</Description>
+                          <LastState Value="2000" RealAddress="22B82CCA750"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>399</ID>
+                          <Description>"newCapacity"</Description>
+                          <LastState Value="26" RealAddress="22B82CCA754"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>239</ID>
+                      <Description>"[3]AquariumCapacityUpgrade"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>400</ID>
+                          <Description>"moneyCost"</Description>
+                          <LastState Value="3000" RealAddress="22B82CCA730"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>401</ID>
+                          <Description>"newCapacity"</Description>
+                          <LastState Value="28" RealAddress="22B82CCA734"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>240</ID>
+                      <Description>"[4]AquariumCapacityUpgrade"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>402</ID>
+                          <Description>"moneyCost"</Description>
+                          <LastState Value="4000" RealAddress="22B82CCA710"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>403</ID>
+                          <Description>"newCapacity"</Description>
+                          <LastState Value="30" RealAddress="22B82CCA714"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gamecontroller_updatefishstates_ptr]+348</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>20</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>310</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>311</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Tiny Aquarium: Social Fishkeeping - v1.15.15 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>11</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "TheLastGasStation.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Option"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : TheLastGasStation.exe
+  Version: 
+  Date   : 2026-04-30
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+DC0ADC)
+define(bytes,89 53 20 49 8B 80 B8 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+DC0ADC)
+
+label(code)
+label(return)
+
+newmem:
+mov [pointer_ptr],rcx
+
+code:
+  mov [rbx+20],edx
+  mov rax,[r8+000001B8]
+  jmp return
+
+pointer_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 5
+return:
+registersymbol(pointer_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rbx+20],edx
+  // mov rax,[r8+000001B8]
+
+dealloc(newmem)
+unregistersymbol(pointer_ptr)
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+DA2ADC
+// By Finding Money Value(8 Byte)
+// Value Address Have ZERO in last
+
+GameAssembly.dll+DA2AB7: 48 8B D0              - mov rdx,rax
+GameAssembly.dll+DA2ABA: E8 11 37 29 FF        - call GameAssembly.jinfo_get_method+90D0
+GameAssembly.dll+DA2ABF: 4C 8B 74 24 30        - mov r14,[rsp+30]
+GameAssembly.dll+DA2AC4: 48 8B 74 24 60        - mov rsi,[rsp+60]
+GameAssembly.dll+DA2AC9: 48 8B 6C 24 50        - mov rbp,[rsp+50]
+GameAssembly.dll+DA2ACE: 84 C0                 - test al,al
+GameAssembly.dll+DA2AD0: 75 37                 - jne GameAssembly.dll+DA2B09
+GameAssembly.dll+DA2AD2: 4C 8B 03              - mov r8,[rbx]
+GameAssembly.dll+DA2AD5: 48 8B CB              - mov rcx,rbx
+GameAssembly.dll+DA2AD8: 8B 54 24 58           - mov edx,[rsp+58]
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+DAC4AC: 89 53 20              - mov [rbx+20],edx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+DA2ADF: 49 8B 80 B8 01 00 00  - mov rax,[r8+000001B8]
+GameAssembly.dll+DA2AE6: 4D 8B 80 C0 01 00 00  - mov r8,[r8+000001C0]
+GameAssembly.dll+DA2AED: FF D0                 - call rax
+GameAssembly.dll+DA2AEF: 4C 8B 03              - mov r8,[rbx]
+GameAssembly.dll+DA2AF2: 48 8B CB              - mov rcx,rbx
+GameAssembly.dll+DA2AF5: 8B 54 24 58           - mov edx,[rsp+58]
+GameAssembly.dll+DA2AF9: 49 8B 80 78 02 00 00  - mov rax,[r8+00000278]
+GameAssembly.dll+DA2B00: 4D 8B 80 80 02 00 00  - mov r8,[r8+00000280]
+GameAssembly.dll+DA2B07: FF D0                 - call rax
+GameAssembly.dll+DA2B09: 48 83 C4 38           - add rsp,38
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Value Show When Change Any Value &amp; Also Take Few Second For Update. For Example, Use Below Script"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"EXAMPLE"</Description>
+              <LastState/>
+              <Color>00FFFF</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+{$lua}
+showMessage("\nWhen your CASH in Game is -&gt; 238.95, then\nthe Value shown 23895 in Script Option.\n-----------------------------------------------------------------\nIf you want to change the value,\nyou will need to maintain a Precision of TWO Decimal Places.")
+{$asm}
+[DISABLE]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"Popularity, Hygiene, Civilization, Money, Fuel, etc. The value for almost everything will be displayed Below"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>4080FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000017653650480" RealAddress="7FFD73FE0016"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>pointer_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"currentValue"</Description>
+              <LastState Value="0" RealAddress="176536504A0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[pointer_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>10</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " The Last Gas Station - v1.0.7.368(0e4f6304) ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

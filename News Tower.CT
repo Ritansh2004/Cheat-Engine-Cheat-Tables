@@ -1,0 +1,2081 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>10</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("News Tower.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PowerManager"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Power.PowerManager:Update)
+define(bytes,55 48 8B EC 48 83 EC 30 48 89 75 F8 48 8B F1)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Power.PowerManager:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [powermanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  mov [rbp-08],rsi
+  mov rsi,rcx
+  jmp return
+
+powermanager_ptr:
+dq 0
+
+address:
+  jmp far newmem
+  nop
+return:
+registersymbol(powermanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+  // mov [rbp-08],rsi
+  // mov rsi,rcx
+
+dealloc(newmem)
+unregistersymbol(powermanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Power.PowerManager:Update
+
+1963B477FDC: 04 03                          - add al,03
+1963B477FDE: 01 50 00                       - add [rax+00],edx
+1963B477FE1: 00 00                          - add [rax],al
+1963B477FE3: 00 00                          - add [rax],al
+1963B477FE5: 00 00                          - add [rax],al
+1963B477FE7: 00 00                          - add [rax],al
+1963B477FE9: 00 00                          - add [rax],al
+1963B477FEB: 00 00                          - add [rax],al
+1963B477FED: 00 00                          - add [rax],al
+1963B477FEF: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+Power.PowerManager:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Power.PowerManager:Update+1: 48 8B EC                       - mov rbp,rsp
+Power.PowerManager:Update+4: 48 83 EC 30                    - sub rsp,30
+Power.PowerManager:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+Power.PowerManager:Update+c: 48 8B F1                       - mov rsi,rcx
+Power.PowerManager:Update+f: 0F B6 46 38                    - movzx eax,byte ptr [rsi+38]
+Power.PowerManager:Update+13: 85 C0                          - test eax,eax
+Power.PowerManager:Update+15: 74 14                          - je Power.PowerManager:Update+2b
+Power.PowerManager:Update+17: 48 8B CE                       - mov rcx,rsi
+Power.PowerManager:Update+1a: 48 8D 6D 00                    - lea rbp,[rbp+00]
+Power.PowerManager:Update+1e: 49 BB B0 AB FD 9A 96 01 00 00  - mov r11,Power.PowerManager:Calculate
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"basePower"</Description>
+              <LastState Value="50" RealAddress="1C2EE7F8FA8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>powermanager_ptr</Address>
+              <Offsets>
+                <Offset>28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"&lt;UsedPower&gt;"</Description>
+              <LastState Value="34" RealAddress="1C2EE7F8FAC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>powermanager_ptr</Address>
+              <Offsets>
+                <Offset>2c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"unlimitedPower"</Description>
+              <LastState Value="0" RealAddress="1C2EE7F8FB0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>powermanager_ptr</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"&lt;AvailablePower&gt;"</Description>
+              <LastState Value="50" RealAddress="1C2EE7F8FB4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>powermanager_ptr</Address>
+              <Offsets>
+                <Offset>34</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"TowerStats"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,TowerStats:AddMoney)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,TowerStats:AddMoney)
+
+label(code)
+label(return)
+
+newmem:
+mov [towerstats_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+towerstats_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(towerstats_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(towerstats_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: TowerStats:AddMoney
+
+TowerStats+Recap_PayMonthlyExpenses:DoSequence+148: 41 FF D3        - call r11
+27B28C3FF6B: 00 00           - add [rax],al
+27B28C3FF6D: 00 00           - add [rax],al
+27B28C3FF6F: 00 01           - add [rcx],al
+27B28C3FF71: 04 02           - add al,02
+27B28C3FF73: 05 04 03 01 50  - add eax,50010304
+27B28C3FF78: 00 00           - add [rax],al
+27B28C3FF7A: 00 00           - add [rax],al
+27B28C3FF7C: 00 00           - add [rax],al
+27B28C3FF7E: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+TowerStats:AddMoney: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+TowerStats:AddMoney+1: 48 8B EC        - mov rbp,rsp
+TowerStats:AddMoney+4: 48 83 EC 40     - sub rsp,40
+TowerStats:AddMoney+8: 48 89 7D F8     - mov [rbp-08],rdi
+TowerStats:AddMoney+c: 48 8B F9        - mov rdi,rcx
+TowerStats:AddMoney+f: F3 0F 11 4D F0  - movss [rbp-10],xmm1
+TowerStats:AddMoney+14: 4C 89 45 E8     - mov [rbp-18],r8
+TowerStats:AddMoney+18: 48 8B 47 18     - mov rax,[rdi+18]
+TowerStats:AddMoney+1c: 48 8B 4F 28     - mov rcx,[rdi+28]
+TowerStats:AddMoney+20: 48 8B 51 18     - mov rdx,[rcx+18]
+TowerStats:AddMoney+24: F3 0F 10 45 F0  - movss xmm0,[rbp-10]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Value Show When Change Money"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"Money"</Description>
+                  <LastState Value="9991271.75000381" RealAddress="1C42FEC89F0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>towerstats_ptr</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"Influencer"</Description>
+                  <LastState Value="35" RealAddress="1C42FEC8A20"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Double</VariableType>
+                  <Address>towerstats_ptr</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>13</ID>
+          <Description>"TowerTime"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-11-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,TowerTime:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,TowerTime:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [towertime_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+towertime_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(towertime_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(towertime_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: TowerTime:Update
+
+299A9670919: 04 02                          - add al,02
+299A967091B: 05 04 03 01 50                 - add eax,50010304
+299A9670920: 00 00                          - add [rax],al
+299A9670922: 00 00                          - add [rax],al
+299A9670924: 00 00                          - add [rax],al
+299A9670926: 00 00                          - add [rax],al
+299A9670928: 00 00                          - add [rax],al
+299A967092A: 00 00                          - add [rax],al
+299A967092C: 00 00                          - add [rax],al
+299A967092E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+TowerTime:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+TowerTime:Update+1: 48 8B EC                       - mov rbp,rsp
+TowerTime:Update+4: 48 83 EC 30                    - sub rsp,30
+TowerTime:Update+8: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+TowerTime:Update+d: 90                             - nop 
+TowerTime:Update+e: 49 BB B0 55 2F 14 99 02 00 00  - mov r11,TowerTime:EvaluateTimeScale
+TowerTime:Update+18: 41 FF D3                       - call r11
+TowerTime:Update+1b: 48 8D 65 00                    - lea rsp,[rbp+00]
+TowerTime:Update+1f: 5D                             - pop rbp
+TowerTime:Update+20: C3                             - ret 
+299A9670951: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"prevDay"</Description>
+              <LastState Value="1" RealAddress="1C2EE7F7560"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>towertime_ptr</Address>
+              <Offsets>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"isDayLight"</Description>
+              <LastState Value="0" RealAddress="1C2EE7F7564"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>towertime_ptr</Address>
+              <Offsets>
+                <Offset>64</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"currentTime"</Description>
+              <LastState Value="000000365F2BF022" RealAddress="1C2EE7F7568"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>towertime_ptr</Address>
+              <Offsets>
+                <Offset>68</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"dayLightTreshold"</Description>
+              <LastState Value="0.5" RealAddress="1C2EE7F7570"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>towertime_ptr</Address>
+              <Offsets>
+                <Offset>70</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"isFrozen"</Description>
+              <LastState Value="0" RealAddress="1C2EE7F7574"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>towertime_ptr</Address>
+              <Offsets>
+                <Offset>74</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>101</ID>
+          <Description>"InTowerSelectableEmployee"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-11-28
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Gestures.InTowerSelectableEmployee:OnSelect)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Gestures.InTowerSelectableEmployee:OnSelect)
+
+label(code)
+label(return)
+
+newmem:
+mov [intowerselectableemployee_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+intowerselectableemployee_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(intowerselectableemployee_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(intowerselectableemployee_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Gestures.InTowerSelectableEmployee:OnSelect
+
+1A4651D8968: 01 04 02           - add [rdx+rax],eax
+1A4651D896B: 05 04 03 01 50     - add eax,50010304
+1A4651D8970: 00 00              - add [rax],al
+1A4651D8972: 00 00              - add [rax],al
+1A4651D8974: 00 00              - add [rax],al
+1A4651D8976: 00 00              - add [rax],al
+1A4651D8978: 00 00              - add [rax],al
+1A4651D897A: 00 00              - add [rax],al
+1A4651D897C: 00 00              - add [rax],al
+1A4651D897E: 00 00              - add [rax],al
+// ---------- INJECTING HERE ----------
+Gestures.InTowerSelectableEmployee:OnSelect: 55                 - push rbp
+// ---------- DONE INJECTING  ----------
+Gestures.InTowerSelectableEmployee:OnSelect+1: 48 8B EC           - mov rbp,rsp
+Gestures.InTowerSelectableEmployee:OnSelect+4: 48 83 EC 40        - sub rsp,40
+Gestures.InTowerSelectableEmployee:OnSelect+8: 48 89 7D F0        - mov [rbp-10],rdi
+Gestures.InTowerSelectableEmployee:OnSelect+c: 4C 89 7D F8        - mov [rbp-08],r15
+Gestures.InTowerSelectableEmployee:OnSelect+10: 4C 8B F9           - mov r15,rcx
+Gestures.InTowerSelectableEmployee:OnSelect+13: 48 8B FA           - mov rdi,rdx
+Gestures.InTowerSelectableEmployee:OnSelect+16: 4C 89 45 E8        - mov [rbp-18],r8
+Gestures.InTowerSelectableEmployee:OnSelect+1a: 41 B8 01 00 00 00  - mov r8d,00000001
+Gestures.InTowerSelectableEmployee:OnSelect+20: 48 8D 64 24 00     - lea rsp,[rsp+00]
+Gestures.InTowerSelectableEmployee:OnSelect+25: 90                 - nop 
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"Value Show When Select Employee"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"employeeName"</Description>
+              <LastState RealAddress="1C41BD94B84"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>intowerselectableemployee_ptr</Address>
+              <Offsets>
+                <Offset>14</Offset>
+                <Offset>20</Offset>
+                <Offset>D8</Offset>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"Title"</Description>
+              <LastState RealAddress="1C311EEA914"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>String</VariableType>
+              <Length>999</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>intowerselectableemployee_ptr</Address>
+              <Offsets>
+                <Offset>14</Offset>
+                <Offset>20</Offset>
+                <Offset>18</Offset>
+                <Offset>E8</Offset>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"barStatHandler"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"comfort"</Description>
+                      <LastState Value="0.2177022398" RealAddress="1C42FB69E4C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>48</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"prestige"</Description>
+                      <LastState Value="0" RealAddress="1C42FB69DCC"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>58</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"minSkillMultiplier"</Description>
+                      <LastState Value="0.25" RealAddress="1C42FB5AFE0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"maxSkillMultiplier"</Description>
+                      <LastState Value="1" RealAddress="1C42FB5AFE4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"bladder"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"value"</Description>
+                      <LastState Value="0.6035587788" RealAddress="1C42FA7667C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"incrementPerSecond"</Description>
+                      <LastState Value="-0.001209859387" RealAddress="1C42FA766A0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"otherNeedStatConvenienceWindowSeconds"</Description>
+                      <LastState Value="5" RealAddress="1C42FA766A4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"needPoint"</Description>
+                      <LastState Value="0.2700000107" RealAddress="1C42FA766A8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"conveniencePoint"</Description>
+                      <LastState Value="0.4399999976" RealAddress="1C42FA766AC"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"&lt;ConvenienceDecreaser&gt;"</Description>
+                      <LastState Value="0" RealAddress="1C42FA766B0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>40</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"nutrition"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"value"</Description>
+                      <LastState Value="0.6466408372" RealAddress="1C42FA765EC"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"incrementPerSecond"</Description>
+                      <LastState Value="-0.001044826931" RealAddress="1C42FA76610"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"otherNeedStatConvenienceWindowSeconds"</Description>
+                      <LastState Value="5" RealAddress="1C42FA76614"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"needPoint"</Description>
+                      <LastState Value="0.3000000119" RealAddress="1C42FA76618"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"conveniencePoint"</Description>
+                      <LastState Value="0.4399999976" RealAddress="1C42FA7661C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"&lt;ConvenienceDecreaser&gt;"</Description>
+                      <LastState Value="0" RealAddress="1C42FA76620"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>50</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"visibility"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"value"</Description>
+                      <LastState Value="1" RealAddress="1C42FB69D4C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>60</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"isDarkroom"</Description>
+                      <LastState Value="0" RealAddress="1C42FB69D78"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>60</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"incrementPerSecond"</Description>
+                      <LastState Value="0.25" RealAddress="1C42FB69D7C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>60</Offset>
+                        <Offset>98</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"salaryHandler"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"underpayConcentrationCeiling"</Description>
+                  <LastState Value="0.75" RealAddress="1C42FAF7B28"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>intowerselectableemployee_ptr</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"overpayConcentrationFloor"</Description>
+                  <LastState Value="0.25" RealAddress="1C42FAF7B2C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>intowerselectableemployee_ptr</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"&lt;SalaryT&gt;"</Description>
+                  <LastState Value="0.5" RealAddress="1C42FAF7B30"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>intowerselectableemployee_ptr</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"projectedSalaryT"</Description>
+                  <LastState Value="0.5" RealAddress="1C42FAF7B34"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>intowerselectableemployee_ptr</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"projectedSalaryEverSet"</Description>
+                  <LastState Value="1" RealAddress="1C42FAF7B38"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>intowerselectableemployee_ptr</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"skillHandler"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"orderedSkillData"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="3" RealAddress="1C412AA6F58"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>50</Offset>
+                        <Offset>F8</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"[0]SkillData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>57</ID>
+                          <Description>"skillName"</Description>
+                          <LastState RealAddress="1C311EEA194"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>20</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>58</ID>
+                          <Description>"levelHours"</Description>
+                          <LastState Value="500" RealAddress="1C311BB8594"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>59</ID>
+                          <Description>"isBasicReporterSkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8598"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>98</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>60</ID>
+                          <Description>"isCategorySkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8599"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>99</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>61</ID>
+                          <Description>"supportsFloorAssignments"</Description>
+                          <LastState Value="0" RealAddress="1C311BB859A"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9A</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>62</ID>
+                          <Description>"supportsItemAllowance"</Description>
+                          <LastState Value="0" RealAddress="1C311BB859B"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9B</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>63</ID>
+                          <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                          <LastState Value="0" RealAddress="1C311BB859C"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"[1]SkillData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>64</ID>
+                          <Description>"skillName"</Description>
+                          <LastState RealAddress="1C311EEA464"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>20</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>65</ID>
+                          <Description>"levelHours"</Description>
+                          <LastState Value="500" RealAddress="1C311BB8774"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>66</ID>
+                          <Description>"isBasicReporterSkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8778"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>98</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>67</ID>
+                          <Description>"isCategorySkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8779"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>99</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>68</ID>
+                          <Description>"supportsFloorAssignments"</Description>
+                          <LastState Value="0" RealAddress="1C311BB877A"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9A</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>69</ID>
+                          <Description>"supportsItemAllowance"</Description>
+                          <LastState Value="0" RealAddress="1C311BB877B"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9B</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>70</ID>
+                          <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                          <LastState Value="0" RealAddress="1C311BB877C"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9C</Offset>
+                            <Offset>28</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"[2]SkillData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>71</ID>
+                          <Description>"skillName"</Description>
+                          <LastState RealAddress="1C311EEA764"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>20</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>72</ID>
+                          <Description>"levelHours"</Description>
+                          <LastState Value="200" RealAddress="1C311BB8B34"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>73</ID>
+                          <Description>"isBasicReporterSkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8B38"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>98</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>74</ID>
+                          <Description>"isCategorySkill"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8B39"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>99</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>75</ID>
+                          <Description>"supportsFloorAssignments"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8B3A"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9A</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>76</ID>
+                          <Description>"supportsItemAllowance"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8B3B"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9B</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>77</ID>
+                          <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                          <LastState Value="0" RealAddress="1C311BB8B3C"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>intowerselectableemployee_ptr</Address>
+                          <Offsets>
+                            <Offset>9C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>50</Offset>
+                            <Offset>F8</Offset>
+                            <Offset>60</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"transporter"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"walkController"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"yOffset"</Description>
+                      <LastState Value="-0.1199999973" RealAddress="1C42FAE77F0"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>40</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"complainAboutQueueAfter"</Description>
+                      <LastState Value="30" RealAddress="1C42FAE77F4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>40</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>82</ID>
+                      <Description>"&lt;WalkFast&gt;"</Description>
+                      <LastState Value="1" RealAddress="1C42FAE77F8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>40</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>83</ID>
+                      <Description>"&lt;Gravity&gt;"</Description>
+                      <LastState Value="1" RealAddress="1C42FAE77F9"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>79</Offset>
+                        <Offset>40</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"fallVelocity"</Description>
+                      <LastState Value="0" RealAddress="1C42FAE7804"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>40</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"resupplySkill"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>86</ID>
+                      <Description>"skillName"</Description>
+                      <LastState RealAddress="1C311EEAA94"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"levelHours"</Description>
+                      <LastState Value="350" RealAddress="1C311AA7594"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"isBasicReporterSkill"</Description>
+                      <LastState Value="0" RealAddress="1C311AA7598"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>89</ID>
+                      <Description>"isCategorySkill"</Description>
+                      <LastState Value="0" RealAddress="1C311AA7599"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>99</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>90</ID>
+                      <Description>"supportsFloorAssignments"</Description>
+                      <LastState Value="1" RealAddress="1C311AA759A"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9A</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>91</ID>
+                      <Description>"supportsItemAllowance"</Description>
+                      <LastState Value="1" RealAddress="1C311AA759B"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9B</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>92</ID>
+                      <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                      <LastState Value="0" RealAddress="1C311AA759C"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>48</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"cookingSkill"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>94</ID>
+                      <Description>"skillName"</Description>
+                      <LastState RealAddress="1C311EEA7F4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>95</ID>
+                      <Description>"levelHours"</Description>
+                      <LastState Value="400" RealAddress="1C311AA74F4"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>96</ID>
+                      <Description>"isBasicReporterSkill"</Description>
+                      <LastState Value="0" RealAddress="1C311AA74F8"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>97</ID>
+                      <Description>"isCategorySkill"</Description>
+                      <LastState Value="0" RealAddress="1C311AA74F9"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>99</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>98</ID>
+                      <Description>"supportsFloorAssignments"</Description>
+                      <LastState Value="1" RealAddress="1C311AA74FA"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9A</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>99</ID>
+                      <Description>"supportsItemAllowance"</Description>
+                      <LastState Value="0" RealAddress="1C311AA74FB"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9B</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>100</ID>
+                      <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                      <LastState Value="1" RealAddress="1C311AA74FC"/>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>intowerselectableemployee_ptr</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>50</Offset>
+                        <Offset>160</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>104</ID>
+          <Description>"DurabilityReplenisher"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-12-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DurabilityReplenisher:get_Interactable)
+define(bytes,48 83 EC 08 48 89 34 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DurabilityReplenisher:get_Interactable)
+
+label(code)
+label(return)
+
+newmem:
+mov [durabilityreplenisher_ptr],rcx
+
+code:
+  sub rsp,08
+  mov [rsp],rsi
+  jmp return
+
+durabilityreplenisher_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(durabilityreplenisher_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,08
+  // mov [rsp],rsi
+
+dealloc(newmem)
+unregistersymbol(durabilityreplenisher_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DurabilityReplenisher:get_Interactable
+
+23AB4BE8F1D: 00 00        - add [rax],al
+23AB4BE8F1F: 00 01        - add [rcx],al
+23AB4BE8F21: 00 00        - add [rax],al
+23AB4BE8F23: 00 00        - add [rax],al
+23AB4BE8F25: 00 00        - add [rax],al
+23AB4BE8F27: 00 00        - add [rax],al
+23AB4BE8F29: 00 00        - add [rax],al
+23AB4BE8F2B: 00 00        - add [rax],al
+23AB4BE8F2D: 00 00        - add [rax],al
+23AB4BE8F2F: 00           - db 00 
+// ---------- INJECTING HERE ----------
+DurabilityReplenisher:get_Interactable: 48 83 EC 08  - sub rsp,08
+// ---------- DONE INJECTING  ----------
+DurabilityReplenisher:get_Interactable+4: 48 89 34 24  - mov [rsp],rsi
+DurabilityReplenisher:get_Interactable+8: 48 8B F1     - mov rsi,rcx
+DurabilityReplenisher:get_Interactable+b: 48 8B 46 28  - mov rax,[rsi+28]
+DurabilityReplenisher:get_Interactable+f: 48 8B 34 24  - mov rsi,[rsp]
+DurabilityReplenisher:get_Interactable+13: 48 83 C4 08  - add rsp,08
+DurabilityReplenisher:get_Interactable+17: C3           - ret 
+23AB4BE8F48: 01 04 01     - add [rcx+rax],eax
+23AB4BE8F4B: 00 04 02     - add [rdx+rax],al
+23AB4BE8F4E: 00 00        - add [rax],al
+23AB4BE8F50: 00 00        - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"durabilityProvider"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"breakTreshold"</Description>
+                  <LastState Value="0.05000000075" RealAddress="1C42F6D4A84"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"maintenanceThreshold"</Description>
+                  <LastState Value="0.1000000015" RealAddress="1C42F6D4A88"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"currentTargetDurability (Set to 1)"</Description>
+                  <LastState Value="0.6999999285" RealAddress="1C42F6D4A8C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"targetWasOk"</Description>
+                  <LastState Value="1" RealAddress="1C42F6D4A90"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"interactSkill"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"skillName"</Description>
+                  <LastState RealAddress="1C311EEA6D4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"levelHours"</Description>
+                  <LastState Value="100" RealAddress="1C311BB8454"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"isBasicReporterSkill"</Description>
+                  <LastState Value="0" RealAddress="1C311BB8458"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"isCategorySkill"</Description>
+                  <LastState Value="0" RealAddress="1C311BB8459"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>99</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"supportsFloorAssignments"</Description>
+                  <LastState Value="1" RealAddress="1C311BB845A"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>9A</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"supportsItemAllowance"</Description>
+                  <LastState Value="0" RealAddress="1C311BB845B"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>9B</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"floorAssignmentsAlwaysIncludeWorkplaceFloorForPickup"</Description>
+                  <LastState Value="0" RealAddress="1C311BB845C"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>durabilityreplenisher_ptr</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>118</ID>
+          <Description>"EmployeesBarStat"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : News Tower.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Employees.BarStat:set_Value)
+define(bytes,55 48 8B EC 48 83 EC 70)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Employees.BarStat:set_Value)
+
+label(code)
+label(return)
+
+newmem:
+mov [employeesbarstat_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,70
+  jmp return
+
+employeesbarstat_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(employeesbarstat_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,70
+
+dealloc(newmem)
+unregistersymbol(employeesbarstat_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Employees.BarStat:set_Value
+
+IModifierExtensions:Modify+79: C3              - ret 
+1F3E68EEABA: 00 00           - add [rax],al
+1F3E68EEABC: 00 00           - add [rax],al
+1F3E68EEABE: 00 00           - add [rax],al
+1F3E68EEAC0: 01 04 02        - add [rdx+rax],eax
+1F3E68EEAC3: 05 04 03 01 50  - add eax,50010304
+1F3E68EEAC8: 00 00           - add [rax],al
+1F3E68EEACA: 00 00           - add [rax],al
+1F3E68EEACC: 00 00           - add [rax],al
+1F3E68EEACE: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+Employees.BarStat:set_Value: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+Employees.BarStat:set_Value+1: 48 8B EC        - mov rbp,rsp
+Employees.BarStat:set_Value+4: 48 83 EC 70     - sub rsp,70
+Employees.BarStat:set_Value+8: 48 89 75 F0     - mov [rbp-10],rsi
+Employees.BarStat:set_Value+c: 48 89 7D F8     - mov [rbp-08],rdi
+Employees.BarStat:set_Value+10: 48 8B F1        - mov rsi,rcx
+Employees.BarStat:set_Value+13: F3 0F 11 4D B8  - movss [rbp-48],xmm1
+Employees.BarStat:set_Value+18: F3 0F 10 46 4C  - movss xmm0,[rsi+4C]
+Employees.BarStat:set_Value+1d: F3 0F 5A C0     - cvtss2sd xmm0,xmm0
+Employees.BarStat:set_Value+21: F2 0F 5A E8     - cvtsd2ss xmm5,xmm0
+Employees.BarStat:set_Value+25: F3 0F 11 6D EC  - movss [rbp-14],xmm5
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>119</ID>
+              <Description>"value (Set to 1)"</Description>
+              <LastState Value="1" RealAddress="1C42FA19F4C"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>120</ID>
+              <Description>"triggerVariance"</Description>
+              <LastState Value="0.1000000015" RealAddress="1C42FA19F50"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>121</ID>
+              <Description>"lastLogTime"</Description>
+              <LastState Value="8.17015680366468" RealAddress="1C42FA19F58"/>
+              <VariableType>Double</VariableType>
+              <Address>[employeesbarstat_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"incrementPerSecond"</Description>
+              <LastState Value="-6.797345981E27" RealAddress="1C42FA19F70"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>123</ID>
+              <Description>"otherNeedStatConvenienceWindowSeconds"</Description>
+              <LastState Value="6.305843089E-43" RealAddress="1C42FA19F74"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>124</ID>
+              <Description>"needPoint"</Description>
+              <LastState Value="0" RealAddress="1C42FA19F78"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"conveniencePoint"</Description>
+              <LastState Value="0.25" RealAddress="1C42FA19F7C"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"&lt;ConvenienceDecreaser&gt;"</Description>
+              <LastState Value="-984047.5" RealAddress="1C42FA19F80"/>
+              <VariableType>Float</VariableType>
+              <Address>[employeesbarstat_ptr]+80</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>11</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " News Tower - v1.0.257.r, v1.0.333.r, 1.0.334.r, 1.0.387.r &amp; 1.0.397.r ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

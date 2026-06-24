@@ -1,0 +1,1752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>33</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Stick It To The Stickman.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>34</ID>
+          <Description>"Hero"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Stick It To The Stickman.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Hero:Update)
+define(bytes,55 48 8B EC 48 81 EC 10 03 00 00 48 89 75 D0)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Hero:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [hero_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000310
+  mov [rbp-30],rsi
+  jmp return
+
+hero_ptr:
+dq 0
+
+address:
+  jmp far newmem
+  nop
+return:
+registersymbol(hero_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000310
+  // mov [rbp-30],rsi
+
+dealloc(newmem)
+unregistersymbol(hero_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Hero:Update
+
+174FC52D46C: 00 00                          - add [rax],al
+174FC52D46E: 00 00                          - add [rax],al
+174FC52D470: 00 00                          - add [rax],al
+174FC52D472: 00 00                          - add [rax],al
+174FC52D474: 00 00                          - add [rax],al
+174FC52D476: 00 00                          - add [rax],al
+174FC52D478: 00 00                          - add [rax],al
+174FC52D47A: 00 00                          - add [rax],al
+174FC52D47C: 00 00                          - add [rax],al
+174FC52D47E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Hero:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Hero:Update+1: 48 8B EC                       - mov rbp,rsp
+Hero:Update+4: 48 81 EC 10 03 00 00           - sub rsp,00000310
+Hero:Update+b: 48 89 75 D0                    - mov [rbp-30],rsi
+Hero:Update+f: 48 89 7D D8                    - mov [rbp-28],rdi
+Hero:Update+13: 4C 89 65 E0                    - mov [rbp-20],r12
+Hero:Update+17: 4C 89 6D E8                    - mov [rbp-18],r13
+Hero:Update+1b: 4C 89 75 F0                    - mov [rbp-10],r14
+Hero:Update+1f: 4C 89 7D F8                    - mov [rbp-08],r15
+Hero:Update+23: 48 8B F1                       - mov rsi,rcx
+Hero:Update+26: C7 85 98 FD FF FF 00 00 00 00  - mov [rbp-00000268],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"_movementBase"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"_facingDirection"</Description>
+                  <LastState Value="4294967295" RealAddress="2CEF03E8090"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"_lastFacingDirection"</Description>
+                  <LastState Value="4294967295" RealAddress="2CEF03E8094"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"_lastChangeFacingDirectionTime"</Description>
+                  <LastState Value="212.4641876" RealAddress="2CEF03E8098"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"_moveOnXZPlane"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E809C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"getXZMovementBehaviourFromLevel"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E809D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>9D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"_floor"</Description>
+                  <LastState Value="8" RealAddress="2CEF03E80B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"_highestReachedFloorIndex"</Description>
+                  <LastState Value="8" RealAddress="2CEF03E80B4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"_baseCollectRange"</Description>
+                  <LastState Value="2.400000095" RealAddress="2CEF03E80B8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"_moveConfigDetermined"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E80BC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"_missedAttacks"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8778"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>778</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"_lastDamageDealtTime"</Description>
+                  <LastState Value="209.3154449" RealAddress="2CEF03E877C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>77C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"_lastNearlyDamageDealtTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E878C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>78C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"_lastAttackTime"</Description>
+                  <LastState Value="216.4846497" RealAddress="2CEF03E8790"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>790</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"_attackInputPrimaryQueuedTime"</Description>
+                  <LastState Value="-1" RealAddress="2CEF03E8794"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>794</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"_attackInputSecondaryQueuedTime"</Description>
+                  <LastState Value="-1" RealAddress="2CEF03E8798"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>798</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"_deathTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E879C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>79C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"_fadingCorpse"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87A0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"_lastCorpseFearTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87A4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"_movementSpeed"</Description>
+                  <LastState Value="5" RealAddress="2CEF03E87A8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"_movementInjuredSpeed"</Description>
+                  <LastState Value="5" RealAddress="2CEF03E87AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"_movementCrippledSpeed"</Description>
+                  <LastState Value="1.200000048" RealAddress="2CEF03E87B0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"_jumpSpeed"</Description>
+                  <LastState Value="9" RealAddress="2CEF03E87B4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"_extraHeight"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87B8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"_groinSize"</Description>
+                  <LastState Value="0.3600000143" RealAddress="2CEF03E87BC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"_adjustedForScaleMobileAnimationSpeedM"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E87C0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"_stunOnDamageTaken"</Description>
+                  <LastState Value="0.25" RealAddress="2CEF03E87C4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"_killOutOfBounds"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87C8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"IsInAnElevator"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87C9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7C9</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"_isOnLadder"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87CA"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7CA</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"_canDismemberTorso"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E87CB"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7CB</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"_stunTimeM"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E87CC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"_headIsVulnerable"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E87D0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"_stunTime"</Description>
+                  <LastState Value="-0.04999999702" RealAddress="2CEF03E87D4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"_stunInvulnerabilityTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87D8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"_impositionInvulnerabilityTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87DC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"_impositionResistanceTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87E0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"_totalStunTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87E4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"_lastStunStarsTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87E8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"_ignoreDistractionsLockedTime"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E87EC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7EC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"_ignoreDistractionsTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87F0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"_hasBeenImmolated"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87F4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7F4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"_inAirFlagThisFrame"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87F5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7F5</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"_timeInAirForLand"</Description>
+                  <LastState Value="0.5" RealAddress="2CEF03E87F8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"_timeInAir"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E87FC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>7FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"_landImpactTime"</Description>
+                  <LastState Value="-0.003329284489" RealAddress="2CEF03E8800"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>800</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"_lastJumpTime"</Description>
+                  <LastState Value="216.4846497" RealAddress="2CEF03E8804"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>804</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"_lastJumpGroundHeight"</Description>
+                  <LastState Value="32.00625229" RealAddress="2CEF03E8808"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>808</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"_hasReachedTopOfJump"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E880C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>80C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"_forceJumpHoldTime"</Description>
+                  <LastState Value="-0.02334630117" RealAddress="2CEF03E8810"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>810</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"_jumpInputGrace"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8814"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>814</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"_jumpHeight"</Description>
+                  <LastState Value="0.8999999762" RealAddress="2CEF03E8818"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>818</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"_lastAirJumpTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E881C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>81C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"_runningTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8820"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>820</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"_timeOfLastRecordedSlideOpportunity"</Description>
+                  <LastState Value="212.4570618" RealAddress="2CEF03E8824"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>824</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"_lastRunDirection"</Description>
+                  <LastState Value="4294967295" RealAddress="2CEF03E8828"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>828</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"_hangingDelay"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E882C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>82C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"_currentMovementStateTimer"</Description>
+                  <LastState Value="0.3498600423" RealAddress="2CEF03E8830"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>830</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"_isRelevantForElevatorLogic"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E8840"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>840</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"startledCount"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8844"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>844</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"headacheCount"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8848"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>848</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"_stunBreakoutChanceMultiplier"</Description>
+                  <LastState Value="4" RealAddress="2CEF03E884C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>84C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"_sitOnChairStateHasBeenChanged"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8850"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>850</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"_willReleaseGrabOnHurtHalfHealth"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8851"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>851</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"_resistMultipleStaggerings"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8852"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>852</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"_resistMultipleStunnings"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8853"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>853</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"_cannotBeStunnedWhileAttacking"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8854"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>854</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"_lessClumsy"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8855"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>855</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"_lessClumsyDelay"</Description>
+                  <LastState Value="4" RealAddress="2CEF03E8858"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>858</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"_canBreakOutJump"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E885C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>85C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"_lastStaggeredTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8860"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>860</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"_lastDuckingTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8864"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>864</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"_lastWallClingTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8868"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>868</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"exitStunCount"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E886C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>86C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"_lastClumsyTime"</Description>
+                  <LastState Value="-2" RealAddress="2CEF03E8870"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>870</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"_lastJumpTimeFromGround"</Description>
+                  <LastState Value="216.4846497" RealAddress="2CEF03E8874"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>874</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"_releaseZConstraintsOnDeath"</Description>
+                  <LastState Value="1" RealAddress="2CEF03E8878"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>878</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"_isCrippled"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8879"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>879</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"_crippledTime"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E887C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>87C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"_extraCollectRange"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8880"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>880</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"_lastCollectionTime"</Description>
+                  <LastState Value="-1" RealAddress="2CEF03E8884"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>884</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"&lt;RecentlyMountedHangOnTopDelay&gt;"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8888"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>888</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"&lt;RecentlyDismountedHangOnTopDelay&gt;"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E888C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>88C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"_xzRotationSpeed"</Description>
+                  <LastState Value="7" RealAddress="2CEF03E8890"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>890</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"_originalXzRotationSpeed"</Description>
+                  <LastState Value="7" RealAddress="2CEF03E8894"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>894</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"_getFacingDirectionFromAI"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8898"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>898</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"_isArchetypeSelectStickman"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E8899"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>899</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"_peeCounter"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E889C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>89C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"_isAiming"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E88A0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>8A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"_bigHeadSwollenCount"</Description>
+                  <LastState Value="0" RealAddress="2CEF03E88A4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[hero_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>8A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"_unit"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"_health"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>127</ID>
+                      <Description>"maxHealth"</Description>
+                      <LastState Value="10" RealAddress="2CEE5151210"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>128</ID>
+                      <Description>"extraHealth"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151214"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>129</ID>
+                      <Description>"destroyCorpse"</Description>
+                      <LastState Value="1" RealAddress="2CEE5151218"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>130</ID>
+                      <Description>"_health"</Description>
+                      <LastState Value="10" Activated="1" RealAddress="2CEE515121C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>DC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>131</ID>
+                      <Description>"_hasDied"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151220"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>132</ID>
+                      <Description>"_hasBeenDismembered"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151221"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E1</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>133</ID>
+                      <Description>"_deathTime"</Description>
+                      <LastState Value="-10" RealAddress="2CEE5151224"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>134</ID>
+                      <Description>"_lastDamageTime"</Description>
+                      <LastState Value="174.8792267" RealAddress="2CEE5151228"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>135</ID>
+                      <Description>"_lastKnockOrDamageTime"</Description>
+                      <LastState Value="174.8792267" RealAddress="2CEE515122C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>EC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>136</ID>
+                      <Description>"_delayedElectricDamage"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151230"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>137</ID>
+                      <Description>"_invulnerabilityTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151234"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>F4</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>138</ID>
+                      <Description>"_rockHardTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151238"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>F8</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>139</ID>
+                      <Description>"_rockHardArmour"</Description>
+                      <LastState Value="0" RealAddress="2CEE515123C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>FC</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>140</ID>
+                      <Description>"_vulnerableTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151240"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>100</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>141</ID>
+                      <Description>"_supremeConfidenceTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151244"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>104</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>142</ID>
+                      <Description>"_impaledTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151248"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>143</ID>
+                      <Description>"canBleed"</Description>
+                      <LastState Value="1" RealAddress="2CEE515124C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>10C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>144</ID>
+                      <Description>"blackBlood"</Description>
+                      <LastState Value="0" RealAddress="2CEE515124D"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>10D</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>145</ID>
+                      <Description>"_poisonDamage"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151250"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>110</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>146</ID>
+                      <Description>"_canHaveOverTime"</Description>
+                      <LastState Value="1" RealAddress="2CEE5151254"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>114</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>147</ID>
+                      <Description>"_overTimeAvailable"</Description>
+                      <LastState Value="1" RealAddress="2CEE5151255"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>115</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>148</ID>
+                      <Description>"_overTime"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151258"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>118</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>149</ID>
+                      <Description>"_willReflectFirstDamage"</Description>
+                      <LastState Value="0" RealAddress="2CEE515125C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>11C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>150</ID>
+                      <Description>"_overrideGodmode"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151260"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>120</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>151</ID>
+                      <Description>"_isFragile"</Description>
+                      <LastState Value="0" RealAddress="2CEE5151264"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>124</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>152</ID>
+                      <Description>"_xpPoints"</Description>
+                      <LastState Value="10" RealAddress="2CEE5151268"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>128</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>153</ID>
+                      <Description>"isBoss"</Description>
+                      <LastState Value="0" RealAddress="2CEE515126C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>154</ID>
+                      <Description>"_isUsingHealthBar"</Description>
+                      <LastState Value="0" RealAddress="2CEE515126D"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12D</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>155</ID>
+                      <Description>"HasBecomeDebris"</Description>
+                      <LastState Value="0" RealAddress="2CEE515126E"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12E</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>156</ID>
+                      <Description>"_shouldSpawnPromotionOnDeath"</Description>
+                      <LastState Value="0" RealAddress="2CEE515126F"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12F</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>157</ID>
+                      <Description>"_chanceToSpawnPromotion"</Description>
+                      <LastState Value="1" RealAddress="2CEE5151270"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>130</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>158</ID>
+                      <Description>"_willSpawnPromotion"</Description>
+                      <LastState Value="1" RealAddress="2CEE5151274"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>134</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"_controllingPlayer"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>160</ID>
+                      <Description>"_PlayerName"</Description>
+                      <LastState RealAddress="2CED8EFB2B4"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>161</ID>
+                      <Description>"_specialAbilitiesAreUnlocked"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD4488"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>162</ID>
+                      <Description>"_comboCounterIsUnlocked"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD4489"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>C9</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>163</ID>
+                      <Description>"_specialAbilityAmount"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD448C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>CC</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>164</ID>
+                      <Description>"_specialMovementCooldown"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD4490"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D0</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>165</ID>
+                      <Description>"_lastTimeSpecialPressed"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD4494"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D4</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>166</ID>
+                      <Description>"doubleSpecialAbilityUntilTime"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD4498"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>D8</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>167</ID>
+                      <Description>"&lt;UnlimitedAmmo&gt;"</Description>
+                      <LastState Value="1" Activated="1" RealAddress="2CED3DD449C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>DC</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>168</ID>
+                      <Description>"&lt;ExtraHealth&gt;"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD44A0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>169</ID>
+                      <Description>"&lt;CurrentHighestNumberOfConsecutivePunchesLanded&gt;"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD44A4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>170</ID>
+                      <Description>"_currentNumberOfConsecutivePunchesLanded"</Description>
+                      <LastState Value="0" RealAddress="2CED3DD44A8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                        <Offset>28</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>171</ID>
+                      <Description>"_isAIPlayer"</Description>
+                      <LastState Value="0" RealAddress="2CED8E32758"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>172</ID>
+                      <Description>"extraLives"</Description>
+                      <LastState Value="0" RealAddress="2CED8E3275C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>173</ID>
+                      <Description>"&lt;IsRespawning&gt;"</Description>
+                      <LastState Value="0" RealAddress="2CED8E32760"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>174</ID>
+                      <Description>"_hasSpawnedOnce"</Description>
+                      <LastState Value="1" RealAddress="2CED8E32761"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>61</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>175</ID>
+                      <Description>"&lt;DisableSpawning&gt;"</Description>
+                      <LastState Value="0" RealAddress="2CED8E32762"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[hero_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>62</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>176</ID>
+          <Description>"CurrencyRecord"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Stick It To The Stickman.exe
+  Version: 
+  Date   : 2026-01-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CurrencyRecord:GainOrSpendAmount)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CurrencyRecord:GainOrSpendAmount)
+
+label(code)
+label(return)
+
+newmem:
+mov [currencyrecord_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+currencyrecord_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(currencyrecord_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(currencyrecord_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CurrencyRecord:GainOrSpendAmount
+
+UnityEngine.AI.NavMeshPath:DestroyNavMeshPath+129: 75 C2           - jne UnityEngine.AI.NavMeshPath:DestroyNavMeshPath+ed
+UnityEngine.AI.NavMeshPath:DestroyNavMeshPath+12b: EB 97           - jmp UnityEngine.AI.NavMeshPath:DestroyNavMeshPath+c4
+1BEF095D1BD: 00 00           - add [rax],al
+1BEF095D1BF: 00 01           - add [rcx],al
+1BEF095D1C1: 04 02           - add al,02
+1BEF095D1C3: 05 04 03 01 50  - add eax,50010304
+1BEF095D1C8: 00 00           - add [rax],al
+1BEF095D1CA: 00 00           - add [rax],al
+1BEF095D1CC: 00 00           - add [rax],al
+1BEF095D1CE: 00 00           - add [rax],al
+// ---------- INJECTING HERE ----------
+CurrencyRecord:GainOrSpendAmount: 55              - push rbp
+// ---------- DONE INJECTING  ----------
+CurrencyRecord:GainOrSpendAmount+1: 48 8B EC        - mov rbp,rsp
+CurrencyRecord:GainOrSpendAmount+4: 48 83 EC 60     - sub rsp,60
+CurrencyRecord:GainOrSpendAmount+8: 48 89 5D D0     - mov [rbp-30],rbx
+CurrencyRecord:GainOrSpendAmount+c: 48 89 75 D8     - mov [rbp-28],rsi
+CurrencyRecord:GainOrSpendAmount+10: 48 89 7D E0     - mov [rbp-20],rdi
+CurrencyRecord:GainOrSpendAmount+14: 4C 89 65 E8     - mov [rbp-18],r12
+CurrencyRecord:GainOrSpendAmount+18: 4C 89 75 F0     - mov [rbp-10],r14
+CurrencyRecord:GainOrSpendAmount+1c: 4C 89 7D F8     - mov [rbp-08],r15
+CurrencyRecord:GainOrSpendAmount+20: 4C 8B F9        - mov r15,rcx
+CurrencyRecord:GainOrSpendAmount+23: 48 8B FA        - mov rdi,rdx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>180</ID>
+              <Description>"Value Show When Gain/Spend Currency"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>177</ID>
+              <Description>"CurrencyCount"</Description>
+              <LastState Value="9999999" RealAddress="2CED8EACA68"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[currencyrecord_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>178</ID>
+              <Description>"AmountSpent"</Description>
+              <LastState Value="0" RealAddress="2CED8EACA6C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[currencyrecord_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>179</ID>
+              <Description>"HasReceivedOnce"</Description>
+              <LastState Value="1" RealAddress="2CED8EACA70"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[currencyrecord_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>181</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>182</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Stick It To The Stickman ^*^*Created By DANGER DASH ^*^*"
+
+
+
+
+
+</LuaScript>
+</CheatTable>

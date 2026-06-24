@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>59</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Immoral-Bathhouse.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"DataController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Immoral-Bathhouse.exe
+  Version:
+  Date   : 2026-03-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DataController:SetMoney+2d)
+define(bytes,48 63 40 24 3D FF E0 F5 05)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DataController:SetMoney+2d)
+
+label(code)
+label(return)
+
+newmem:
+mov [datacontroller_ptr],rax
+
+code:
+  movsxd  rax,dword ptr [rax+24]
+  cmp eax,05F5E0FF
+  jmp return
+
+datacontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 4
+return:
+registersymbol(datacontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movsxd  rax,dword ptr [rax+24]
+  // cmp eax,05F5E0FF
+
+dealloc(newmem)
+unregistersymbol(datacontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DataController:SetMoney+2d
+
+DataController:SetMoney: 55                             - push rbp
+DataController:SetMoney+1: 48 8B EC                       - mov rbp,rsp
+DataController:SetMoney+4: 48 83 EC 40                    - sub rsp,40
+DataController:SetMoney+8: 48 89 4D F8                    - mov [rbp-08],rcx
+DataController:SetMoney+c: 48 B8 88 FF 5B C5 9A 01 00 00  - mov rax,0000019AC55BFF88
+DataController:SetMoney+16: 48 8B 00                       - mov rax,[rax]
+DataController:SetMoney+19: 48 63 4D F8                    - movsxd  rcx,dword ptr [rbp-08]
+DataController:SetMoney+1d: 89 48 24                       - mov [rax+24],ecx
+DataController:SetMoney+20: 48 B8 88 FF 5B C5 9A 01 00 00  - mov rax,0000019AC55BFF88
+DataController:SetMoney+2a: 48 8B 00                       - mov rax,[rax]
+// ---------- INJECTING HERE ----------
+DataController:SetMoney+2d: 48 63 40 24                    - movsxd  rax,dword ptr [rax+24]
+// ---------- DONE INJECTING  ----------
+DataController:SetMoney+31: 3D FF E0 F5 05                 - cmp eax,05F5E0FF
+DataController:SetMoney+36: 7E 14                          - jle DataController:SetMoney+4c
+DataController:SetMoney+38: 48 B8 88 FF 5B C5 9A 01 00 00  - mov rax,0000019AC55BFF88
+DataController:SetMoney+42: 48 8B 00                       - mov rax,[rax]
+DataController:SetMoney+45: C7 40 24 FF E0 F5 05           - mov [rax+24],05F5E0FF
+DataController:SetMoney+4c: 48 B8 88 FF 5B C5 9A 01 00 00  - mov rax,0000019AC55BFF88
+DataController:SetMoney+56: 48 8B 00                       - mov rax,[rax]
+DataController:SetMoney+59: 48 63 40 24                    - movsxd  rax,dword ptr [rax+24]
+DataController:SetMoney+5d: 85 C0                          - test eax,eax
+DataController:SetMoney+5f: 7D 14                          - jnl DataController:SetMoney+75
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Value Show When Change Stamina"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000139CDE87B40" RealAddress="13970C70015"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>datacontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"scoreLevel"</Description>
+                  <LastState Value="1" RealAddress="139CDE87B58"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+18</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"hasBreak"</Description>
+                  <LastState Value="0" RealAddress="139CDE87B5C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+1C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"debtBeenPaid"</Description>
+                  <LastState Value="0" RealAddress="139CDE87B5D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+1D</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"sexDesireOverload"</Description>
+                  <LastState Value="0" RealAddress="139CDE87B5E"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+1E</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"isOperated"</Description>
+                  <LastState Value="0" RealAddress="139CDE87B5F"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+1F</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"score"</Description>
+                  <LastState Value="0" RealAddress="139CDE87B60"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"money"</Description>
+                  <LastState Value="99966999" RealAddress="139CDE87B64"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+24</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"day"</Description>
+                  <LastState Value="2" RealAddress="139CDE87B68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+28</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"stamina"</Description>
+                  <LastState Value="5" RealAddress="139CDE87B6C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+2C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"maxStamina"</Description>
+                  <LastState Value="80" RealAddress="139CDE87B70"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"sexDesire"</Description>
+                  <LastState Value="50" RealAddress="139CDE87B74"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"maxSexDesire"</Description>
+                  <LastState Value="100" RealAddress="139CDE87B78"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"location"</Description>
+                  <LastState Value="11" RealAddress="139CDE87B7C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+3C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"timePeriod"</Description>
+                  <LastState Value="1" RealAddress="139CDE87B80"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[datacontroller_ptr]+40</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"mapEnableData"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"_mansion"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C50"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"_cafe"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C51"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>11</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"_street"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C52"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>12</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"_bathhouse"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C53"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>13</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"_yakuza"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C54"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"_apartment"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C55"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>15</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"_trail"</Description>
+                  <LastState Value="0" RealAddress="139CDE94C56"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>16</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"_medicine"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C57"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>17</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"_school"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C58"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"_park"</Description>
+                  <LastState Value="1" RealAddress="139CDE94C59"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>19</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"_isTrailNew"</Description>
+                  <LastState Value="0" RealAddress="139CDE94C5A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[datacontroller_ptr]+10</Address>
+                  <Offsets>
+                    <Offset>1A</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"LikeIncreasePanel"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Immoral-Bathhouse.exe
+  Version: 
+  Date   : 2026-03-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,LikeIncreasePanel:Update)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,LikeIncreasePanel:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [likeincreasepanel_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+likeincreasepanel_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(likeincreasepanel_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(likeincreasepanel_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LikeIncreasePanel:Update
+
+1344E94B90B: 00 00                          - add [rax],al
+1344E94B90D: 00 00                          - add [rax],al
+1344E94B90F: 00 01                          - add [rcx],al
+1344E94B911: 04 01                          - add al,01
+1344E94B913: 00 04 02                       - add [rdx+rax],al
+1344E94B916: 00 00                          - add [rax],al
+1344E94B918: 00 00                          - add [rax],al
+1344E94B91A: 00 00                          - add [rax],al
+1344E94B91C: 00 00                          - add [rax],al
+1344E94B91E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+LikeIncreasePanel:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+LikeIncreasePanel:Update+1: 48 8B EC                       - mov rbp,rsp
+LikeIncreasePanel:Update+4: 48 83 EC 60                    - sub rsp,60
+LikeIncreasePanel:Update+8: 48 89 75 F0                    - mov [rbp-10],rsi
+LikeIncreasePanel:Update+c: 48 89 7D F8                    - mov [rbp-08],rdi
+LikeIncreasePanel:Update+10: 48 8B F1                       - mov rsi,rcx
+LikeIncreasePanel:Update+13: 66 66 90                       - nop 3
+LikeIncreasePanel:Update+16: 49 BB 00 00 92 4E 34 01 00 00  - mov r11,BasePanel:Update
+LikeIncreasePanel:Update+20: 41 FF D3                       - call r11
+LikeIncreasePanel:Update+23: 0F B6 86 CC 00 00 00           - movzx eax,byte ptr [rsi+000000CC]
+LikeIncreasePanel:Update+2a: 85 C0                          - test eax,eax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"Value Show When Change Like"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000139CDE9AB60" RealAddress="13970C80014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>likeincreasepanel_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"animationMode"</Description>
+              <LastState Value="0" RealAddress="139CDE9ABA8"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"duration"</Description>
+              <LastState Value="0.3000000119" RealAddress="139CDE9ABAC"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"animationType"</Description>
+              <LastState Value="1" RealAddress="139CDE9ABC0"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"stepIdx"</Description>
+              <LastState Value="1" RealAddress="139CDE9ABC4"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+64</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"alpha"</Description>
+              <LastState Value="0" RealAddress="139CDE9ABC8"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"targetAlpha"</Description>
+              <LastState Value="0" RealAddress="139CDE9ABCC"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"timer"</Description>
+              <LastState Value="192.4661713" RealAddress="139CDE9ABD0"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"startAnimation"</Description>
+              <LastState Value="0" RealAddress="139CDE9ABD4"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"sliderDelta"</Description>
+              <LastState Value="0.5" RealAddress="139CDE9AC18"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"remainDelta"</Description>
+              <LastState Value="0" RealAddress="139CDE9AC1C"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"useDelta"</Description>
+              <LastState Value="0.5" RealAddress="139CDE9AC20"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"delayTimer"</Description>
+              <LastState Value="190.459671" RealAddress="139CDE9AC24"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"targetLike"</Description>
+              <LastState Value="35" RealAddress="139CDE9AC28"/>
+              <VariableType>Float</VariableType>
+              <Address>[likeincreasepanel_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"isStartSlide"</Description>
+              <LastState Value="0" RealAddress="139CDE9AC2C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"isOverDelaying"</Description>
+              <LastState Value="0" RealAddress="139CDE9AC2D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+CD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"isUnlock"</Description>
+              <LastState Value="0" RealAddress="139CDE9AC2E"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+CE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"targetLevel"</Description>
+              <LastState Value="1" RealAddress="139CDE9AC30"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"characterType"</Description>
+              <LastState Value="17" RealAddress="139CDE9AC34"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"like"</Description>
+              <LastState Value="35" RealAddress="139CDE94A90"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+A8</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"maxLike"</Description>
+              <LastState Value="100" RealAddress="139CDE94A94"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+A8</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"level"</Description>
+              <LastState Value="1" RealAddress="139CDE94A98"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[likeincreasepanel_ptr]+A8</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"isUnlock"</Description>
+              <LastState Value="0" RealAddress="139CDE94A9C"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+A8</Address>
+              <Offsets>
+                <Offset>1C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"canRape"</Description>
+              <LastState Value="0" RealAddress="139CDE94A9D"/>
+              <VariableType>Byte</VariableType>
+              <Address>[likeincreasepanel_ptr]+A8</Address>
+              <Offsets>
+                <Offset>1D</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>58</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>60</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Immoral Bathhouse ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>76</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Shady Knight.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Shady Knight.exe
+  Version: 
+  Date   : 2026-04-27
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerController:Update)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController:Update
+
+27C127BBA38: 01 04 02                 - add [rdx+rax],eax
+27C127BBA3B: 05 04 03 01 50           - add eax,50010304
+27C127BBA40: 00 00                    - add [rax],al
+27C127BBA42: 00 00                    - add [rax],al
+27C127BBA44: 00 00                    - add [rax],al
+27C127BBA46: 00 00                    - add [rax],al
+27C127BBA48: 00 00                    - add [rax],al
+27C127BBA4A: 00 00                    - add [rax],al
+27C127BBA4C: 00 00                    - add [rax],al
+27C127BBA4E: 00 00                    - add [rax],al
+// ---------- INJECTING HERE ----------
+PlayerController:Update: 55                       - push rbp
+// ---------- DONE INJECTING  ----------
+PlayerController:Update+1: 48 8B EC                 - mov rbp,rsp
+PlayerController:Update+4: 48 83 EC 40              - sub rsp,40
+PlayerController:Update+8: 48 89 75 F8              - mov [rbp-08],rsi
+PlayerController:Update+c: 48 8B F1                 - mov rsi,rcx
+PlayerController:Update+f: 0F B6 86 21 02 00 00     - movzx eax,byte ptr [rsi+00000221]
+PlayerController:Update+16: 85 C0                    - test eax,eax
+PlayerController:Update+18: 0F 85 D5 07 00 00        - jne PlayerController:Update+7f3
+PlayerController:Update+1e: F3 0F 10 86 74 02 00 00  - movss xmm0,[rsi+00000274]
+PlayerController:Update+26: F3 0F 5A C0              - cvtss2sd xmm0,xmm0
+PlayerController:Update+2a: 66 0F 57 C9              - xorpd xmm1,xmm1
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>playercontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"&lt;parkourActionsCount&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+1F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"platformableCounted"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+1FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"jumpHolded"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+1FD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"dashWasFullyHolded"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+1FE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"belowMaxSpeed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+1FF</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"dashJumpTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+200</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"&lt;isInvinsible&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+204</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"&lt;inputActive&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+205</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"&lt;lifetime&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+208</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"&lt;h&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+20C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"&lt;v&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+210</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"&lt;chainLanding&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+220</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"&lt;isDead&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+221</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"jumpPickUsed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+222</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"&lt;damageBlockedByWeapon&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+223</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"dotN"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+224</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"climbCheckCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+228</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"hTemp"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+22C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"vTemp"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+230</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"dot"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+234</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"maxSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+238</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"lastTimeGrabbed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+23C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"damageTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+240</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"gravity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+244</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"airControlBlock"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+248</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"airControl"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+24C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"defaultSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+250</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"slideBreak"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+254</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"&lt;speed&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+258</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"gTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+25C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"jumpBuffer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+260</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"ringTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+264</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"&lt;strikeCancelType&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+268</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"focusOnDamage"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+26C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"infiniteFocus"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+270</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"focusTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+274</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"focusScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+278</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"maxVelMgt"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+27C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"slideBashBuffer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+280</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"&lt;headBobbingPower&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+284</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"&lt;screenShakePower&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+288</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"&lt;autoGrab&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+28C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"&lt;upKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"&lt;leftKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"&lt;downKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"&lt;rightKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"&lt;slideKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"&lt;jumpKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"&lt;restartKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"&lt;kickKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"&lt;attackKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"&lt;altKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"&lt;dashKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"&lt;grappleKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"&lt;focusKey&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+3D4</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"StyleRanking"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Shady Knight.exe
+  Version: 
+  Date   : 2026-04-27
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,StyleRanking:Update)
+define(bytes,55 48 8B EC 48 81 EC C0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,StyleRanking:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [styleranking_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000C0
+  jmp return
+
+styleranking_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(styleranking_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000C0
+
+dealloc(newmem)
+unregistersymbol(styleranking_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: StyleRanking:Update
+
+27BA84E7C5D: 00 00                 - add [rax],al
+27BA84E7C5F: 00 00                 - add [rax],al
+27BA84E7C61: 00 00                 - add [rax],al
+27BA84E7C63: 00 00                 - add [rax],al
+27BA84E7C65: 00 00                 - add [rax],al
+27BA84E7C67: 00 00                 - add [rax],al
+27BA84E7C69: 00 00                 - add [rax],al
+27BA84E7C6B: 00 00                 - add [rax],al
+27BA84E7C6D: 00 00                 - add [rax],al
+27BA84E7C6F: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+StyleRanking:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+StyleRanking:Update+1: 48 8B EC              - mov rbp,rsp
+StyleRanking:Update+4: 48 81 EC C0 00 00 00  - sub rsp,000000C0
+StyleRanking:Update+b: 48 89 5D D0           - mov [rbp-30],rbx
+StyleRanking:Update+f: 48 89 75 D8           - mov [rbp-28],rsi
+StyleRanking:Update+13: 48 89 7D E0           - mov [rbp-20],rdi
+StyleRanking:Update+17: 4C 89 65 E8           - mov [rbp-18],r12
+StyleRanking:Update+1b: 4C 89 75 F0           - mov [rbp-10],r14
+StyleRanking:Update+1f: 4C 89 7D F8           - mov [rbp-08],r15
+StyleRanking:Update+23: 48 8B F1              - mov rsi,rcx
+StyleRanking:Update+26: 0F B6 86 20 01 00 00  - movzx eax,byte ptr [rsi+00000120]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>styleranking_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"&lt;airCombo&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+110</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"&lt;bonusCount&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+114</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"&lt;points&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"&lt;timer&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[styleranking_ptr]+11C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"skip"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[styleranking_ptr]+120</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"SSSblock"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[styleranking_ptr]+121</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"&lt;rankIndex&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"&lt;killUrgency&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[styleranking_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"killUrgencySpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[styleranking_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"movesBetweenKills"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"inKillChain"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[styleranking_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"actionWithoutDamage"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"parkourWithoutDamage"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>72</ID>
+              <Description>"bonusWithoutDamage"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>73</ID>
+              <Description>"alpha"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[styleranking_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>74</ID>
+              <Description>"shadowIndex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[styleranking_ptr]+154</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>78</ID>
+          <Description>"TimeManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Shady Knight.exe
+  Version: 
+  Date   : 2026-04-27
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,TimeManager:Update)
+define(bytes,55 48 8B EC 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,TimeManager:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [timemanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,40
+  jmp return
+
+timemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(timemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(timemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: TimeManager:Update
+
+2B07BC500D7: 00 AB F4 C4 7B B0              - add [rbx-4F843B0C],ch
+2B07BC500DD: 02 00                          - add al,[rax]
+2B07BC500DF: 00 D7                          - add bh,dl
+2B07BC500E1: F7 C4 7B B0 02 00              - test esp,0002B07B
+2B07BC500E7: 00 00                          - add [rax],al
+2B07BC500E9: 00 00                          - add [rax],al
+2B07BC500EB: 00 00                          - add [rax],al
+2B07BC500ED: 00 00                          - add [rax],al
+2B07BC500EF: 00                             - db 00 
+TimeManager:Update: 55                             - push rbp
+// ---------- INJECTING HERE ----------
+TimeManager:Update+1: 48 8B EC                       - mov rbp,rsp
+// ---------- DONE INJECTING  ----------
+TimeManager:Update+4: 48 83 EC 40                    - sub rsp,40
+TimeManager:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+TimeManager:Update+c: 48 8B F1                       - mov rsi,rcx
+TimeManager:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+TimeManager:Update+16: 49 BB B0 05 C5 7B B0 02 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+TimeManager:Update+20: 41 FF D3                       - call r11
+TimeManager:Update+23: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+TimeManager:Update+27: 48 B8 74 06 36 54 B0 02 00 00  - mov rax,000002B054360674
+TimeManager:Update+31: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+TimeManager:Update+35: F3 0F 11 28                    - movss [rax],xmm5
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>timemanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"&lt;defaultTimeScale&gt;"</Description>
+              <LastState Value="1" RealAddress="2B0771DA818"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timemanager_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>81</ID>
+              <Description>"timeIsStopped"</Description>
+              <LastState Value="1" RealAddress="2B0771DA81C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[timemanager_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"slowmoScale"</Description>
+              <LastState Value="0" RealAddress="2B0771DA820"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timemanager_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"slowmoDuration"</Description>
+              <LastState Value="0" RealAddress="2B0771DA824"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timemanager_ptr]+24</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"slowmoDelay"</Description>
+              <LastState Value="0" RealAddress="2B0771DA828"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timemanager_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>85</ID>
+              <Description>"debugTime"</Description>
+              <LastState Value="0" RealAddress="2B0771DA82C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[timemanager_ptr]+2C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"cachedTimeScale"</Description>
+              <LastState Value="1" RealAddress="2B0771DA830"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timemanager_ptr]+30</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>75</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>77</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <Comments>Made by DANGER DASH
+</Comments>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Shady Knight - S1 SK-BUILD 1135.010226 ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

@@ -1,0 +1,1969 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>144</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Gods of Sand.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"DebugController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Gods of Sand.exe
+  Version: 
+  Date   : 2026-04-18
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+3FD080)
+define(bytes,40 53 48 83 EC 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+3FD080)
+
+label(code)
+label(return)
+
+newmem:
+mov [debugcontroller_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,20
+  jmp return
+
+debugcontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(debugcontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,20
+
+dealloc(newmem)
+unregistersymbol(debugcontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DebugController.Update
+
+DebugController.&lt;Awake&gt;b__16_6: C6 41 42 01     - mov byte ptr [rcx+42],01
+GameAssembly.dll+3FD074: C6 41 40 01     - mov byte ptr [rcx+40],01
+GameAssembly.dll+3FD078: C3              - ret 
+GameAssembly.dll+3FD079: CC              - int 3 
+GameAssembly.dll+3FD07A: CC              - int 3 
+GameAssembly.dll+3FD07B: CC              - int 3 
+GameAssembly.dll+3FD07C: CC              - int 3 
+GameAssembly.dll+3FD07D: CC              - int 3 
+GameAssembly.dll+3FD07E: CC              - int 3 
+GameAssembly.dll+3FD07F: CC              - int 3 
+// ---------- INJECTING HERE ----------
+DebugController.Update: 40 53           - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3FD082: 48 83 EC 20     - sub rsp,20
+GameAssembly.dll+3FD086: 48 8B D9        - mov rbx,rcx
+GameAssembly.dll+3FD089: 33 D2           - xor edx,edx
+GameAssembly.dll+3FD08B: B9 60 00 00 00  - mov ecx,00000060
+GameAssembly.dll+3FD090: E8 FB D4 F9 01  - call UnityEngine.Input.GetKeyDownInt
+GameAssembly.dll+3FD095: 84 C0           - test al,al
+GameAssembly.dll+3FD097: 74 0D           - je GameAssembly.dll+3FD0A6
+GameAssembly.dll+3FD099: 80 7B 41 00     - cmp byte ptr [rbx+41],00
+GameAssembly.dll+3FD09D: 0F 94 C0        - sete al
+GameAssembly.dll+3FD0A0: 88 43 41        - mov [rbx+41],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>debugcontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"isFocused"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[debugcontroller_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"showConsole"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[debugcontroller_ptr]+41</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"showHelp"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[debugcontroller_ptr]+42</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"commandList"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"_size"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"Count"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"_firstChar"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[debugcontroller_ptr]+50</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"GladiatorManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Gods of Sand.exe
+  Version: 
+  Date   : 2026-04-18
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+459E90)
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+459E90)
+
+label(code)
+label(return)
+
+newmem:
+mov [gladiatormanager_ptr],rcx
+
+code:
+  mov [rsp+08],rbx
+  jmp return
+
+gladiatormanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(gladiatormanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+unregistersymbol(gladiatormanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GladiatorManager.UpdateTraining
+
+GameAssembly.dll+459E77: 48 8B 5C 24 30        - mov rbx,[rsp+30]
+GameAssembly.dll+459E7C: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+459E80: 5F                    - pop rdi
+GameAssembly.dll+459E81: E9 4A CB FE FF        - jmp GladiatorHUDManager.RefreshGladiatorIcons
+GameAssembly.dll+459E86: E8 D5 C2 E7 FF        - call GameAssembly.mono_method_get_class+B0
+GameAssembly.dll+459E8B: CC                    - int 3 
+GameAssembly.dll+459E8C: CC                    - int 3 
+GameAssembly.dll+459E8D: CC                    - int 3 
+GameAssembly.dll+459E8E: CC                    - int 3 
+GameAssembly.dll+459E8F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+GladiatorManager.UpdateTraining: 48 89 5C 24 08        - mov [rsp+08],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+459E95: 48 89 7C 24 10        - mov [rsp+10],rdi
+GameAssembly.dll+459E9A: 55                    - push rbp
+GameAssembly.dll+459E9B: 48 8B EC              - mov rbp,rsp
+GameAssembly.dll+459E9E: 48 83 EC 50           - sub rsp,50
+GameAssembly.dll+459EA2: 80 3D 5B E0 F9 02 00  - cmp byte ptr [GameAssembly.dll+33F7F04],00
+GameAssembly.dll+459EA9: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+459EAC: 75 1F                 - jne GameAssembly.dll+459ECD
+GameAssembly.dll+459EAE: 48 8D 0D 1B BE DD 02  - lea rcx,[GameAssembly.dll+3235CD0]
+GameAssembly.dll+459EB5: E8 66 C0 E7 FF        - call GameAssembly.il2cpp_get_exception_argument_null+3D0
+GameAssembly.dll+459EBA: 48 8D 0D 3F 0B DA 02  - lea rcx,[GameAssembly.dll+31FAA00]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>147</ID>
+              <Description>"Value Show When Open Inventory"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000180AC0B9C00" RealAddress="7FF95A4D0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>gladiatormanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"[0]Gladiator"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"GladiatorName"</Description>
+                  <LastState RealAddress="180AC21F2D4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gladiatormanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>18</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"stats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>18</ID>
+                      <Description>"StrengthExp"</Description>
+                      <LastState Value="187.5" RealAddress="180A681CBA0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>19</ID>
+                      <Description>"AgilityExp"</Description>
+                      <LastState Value="75" RealAddress="180A681CBA4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>20</ID>
+                      <Description>"DexterityExp"</Description>
+                      <LastState Value="75" RealAddress="180A681CBA8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>21</ID>
+                      <Description>"DefenseExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CBAC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"ResistenceExp"</Description>
+                      <LastState Value="187.5" RealAddress="180A681CBB0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"IntelligenceExp"</Description>
+                      <LastState Value="75" RealAddress="180A681CBB4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"VitalityExp"</Description>
+                      <LastState Value="262.5" RealAddress="180A681CBB8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"EnduranceExp"</Description>
+                      <LastState Value="37.5" RealAddress="180A681CBBC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"&lt;TotalArmor&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="180A681CBC0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"CurrentHealthPoints"</Description>
+                      <LastState Value="78" RealAddress="180A681CBC4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>28</ID>
+                      <Description>"CurrentStaminaPoints"</Description>
+                      <LastState Value="66" RealAddress="180A681CBC8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"SkillPoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CBCC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"PassivePoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CBD0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"Renown"</Description>
+                      <LastState Value="0" RealAddress="180A681CBD4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"fightStats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"isSilenced"</Description>
+                      <LastState Value="0" RealAddress="180AC23B850"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"isStunned"</Description>
+                      <LastState Value="0" RealAddress="180AC23B851"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>11</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"extraStrength"</Description>
+                      <LastState Value="0" RealAddress="180AC23B854"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"extraAgility"</Description>
+                      <LastState Value="0" RealAddress="180AC23B858"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"extraDexterity"</Description>
+                      <LastState Value="0" RealAddress="180AC23B85C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"extraDefense"</Description>
+                      <LastState Value="0" RealAddress="180AC23B860"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"extraResistence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B864"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"extraIntelligence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B868"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"extraVitality"</Description>
+                      <LastState Value="0" RealAddress="180AC23B86C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"extraEndurance"</Description>
+                      <LastState Value="0" RealAddress="180AC23B870"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"extraArmor"</Description>
+                      <LastState Value="0" RealAddress="180AC23B874"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"extraHealthPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B878"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"extraStaminaPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B87C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"hpOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B880"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"hpOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B884"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"hpOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B888"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"spOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B88C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"spOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B890"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"spOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B894"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"[1]Gladiator"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"GladiatorName"</Description>
+                  <LastState RealAddress="180AC21F294"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gladiatormanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>18</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"stats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"StrengthExp"</Description>
+                      <LastState Value="262.5" RealAddress="180A681CB00"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"AgilityExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CB04"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"DexterityExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CB08"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"DefenseExp"</Description>
+                      <LastState Value="75" RealAddress="180A681CB0C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"ResistenceExp"</Description>
+                      <LastState Value="225" RealAddress="180A681CB10"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"IntelligenceExp"</Description>
+                      <LastState Value="37.5" RealAddress="180A681CB14"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"VitalityExp"</Description>
+                      <LastState Value="225" RealAddress="180A681CB18"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"EnduranceExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CB1C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>82</ID>
+                      <Description>"&lt;TotalArmor&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="180A681CB20"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>83</ID>
+                      <Description>"CurrentHealthPoints"</Description>
+                      <LastState Value="72" RealAddress="180A681CB24"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"CurrentStaminaPoints"</Description>
+                      <LastState Value="84" RealAddress="180A681CB28"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>85</ID>
+                      <Description>"SkillPoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CB2C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>86</ID>
+                      <Description>"PassivePoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CB30"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"Renown"</Description>
+                      <LastState Value="0" RealAddress="180A681CB34"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"fightStats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"isSilenced"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7F0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>89</ID>
+                      <Description>"isStunned"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7F1"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>11</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>90</ID>
+                      <Description>"extraStrength"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7F4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>91</ID>
+                      <Description>"extraAgility"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7F8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>92</ID>
+                      <Description>"extraDexterity"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7FC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>93</ID>
+                      <Description>"extraDefense"</Description>
+                      <LastState Value="0" RealAddress="180AC23B800"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>94</ID>
+                      <Description>"extraResistence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B804"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>95</ID>
+                      <Description>"extraIntelligence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B808"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>96</ID>
+                      <Description>"extraVitality"</Description>
+                      <LastState Value="0" RealAddress="180AC23B80C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>97</ID>
+                      <Description>"extraEndurance"</Description>
+                      <LastState Value="0" RealAddress="180AC23B810"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>98</ID>
+                      <Description>"extraArmor"</Description>
+                      <LastState Value="0" RealAddress="180AC23B814"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>99</ID>
+                      <Description>"extraHealthPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B818"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>100</ID>
+                      <Description>"extraStaminaPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B81C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>101</ID>
+                      <Description>"hpOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B820"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>102</ID>
+                      <Description>"hpOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B824"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>103</ID>
+                      <Description>"hpOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B828"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>104</ID>
+                      <Description>"spOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B82C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>105</ID>
+                      <Description>"spOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B830"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>106</ID>
+                      <Description>"spOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B834"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"[2]Gladiator"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"GladiatorName"</Description>
+                  <LastState RealAddress="180AC21F254"/>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[gladiatormanager_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>18</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"stats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"StrengthExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CA10"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"AgilityExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CA14"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"DexterityExp"</Description>
+                      <LastState Value="337.5" RealAddress="180A681CA18"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"DefenseExp"</Description>
+                      <LastState Value="187.5" RealAddress="180A681CA1C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"ResistenceExp"</Description>
+                      <LastState Value="150" RealAddress="180A681CA20"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>116</ID>
+                      <Description>"IntelligenceExp"</Description>
+                      <LastState Value="37.5" RealAddress="180A681CA24"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>117</ID>
+                      <Description>"VitalityExp"</Description>
+                      <LastState Value="37.5" RealAddress="180A681CA28"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>118</ID>
+                      <Description>"EnduranceExp"</Description>
+                      <LastState Value="75" RealAddress="180A681CA2C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>119</ID>
+                      <Description>"&lt;TotalArmor&gt;k__BackingField"</Description>
+                      <LastState Value="0" RealAddress="180A681CA30"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>120</ID>
+                      <Description>"CurrentHealthPoints"</Description>
+                      <LastState Value="42" RealAddress="180A681CA34"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"CurrentStaminaPoints"</Description>
+                      <LastState Value="72" RealAddress="180A681CA38"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>122</ID>
+                      <Description>"SkillPoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CA3C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>123</ID>
+                      <Description>"PassivePoints"</Description>
+                      <LastState Value="0" RealAddress="180A681CA40"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>124</ID>
+                      <Description>"Renown"</Description>
+                      <LastState Value="0" RealAddress="180A681CA44"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"fightStats"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>125</ID>
+                      <Description>"isSilenced"</Description>
+                      <LastState Value="0" RealAddress="180AC23B790"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>126</ID>
+                      <Description>"isStunned"</Description>
+                      <LastState Value="0" RealAddress="180AC23B791"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>11</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>127</ID>
+                      <Description>"extraStrength"</Description>
+                      <LastState Value="0" RealAddress="180AC23B794"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>128</ID>
+                      <Description>"extraAgility"</Description>
+                      <LastState Value="0" RealAddress="180AC23B798"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>129</ID>
+                      <Description>"extraDexterity"</Description>
+                      <LastState Value="0" RealAddress="180AC23B79C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>130</ID>
+                      <Description>"extraDefense"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7A0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>131</ID>
+                      <Description>"extraResistence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7A4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>132</ID>
+                      <Description>"extraIntelligence"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7A8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>133</ID>
+                      <Description>"extraVitality"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7AC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>134</ID>
+                      <Description>"extraEndurance"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7B0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>135</ID>
+                      <Description>"extraArmor"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7B4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>136</ID>
+                      <Description>"extraHealthPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7B8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>137</ID>
+                      <Description>"extraStaminaPoints"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7BC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>138</ID>
+                      <Description>"hpOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7C0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>139</ID>
+                      <Description>"hpOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7C4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>140</ID>
+                      <Description>"hpOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7C8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>141</ID>
+                      <Description>"spOverTurn"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7CC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>142</ID>
+                      <Description>"spOverTurnRounds"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7D0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>143</ID>
+                      <Description>"spOverTurnDecay"</Description>
+                      <LastState Value="0" RealAddress="180AC23B7D4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gladiatormanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>28</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>145</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>146</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Gods of Sand - v1.0.1 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

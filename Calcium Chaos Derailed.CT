@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>107</ID>
+      <Description>"                                                                            -     CALCIUM CHAOS : DERAILED      -"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>008000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>11</ID>
+      <Description>"                                                                                 Steam version V1.0 by TENOKE"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>8</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>108</ID>
+      <Description>"2)  Start/load new or saved game then wait to take control of your character"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>31</ID>
+      <Description>"3)  Activate me ! ... to enable POINTERS"</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : Calcium Chaos Derailed.exe
+  Version: 
+  Date   : 2024-11-11
+  Author :   
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,0F B6 8E 44 02 00 00) // should be unique
+alloc(newmem,$1000,INJECT)
+alloc(player,8)
+
+label(code)
+label(return)
+
+player:
+  dq 0
+
+newmem:
+
+code:
+  mov [player],rsi
+  movzx ecx,byte ptr [rsi+00000244]
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 2
+
+return:
+registersymbol(INJECT)
+registersymbol(player)
+
+[DISABLE]
+
+INJECT:
+  db 0F B6 8E 44 02 00 00
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Player:Update+5d2
+
+Player:Update+5a4: 48 8B C8                       - mov rcx,rax
+Player:Update+5a7: 83 39 00                       - cmp dword ptr [rcx],00
+Player:Update+5aa: 48 8B 40 50                    - mov rax,[rax+50]
+Player:Update+5ae: 48 8B C8                       - mov rcx,rax
+Player:Update+5b1: 49 8B D7                       - mov rdx,r15
+Player:Update+5b4: 83 38 00                       - cmp dword ptr [rax],00
+Player:Update+5b7: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+Player:Update+5be: 49 BB 40 A2 61 F1 7F 02 00 00  - mov r11,PlayerWeaponWrapper:UpdateWeaponData
+Player:Update+5c8: 41 FF D3                       - call r11
+Player:Update+5cb: 48 8B 86 70 01 00 00           - mov rax,[rsi+00000170]
+// ---------- INJECTING HERE ----------
+Player:Update+5d2: 0F B6 8E 44 02 00 00           - movzx ecx,byte ptr [rsi+00000244]
+// ---------- DONE INJECTING  ----------
+Player:Update+5d9: 83 38 00                       - cmp dword ptr [rax],00
+Player:Update+5dc: 40 88 88 BC 00 00 00           - mov [rax+000000BC],cl
+Player:Update+5e3: 0F B6 86 44 02 00 00           - movzx eax,byte ptr [rsi+00000244]
+Player:Update+5ea: 85 C0                          - test eax,eax
+Player:Update+5ec: 0F 84 67 00 00 00              - je Player:Update+659
+Player:Update+5f2: 48 8B 86 70 01 00 00           - mov rax,[rsi+00000170]
+27FF1619119: 48 89 85 80 FE FF FF           - mov [rbp-00000180],rax
+27FF1619120: 48 B8 50 AD F1 D5 7F 02 00 00  - mov rax,0000027FD5F1AD50
+Player:Update+60a: 48 8B 00                       - mov rax,[rax]
+Player:Update+60d: 48 8B C8                       - mov rcx,rax
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>103</ID>
+          <Description>"Activate me to enable currency pointer."</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Calcium Chaos Derailed.exe
+  Version: 
+  Date   : 2024-11-11
+  Author :   
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,48 63 91 48 02 00 00 48 8B C8 83 38 00 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 41 FF D3 48 63 4D F0 89 48 1C 48 8B 7D F8) // should be unique
+alloc(newmem,$1000)
+alloc(money,8)
+
+label(code)
+label(return)
+
+money:
+  dq 0
+
+newmem:
+
+code:
+  call r11
+  movsxd  rcx,dword ptr [rbp-10]
+  mov [money],rax
+  mov [rax+1C],ecx
+  mov rdi,[rbp-08]
+  jmp return
+
+INJECT+17:
+  jmp far newmem
+
+return:
+registersymbol(INJECT)
+registersymbol(money)
+
+[DISABLE]
+
+INJECT+17:
+  db 41 FF D3 48 63 4D F0 89 48 1C 48 8B 7D F8
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerCurrency:SetCurrencyData+48
+
+PlayerCurrency:SetCurrencyData+16: 49 BB 30 50 CF 24 C3 01 00 00  - mov r11,RunSaveData:get_Current
+PlayerCurrency:SetCurrencyData+20: 41 FF D3                       - call r11
+PlayerCurrency:SetCurrencyData+23: 48 8B 40 10                    - mov rax,[rax+10]
+PlayerCurrency:SetCurrencyData+27: 48 8B 4F 18                    - mov rcx,[rdi+18]
+PlayerCurrency:SetCurrencyData+2b: 48 8B D1                       - mov rdx,rcx
+PlayerCurrency:SetCurrencyData+2e: 83 3A 00                       - cmp dword ptr [rdx],00
+PlayerCurrency:SetCurrencyData+31: 48 63 91 48 02 00 00           - movsxd  rdx,dword ptr [rcx+00000248]
+PlayerCurrency:SetCurrencyData+38: 48 8B C8                       - mov rcx,rax
+PlayerCurrency:SetCurrencyData+3b: 83 38 00                       - cmp dword ptr [rax],00
+PlayerCurrency:SetCurrencyData+3e: 49 BB 90 90 22 6F C2 01 00 00  - mov r11,System.Collections.Generic.List`1[T_REF]:get_Item
+// ---------- INJECTING HERE ----------
+PlayerCurrency:SetCurrencyData+48: 41 FF D3                       - call r11
+// ---------- DONE INJECTING  ----------
+PlayerCurrency:SetCurrencyData+4b: 48 63 4D F0                    - movsxd  rcx,dword ptr [rbp-10]
+PlayerCurrency:SetCurrencyData+4f: 89 48 1C                       - mov [rax+1C],ecx
+PlayerCurrency:SetCurrencyData+52: 48 8B 7D F8                    - mov rdi,[rbp-08]
+PlayerCurrency:SetCurrencyData+56: 48 8D 65 00                    - lea rsp,[rbp+00]
+PlayerCurrency:SetCurrencyData+5a: 5D                             - pop rbp
+PlayerCurrency:SetCurrencyData+5b: C3                             - ret 
+1C324CF59AC: 00 00                          - add [rax],al
+1C324CF59AE: 00 00                          - add [rax],al
+1C324CF59B0: 01 04 02                       - add [rdx+rax],eax
+1C324CF59B3: 05 04 03 01 50                 - add eax,50010304
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>98</ID>
+          <Description>"Support me if you appreciate my contribution to the community."</Description>
+          <LastState/>
+          <Color>FF00FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+ShellExecute('https://ko-fi.com/  ')
+{$asm}
+[ENABLE]
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>112</ID>
+          <Description>"Activate me to enable metacurrency pointer."</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Calcium Chaos Derailed.exe
+  Version: 
+  Date   : 2024-11-11
+  Author :   
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,48 63 80 0C 01 00 00 48) // should be unique
+alloc(newmem,$1000,INJECT)
+alloc(metacurr,8)
+
+label(code)
+label(return)
+
+metacurr:
+  dq 0
+
+newmem:
+
+code:
+  mov [metacurr],rax
+  movsxd  rax,dword ptr [rax+0000010C]
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 2
+
+return:
+registersymbol(INJECT)
+registersymbol(metacurr)
+
+[DISABLE]
+
+INJECT:
+  db 48 63 80 0C 01 00 00
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MetaCurrencyUI:Update+2b
+
+MetaCurrencyUI:Update: 55                             - push rbp
+MetaCurrencyUI:Update+1: 48 8B EC                       - mov rbp,rsp
+MetaCurrencyUI:Update+4: 48 83 EC 60                    - sub rsp,60
+MetaCurrencyUI:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+MetaCurrencyUI:Update+c: 48 8B F1                       - mov rsi,rcx
+MetaCurrencyUI:Update+f: 48 8B 46 20                    - mov rax,[rsi+20]
+MetaCurrencyUI:Update+13: 48 89 45 D0                    - mov [rbp-30],rax
+MetaCurrencyUI:Update+17: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+MetaCurrencyUI:Update+1e: 49 BB 90 82 C6 1F 98 02 00 00  - mov r11,GameSaveData:get_Current
+MetaCurrencyUI:Update+28: 41 FF D3                       - call r11
+// ---------- INJECTING HERE ----------
+MetaCurrencyUI:Update+2b: 48 63 80 0C 01 00 00           - movsxd  rax,dword ptr [rax+0000010C]
+// ---------- DONE INJECTING  ----------
+MetaCurrencyUI:Update+32: 48 89 45 C8                    - mov [rbp-38],rax
+MetaCurrencyUI:Update+36: 48 B9 80 AF 38 41 97 02 00 00  - mov rcx,000002974138AF80
+MetaCurrencyUI:Update+40: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+MetaCurrencyUI:Update+45: 90                             - nop 
+MetaCurrencyUI:Update+46: 49 BB 80 10 30 FF 95 02 00 00  - mov r11,System.Object:__icall_wrapper_ves_icall_object_new_specific
+MetaCurrencyUI:Update+50: 41 FF D3                       - call r11
+MetaCurrencyUI:Update+53: 48 8B D0                       - mov rdx,rax
+MetaCurrencyUI:Update+56: 48 8B 45 C8                    - mov rax,[rbp-38]
+297F5DABC1A: 89 42 10                       - mov [rdx+10],eax
+297F5DABC1D: 48 B9 60 6D FA F1 97 02 00 00  - mov rcx,00000297F1FA6D60
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>56</ID>
+      <Description>"DebugInvincible"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>148</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>63</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>49</ID>
+      <Description>"invincible"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>12C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>62</ID>
+      <Description>"InvincibilityDuration (after taking Damage)"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>F4</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>35</ID>
+      <Description>"disable Invincibility blinking"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>F8</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>61</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>41</ID>
+      <Description>"lives"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>118</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>53</ID>
+      <Description>"maxLives"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>13C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>57</ID>
+      <Description>"CurrentHealth"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>14C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>33</ID>
+      <Description>"maxHealth"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>F0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>58</ID>
+      <Description>"MaxMaxHealth"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>150</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>69</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>81</ID>
+      <Description>"movementSpeed"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+168</Address>
+      <Offsets>
+        <Offset>40</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>82</ID>
+      <Description>"dashMovementSpeed"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+168</Address>
+      <Offsets>
+        <Offset>44</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>83</ID>
+      <Description>"currentSpeed"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+168</Address>
+      <Offsets>
+        <Offset>84</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>68</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>105</ID>
+      <Description>"1) Collect currency to make value appear."</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>0000FF</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>95</ID>
+      <Description>"2) Be carreful never reach the end of level with more than 5000."</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>0000FF</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>114</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>104</ID>
+      <Description>"Currency"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>money</Address>
+      <Offsets>
+        <Offset>1C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>67</ID>
+      <Description>"Currency bonus ( add x to each shard collected)"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>[player]+1A0</Address>
+      <Offsets>
+        <Offset>20</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>111</ID>
+      <Description>"Metacurrency"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>metacurr</Address>
+      <Offsets>
+        <Offset>10C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>70</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>45</ID>
+      <Description>"canBeStunned"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>124</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>48</ID>
+      <Description>"stunCooldown"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>128</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>38</ID>
+      <Description>"chanceToMiss"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>104</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>39</ID>
+      <Description>"damageResistance"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>108</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>47</ID>
+      <Description>"dontBlockProjectile"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>126</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>54</ID>
+      <Description>"damageReceivedMultiplier"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>140</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>64</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>42</ID>
+      <Description>"ShowHurtSpriteOnDeath"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>11C</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>46</ID>
+      <Description>"disableDamageVisual"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[player]+1B0</Address>
+      <Offsets>
+        <Offset>125</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>87</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>96</ID>
+      <Description>"ABILITY"</Description>
+      <Options moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>120</ID>
+          <Description>"Press [Up]  D-pad to re-enable Ability "</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0: Ability available
+1: Ability unavailable
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>FF00FF</Color>
+          <VariableType>Byte</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>65</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>22544</Key>
+              </Keys>
+              <Value>0</Value>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>116</ID>
+          <Description>"damageDealt"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>60</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>117</ID>
+          <Description>"damageNeeded"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>3C</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>118</ID>
+          <Description>"activeTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>119</ID>
+          <Description>"cooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>38</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>121</ID>
+          <Description>"useCooldown"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>40</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>122</ID>
+          <Description>"elapsedCooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>58</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>123</ID>
+          <Description>"elapsedDrainTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>5C</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>124</ID>
+          <Description>"triggerTimer"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>64</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>126</ID>
+          <Description>"IsBeingUsed"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No / Off / Disabled
+1:Yes / On / Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[player]+178</Address>
+          <Offsets>
+            <Offset>66</Offset>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"Calcium Chaos Derailed.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+</LuaScript>
+</CheatTable>

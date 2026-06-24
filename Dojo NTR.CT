@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>102</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Dojo NTR.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"UserData"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{
+  Game   : Dojo NTR.exe
+  Author : DANGER DASH
+}
+
+define(address1,"GameAssembly.dll"+478890)
+define(bytes1,29 51 50 C3 CC)
+
+define(address2,"GameAssembly.dll"+477C00)
+define(bytes2,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address1,bytes1)
+assert(address2,bytes2)
+
+alloc(newmem,$2000,"GameAssembly.dll")
+
+label(code1)
+label(return1)
+label(code2)
+label(return2)
+label(userdata_ptr)
+
+// --- Logic for ConsumeEnergy ---
+newmem:
+  mov [userdata_ptr],rcx // Store pointer
+code1:
+  sub [rcx+50],edx
+  ret
+  int 3
+  jmp return1
+
+// --- Logic for AddEnergy ---
+align 10
+newmem2:
+  mov [userdata_ptr],rcx // Store same pointer here too
+code2:
+  mov [rsp+08],rbx
+  jmp return2
+
+// --- Data Storage ---
+userdata_ptr:
+  dq 0
+
+// --- Injection Points ---
+address1:
+  jmp newmem
+return1:
+
+address2:
+  jmp newmem2
+return2:
+
+registersymbol(userdata_ptr)
+
+[DISABLE]
+
+address1:
+  db bytes1
+
+address2:
+  db bytes2
+
+unregistersymbol(userdata_ptr)
+dealloc(newmem)
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"Value Show When Change Energy"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"difficulty"</Description>
+                  <LastState Value="0" RealAddress="2486D72CA90"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+10</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"day"</Description>
+                  <LastState Value="2" RealAddress="2486D72CAA0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"hour"</Description>
+                  <LastState Value="9" RealAddress="2486D72CAA4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+24</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"minute"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAA8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+28</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"sex_level"</Description>
+                  <LastState Value="1" RealAddress="2486D72CAAC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+2C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"power_level"</Description>
+                  <LastState Value="7" RealAddress="2486D72CAB0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"power_exp"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAB4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"skill_level"</Description>
+                  <LastState Value="7" RealAddress="2486D72CAB8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"skill_exp"</Description>
+                  <LastState Value="0" RealAddress="2486D72CABC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+3C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"work_level"</Description>
+                  <LastState Value="1" RealAddress="2486D72CAC0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+40</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"game_pizhuan_level"</Description>
+                  <LastState Value="1" RealAddress="2486D72CAC4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+44</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"game_caoren_level"</Description>
+                  <LastState Value="1" RealAddress="2486D72CAC8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"game_dubo_level"</Description>
+                  <LastState Value="1" RealAddress="2486D72CACC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"energy"</Description>
+                  <LastState Value="60" RealAddress="2486D72CAD0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"extend_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAD4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"game_pizhuan_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAD8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"game_caoren_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CADC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"clothing_status"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAE0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"game_banzhuan_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAE4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"game_wadi_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CAE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"cur_location"</Description>
+                  <LastState Value="8" RealAddress="2486D72CAF8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"last_location"</Description>
+                  <LastState Value="5" RealAddress="2486D72CAFC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"next_location"</Description>
+                  <LastState Value="8" RealAddress="2486D72CB00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"fish_coin"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB10"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"coin_i"</Description>
+                  <LastState Value="0" RealAddress="24863DE02F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"exp_i"</Description>
+                  <LastState Value="0" RealAddress="24863DE0270"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+A0</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"teach_step"</Description>
+                  <LastState Value="6" RealAddress="2486D72CB30"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"show_201_step"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB60"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"show_401_step"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB64"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"result_401"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"success_401_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB78"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"ph_talk"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB88"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"work_reward_day"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB98"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"work_coin"</Description>
+                  <LastState Value="0" RealAddress="2486D72CB9C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"master_dialog"</Description>
+                  <LastState Value="1" RealAddress="2486D72CBA0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"get_fish_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBA4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"is_clear"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBA8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"clear_step"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBAC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"skill_added"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBB8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+138</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"power_added"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBB9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+139</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"total_add_money"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBBC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+13C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"total_consume_money"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBC0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+140</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"ending_type"</Description>
+                  <LastState Value="4294967295" RealAddress="2486D72CBC4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+144</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"total_work_coin"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBE0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"work_dis"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBE4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"total_work_dis"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBE8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"fisrt_rika"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBEC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"fish_step_1"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBF0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"fish_step_2"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBF4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"fish_step_3"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBF8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"total_failed_401_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CBFC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+17C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"total_success_401_count"</Description>
+                  <LastState Value="0" RealAddress="2486D72CC00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"ph_wc"</Description>
+                  <LastState Value="0" RealAddress="2486D72CC04"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"ph_wc_day"</Description>
+                  <LastState Value="0" RealAddress="2486D72CC08"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"ph_wc_hour"</Description>
+                  <LastState Value="0" RealAddress="2486D72CC0C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+18C</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"hero_datas"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"_size"</Description>
+                  <LastState Value="1" RealAddress="24A800E06A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="4" RealAddress="2486F238068"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"[0]HeroData"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"h_level"</Description>
+                      <LastState Value="1" RealAddress="2486F20DBB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"h_value"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBBC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"h_exp"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBC0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"location_type"</Description>
+                      <LastState Value="7" RealAddress="2486F20DBD0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"birth_day"</Description>
+                      <LastState Value="1" RealAddress="2486F20DBD4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"h_location_index"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBD8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"am_h"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBDC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"enter_h"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBDD"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>3D</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"enter_h_day"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBE0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"movie_day"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBE4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"movie_count"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBE8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"movie_cg_count"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBEC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"day_train_count"</Description>
+                      <LastState Value="4" RealAddress="2486F20DBF0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"home_fisrt_dialog"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBF4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"home_h_night"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBF5"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>55</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"home_h_day"</Description>
+                      <LastState Value="0" RealAddress="2486F20DBF6"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[userdata_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>56</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"role_data_301"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"h_level"</Description>
+                  <LastState Value="1" RealAddress="2486F20D6D0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"dialog_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6D4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"dialog_day"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6D8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"event_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6DC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"event_day"</Description>
+                  <LastState Value="4294967294" RealAddress="2486F20D6E0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"open_worksite_dialog"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6E4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"worksite_dialog_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"worksite_dialog_day"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"movie_day"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"open_movie"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6F4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"movie_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6F8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"movie_cg_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D6FC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"h_count"</Description>
+                  <LastState Value="0" RealAddress="2486F20D708"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D0</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"role_data_701"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"meeting_daytime"</Description>
+                  <LastState Value="0" RealAddress="24A801076D0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"meeting_night"</Description>
+                  <LastState Value="0" RealAddress="24A801076D4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"step"</Description>
+                  <LastState Value="0" RealAddress="24A801076D8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"make_love_count"</Description>
+                  <LastState Value="0" RealAddress="24A801076DC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"make_love_day"</Description>
+                  <LastState Value="0" RealAddress="24A801076E0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"friendliness_level"</Description>
+                  <LastState Value="1" RealAddress="24A801076E4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"friendliness_exp"</Description>
+                  <LastState Value="0" RealAddress="24A801076E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[userdata_ptr]+D8</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>101</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>104</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Dojo NTR - v1.9.13 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

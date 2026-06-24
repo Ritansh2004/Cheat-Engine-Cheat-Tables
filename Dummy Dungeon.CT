@@ -1,0 +1,1249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>127</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Dummy Dungeon.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"Player"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Dummy Dungeon.exe
+  Version: 
+  Date   : 2025-12-26
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Player:Update)
+define(bytes,55 48 8B EC 48 81 EC D0 02 00 00 48 89 5D C8)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Player:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [player_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000002D0
+  mov [rbp-38],rbx
+  jmp return
+
+player_ptr:
+dq 0
+
+address:
+  jmp far newmem
+  nop
+return:
+registersymbol(player_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000002D0
+  // mov [rbp-38],rbx
+
+dealloc(newmem)
+unregistersymbol(player_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Player:Update
+
+1B2CF41FFF6:                       - ?? 
+1B2CF41FFF7:                       - ?? 
+1B2CF41FFF8:                       - ?? 
+1B2CF41FFF9:                       - ?? 
+1B2CF41FFFA:                       - ?? 
+1B2CF41FFFB:                       - ?? 
+1B2CF41FFFC:                       - ?? 
+1B2CF41FFFD:                       - ?? 
+1B2CF41FFFE:                       - ?? 
+1B2CF41FFFF:                       - ?? 
+// ---------- INJECTING HERE ----------
+Player:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+Player:Update+1: 48 8B EC              - mov rbp,rsp
+Player:Update+4: 48 81 EC D0 02 00 00  - sub rsp,000002D0
+Player:Update+b: 48 89 5D C8           - mov [rbp-38],rbx
+Player:Update+f: 48 89 75 D0           - mov [rbp-30],rsi
+Player:Update+13: 48 89 7D D8           - mov [rbp-28],rdi
+Player:Update+17: 4C 89 65 E0           - mov [rbp-20],r12
+Player:Update+1b: 4C 89 6D E8           - mov [rbp-18],r13
+Player:Update+1f: 4C 89 75 F0           - mov [rbp-10],r14
+Player:Update+23: 4C 89 7D F8           - mov [rbp-08],r15
+Player:Update+27: 48 8B F1              - mov rsi,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"levelUp"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"lowHpOffset"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[player_ptr]+184</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"isDead"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+188</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"isHoldingInteractionButton"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+194</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"isFighting"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+195</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"ignoreInputs"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+196</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"shieldActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+197</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"isInvisible"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+198</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"reduceHealing"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+199</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"canChangeWeapon"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+19A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"canBeTeleported"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+19B</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"summonedPetsCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[player_ptr]+19C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"takeDamageCooldown"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+1A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"canTakeDamage"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+1A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"oneShotProtection"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+1A5</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"dialogueIsActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+1A6</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"playerStats"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"maxHealth"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"luck"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"moveSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"dashNumber"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>28</ID>
+                      <Description>"dashDistance"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"dashTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"dashCooldownValue"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"attackSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>A4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"damage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"critChance"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>AC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"critDamage"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"dodgeChance"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"additionalChestChance"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"weaponDamage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"weaponRange"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"weaponSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>C4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"weaponKnockback"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"currentHealth"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>CC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"currentShield"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"currentLevel"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>D4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"currentExp"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"moonKey"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>DC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"gameTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"damageDealt"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"damageTaken"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"goldSpent"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>EC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"goldMax"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"roomCleared"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>F4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"enemiesDefeated"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>F8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"keys"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>FC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"money"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>100</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"moveAcceleration"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>104</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"mainFloorBossDone"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"bookVisited"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"spell"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"value"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"cooldown"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"playerAttack"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"monkAltAttacks"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"canMonkSlam"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12D</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"isGlitterEffect"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12E</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"canAttack"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>12F</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"damageBuff"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>130</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"attackInt"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>134</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"maxWeakAttackInt"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"maxStrongAttackInt"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>13C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"slowed"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>140</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"slowValue"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>144</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"currentAttack"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"isCurrentAttackStrong"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>14C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"comboTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"isHoldingSpecial"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>154</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"cooldown"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>158</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"fillTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>15C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"isCooldownActive"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>160</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"isAttackFollowup"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>161</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"attackType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>164</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"activeWeapon"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"_idName"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"weaponType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>82</ID>
+                      <Description>"moneyValue"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>83</ID>
+                      <Description>"altStrongAnimations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"damage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>85</ID>
+                      <Description>"attackRange"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>86</ID>
+                      <Description>"attackSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"canKnockUp"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"knockback"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[player_ptr]+38</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"playerMovement"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"speedMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"maxSpeedMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"speedGain"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"gravity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>104</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"fallMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"jumpHeight"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>10C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"dashCheckOffset"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>110</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"groundDistance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>114</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"isFairyJumpActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>150</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"isDashUpgraded"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>151</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"remainingDashes"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>154</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"isGrounded"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>158</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"forcedMovement"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>159</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"isDashing"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15A</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"inBunnyHopState"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15B</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"groundHit"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"extraJump"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"isDoubleJumpActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15E</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"canDoubleJump"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>15F</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"forceFall"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>160</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"headbob"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>161</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"bobFrequency"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>164</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"bobHorizontalAmplitude"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>168</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"headBobSmoothing"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"isWalking"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>170</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"walkingTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>174</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"idleTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>178</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"groundedTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>17C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"groundResetSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>180</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"time"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>190</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"dashCooldownTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>194</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"dashTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>198</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"dashCheckSize"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>19C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"aerialTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>1C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"maxAerialTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>1C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>125</ID>
+                  <Description>"isAerialActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[player_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>1CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>126</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>128</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Dummy Dungeon ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

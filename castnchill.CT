@@ -1,0 +1,3319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "castnchill.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"Angler"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : castnchill.exe
+  Version: 
+  Date   : 2025-10-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+5B6990)
+define(bytes,40 53 48 83 EC 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+5B6990)
+
+label(code)
+label(return)
+
+newmem:
+mov [gameruntime_angler_ptr],rcx
+code:
+  push rbx
+  sub rsp,20
+  jmp return
+
+gameruntime_angler_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(gameruntime_angler_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,20
+
+dealloc(newmem)
+unregistersymbol(gameruntime_angler_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Game.Angler.Update
+
+GameAssembly.dll+4C0513: 00 C1              - add cl,al
+GameAssembly.dll+4C0515: 04 4C              - add al,4C
+GameAssembly.dll+4C0517: 00 CC              - add ah,cl
+GameAssembly.dll+4C0519: CC                 - int 3 
+GameAssembly.dll+4C051A: CC                 - int 3 
+GameAssembly.dll+4C051B: CC                 - int 3 
+GameAssembly.dll+4C051C: CC                 - int 3 
+GameAssembly.dll+4C051D: CC                 - int 3 
+GameAssembly.dll+4C051E: CC                 - int 3 
+GameAssembly.dll+4C051F: CC                 - int 3 
+// ---------- INJECTING HERE ----------
+Game.Angler.Update: 40 53              - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+4C0522: 48 83 EC 20        - sub rsp,20
+GameAssembly.dll+4C0526: 33 D2              - xor edx,edx
+GameAssembly.dll+4C0528: 48 8B D9           - mov rbx,rcx
+GameAssembly.dll+4C052B: E8 70 FB FF FF     - call Game.Angler.UpdateState
+GameAssembly.dll+4C0530: 8B 83 20 01 00 00  - mov eax,[rbx+00000120]
+GameAssembly.dll+4C0536: 89 83 24 01 00 00  - mov [rbx+00000124],eax
+GameAssembly.dll+4C053C: 48 83 C4 20        - add rsp,20
+GameAssembly.dll+4C0540: 5B                 - pop rbx
+GameAssembly.dll+4C0541: C3                 - ret 
+GameAssembly.dll+4C0542: CC                 - int 3 
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>281</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>282</ID>
+                  <Description>"isCustomiserAngler"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA558"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+58</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>283</ID>
+                  <Description>"anglerIndex"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA55C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gameruntime_angler_ptr]+5C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>284</ID>
+                  <Description>"baseSortOrder"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA560"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gameruntime_angler_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>285</ID>
+                  <Description>"isDriver"</Description>
+                  <LastState Value="1" RealAddress="21C1D4CA570"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>286</ID>
+                  <Description>"m_localDir"</Description>
+                  <LastState Value="1" RealAddress="21C1D4CA5C0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gameruntime_angler_ptr]+C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>287</ID>
+                  <Description>"&lt;Stamina&gt;"</Description>
+                  <LastState Value="100" RealAddress="21C1D4CA5D0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>288</ID>
+                  <Description>"&lt;IsSeated&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5E0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>289</ID>
+                  <Description>"&lt;IsUsingStandingSeat&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5E1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>290</ID>
+                  <Description>"&lt;IsMounted&gt;"</Description>
+                  <LastState Value="1" RealAddress="21C1D4CA5E2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>291</ID>
+                  <Description>"m_isPairingInput"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5E3"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E3</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>292</ID>
+                  <Description>"m_nextAllowedControlsChangeTime"</Description>
+                  <LastState Value="1375.353638" RealAddress="21C1D4CA5E4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>293</ID>
+                  <Description>"m_nextAllowedInteractTime"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5E8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>294</ID>
+                  <Description>"&lt;InputMap&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gameruntime_angler_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>295</ID>
+                  <Description>"&lt;MoveInput&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5F8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>296</ID>
+                  <Description>"&lt;InteractInput&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA5FC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>297</ID>
+                  <Description>"&lt;PrevInteractInput&gt;"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA600"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+100</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>298</ID>
+                  <Description>"m_mountAfterStanding"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA618"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>299</ID>
+                  <Description>"m_rodPrePickupDelay"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA61C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gameruntime_angler_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>300</ID>
+                  <Description>"m_shouldWake"</Description>
+                  <LastState Value="0" RealAddress="21C1D4CA620"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gameruntime_angler_ptr]+120</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"Boat"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>156</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>301</ID>
+                      <Description>"isCustomiserBoat"</Description>
+                      <LastState Value="0" RealAddress="21C1D641258"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>302</ID>
+                      <Description>"rotation"</Description>
+                      <LastState Value="0" RealAddress="21C1D641288"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>303</ID>
+                      <Description>"angularVelocity"</Description>
+                      <LastState Value="1.401298464E-45" RealAddress="21C1D64128C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>304</ID>
+                      <Description>"m_nextSellTime"</Description>
+                      <LastState Value="0" RealAddress="21C1D641290"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>305</ID>
+                      <Description>"m_wasUndocked"</Description>
+                      <LastState Value="1" RealAddress="21C1D641294"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>306</ID>
+                      <Description>"&lt;BoatIndex&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D641298"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>307</ID>
+                      <Description>"&lt;MoveInput&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D6412D0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>308</ID>
+                      <Description>"&lt;Speed&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D6412D4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>309</ID>
+                      <Description>"&lt;FilteredSpeed&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D6412D8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>310</ID>
+                      <Description>"&lt;FilteredAcceleration&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D6412DC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>311</ID>
+                      <Description>"&lt;Dir&gt;"</Description>
+                      <LastState Value="1" RealAddress="21C1D6412E0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"&lt;EngineData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>312</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BFADCFF98"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>313</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFADCEC14"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>314</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BFADCFFB0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>315</ID>
+                      <Description>"acceleration"</Description>
+                      <LastState Value="15" RealAddress="21BFADCFFB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>316</ID>
+                      <Description>"deceleration"</Description>
+                      <LastState Value="15" RealAddress="21BFADCFFBC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>317</ID>
+                      <Description>"maxSpeed"</Description>
+                      <LastState Value="40" RealAddress="21BFADCFFC0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>318</ID>
+                      <Description>"effectOffsetX"</Description>
+                      <LastState Value="-34" RealAddress="21BFADCFFE8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>319</ID>
+                      <Description>"accelerationFilter"</Description>
+                      <LastState Value="1" RealAddress="21BFADCFFEC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"&lt;StorageData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>320</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BFAD84E78"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>321</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFAD766D4"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>322</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BFAD84E90"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>323</ID>
+                      <Description>"capacity"</Description>
+                      <LastState Value="3" RealAddress="21BFAD84E98"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+68</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"Rod"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>239</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>324</ID>
+                      <Description>"bendAmount"</Description>
+                      <LastState Value="0.5" RealAddress="21C1D4CA410"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>325</ID>
+                      <Description>"bendBlend"</Description>
+                      <LastState Value="1" RealAddress="21C1D4CA414"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>326</ID>
+                      <Description>"m_bendCurrent"</Description>
+                      <LastState Value="2.802596929E-45" RealAddress="21C1D4CA418"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>327</ID>
+                      <Description>"m_bendSpeed"</Description>
+                      <LastState Value="-2.522337236E-44" RealAddress="21C1D4CA41C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>328</ID>
+                      <Description>"m_bendTarget"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA420"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>329</ID>
+                      <Description>"m_blendedBendAmount"</Description>
+                      <LastState Value="0.5005896688" RealAddress="21C1D4CA424"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>330</ID>
+                      <Description>"m_castDir"</Description>
+                      <LastState Value="-1" RealAddress="21C1D4CA428"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>331</ID>
+                      <Description>"m_castHapticIncrement"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA42C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>332</ID>
+                      <Description>"m_castStartTime"</Description>
+                      <LastState Value="-1" RealAddress="21C1D4CA430"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>333</ID>
+                      <Description>"m_distanceToHook"</Description>
+                      <LastState Value="12.87375641" RealAddress="21C1D4CA434"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>334</ID>
+                      <Description>"m_filteredLureLookAtOffsetY"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA438"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>335</ID>
+                      <Description>"m_hasSubtractedJigLength"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA43C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>336</ID>
+                      <Description>"m_isJigging"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA448"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>337</ID>
+                      <Description>"m_jigStartTime"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA44C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>338</ID>
+                      <Description>"m_lureCanJig"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA460"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>339</ID>
+                      <Description>"m_retrievePowerTarget"</Description>
+                      <LastState Value="1" RealAddress="21C1D4CA470"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>340</ID>
+                      <Description>"m_springDistance"</Description>
+                      <LastState Value="3.258293152" RealAddress="21C1D4CA474"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>341</ID>
+                      <Description>"m_springMaxTimer"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA478"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>342</ID>
+                      <Description>"m_springMaxTimerLimit"</Description>
+                      <LastState Value="4" RealAddress="21C1D4CA47C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>343</ID>
+                      <Description>"&lt;CastPower&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4B0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>344</ID>
+                      <Description>"&lt;AudioLineDrag&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4B4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>F4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>345</ID>
+                      <Description>"&lt;AudioLineDragSpeed&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4B8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>F8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>346</ID>
+                      <Description>"&lt;AudioLineStruggle&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4BC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>FC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>347</ID>
+                      <Description>"&lt;AudioLineLengthSpeed&gt;"</Description>
+                      <LastState Value="-38.32535553" RealAddress="21C1D4CA4C0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>100</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>348</ID>
+                      <Description>"&lt;SpringRatio&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4C4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>104</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>349</ID>
+                      <Description>"&lt;SpringForce&gt;"</Description>
+                      <LastState Value="4887.439941" RealAddress="21C1D4CA4C8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>350</ID>
+                      <Description>"&lt;LineLength&gt;"</Description>
+                      <LastState Value="12.87375641" RealAddress="21C1D4CA4CC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>351</ID>
+                      <Description>"&lt;DistanceToLure&gt;"</Description>
+                      <LastState Value="8" RealAddress="21C1D4CA4D0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>110</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>352</ID>
+                      <Description>"&lt;Spooling&gt;"</Description>
+                      <LastState Value="0" RealAddress="21C1D4CA4D4"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>114</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>353</ID>
+                      <Description>"&lt;RetrievePower&gt;"</Description>
+                      <LastState Value="1" RealAddress="21C1D4CA4D8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>118</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"&lt;StrengthData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>354</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BFAD5DD88"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>355</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFADC0224"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>356</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BFAD5DDA0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>357</ID>
+                      <Description>"weight"</Description>
+                      <LastState Value="4" RealAddress="21BFAD5DDA8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"&lt;LengthData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>358</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BFAD5D108"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>359</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFAE09A04"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>360</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BFAD5D120"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>361</ID>
+                      <Description>"spoolDistance"</Description>
+                      <LastState Value="150" RealAddress="21BFAD5D128"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>362</ID>
+                      <Description>"breakDistance"</Description>
+                      <LastState Value="300" RealAddress="21BFAD5D12C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"&lt;LureData&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>363</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BF8253018"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>364</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFAE6D914"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>365</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BF8253070"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>366</ID>
+                      <Description>"visualMultiplier"</Description>
+                      <LastState Value="1" RealAddress="21BF8253090"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>367</ID>
+                      <Description>"startAvailable"</Description>
+                      <LastState Value="1" RealAddress="21BF82530A8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>368</ID>
+                      <Description>"sinkerDistance"</Description>
+                      <LastState Value="0" RealAddress="21BF8253110"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>110</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>369</ID>
+                      <Description>"audioType"</Description>
+                      <LastState Value="0" RealAddress="21BF8253114"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>114</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>370</ID>
+                      <Description>"trackUnderwater"</Description>
+                      <LastState Value="1" RealAddress="21BF8253118"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>118</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>371</ID>
+                      <Description>"trackOffsetY"</Description>
+                      <LastState Value="0" RealAddress="21BF825311C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>11C</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>372</ID>
+                      <Description>"density"</Description>
+                      <LastState Value="0.400000006" RealAddress="21BF8253130"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>130</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>373</ID>
+                      <Description>"airForce"</Description>
+                      <LastState Value="0.5" RealAddress="21BF8253144"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>144</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>374</ID>
+                      <Description>"retrieveMaxSpeed"</Description>
+                      <LastState Value="30" RealAddress="21BF8253148"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>375</ID>
+                      <Description>"retrieveLateralDrag"</Description>
+                      <LastState Value="0.5" RealAddress="21BF825314C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14C</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>376</ID>
+                      <Description>"waterLateralDrag"</Description>
+                      <LastState Value="0" RealAddress="21BF8253150"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>377</ID>
+                      <Description>"airDrag"</Description>
+                      <LastState Value="0" RealAddress="21BF8253154"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>154</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>378</ID>
+                      <Description>"waterDrag"</Description>
+                      <LastState Value="1" RealAddress="21BF8253158"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>158</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>379</ID>
+                      <Description>"attachedDrag"</Description>
+                      <LastState Value="0.5" RealAddress="21BF825315C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>15C</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>380</ID>
+                      <Description>"inertiaOverride"</Description>
+                      <LastState Value="100" RealAddress="21BF8253160"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>160</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>381</ID>
+                      <Description>"airAngularDrag"</Description>
+                      <LastState Value="2" RealAddress="21BF8253164"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>164</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>382</ID>
+                      <Description>"waterAngularDrag"</Description>
+                      <LastState Value="15" RealAddress="21BF8253168"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>168</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>383</ID>
+                      <Description>"attachedAngularDrag"</Description>
+                      <LastState Value="2" RealAddress="21BF825316C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>16C</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>384</ID>
+                      <Description>"retrieveAngularDrag"</Description>
+                      <LastState Value="15" RealAddress="21BF8253170"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>170</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>385</ID>
+                      <Description>"castMaxVelocityScale"</Description>
+                      <LastState Value="0.8000000119" RealAddress="21BF825317C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>17C</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>386</ID>
+                      <Description>"launchAngularVelocity"</Description>
+                      <LastState Value="700" RealAddress="21BF8253180"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>180</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>387</ID>
+                      <Description>"keepTargetedAboveWater"</Description>
+                      <LastState Value="1" RealAddress="21BF82531B8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gameruntime_angler_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>1B8</Offset>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>181</ID>
+                  <Description>"&lt;FishingLine&gt;"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>198</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>388</ID>
+                          <Description>"lineTensionRaw"</Description>
+                          <LastState Value="0" RealAddress="21C1DA426E8"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>58</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>389</ID>
+                          <Description>"lineTensionFiltered"</Description>
+                          <LastState Value="2.802596929E-45" RealAddress="21C1DA426EC"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>5C</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>390</ID>
+                          <Description>"lineTensionScaled"</Description>
+                          <LastState Value="10" RealAddress="21C1DA426F0"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>60</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>391</ID>
+                          <Description>"lineStretchRaw"</Description>
+                          <LastState Value="0" RealAddress="21C1DA426F4"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>64</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>392</ID>
+                          <Description>"lineDragScale"</Description>
+                          <LastState Value="1" RealAddress="21C1DA426F8"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>68</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>393</ID>
+                          <Description>"lineLength"</Description>
+                          <LastState Value="12.87375641" RealAddress="21C1DA426FC"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>6C</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>394</ID>
+                          <Description>"lineLengthScaled"</Description>
+                          <LastState Value="12.87375641" RealAddress="21C1DA42700"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>70</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>395</ID>
+                          <Description>"pointLineLength"</Description>
+                          <LastState Value="-13.12624359" RealAddress="21C1DA42704"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>74</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>396</ID>
+                          <Description>"pointSpacing"</Description>
+                          <LastState Value="20" RealAddress="21C1DA42708"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>78</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>397</ID>
+                          <Description>"desiredPointCount"</Description>
+                          <LastState Value="0" RealAddress="21C1DA4270C"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>7C</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>398</ID>
+                          <Description>"curveLineLength"</Description>
+                          <LastState Value="8" RealAddress="21C1DA42710"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>399</ID>
+                          <Description>"startPointDistance"</Description>
+                          <LastState Value="26" RealAddress="21C1DA42714"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>400</ID>
+                          <Description>"endPointDistance"</Description>
+                          <LastState Value="40" RealAddress="21C1DA42718"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>401</ID>
+                          <Description>"currentPointSpacing"</Description>
+                          <LastState Value="9.177101135" RealAddress="21C1DA4271C"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>8C</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>402</ID>
+                          <Description>"desiredPointSpacing"</Description>
+                          <LastState Value="20.3228817" RealAddress="21C1DA42720"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>403</ID>
+                          <Description>"pointRemoveBlendTimer"</Description>
+                          <LastState Value="0" RealAddress="21C1DA42724"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>404</ID>
+                          <Description>"m_pixelNoiseOffset"</Description>
+                          <LastState Value="5.999999523" RealAddress="21C1DA42748"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>B8</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>405</ID>
+                          <Description>"m_pixelNoiseRefreshTime"</Description>
+                          <LastState Value="1353.160278" RealAddress="21C1DA4274C"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>BC</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>406</ID>
+                          <Description>"m_pixelNoiseStart"</Description>
+                          <LastState Value="0.7396022081" RealAddress="21C1DA42750"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>C0</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>407</ID>
+                          <Description>"m_pixelNoiseThreshold"</Description>
+                          <LastState Value="0.05000000075" RealAddress="21C1DA42754"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>C4</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>408</ID>
+                          <Description>"&lt;IsShowing&gt;"</Description>
+                          <LastState Value="1" RealAddress="21C1DA42768"/>
+                          <VariableType>Byte</VariableType>
+                          <Address>[gameruntime_angler_ptr]+78</Address>
+                          <Offsets>
+                            <Offset>D8</Offset>
+                            <Offset>120</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>199</ID>
+                      <Description>"&lt;Config&gt;"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>200</ID>
+                          <Description>"Main"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>409</ID>
+                              <Description>"renderQueue"</Description>
+                              <LastState Value="3500" RealAddress="21BF6B64D48"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>28</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>410</ID>
+                              <Description>"texturePadding"</Description>
+                              <LastState Value="4" RealAddress="21BF6B64D4C"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>2C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>411</ID>
+                              <Description>"lureCloseSpringMultiplier"</Description>
+                              <LastState Value="3" RealAddress="21BF6B64D58"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>38</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>412</ID>
+                              <Description>"hookedSlackReelSpeedMultiplier"</Description>
+                              <LastState Value="1.600000024" RealAddress="21BF6B64D5C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>3C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>413</ID>
+                              <Description>"hookedReelSpeed"</Description>
+                              <LastState Value="30" RealAddress="21BF6B64D60"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>40</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>414</ID>
+                              <Description>"hookedSpoolSpeed"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64D64"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>44</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>415</ID>
+                              <Description>"autoReelSpeed"</Description>
+                              <LastState Value="10" RealAddress="21BF6B64D68"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>48</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>416</ID>
+                              <Description>"autoReelSpeedMax"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64D6C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>4C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>417</ID>
+                              <Description>"spoolSpeed"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64D70"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>50</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>418</ID>
+                              <Description>"spoolExtraLength"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64D74"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>54</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>419</ID>
+                              <Description>"springStrengthMultiplier"</Description>
+                              <LastState Value="2000" RealAddress="21BF6B64D78"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>58</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>420</ID>
+                              <Description>"breakDelay"</Description>
+                              <LastState Value="4" RealAddress="21BF6B64D7C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>5C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>421</ID>
+                              <Description>"tooBigBreakDelay"</Description>
+                              <LastState Value="2" RealAddress="21BF6B64D80"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>60</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>422</ID>
+                              <Description>"breakDelayDecay"</Description>
+                              <LastState Value="1.5" RealAddress="21BF6B64D84"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>64</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>423</ID>
+                              <Description>"breakRetractDistance"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64D88"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>68</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>424</ID>
+                              <Description>"jigLineSlackMax"</Description>
+                              <LastState Value="10" RealAddress="21BF6B64DA0"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>80</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>425</ID>
+                              <Description>"jigLureSpeedMax"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64DA4"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>84</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>426</ID>
+                              <Description>"jigRodAngleMax"</Description>
+                              <LastState Value="60" RealAddress="21BF6B64DA8"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>88</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>427</ID>
+                              <Description>"jigDistance"</Description>
+                              <LastState Value="0" RealAddress="21BF6B64DAC"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>8C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>428</ID>
+                              <Description>"maxPoints"</Description>
+                              <LastState Value="32" RealAddress="21BF6B64DC0"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>A0</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>429</ID>
+                              <Description>"curveSampleCount"</Description>
+                              <LastState Value="6" RealAddress="21BF6B64DC4"/>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>A4</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>430</ID>
+                              <Description>"startExtraSpacing"</Description>
+                              <LastState Value="6" RealAddress="21BF6B64DD0"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>B0</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>431</ID>
+                              <Description>"endExtraSpacing"</Description>
+                              <LastState Value="20" RealAddress="21BF6B64DD4"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>B4</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>432</ID>
+                              <Description>"pointRemoveBlendTime"</Description>
+                              <LastState Value="9.999999747E-6" RealAddress="21BF6B64DD8"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>B8</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>433</ID>
+                              <Description>"maxDeltaTime"</Description>
+                              <LastState Value="0.03333333507" RealAddress="21BF6B64DDC"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>BC</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>434</ID>
+                              <Description>"constraintStrength"</Description>
+                              <LastState Value="0.05000000075" RealAddress="21BF6B64DE0"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>C0</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>435</ID>
+                              <Description>"constraintIterationsPerSec"</Description>
+                              <LastState Value="400" RealAddress="21BF6B64DE4"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>C4</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>436</ID>
+                              <Description>"tensionFilter"</Description>
+                              <LastState Value="5" RealAddress="21BF6B64E10"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>F0</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>437</ID>
+                              <Description>"submergedDepth"</Description>
+                              <LastState Value="0" RealAddress="21BF6B64E28"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>108</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>438</ID>
+                              <Description>"airDrag"</Description>
+                              <LastState Value="4" RealAddress="21BF6B64E2C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>10C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>439</ID>
+                              <Description>"waterDrag"</Description>
+                              <LastState Value="7" RealAddress="21BF6B64E30"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>110</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>440</ID>
+                              <Description>"splashWaterDrag"</Description>
+                              <LastState Value="100" RealAddress="21BF6B64E34"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>114</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>441</ID>
+                              <Description>"forwardDrag"</Description>
+                              <LastState Value="8" RealAddress="21BF6B64E38"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>118</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>442</ID>
+                              <Description>"forwardSpeedMax"</Description>
+                              <LastState Value="12" RealAddress="21BF6B64E3C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>11C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>443</ID>
+                              <Description>"gravity"</Description>
+                              <LastState Value="100" RealAddress="21BF6B64E40"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>120</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>444</ID>
+                              <Description>"waterGravity"</Description>
+                              <LastState Value="4" RealAddress="21BF6B64E44"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>124</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>445</ID>
+                              <Description>"pixelNoiseIncrement"</Description>
+                              <LastState Value="0.6000000238" RealAddress="21BF6B64E48"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>128</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>446</ID>
+                              <Description>"pixelNoisePower"</Description>
+                              <LastState Value="4" RealAddress="21BF6B64E4C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>12C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>447</ID>
+                              <Description>"pixelNoiseRefreshInterval"</Description>
+                              <LastState Value="0.5" RealAddress="21BF6B64E58"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>138</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>448</ID>
+                              <Description>"audioLineLengthSpeedFilter"</Description>
+                              <LastState Value="10" RealAddress="21BF6B64E5C"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>13C</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>201</ID>
+                          <Description>"lureCloseDistance"</Description>
+                          <Options moHideChildren="1"/>
+                          <LastState Value="" RealAddress="00000000"/>
+                          <Color>FF8000</Color>
+                          <GroupHeader>1</GroupHeader>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>449</ID>
+                              <Description>"min"</Description>
+                              <LastState Value="40" RealAddress="21BB5DFCC70"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>10</Offset>
+                                <Offset>30</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>450</ID>
+                              <Description>"max"</Description>
+                              <LastState Value="80" RealAddress="21BB5DFCC74"/>
+                              <VariableType>Float</VariableType>
+                              <Address>[gameruntime_angler_ptr]+78</Address>
+                              <Offsets>
+                                <Offset>14</Offset>
+                                <Offset>30</Offset>
+                                <Offset>D0</Offset>
+                                <Offset>120</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>75</ID>
+          <Description>"GameJournal"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : castnchill.exe
+  Version: 
+  Date   : 2025-10-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+697CE0)
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+697CE0)
+
+label(code)
+label(return)
+
+newmem:
+mov [game_journal_catch_ptr],rcx
+
+code:
+  mov [rsp+08],rbx
+  jmp return
+
+game_journal_catch_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(game_journal_catch_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+unregistersymbol(game_journal_catch_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Game.Journal.Catch
+
+GameAssembly.dll+558B77: 48 8B 7C 24 30        - mov rdi,[rsp+30]
+GameAssembly.dll+558B7C: 48 8B 5C 24 38        - mov rbx,[rsp+38]
+GameAssembly.dll+558B81: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+558B85: 5E                    - pop rsi
+GameAssembly.dll+558B86: C3                    - ret 
+GameAssembly.dll+558B87: E8 24 D5 D5 FF        - call GameAssembly.il2cpp_method_get_declaring_type+B0
+GameAssembly.dll+558B8C: CC                    - int 3 
+GameAssembly.dll+558B8D: CC                    - int 3 
+GameAssembly.dll+558B8E: CC                    - int 3 
+GameAssembly.dll+558B8F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+Game.Journal.Catch: 48 89 5C 24 08        - mov [rsp+08],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+558B95: 48 89 6C 24 10        - mov [rsp+10],rbp
+GameAssembly.dll+558B9A: 48 89 74 24 18        - mov [rsp+18],rsi
+GameAssembly.dll+558B9F: 48 89 7C 24 20        - mov [rsp+20],rdi
+GameAssembly.dll+558BA4: 41 56                 - push r14
+GameAssembly.dll+558BA6: 48 83 EC 20           - sub rsp,20
+GameAssembly.dll+558BAA: 80 3D BE 31 55 02 00  - cmp byte ptr [GameAssembly.dll+2AABD6F],00
+GameAssembly.dll+558BB1: 45 0F B6 F1           - movzx r14d,r9b
+GameAssembly.dll+558BB5: 49 8B F0              - mov rsi,r8
+GameAssembly.dll+558BB8: 48 8B FA              - mov rdi,rdx
+GameAssembly.dll+558BBB: 48 8B E9              - mov rbp,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"Value Show when Catch One Fish"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>153</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>451</ID>
+                  <Description>"m_timeOfDay"</Description>
+                  <LastState Value="6" RealAddress="21BFADA1730"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[game_journal_catch_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>452</ID>
+                  <Description>"&lt;LastVersion&gt;"</Description>
+                  <LastState Value="5" RealAddress="21BFADA1748"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>453</ID>
+                  <Description>"&lt;ActiveTime&gt;"</Description>
+                  <LastState Value="1420" RealAddress="21BFADA174C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>454</ID>
+                  <Description>"&lt;ElapsedTime&gt;"</Description>
+                  <LastState Value="1420" RealAddress="21BFADA1750"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>455</ID>
+                  <Description>"&lt;Cash&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA1754"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+54</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>456</ID>
+                  <Description>"&lt;NeedsVersionUpgrade&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA17A8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>457</ID>
+                  <Description>"&lt;HasFoundAnyFish&gt;"</Description>
+                  <LastState Value="1" RealAddress="21BFADA17C8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>458</ID>
+                  <Description>"&lt;HasCaughtAnyFish&gt;"</Description>
+                  <LastState Value="1" RealAddress="21BFADA17C9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+C9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>459</ID>
+                  <Description>"&lt;HasStoredAnyFish&gt;"</Description>
+                  <LastState Value="1" RealAddress="21BFADA17CA"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+CA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>460</ID>
+                  <Description>"&lt;HasReleasedAnyFish&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA17CB"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+CB</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>461</ID>
+                  <Description>"&lt;HasActivelyCaughtAnyFishWithFish&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA17CC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>462</ID>
+                  <Description>"m_initialVersion"</Description>
+                  <LastState Value="5" RealAddress="21BFADA17D8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>463</ID>
+                  <Description>"&lt;InitialByteSize&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA17F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[game_journal_catch_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>464</ID>
+                  <Description>"&lt;HasLoadError&gt;"</Description>
+                  <LastState Value="0" RealAddress="21BFADA17F4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[game_journal_catch_ptr]+F4</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"&lt;RecentRods&gt;"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>465</ID>
+                      <Description>"order"</Description>
+                      <LastState Value="1" RealAddress="21BF8296A98"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>466</ID>
+                      <Description>"id"</Description>
+                      <LastState RealAddress="21BFADD37C4"/>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>467</ID>
+                      <Description>"cost"</Description>
+                      <LastState Value="0" RealAddress="21BF8296AF0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>468</ID>
+                      <Description>"locationType"</Description>
+                      <LastState Value="0" RealAddress="21BF8296B18"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>469</ID>
+                      <Description>"inputFilter"</Description>
+                      <LastState Value="20" RealAddress="21BF8296B48"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"Strength"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>470</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="5" RealAddress="21BF67B7BF8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>A0</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>268</ID>
+                      <Description>"[0]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>471</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="1" RealAddress="21BFAD5DD88"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>472</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="0" RealAddress="21BFAD5DDA0"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>473</ID>
+                          <Description>"weight"</Description>
+                          <LastState Value="4" RealAddress="21BFAD5DDA8"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>269</ID>
+                      <Description>"[1]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>474</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="2" RealAddress="21BFAD5DD38"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>475</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="10" RealAddress="21BFAD5DD50"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>476</ID>
+                          <Description>"weight"</Description>
+                          <LastState Value="5" RealAddress="21BFAD5DD58"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>270</ID>
+                      <Description>"[2]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>477</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="3" RealAddress="21BFAD5DCE8"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>478</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="20" RealAddress="21BFAD5DD00"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>479</ID>
+                          <Description>"weight"</Description>
+                          <LastState Value="6" RealAddress="21BFAD5DD08"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>271</ID>
+                      <Description>"[3]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>480</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="4" RealAddress="21BFAD5DC98"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>481</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="30" RealAddress="21BFAD5DCB0"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>482</ID>
+                          <Description>"weight"</Description>
+                          <LastState Value="7" RealAddress="21BFAD5DCB8"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>272</ID>
+                      <Description>"[4]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>483</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="5" RealAddress="21BFAD5DC48"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>484</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="40" RealAddress="21BFAD5DC60"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>485</ID>
+                          <Description>"weight"</Description>
+                          <LastState Value="8" RealAddress="21BFAD5DC68"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"Length"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>486</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="5" RealAddress="21BF67B7BA8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>A8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>274</ID>
+                      <Description>"[0]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>487</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="1" RealAddress="21BFAD5D108"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>488</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="0" RealAddress="21BFAD5D120"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>489</ID>
+                          <Description>"spoolDistance"</Description>
+                          <LastState Value="150" RealAddress="21BFAD5D128"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>490</ID>
+                          <Description>"breakDistance"</Description>
+                          <LastState Value="300" RealAddress="21BFAD5D12C"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>3C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>278</ID>
+                      <Description>"[1]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>491</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="2" RealAddress="21BFAD5D0B8"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>492</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="25" RealAddress="21BFAD5D0D0"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>493</ID>
+                          <Description>"spoolDistance"</Description>
+                          <LastState Value="180" RealAddress="21BFAD5D0D8"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>494</ID>
+                          <Description>"breakDistance"</Description>
+                          <LastState Value="330" RealAddress="21BFAD5D0DC"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>3C</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>277</ID>
+                      <Description>"[2]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>495</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="3" RealAddress="21BFAD5D068"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>496</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="25" RealAddress="21BFAD5D080"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>497</ID>
+                          <Description>"spoolDistance"</Description>
+                          <LastState Value="210" RealAddress="21BFAD5D088"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>498</ID>
+                          <Description>"breakDistance"</Description>
+                          <LastState Value="360" RealAddress="21BFAD5D08C"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>3C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>275</ID>
+                      <Description>"[3]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>499</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="4" RealAddress="21BFAD5D018"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>500</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="25" RealAddress="21BFAD5D030"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>501</ID>
+                          <Description>"spoolDistance"</Description>
+                          <LastState Value="240" RealAddress="21BFAD5D038"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>502</ID>
+                          <Description>"breakDistance"</Description>
+                          <LastState Value="390" RealAddress="21BFAD5D03C"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>3C</Offset>
+                            <Offset>38</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>276</ID>
+                      <Description>"[4]UpgradeData"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>503</ID>
+                          <Description>"order"</Description>
+                          <LastState Value="5" RealAddress="21BFAD60FB8"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>504</ID>
+                          <Description>"cost"</Description>
+                          <LastState Value="25" RealAddress="21BFAD60FD0"/>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>505</ID>
+                          <Description>"spoolDistance"</Description>
+                          <LastState Value="270" RealAddress="21BFAD60FD8"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>506</ID>
+                          <Description>"breakDistance"</Description>
+                          <LastState Value="420" RealAddress="21BFAD60FDC"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>3C</Offset>
+                            <Offset>40</Offset>
+                            <Offset>18</Offset>
+                            <Offset>A8</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"Casting"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>507</ID>
+                      <Description>"aimDurationMax"</Description>
+                      <LastState Value="1.5" RealAddress="21BFADD3730"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>B0</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>508</ID>
+                      <Description>"holdHoldDurationMax"</Description>
+                      <LastState Value="1" RealAddress="21BFADD3734"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>B0</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>509</ID>
+                      <Description>"castSpeedMin"</Description>
+                      <LastState Value="100" RealAddress="21BFADD3738"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>B0</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>510</ID>
+                      <Description>"castSpeedMax"</Description>
+                      <LastState Value="170" RealAddress="21BFADD373C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>B0</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>135</ID>
+                  <Description>"Response"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>511</ID>
+                      <Description>"speedMultiplier"</Description>
+                      <LastState Value="0.8000000119" RealAddress="21BFADD3700"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>B8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>512</ID>
+                      <Description>"lineSpringConstant"</Description>
+                      <LastState Value="500" RealAddress="21BFADD3704"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>B8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>513</ID>
+                      <Description>"startDragRatio"</Description>
+                      <LastState Value="0.5" RealAddress="21BFADD3708"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>B8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>514</ID>
+                      <Description>"lineDragConstant"</Description>
+                      <LastState Value="0.6999999881" RealAddress="21BFADD370C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[game_journal_catch_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>B8</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"Visuals"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>155</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>515</ID>
+                          <Description>"length"</Description>
+                          <LastState Value="50" RealAddress="21BFADCB670"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>516</ID>
+                          <Description>"bendOffset"</Description>
+                          <LastState Value="-20" RealAddress="21BFADCB674"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>517</ID>
+                          <Description>"bendSpring"</Description>
+                          <LastState Value="15" RealAddress="21BFADCB6A0"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>518</ID>
+                          <Description>"bendDamping"</Description>
+                          <LastState Value="3" RealAddress="21BFADCB6A4"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>44</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>519</ID>
+                          <Description>"bendSpringForceMax"</Description>
+                          <LastState Value="5000" RealAddress="21BFADCB6A8"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>48</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>144</ID>
+                      <Description>"bendrange"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>520</ID>
+                          <Description>"min"</Description>
+                          <LastState Value="0.1000000015" RealAddress="21BFADBE790"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>10</Offset>
+                            <Offset>28</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>521</ID>
+                          <Description>"max"</Description>
+                          <LastState Value="0.75" RealAddress="21BFADBE794"/>
+                          <VariableType>Float</VariableType>
+                          <Address>[game_journal_catch_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>28</Offset>
+                            <Offset>C0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>279</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>280</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Cast n Chill - v1.2.4(130) ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

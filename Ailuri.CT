@@ -1,0 +1,2211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>118</ID>
+      <Description>"                                                                   -     AILURI    -"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>008000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>215</ID>
+      <Description>"                                                          Steam version by TENOKE"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>217</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>186</ID>
+      <Description>"[ F8]  CompactMode  /  Full view mode"</Description>
+      <LastState Activated="1"/>
+      <Color>0080FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+LuaCall(function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel4.Visible    = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true))
+
+[DISABLE]
+LuaCall(cycleFullCompact(nil,false))
+</AssemblerScript>
+      <Hotkeys>
+        <Hotkey>
+          <Action>Toggle Activation</Action>
+          <Keys>
+            <Key>119</Key>
+          </Keys>
+          <ID>0</ID>
+          <ActivateSound TTS="EN">compact mode</ActivateSound>
+          <DeactivateSound TTS="EN">full view mode</DeactivateSound>
+        </Hotkey>
+      </Hotkeys>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>187</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>218</ID>
+      <Description>"1)  Activate me ! ... Auto-Attach game process."</Description>
+      <LastState/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+OpenProcess("Ailuri.exe")
+mono_initialize()
+LaunchMonoDataCollector()
+{$asm}
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>219</ID>
+      <Description>"2)  Start Game and wait to take control of your character."</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"3)  Activate me ! ... to enable POINTERS."</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+[ENABLE]
+
+aobscan(INJECT,83 3F 00 48 63 87 F4 00 00 00 83 F8 01 0F) // should be unique
+alloc(newmem,$1000,INJECT)
+alloc(movman,8)
+
+label(code)
+label(return)
+
+movman:
+  dq 0
+
+newmem:
+
+code:
+  mov [movman],rdi
+  cmp dword ptr [rdi],00
+  movsxd  rax,dword ptr [rdi+000000F4]
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 5
+
+return:
+registersymbol(INJECT)
+registersymbol(movman)
+
+[DISABLE]
+
+INJECT:
+  db 83 3F 00 48 63 87 F4 00 00 00
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: 2896C0076FC
+
+2896C0076D2: 48 63 87 F4 00 00 00           - movsxd  rax,dword ptr [rdi+000000F4]
+2896C0076D9: 85 C0                          - test eax,eax
+2896C0076DB: 75 32                          - jne 2896C00770F
+2896C0076DD: 49 8B CF                       - mov rcx,r15
+2896C0076E0: 41 83 3F 00                    - cmp dword ptr [r15],00
+2896C0076E4: 66 90                          - nop 2
+2896C0076E6: 49 BB A0 09 11 69 89 02 00 00  - mov r11,00000289691109A0
+2896C0076F0: 41 FF D3                       - call r11
+2896C0076F3: 83 F8 01                       - cmp eax,01
+2896C0076F6: 0F 85 8F 01 00 00              - jne 2896C00788B
+// ---------- INJECTING HERE ----------
+2896C0076FC: 83 3F 00                       - cmp dword ptr [rdi],00
+// ---------- DONE INJECTING  ----------
+2896C0076FF: 48 63 87 F4 00 00 00           - movsxd  rax,dword ptr [rdi+000000F4]
+2896C007706: 83 F8 01                       - cmp eax,01
+2896C007709: 0F 84 7C 01 00 00              - je 2896C00788B
+2896C00770F: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+2896C007716: 49 BB 30 A1 12 69 89 02 00 00  - mov r11,000002896912A130
+2896C007720: 41 FF D3                       - call r11
+2896C007723: 83 3F 00                       - cmp dword ptr [rdi],00
+2896C007726: 48 63 97 F0 00 00 00           - movsxd  rdx,dword ptr [rdi+000000F0]
+2896C00772D: 48 8B C8                       - mov rcx,rax
+2896C007730: 83 38 00                       - cmp dword ptr [rax],00
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>156</ID>
+          <Description>"Activate me to enable GroundMovement pointers"</Description>
+          <LastState/>
+          <Color>0000FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Ailuri.exe
+  Version: 
+  Date   : 2025-02-07
+  Author : LIOBOSS
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,0F B6 86 24 01 00 00 85 C0 0F 84 2C) // should be unique
+alloc(newmem,$1000,INJECT)
+alloc(bmovmt,8)
+
+label(code)
+label(return)
+
+bmovmt:
+  dq 0
+
+newmem:
+
+code:
+  mov [bmovmt],rsi
+  movzx eax,byte ptr [rsi+00000124]
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 2
+return:
+registersymbol(INJECT)
+registersymbol(bmovmt)
+
+[DISABLE]
+
+INJECT:
+  db 0F B6 86 24 01 00 00
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GroundMovement:Updates+45f3
+
+GroundMovement:Updates+45be: 49 BB F0 41 D0 FB 69 02 00 00  - mov r11,GroundMovement:PlayerJump
+GroundMovement:Updates+45c8: 41 FF D3                       - call r11
+GroundMovement:Updates+45cb: 48 8B CE                       - mov rcx,rsi
+GroundMovement:Updates+45ce: 49 BB 30 6F 68 E1 69 02 00 00  - mov r11,GroundMovement:ClimbAbility
+GroundMovement:Updates+45d8: 41 FF D3                       - call r11
+GroundMovement:Updates+45db: 48 8B CE                       - mov rcx,rsi
+GroundMovement:Updates+45de: 49 BB E0 71 68 E1 69 02 00 00  - mov r11,BaseMovement:get_OverActivatePoint
+GroundMovement:Updates+45e8: 41 FF D3                       - call r11
+GroundMovement:Updates+45eb: 85 C0                          - test eax,eax
+GroundMovement:Updates+45ed: 0F 84 3B 00 00 00              - je GroundMovement:Updates+462e
+// ---------- INJECTING HERE ----------
+GroundMovement:Updates+45f3: 0F B6 86 24 01 00 00           - movzx eax,byte ptr [rsi+00000124]
+// ---------- DONE INJECTING  ----------
+GroundMovement:Updates+45fa: 85 C0                          - test eax,eax
+GroundMovement:Updates+45fc: 0F 84 2C 00 00 00              - je GroundMovement:Updates+462e
+GroundMovement:Updates+4602: 48 8B CE                       - mov rcx,rsi
+GroundMovement:Updates+4605: 48 8B 06                       - mov rax,[rsi]
+GroundMovement:Updates+4608: FF 90 08 01 00 00              - call qword ptr [rax+00000108]
+GroundMovement:Updates+460e: 85 C0                          - test eax,eax
+GroundMovement:Updates+4610: 0F 85 18 00 00 00              - jne GroundMovement:Updates+462e
+269E1684616: 48 8B 46 30                    - mov rax,[rsi+30]
+269E168461A: 48 8B C8                       - mov rcx,rax
+269E168461D: 48 89 85 B0 F7 FF FF           - mov [rbp-00000850],rax
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>221</ID>
+          <Description>"Support me if you appreciate my contribution to the community."</Description>
+          <LastState/>
+          <Color>FF00FF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+ShellExecute('https://ko-fi.com/lioboss')
+{$asm}
+[ENABLE]
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>222</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>223</ID>
+      <Description>"1) Open menu / Pause game once"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>173</ID>
+      <Description>"2) Activate me to enable collectible pointers"</Description>
+      <LastState/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+
+aobscan(INJECT,48 63 00 EB 19) // should be unique
+alloc(newmem,$1000,INJECT)
+alloc(essence,8)
+
+label(code)
+label(return)
+
+essence:
+  dq 0
+
+newmem:
+
+code:
+  mov [essence],rax
+  movsxd  rax,dword ptr [rax]
+  jmp LevelManager:GetCollectableAmount+8b
+  jmp return
+
+INJECT:
+  jmp newmem
+return:
+registersymbol(INJECT)
+registersymbol(essence)
+
+[DISABLE]
+
+INJECT:
+  db 48 63 00 EB 19
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: LevelManager:GetCollectableAmount+6d
+
+LevelManager:GetCollectableAmount+36: 48 B8 90 6F 63 EB 2F 02 00 00  - mov rax,0000022FEB636F90
+LevelManager:GetCollectableAmount+40: 48 63 00                       - movsxd  rax,dword ptr [rax]
+LevelManager:GetCollectableAmount+43: EB 46                          - jmp LevelManager:GetCollectableAmount+8b
+LevelManager:GetCollectableAmount+45: 48 B8 9C 6F 63 EB 2F 02 00 00  - mov rax,0000022FEB636F9C
+LevelManager:GetCollectableAmount+4f: 48 63 00                       - movsxd  rax,dword ptr [rax]
+LevelManager:GetCollectableAmount+52: EB 37                          - jmp LevelManager:GetCollectableAmount+8b
+LevelManager:GetCollectableAmount+54: 48 B8 A0 6F 63 EB 2F 02 00 00  - mov rax,0000022FEB636FA0
+LevelManager:GetCollectableAmount+5e: 48 63 00                       - movsxd  rax,dword ptr [rax]
+LevelManager:GetCollectableAmount+61: EB 28                          - jmp LevelManager:GetCollectableAmount+8b
+LevelManager:GetCollectableAmount+63: 48 B8 98 6F 63 EB 2F 02 00 00  - mov rax,0000022FEB636F98
+// ---------- INJECTING HERE ----------
+LevelManager:GetCollectableAmount+6d: 48 63 00                       - movsxd  rax,dword ptr [rax]
+// ---------- DONE INJECTING  ----------
+LevelManager:GetCollectableAmount+70: EB 19                          - jmp LevelManager:GetCollectableAmount+8b
+LevelManager:GetCollectableAmount+72: 48 B8 94 6F 63 EB 2F 02 00 00  - mov rax,0000022FEB636F94
+LevelManager:GetCollectableAmount+7c: 48 63 00                       - movsxd  rax,dword ptr [rax]
+LevelManager:GetCollectableAmount+7f: EB 0A                          - jmp LevelManager:GetCollectableAmount+8b
+LevelManager:GetCollectableAmount+81: 48 B8 FF FF FF FF FF FF FF FF  - mov rax,FFFFFFFFFFFFFFFF
+LevelManager:GetCollectableAmount+8b: 48 8B 34 24                    - mov rsi,[rsp]
+LevelManager:GetCollectableAmount+8f: 48 83 C4 18                    - add rsp,18
+LevelManager:GetCollectableAmount+93: C3                             - ret 
+2302BD216F4: 00 00                          - add [rax],al
+2302BD216F6: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>209</ID>
+      <Description>"3) Open menu / Pause game again to make current level values appear"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>211</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>178</ID>
+      <Description>"Animal discovered"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>essence</Address>
+      <Offsets>
+        <Offset>-08</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>177</ID>
+      <Description>"Seedling"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>essence</Address>
+      <Offsets>
+        <Offset>-04</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>174</ID>
+      <Description>"Essence"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>essence</Address>
+      <Offsets>
+        <Offset>0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>175</ID>
+      <Description>"Flowers"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>essence</Address>
+      <Offsets>
+        <Offset>04</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>176</ID>
+      <Description>"Animal rescued"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>essence</Address>
+      <Offsets>
+        <Offset>08</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>210</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>48</ID>
+      <Description>"Invincibility (enemies only)"</Description>
+      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0: No / Off / Disabled
+1: Yes / On / Enabled
+</DropDownList>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>[movman]+70</Address>
+      <Offsets>
+        <Offset>100</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>238</ID>
+      <Description>"Inf True Stamina"</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+
+aobscan(INJECT,F3 41 0F 11 AE F4 00 00 00 F3 41 0F 10 46 70 F3 0F 5A C0 F2 0F 5A E8 F3 0F 11 AD 6C FF FF FF F3 0F 10 85 6C FF FF FF F3 0F 5A C0 F3 41 0F 10 4E 70 F3 0F 5A C9 F2 0F 5A E9 F3 0F 11 AD 6C FF FF FF F3 0F 10 8D 6C FF FF FF F3 0F 5A C9 F3 0F 10 95 60 FF FF FF F3 0F 5A D2 F2 0F 5C CA 66 0F 2F C8 0F 8A ?? ?? ?? ?? 0F 83) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  movss xmm5,[r14+000000D0]
+  movss [r14+000000F4],xmm5
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 4
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db F3 41 0F 11 AE F4 00 00 00
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: StaminaBar:TakeFromStaminaBar+1f9
+
+StaminaBar:TakeFromStaminaBar+1c3: F3 41 0F 10 46 70           - movss xmm0,[r14+70]
+StaminaBar:TakeFromStaminaBar+1c9: F3 0F 5A C0                 - cvtss2sd xmm0,xmm0
+StaminaBar:TakeFromStaminaBar+1cd: F2 0F 5A E8                 - cvtsd2ss xmm5,xmm0
+StaminaBar:TakeFromStaminaBar+1d1: F3 0F 11 AD 6C FF FF FF     - movss [rbp-00000094],xmm5
+StaminaBar:TakeFromStaminaBar+1d9: F3 0F 10 85 6C FF FF FF     - movss xmm0,[rbp-00000094]
+StaminaBar:TakeFromStaminaBar+1e1: F3 0F 5A C0                 - cvtss2sd xmm0,xmm0
+StaminaBar:TakeFromStaminaBar+1e5: F3 0F 10 8D 60 FF FF FF     - movss xmm1,[rbp-000000A0]
+StaminaBar:TakeFromStaminaBar+1ed: F3 0F 5A C9                 - cvtss2sd xmm1,xmm1
+StaminaBar:TakeFromStaminaBar+1f1: F2 0F 5C C1                 - subsd xmm0,xmm1
+StaminaBar:TakeFromStaminaBar+1f5: F2 0F 5A E8                 - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+StaminaBar:TakeFromStaminaBar+1f9: F3 41 0F 11 AE F4 00 00 00  - movss [r14+000000F4],xmm5
+// ---------- DONE INJECTING  ----------
+StaminaBar:TakeFromStaminaBar+202: F3 41 0F 10 46 70           - movss xmm0,[r14+70]
+StaminaBar:TakeFromStaminaBar+208: F3 0F 5A C0                 - cvtss2sd xmm0,xmm0
+StaminaBar:TakeFromStaminaBar+20c: F2 0F 5A E8                 - cvtsd2ss xmm5,xmm0
+StaminaBar:TakeFromStaminaBar+210: F3 0F 11 AD 6C FF FF FF     - movss [rbp-00000094],xmm5
+StaminaBar:TakeFromStaminaBar+218: F3 0F 10 85 6C FF FF FF     - movss xmm0,[rbp-00000094]
+StaminaBar:TakeFromStaminaBar+220: F3 0F 5A C0                 - cvtss2sd xmm0,xmm0
+StaminaBar:TakeFromStaminaBar+224: F3 41 0F 10 4E 70           - movss xmm1,[r14+70]
+StaminaBar:TakeFromStaminaBar+22a: F3 0F 5A C9                 - cvtss2sd xmm1,xmm1
+StaminaBar:TakeFromStaminaBar+22e: F2 0F 5A E9                 - cvtsd2ss xmm5,xmm1
+StaminaBar:TakeFromStaminaBar+232: F3 0F 11 AD 6C FF FF FF     - movss [rbp-00000094],xmm5
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>228</ID>
+          <Description>"Inf Stamina bar"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Ailuri.exe
+  Version: 
+  Date   : 2025-02-07
+  Author : LIOBOSS
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,F3 0F 11 6E 70 F3 0F 10 46) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  movss xmm5,[rsi+74]
+  movss [rsi+70],xmm5
+  jmp return
+
+INJECT:
+  jmp newmem
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db F3 0F 11 6E 70
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: StaminaBar:set_StaminaValue+90
+
+StaminaBar:set_StaminaValue+64: F3 0F 10 4D E8                 - movss xmm1,[rbp-18]
+StaminaBar:set_StaminaValue+69: F3 0F 5A C9                    - cvtss2sd xmm1,xmm1
+StaminaBar:set_StaminaValue+6d: F2 0F 5C C1                    - subsd xmm0,xmm1
+StaminaBar:set_StaminaValue+71: F2 0F 5A C0                    - cvtsd2ss xmm0,xmm0
+StaminaBar:set_StaminaValue+75: 90                             - nop 
+StaminaBar:set_StaminaValue+76: 49 BB 90 F0 0F BE 47 02 00 00  - mov r11,LevelManager:AddToDamage
+StaminaBar:set_StaminaValue+80: 41 FF D3                       - call r11
+StaminaBar:set_StaminaValue+83: F3 0F 10 45 E8                 - movss xmm0,[rbp-18]
+StaminaBar:set_StaminaValue+88: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+StaminaBar:set_StaminaValue+8c: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+StaminaBar:set_StaminaValue+90: F3 0F 11 6E 70                 - movss [rsi+70],xmm5
+// ---------- DONE INJECTING  ----------
+StaminaBar:set_StaminaValue+95: F3 0F 10 46 70                 - movss xmm0,[rsi+70]
+StaminaBar:set_StaminaValue+9a: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+StaminaBar:set_StaminaValue+9e: 66 0F 57 C9                    - xorpd xmm1,xmm1
+StaminaBar:set_StaminaValue+a2: 66 0F 2F C8                    - comisd xmm1,xmm0
+StaminaBar:set_StaminaValue+a6: 0F 86 0D 00 00 00              - jbe StaminaBar:set_StaminaValue+b9
+StaminaBar:set_StaminaValue+ac: 66 0F 57 C0                    - xorpd xmm0,xmm0
+StaminaBar:set_StaminaValue+b0: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+StaminaBar:set_StaminaValue+b4: F3 0F 11 6E 70                 - movss [rsi+70],xmm5
+StaminaBar:set_StaminaValue+b9: 0F B6 86 F8 00 00 00           - movzx eax,byte ptr [rsi+000000F8]
+StaminaBar:set_StaminaValue+c0: 85 C0                          - test eax,eax
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>188</ID>
+      <Description>"Inf True Mana"</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+[ENABLE]
+
+aobscan(INJECT,F2 0F 5C C1 F2 0F 5A E8 F3 0F 11 6F) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  subsd xmm0,xmm1
+  push eax
+  mov eax,64
+  cvtsi2sd xmm0,eax
+  pop eax
+  cvtsd2ss xmm5,xmm0
+  jmp return
+
+INJECT:
+  jmp newmem
+  nop 3
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db F2 0F 5C C1 F2 0F 5A E8
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: 1DFEDF931AC
+
+1DFEDF93180: F2 0F 10 C8                    - movsd xmm1,xmm0
+1DFEDF93184: F2 0F 5A C9                    - cvtsd2ss xmm1,xmm1
+1DFEDF93188: 83 38 00                       - cmp dword ptr [rax],00
+1DFEDF9318B: 66 66 90                       - nop 3
+1DFEDF9318E: 49 BB 10 32 F9 ED DF 01 00 00  - mov r11,000001DFEDF93210
+1DFEDF93198: 41 FF D3                       - call r11
+1DFEDF9319B: F3 0F 10 47 58                 - movss xmm0,[rdi+58]
+1DFEDF931A0: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+1DFEDF931A4: F3 0F 2A CE                    - cvtsi2ss xmm1,esi
+1DFEDF931A8: F3 0F 5A C9                    - cvtss2sd xmm1,xmm1
+// ---------- INJECTING HERE ----------
+1DFEDF931AC: F2 0F 5C C1                    - subsd xmm0,xmm1
+// ---------- DONE INJECTING  ----------
+1DFEDF931B0: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+1DFEDF931B4: F3 0F 11 6F 58                 - movss [rdi+58],xmm5
+1DFEDF931B9: 48 8B 75 F0                    - mov rsi,[rbp-10]
+1DFEDF931BD: 48 8B 7D F8                    - mov rdi,[rbp-08]
+1DFEDF931C1: 48 8D 65 00                    - lea rsp,[rbp+00]
+1DFEDF931C5: 5D                             - pop rbp
+1DFEDF931C6: C3                             - ret 
+1DFEDF931C7: FF                             - db -01
+1DFEDF931C8: FF                             - db -01
+1DFEDF931C9: FF                             - db -01
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>189</ID>
+          <Description>"Inf Mana Bar"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Ailuri.exe
+  Version: 
+  Date   : 2025-02-08
+  Author : LIOBOSS
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscan(INJECT,F3 0F 11 6E 54 F3 0F 10 46 54 F3 0F 5A C0 66) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  movss xmm5,[rsi+50]
+  movss [rsi+54],xmm5
+  jmp return
+
+INJECT:
+  jmp newmem
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db F3 0F 11 6E 54
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: 1DFEE24E3B7
+
+1DFEE24E394: 7A 10                 - jp 1DFEE24E3A6
+1DFEE24E396: 73 0E                 - jae 1DFEE24E3A6
+1DFEE24E398: 48 8B 46 28           - mov rax,[rsi+28]
+1DFEE24E39C: 48 8B C8              - mov rcx,rax
+1DFEE24E39F: 83 39 00              - cmp dword ptr [rcx],00
+1DFEE24E3A2: C6 40 18 00           - mov byte ptr [rax+18],00
+1DFEE24E3A6: C6 46 68 01           - mov byte ptr [rsi+68],01
+1DFEE24E3AA: F3 0F 10 45 E8        - movss xmm0,[rbp-18]
+1DFEE24E3AF: F3 0F 5A C0           - cvtss2sd xmm0,xmm0
+1DFEE24E3B3: F2 0F 5A E8           - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+1DFEE24E3B7: F3 0F 11 6E 54        - movss [rsi+54],xmm5
+// ---------- DONE INJECTING  ----------
+1DFEE24E3BC: F3 0F 10 46 54        - movss xmm0,[rsi+54]
+1DFEE24E3C1: F3 0F 5A C0           - cvtss2sd xmm0,xmm0
+1DFEE24E3C5: 66 0F 57 C9           - xorpd xmm1,xmm1
+1DFEE24E3C9: 66 0F 2F C8           - comisd xmm1,xmm0
+1DFEE24E3CD: 76 0D                 - jna 1DFEE24E3DC
+1DFEE24E3CF: 66 0F 57 C0           - xorpd xmm0,xmm0
+1DFEE24E3D3: F2 0F 5A E8           - cvtsd2ss xmm5,xmm0
+1DFEE24E3D7: F3 0F 11 6E 54        - movss [rsi+54],xmm5
+1DFEE24E3DC: 48 8B CE              - mov rcx,rsi
+1DFEE24E3DF: 48 8D AD 00 00 00 00  - lea rbp,[rbp+00000000]
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>233</ID>
+      <Description>"Inf Oxygen new"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+define(address,AirBar:set_AirTimeValue+1d )
+define(bytes,F2 0F 5A E8 F3 0F 11 6E 3C 48 8B CE 48 8D 64 24 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cvtsd2ss xmm5,xmm0
+  movss xmm5,[rsi+40]
+  movss [rsi+3C],xmm5
+  mov rcx,rsi
+  lea rsp,[rsp+00]
+  jmp return
+
+address:
+  jmp far newmem
+  nop 3
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // cvtsd2ss xmm5,xmm0
+  // movss [rsi+3C],xmm5
+  // mov rcx,rsi
+  // lea rsp,[rsp+00]
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: AirBar:set_AirTimeValue+1d
+
+20D434F6FDC: 00 00                          - add [rax],al
+20D434F6FDE: 00 00                          - add [rax],al
+AirBar:set_AirTimeValue: 55                             - push rbp
+AirBar:set_AirTimeValue+1: 48 8B EC                       - mov rbp,rsp
+AirBar:set_AirTimeValue+4: 48 83 EC 30                    - sub rsp,30
+AirBar:set_AirTimeValue+8: 48 89 75 F8                    - mov [rbp-08],rsi
+AirBar:set_AirTimeValue+c: 48 8B F1                       - mov rsi,rcx
+AirBar:set_AirTimeValue+f: F3 0F 11 4D F0                 - movss [rbp-10],xmm1
+AirBar:set_AirTimeValue+14: F3 0F 10 45 F0                 - movss xmm0,[rbp-10]
+AirBar:set_AirTimeValue+19: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+// ---------- INJECTING HERE ----------
+AirBar:set_AirTimeValue+1d: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- DONE INJECTING  ----------
+AirBar:set_AirTimeValue+21: F3 0F 11 6E 3C                 - movss [rsi+3C],xmm5
+AirBar:set_AirTimeValue+26: 48 8B CE                       - mov rcx,rsi
+AirBar:set_AirTimeValue+29: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+AirBar:set_AirTimeValue+2e: 49 BB 43 70 4F 43 0D 02 00 00  - mov r11,0000020D434F7043
+AirBar:set_AirTimeValue+38: 41 FF D3                       - call r11
+AirBar:set_AirTimeValue+3b: 48 8B 75 F8                    - mov rsi,[rbp-08]
+AirBar:set_AirTimeValue+3f: 48 8D 65 00                    - lea rsp,[rbp+00]
+AirBar:set_AirTimeValue+43: 5D                             - pop rbp
+AirBar:set_AirTimeValue+44: C3                             - ret 
+20D434F7025: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>224</ID>
+      <Description>"Inf Essence (999)"</Description>
+      <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>
+
+define(address,UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+141 )
+define(bytes,83 38 00 89 48 38)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+141 )
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  cmp dword ptr [rax],00
+  mov ecx,#999
+  mov [rax+38],ecx
+  jmp return
+
+address:
+  jmp newmem
+  nop
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // cmp dword ptr [rax],00
+  // mov [rax+38],ecx
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+141
+
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+115: 74 0C                          - je UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+123
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+117: 49 63 87 08 01 00 00           - movsxd  rax,dword ptr [r15+00000108]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+11e: 83 F8 FF                       - cmp eax,-01
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+121: 75 24                          - jne UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+147
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+123: 48 B8 A0 8E 44 0C FC 01 00 00  - mov rax,000001FC0C448EA0
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+12d: 48 8B 00                       - mov rax,[rax]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+130: 48 8B C8                       - mov rcx,rax
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+133: 83 39 00                       - cmp dword ptr [rcx],00
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+136: 48 8B 40 48                    - mov rax,[rax+48]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+13a: 49 63 8F 0C 01 00 00           - movsxd  rcx,dword ptr [r15+0000010C]
+// ---------- INJECTING HERE ----------
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+141: 83 38 00                       - cmp dword ptr [rax],00
+// ---------- DONE INJECTING  ----------
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+144: 89 48 38                       - mov [rax+38],ecx
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+147: 48 B8 A0 8E 44 0C FC 01 00 00  - mov rax,000001FC0C448EA0
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+151: 48 8B 00                       - mov rax,[rax]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+154: 48 8B C8                       - mov rcx,rax
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+157: 83 38 00                       - cmp dword ptr [rax],00
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+15a: 48 8D 6D 00                    - lea rbp,[rbp+00]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+15e: 49 BB BB 66 0A F0 FC 01 00 00  - mov r11,000001FCF00A66BB
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+168: 41 FF D3                       - call r11
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+16b: 49 8B 47 38                    - mov rax,[r15+38]
+UpgradeScreen+&lt;SaveUpgrades&gt;d__62:MoveNext+16f: 48 8B C8                       - mov rcx,rax
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>225</ID>
+          <Description>"Inf Essence 2"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Ailuri.exe
+  Version: 
+  Date   : 2025-02-08
+  Author : LIOBOSS
+
+  This script does blah blah blah
+}
+
+define(address,GameData:Save+125 )
+define(bytes,49 63 57 38 48 8B CF)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,GameData:Save+125 )
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov [r15+38],#999
+  movsxd  rdx,dword ptr [r15+38]
+  mov rcx,rdi
+  jmp return
+
+address:
+  jmp newmem
+  nop 2
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // movsxd  rdx,dword ptr [r15+38]
+  // mov rcx,rdi
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameData:Save+125
+
+GameData:Save+fe: 49 BB 1F 5F CA 4B FB 01 00 00  - mov r11,000001FB4BCA5F1F
+GameData:Save+108: 41 FF D3                       - call r11
+GameData:Save+10b: EB 18                          - jmp GameData:Save+125
+GameData:Save+10d: 48 89 65 C0                    - mov [rbp-40],rsp
+GameData:Save+111: 48 83 EC 20                    - sub rsp,20
+GameData:Save+115: 48 8B C5                       - mov rax,rbp
+GameData:Save+118: 48 83 C0 A8                    - add rax,-58
+GameData:Save+11c: 48 89 45 98                    - mov [rbp-68],rax
+GameData:Save+120: 48 8B 65 C0                    - mov rsp,[rbp-40]
+GameData:Save+124: C3                             - ret 
+// ---------- INJECTING HERE ----------
+GameData:Save+125: 49 63 57 38                    - movsxd  rdx,dword ptr [r15+38]
+// ---------- DONE INJECTING  ----------
+GameData:Save+129: 48 8B CF                       - mov rcx,rdi
+GameData:Save+12c: 48 8B 07                       - mov rax,[rdi]
+GameData:Save+12f: FF 90 A0 00 00 00              - call qword ptr [rax+000000A0]
+GameData:Save+135: 49 63 57 40                    - movsxd  rdx,dword ptr [r15+40]
+GameData:Save+139: 48 8B CF                       - mov rcx,rdi
+GameData:Save+13c: 48 8B 07                       - mov rax,[rdi]
+GameData:Save+13f: FF 90 A0 00 00 00              - call qword ptr [rax+000000A0]
+GameData:Save+145: 49 63 57 44                    - movsxd  rdx,dword ptr [r15+44]
+GameData:Save+149: 48 8B CF                       - mov rcx,rdi
+GameData:Save+14c: 48 8B 07                       - mov rax,[rdi]
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>185</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>13</ID>
+      <Description>"MANA"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF8000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"m_manaCap"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>50</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"m_currentMana"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>54</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>16</ID>
+          <Description>"m_trueCurrentMana"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>58</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>17</ID>
+          <Description>"m_permanentUI"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>68</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"m_blackValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>6C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>19</ID>
+          <Description>"m_redValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>70</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>20</ID>
+          <Description>"ActiveManaBar"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+50</Address>
+          <Offsets>
+            <Offset>74</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>21</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>22</ID>
+      <Description>"STAMINA"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>FF80FF</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>23</ID>
+          <Description>"m_staminaValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>70</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"m_MaxStamina"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>74</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>44</ID>
+          <Description>"m_trueStaminaValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>F4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>34</ID>
+          <Description>"m_trueMaxStamina"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>D0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>25</ID>
+          <Description>"m_basicImmunity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>AC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>26</ID>
+          <Description>"m_overTimeDecay"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>B0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>27</ID>
+          <Description>"m_timeOfDecay"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>B4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>28</ID>
+          <Description>"m_timer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>B8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>29</ID>
+          <Description>"m_starvationTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>BC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>30</ID>
+          <Description>"m_starveTimer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>C0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>31</ID>
+          <Description>"m_starvePercentage"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>C4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"m_starveDamage"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>C8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>35</ID>
+          <Description>"MaxOverShield"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>D4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>36</ID>
+          <Description>"m_ignoreKnockback"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>D8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>37</ID>
+          <Description>"m_decayTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>DC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>38</ID>
+          <Description>"m_decayAmount"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>E0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>39</ID>
+          <Description>"m_overhealDeacyTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>E4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>40</ID>
+          <Description>"m_overhealDecay"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>E8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>41</ID>
+          <Description>"m_hurtPoint"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>EC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>45</ID>
+          <Description>"m_overTimeDamage"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>F8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>46</ID>
+          <Description>"m_timeDecay"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>F9</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>47</ID>
+          <Description>"m_invincibilityTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>FC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>49</ID>
+          <Description>"m_permanentUI"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>10C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>51</ID>
+          <Description>"m_blueValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>110</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>52</ID>
+          <Description>"m_redValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>114</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>53</ID>
+          <Description>"m_blackValue"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>118</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>54</ID>
+          <Description>"ManaHealAmount"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[movman]+70</Address>
+          <Offsets>
+            <Offset>11C</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>63</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"AIR"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>8080FF</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>5</ID>
+          <Description>"airTimer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+48</Address>
+          <Offsets>
+            <Offset>3C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"MaxAirTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[movman]+48</Address>
+          <Offsets>
+            <Offset>40</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>8</ID>
+          <Description>"AirBarActive"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0: No / Off / Disabled
+1: Yes / On / Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[movman]+48</Address>
+          <Offsets>
+            <Offset>45</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>160</ID>
+      <Description>"ATTACKS"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>0000FF</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>234</ID>
+          <Description>"Set damage and cooldown for each attack move unlocked then freeze for One Hit Kill"</Description>
+          <LastState Value="" RealAddress="00000000"/>
+          <Color>FF8000</Color>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>161</ID>
+          <Description>"attackDamage 1"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>166</ID>
+          <Description>"attackCooldown 1"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>191</ID>
+          <Description>"attackDamage 2"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>192</ID>
+          <Description>"attackCooldown 2"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>193</ID>
+          <Description>"attackDamage 3"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>194</ID>
+          <Description>"attackCooldown 3"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>30</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>195</ID>
+          <Description>"attackDamage 4"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>38</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>196</ID>
+          <Description>"attackCooldown 4"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>38</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>197</ID>
+          <Description>"attackDamage 5"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>40</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>198</ID>
+          <Description>"attackCooldown 5"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>40</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>199</ID>
+          <Description>"attackDamage 6"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>48</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>200</ID>
+          <Description>"attackCooldown 6"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>48</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>207</ID>
+          <Description>"attackDamage 7"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>50</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>208</ID>
+          <Description>"attackCooldown 7"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>50</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>205</ID>
+          <Description>"attackDamage 8"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>58</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>206</ID>
+          <Description>"attackCooldown 8"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>58</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>203</ID>
+          <Description>"attackDamage 9"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>60</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>204</ID>
+          <Description>"attackCooldown 9"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>60</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>201</ID>
+          <Description>"attackDamage 10"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>68</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>202</ID>
+          <Description>"attackCooldown 10"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>[bmovmt]+90</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>68</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>159</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>64</ID>
+      <Description>"MOVEMENT"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>008000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>65</ID>
+          <Description>"gravity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>D0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>66</ID>
+          <Description>"maxVelocity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>D4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>67</ID>
+          <Description>"m_dashMultiplier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>E0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>68</ID>
+          <Description>"m_runMultiplier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>E4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>70</ID>
+          <Description>"canManaHeal"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>FC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>71</ID>
+          <Description>"m_slowSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>134</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>72</ID>
+          <Description>"baseSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>208</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>73</ID>
+          <Description>"m_originalBaseSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>214</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>74</ID>
+          <Description>"m_baseSpeedModifier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>218</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>75</ID>
+          <Description>"m_verticalDashSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>224</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>76</ID>
+          <Description>"m_horizontalDashSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>228</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>77</ID>
+          <Description>"m_groundDashSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>22C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>78</ID>
+          <Description>"dashEnergy"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>230</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>79</ID>
+          <Description>"dashTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>234</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>80</ID>
+          <Description>"dashTimer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>238</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>81</ID>
+          <Description>"dashCooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>23C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>82</ID>
+          <Description>"m_currentDashCooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>240</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>83</ID>
+          <Description>"m_dashDelay"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>248</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"m_dashDelayTimer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>24C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>85</ID>
+          <Description>"m_delayDash"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>250</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87</ID>
+          <Description>"m_dashSlingshotMultiplier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>264</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>88</ID>
+          <Description>"m_upgradeDashSpeedModifier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>268</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>89</ID>
+          <Description>"m_upgradeDashDurationModifier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>26C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>90</ID>
+          <Description>"m_dashSpeedModifier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>270</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>91</ID>
+          <Description>"m_dashDurationModifier"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>274</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>92</ID>
+          <Description>"m_resetDashModifiers"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>278</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>93</ID>
+          <Description>"m_slingShotEnabled"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>279</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>94</ID>
+          <Description>"m_inputDashSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>260</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>95</ID>
+          <Description>"m_dashAOEEnabled"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>27A</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>96</ID>
+          <Description>"m_falseDashTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>27C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>97</ID>
+          <Description>"m_isForceDashing"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>280</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>98</ID>
+          <Description>"m_forceDashCooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>284</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>100</ID>
+          <Description>"m_forceDashDirection"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>28C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>103</ID>
+          <Description>"m_parryCooldown"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>29C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>105</ID>
+          <Description>"m_perfectParryTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2A4</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>106</ID>
+          <Description>"m_perfectParryDamage"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2A8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>107</ID>
+          <Description>"m_perfectParryInvulnerabilityTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2AC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>113</ID>
+          <Description>"m_damageToReflect"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2BC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>114</ID>
+          <Description>"m_parryRegenPercent"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2C0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>122</ID>
+          <Description>"&lt;AllowLookup&gt;k__BackingField"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2DD</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>128</ID>
+          <Description>"jumpCounter"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>318</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>117</ID>
+          <Description>"timeToJumpHeight"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2CC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>116</ID>
+          <Description>"jumpHeight"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>2C8</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>129</ID>
+          <Description>"&lt;TemporaryJumpPower&gt;k__BackingField"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>31C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>130</ID>
+          <Description>"m_jumpGraceTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>320</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>131</ID>
+          <Description>"m_jumpStrength"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>324</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>132</ID>
+          <Description>"m_airGrappleJumpStrength"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>328</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>133</ID>
+          <Description>"m_fallToFreefallTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>330</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>134</ID>
+          <Description>"m_baseFallDamage"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>338</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>140</ID>
+          <Description>"runSpeed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>360</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>141</ID>
+          <Description>"m_fallTime"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>364</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>142</ID>
+          <Description>"m_fallTimer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>368</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>143</ID>
+          <Description>"BlockFallDamage"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>36C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>144</ID>
+          <Description>"m_fallDamagePerSecond"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>370</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>145</ID>
+          <Description>"m_autoClimb"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>374</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>146</ID>
+          <Description>"m_isClimbWallActive"</Description>
+          <DropDownListLink>m_wallSlideActive</DropDownListLink>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>376</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>147</ID>
+          <Description>"m_jumpOffPower"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>394</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>148</ID>
+          <Description>"m_wallSlideActive"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0: No / Off / Disabled
+1: Yes / On / Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>398</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>150</ID>
+          <Description>"m_wallSlideGravity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>39C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>151</ID>
+          <Description>"m_defaultGravity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>bmovmt</Address>
+          <Offsets>
+            <Offset>3B0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

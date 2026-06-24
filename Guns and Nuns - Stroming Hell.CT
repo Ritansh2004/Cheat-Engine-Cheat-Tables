@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>35</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Guns and Nuns - Stroming Hell.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"HealthManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Guns and Nuns - Stroming Hell.exe
+  Version: 
+  Date   : 2026-04-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+450C50)
+define(bytes,40 53 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+450C50)
+
+label(code)
+label(return)
+
+newmem:
+mov [healthmanager_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,50
+  jmp return
+
+healthmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(healthmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(healthmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: HealthManager.Update
+
+GameAssembly.dll+450C2B: 48 8B D0              - mov rdx,rax
+GameAssembly.dll+450C2E: 48 8B CF              - mov rcx,rdi
+GameAssembly.dll+450C31: 4D 8B 81 60 05 00 00  - mov r8,[r9+00000560]
+GameAssembly.dll+450C38: 48 8B 5C 24 30        - mov rbx,[rsp+30]
+GameAssembly.dll+450C3D: 48 83 C4 20           - add rsp,20
+GameAssembly.dll+450C41: 5F                    - pop rdi
+GameAssembly.dll+450C42: 49 FF A1 58 05 00 00  - jmp qword ptr [r9+00000558]
+GameAssembly.dll+450C49: E8 42 F6 F3 FF        - call GameAssembly.BrotliDecoderIsFinished+5A00
+GameAssembly.dll+450C4E: CC                    - int 3 
+GameAssembly.dll+450C4F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+HealthManager.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+450C52: 48 83 EC 50           - sub rsp,50
+GameAssembly.dll+450C56: 80 3D AD 02 C5 02 00  - cmp byte ptr [GameAssembly.dll+30A0F0A],00
+GameAssembly.dll+450C5D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+450C60: 0F 29 74 24 40        - movaps [rsp+40],xmm6
+GameAssembly.dll+450C65: 0F 29 7C 24 30        - movaps [rsp+30],xmm7
+GameAssembly.dll+450C6A: 75 1F                 - jne GameAssembly.dll+450C8B
+GameAssembly.dll+450C6C: 48 8D 0D D5 68 A8 02  - lea rcx,[GameAssembly.dll+2ED7548]
+GameAssembly.dll+450C73: E8 A8 F3 F3 FF        - call GameAssembly.BrotliDecoderIsFinished+5790
+GameAssembly.dll+450C78: 48 8D 0D 39 2B A7 02  - lea rcx,[GameAssembly.dll+2EC37B8]
+GameAssembly.dll+450C7F: E8 9C F3 F3 FF        - call GameAssembly.BrotliDecoderIsFinished+5790
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001429A0CB660" RealAddress="7FF9E6870011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>healthmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"cacheDMG"</Description>
+              <LastState Value="0" RealAddress="1429A0CB680"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthmanager_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"CrazyDelay"</Description>
+              <LastState Value="5" RealAddress="1429A0CB6B8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[healthmanager_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"CrazyTimer"</Description>
+              <LastState Value="3.916437387" RealAddress="1429A0CB6BC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[healthmanager_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"HealthRegenAmount"</Description>
+              <LastState Value="0" RealAddress="1429A0CB6E4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthmanager_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"ShieldRegenAmount"</Description>
+              <LastState Value="0" RealAddress="1429A0CB6E8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthmanager_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"RegenCooldown"</Description>
+              <LastState Value="0.25" RealAddress="1429A0CB6EC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[healthmanager_ptr]+8C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"Health"</Description>
+              <LastState Value="150" RealAddress="1429A0CB6FC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthmanager_ptr]+9C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"HealthRegenTimer"</Description>
+              <LastState Value="0.04998619854" RealAddress="1429A0CB700"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[healthmanager_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"Shield"</Description>
+              <LastState Value="50" RealAddress="1429A0CB704"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[healthmanager_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"isDead"</Description>
+              <LastState Value="0" RealAddress="1429A0CB708"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[healthmanager_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"GameOverCheck"</Description>
+              <LastState Value="0" RealAddress="1429A0CB738"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[healthmanager_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"damageCooldown"</Description>
+              <LastState Value="0" RealAddress="1429A0CB75C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[healthmanager_ptr]+FC</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"TimerDisplay"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Guns and Nuns - Stroming Hell.exe
+  Version: 
+  Date   : 2026-04-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+46F460)
+define(bytes,40 53 48 83 EC 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+46F460)
+
+label(code)
+label(return)
+
+newmem:
+mov [timerdisplay_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,20
+  jmp return
+
+timerdisplay_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(timerdisplay_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,20
+
+dealloc(newmem)
+unregistersymbol(timerdisplay_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: TimerDisplay.Update
+
+GameAssembly.dll+46F452: 5B                    - pop rbx
+GameAssembly.dll+46F453: C3                    - ret 
+GameAssembly.dll+46F454: E8 37 0E F2 FF        - call GameAssembly.BrotliDecoderIsFinished+5A00
+GameAssembly.dll+46F459: CC                    - int 3 
+GameAssembly.dll+46F45A: CC                    - int 3 
+GameAssembly.dll+46F45B: CC                    - int 3 
+GameAssembly.dll+46F45C: CC                    - int 3 
+GameAssembly.dll+46F45D: CC                    - int 3 
+GameAssembly.dll+46F45E: CC                    - int 3 
+GameAssembly.dll+46F45F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+TimerDisplay.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+46F462: 48 83 EC 20           - sub rsp,20
+GameAssembly.dll+46F466: 80 3D 33 1B C3 02 00  - cmp byte ptr [GameAssembly.dll+30A0FA0],00
+GameAssembly.dll+46F46D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+46F470: 75 1F                 - jne GameAssembly.dll+46F491
+GameAssembly.dll+46F472: 48 8D 0D CF 80 A6 02  - lea rcx,[GameAssembly.dll+2ED7548]
+GameAssembly.dll+46F479: E8 A2 0B F2 FF        - call GameAssembly.BrotliDecoderIsFinished+5790
+GameAssembly.dll+46F47E: 48 8D 0D 33 43 A5 02  - lea rcx,[GameAssembly.dll+2EC37B8]
+GameAssembly.dll+46F485: E8 96 0B F2 FF        - call GameAssembly.BrotliDecoderIsFinished+5790
+GameAssembly.dll+46F48A: C6 05 0F 1B C3 02 01  - mov byte ptr [GameAssembly.dll+30A0FA0],01
+GameAssembly.dll+46F491: 48 8B 05 B0 80 A6 02  - mov rax,[GameAssembly.dll+2ED7548]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000142C2AD5000" RealAddress="7FF9E6860011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>timerdisplay_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"timeRemaining"</Description>
+              <LastState Value="100" RealAddress="142C2AD5028"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[timerdisplay_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"FinalTimeAttackScore"</Description>
+              <LastState Value="0" RealAddress="142C2AD5040"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timerdisplay_ptr]+40</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>19</ID>
+          <Description>"ScoreManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Guns and Nuns - Stroming Hell.exe
+  Version: 
+  Date   : 2026-04-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+4575E0)
+define(bytes,40 53 48 83 EC 40)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+4575E0)
+
+label(code)
+label(return)
+
+newmem:
+mov [scoremanager_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,40
+  jmp return
+
+scoremanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(scoremanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,40
+
+dealloc(newmem)
+unregistersymbol(scoremanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ScoreManager.Update
+
+GameAssembly.dll+4575D6: CC                    - int 3 
+GameAssembly.dll+4575D7: CC                    - int 3 
+GameAssembly.dll+4575D8: CC                    - int 3 
+GameAssembly.dll+4575D9: CC                    - int 3 
+GameAssembly.dll+4575DA: CC                    - int 3 
+GameAssembly.dll+4575DB: CC                    - int 3 
+GameAssembly.dll+4575DC: CC                    - int 3 
+GameAssembly.dll+4575DD: CC                    - int 3 
+GameAssembly.dll+4575DE: CC                    - int 3 
+GameAssembly.dll+4575DF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+ScoreManager.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+4575E2: 48 83 EC 40           - sub rsp,40
+GameAssembly.dll+4575E6: 80 3D 30 99 C4 02 00  - cmp byte ptr [GameAssembly.dll+30A0F1D],00
+GameAssembly.dll+4575ED: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+4575F0: 75 13                 - jne GameAssembly.dll+457605
+GameAssembly.dll+4575F2: 48 8D 0D C7 9C A5 02  - lea rcx,[GameAssembly.dll+2EB12C0]
+GameAssembly.dll+4575F9: E8 22 8A F3 FF        - call GameAssembly.BrotliDecoderIsFinished+5790
+GameAssembly.dll+4575FE: C6 05 18 99 C4 02 01  - mov byte ptr [GameAssembly.dll+30A0F1D],01
+GameAssembly.dll+457605: 48 8B 05 B4 9C A5 02  - mov rax,[GameAssembly.dll+2EB12C0]
+GameAssembly.dll+45760C: 48 89 7C 24 50        - mov [rsp+50],rdi
+GameAssembly.dll+457611: 0F 29 74 24 30        - movaps [rsp+30],xmm6
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000142C2C83AA0" RealAddress="7FF9E6850011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>scoremanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"currentStartTier"</Description>
+              <LastState Value="0" RealAddress="142C2C83AD0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"CurrentScore"</Description>
+              <LastState Value="0" RealAddress="142C2C83AD4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"FinalTimeAttackScore"</Description>
+              <LastState Value="0" RealAddress="142C2C83AD8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[scoremanager_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"CurrentComboChain"</Description>
+              <LastState Value="0" RealAddress="142C2C83ADC"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"ComboTimer"</Description>
+              <LastState Value="99" Activated="1" RealAddress="142C2C83AE0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[scoremanager_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"isComboGoing"</Description>
+              <LastState Value="1" Activated="1" RealAddress="142C2C83AF0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[scoremanager_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"isHolyTime"</Description>
+              <LastState Value="1" Activated="1" RealAddress="142C2C83B58"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[scoremanager_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"HolyCounter"</Description>
+              <LastState Value="0" RealAddress="142C2C83B5C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"HolyTimer"</Description>
+              <LastState Value="99" Activated="1" RealAddress="142C2C83B60"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[scoremanager_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"gameFinsih"</Description>
+              <LastState Value="0" RealAddress="142C2C83B64"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[scoremanager_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"ScoreAudit"</Description>
+              <LastState Value="0" RealAddress="142C2C83B68"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"ScoreAuditRam"</Description>
+              <LastState Value="0" RealAddress="142C2C83B6C"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"secretT_timer"</Description>
+              <LastState Value="0.08346866071" RealAddress="142C2C83BA0"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[scoremanager_ptr]+100</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"Debug"</Description>
+              <LastState Value="4" RealAddress="142C2C83BA4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[scoremanager_ptr]+104</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>36</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>37</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Guns and Nuns - Stroming Hell - v1.0.2 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

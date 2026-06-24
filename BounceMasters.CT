@@ -1,0 +1,2209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>226</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "BounceMasters.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"FlyingCharacter"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : BounceMasters.exe
+  Version:
+  Date   : 2026-04-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+240F000)
+define(bytes,40 57 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+240F000)
+
+label(code)
+label(return)
+
+newmem:
+mov [flyingcharacter_ptr],rcx
+
+code:
+  push rdi
+  sub rsp,30
+  jmp return
+
+flyingcharacter_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(flyingcharacter_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rdi
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(flyingcharacter_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FlyingCharacter.UpdateFlyingCharacter
+
+GameAssembly.dll+240EFF6: CC                    - int 3
+GameAssembly.dll+240EFF7: CC                    - int 3
+GameAssembly.dll+240EFF8: CC                    - int 3
+GameAssembly.dll+240EFF9: CC                    - int 3
+GameAssembly.dll+240EFFA: CC                    - int 3
+GameAssembly.dll+240EFFB: CC                    - int 3
+GameAssembly.dll+240EFFC: CC                    - int 3
+GameAssembly.dll+240EFFD: CC                    - int 3
+GameAssembly.dll+240EFFE: CC                    - int 3
+GameAssembly.dll+240EFFF: CC                    - int 3
+// ---------- INJECTING HERE ----------
+FlyingCharacter.UpdateFlyingCharacter: 40 57                 - push rdi
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+240F002: 48 83 EC 30           - sub rsp,30
+GameAssembly.dll+240F006: 80 3D 01 DE CB 01 00  - cmp byte ptr [GameAssembly.dll+40CCE0E],00
+GameAssembly.dll+240F00D: 48 8B F9              - mov rdi,rcx
+GameAssembly.dll+240F010: 0F 29 74 24 20        - movaps [rsp+20],xmm6
+GameAssembly.dll+240F015: 0F 28 F1              - movaps xmm6,xmm1
+GameAssembly.dll+240F018: 75 1F                 - jne GameAssembly.dll+240F039
+GameAssembly.dll+240F01A: 48 8D 0D 97 5D A3 01  - lea rcx,[GameAssembly.dll+3E44DB8]
+GameAssembly.dll+240F021: E8 0A 9C EF FD        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+240F026: 48 8D 0D C3 A4 9E 01  - lea rcx,[GameAssembly.dll+3DF94F0]
+GameAssembly.dll+240F02D: E8 FE 9B EF FD        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>230</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>flyingcharacter_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>233</ID>
+              <Description>"levelOfMaxVelocityUpgradeForAdditionTrailEffectActivation"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>234</ID>
+              <Description>"jumpUpDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+90</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>235</ID>
+              <Description>"jumpUpOffset"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>236</ID>
+              <Description>"jumpDownDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>237</ID>
+              <Description>"minYVelocityForSpecialAnimation"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>238</ID>
+              <Description>"gravityAccelerationUpMoving"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>239</ID>
+              <Description>"gravityAccelerationDownMoving"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>240</ID>
+              <Description>"gravityCosmosAccelerationUpMoving"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>241</ID>
+              <Description>"gravityCosmosAccelerationDownMoving"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>242</ID>
+              <Description>"minStickAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>243</ID>
+              <Description>"stickShakeDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>244</ID>
+              <Description>"stickShakeRadius"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>245</ID>
+              <Description>"xVelocityForDeath"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>246</ID>
+              <Description>"deathSlidingDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>247</ID>
+              <Description>"deathSlidingVibration"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>248</ID>
+              <Description>"deathSlidingFartMaxCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+108</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>249</ID>
+              <Description>"deathSwimmingDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>250</ID>
+              <Description>"xOffsetBeforeDescentFromFlagMario"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>251</ID>
+              <Description>"minShadowAlpha"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+168</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>252</ID>
+              <Description>"minShadowHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+16C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>253</ID>
+              <Description>"maxShadowAlpha"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+17C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>254</ID>
+              <Description>"maxShadowHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+180</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>255</ID>
+              <Description>"shadowYPosition"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+184</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>256</ID>
+              <Description>"fieryFlyingCharacterMinSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+1B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>257</ID>
+              <Description>"buritoBisonAbilityStopedTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+1C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>258</ID>
+              <Description>"heightToStartDragging"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+1C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>259</ID>
+              <Description>"xVelocityDraggingForCoefficient"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+1C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>260</ID>
+              <Description>"currentFlyingCharacterSkinType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+210</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>261</ID>
+              <Description>"isFlipped"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+220</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>262</ID>
+              <Description>"currentFlyingCharacterState"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+224</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>263</ID>
+              <Description>"isJumpDown"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+230</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>264</ID>
+              <Description>"currentJumpDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+24C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>265</ID>
+              <Description>"totalJumpDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+250</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>266</ID>
+              <Description>"isAbilityAvailable"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+274</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>267</ID>
+              <Description>"isNeedRecalculatePredictions"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+280</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>268</ID>
+              <Description>"currentDeathSlidingDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+290</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>269</ID>
+              <Description>"currentDeathSwimmingDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>270</ID>
+              <Description>"timeBeforeNextGroundCollision"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>271</ID>
+              <Description>"isYMoveFreeze"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+2A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>272</ID>
+              <Description>"currentYVelocityChangeDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>273</ID>
+              <Description>"totalYVelocityChangeDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>274</ID>
+              <Description>"startYVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>275</ID>
+              <Description>"finishYVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>276</ID>
+              <Description>"swimmingXVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>277</ID>
+              <Description>"swimmingCurrentDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>278</ID>
+              <Description>"swimmingTotalDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>279</ID>
+              <Description>"swimmingDepth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>280</ID>
+              <Description>"canScaleAfterSwimming"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+2E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>281</ID>
+              <Description>"afterSwimmingScalingType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+2EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>282</ID>
+              <Description>"rollingXVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+2F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>283</ID>
+              <Description>"rollingRaycastMask"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+2FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>284</ID>
+              <Description>"rollingFallingHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+300</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>285</ID>
+              <Description>"rollingFallingVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+304</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>286</ID>
+              <Description>"isRollingFallingFinished"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+308</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>287</ID>
+              <Description>"deathFallingGravityAcceleration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+314</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>288</ID>
+              <Description>"defaultRaycastLayerMask"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+330</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>289</ID>
+              <Description>"characterColliderDirection"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+35C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>290</ID>
+              <Description>"targetMaxXVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+380</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>291</ID>
+              <Description>"isMaxVelocityCrossed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+384</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>292</ID>
+              <Description>"currentMaxVelocityTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+388</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>293</ID>
+              <Description>"startMaxXVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+38C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>294</ID>
+              <Description>"totalMaxVelocityDecreaseTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+390</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>295</ID>
+              <Description>"lastCollideXVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+394</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>296</ID>
+              <Description>"isFlyingCharacterFiery"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+3B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>297</ID>
+              <Description>"isShadowVisible"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+3D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>298</ID>
+              <Description>"isDeathSlidingEffectActive"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+3D1</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>299</ID>
+              <Description>"deathType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+438</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>300</ID>
+              <Description>"isCurrentFlyingCharacterStateDeathSliding"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+43C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>301</ID>
+              <Description>"currentDeathSlidingFartMaxCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+448</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>302</ID>
+              <Description>"wasAbilityUsed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+44C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>303</ID>
+              <Description>"canDescentsFromFlag"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+44D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>304</ID>
+              <Description>"flagMarioDescentDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+45C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>305</ID>
+              <Description>"currentBuritoBisonAbilityActiveTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+4A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>306</ID>
+              <Description>"currentAbilityFlyingCharacterState"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[flyingcharacter_ptr]+4A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>307</ID>
+              <Description>"maxXVelocityToDrag"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+4B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>308</ID>
+              <Description>"startDraggingVelocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+4BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>309</ID>
+              <Description>"_isShieldApplied"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+4C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>310</ID>
+              <Description>"_isSpringApplied"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+4C9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>311</ID>
+              <Description>"_isBombApplied"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+4CA</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>312</ID>
+              <Description>"_isMagnetApplied"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[flyingcharacter_ptr]+4CB</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>313</ID>
+              <Description>"&lt;Angle&gt;"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[flyingcharacter_ptr]+4D8</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>82</ID>
+          <Description>"Level"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : BounceMasters.exe
+  Version:
+  Date   : 2026-04-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+25038A0)
+define(bytes,40 53 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+25038A0)
+
+label(code)
+label(return)
+
+newmem:
+mov [level_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,50
+  jmp return
+
+level_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(level_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(level_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Level.Update
+
+GameAssembly.dll+2503896: CC                    - int 3
+GameAssembly.dll+2503897: CC                    - int 3
+GameAssembly.dll+2503898: CC                    - int 3
+GameAssembly.dll+2503899: CC                    - int 3
+GameAssembly.dll+250389A: CC                    - int 3
+GameAssembly.dll+250389B: CC                    - int 3
+GameAssembly.dll+250389C: CC                    - int 3
+GameAssembly.dll+250389D: CC                    - int 3
+GameAssembly.dll+250389E: CC                    - int 3
+GameAssembly.dll+250389F: CC                    - int 3
+// ---------- INJECTING HERE ----------
+Level.Update: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+25038A2: 48 83 EC 50           - sub rsp,50
+GameAssembly.dll+25038A6: 80 3D D7 9F BC 01 00  - cmp byte ptr [GameAssembly.dll+40CD884],00
+GameAssembly.dll+25038AD: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+25038B0: 75 1F                 - jne GameAssembly.dll+25038D1
+GameAssembly.dll+25038B2: 48 8D 0D DF 98 95 01  - lea rcx,[GameAssembly.dll+3E5D198]
+GameAssembly.dll+25038B9: E8 72 53 E0 FD        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+25038BE: 48 8D 0D BB 5A 95 01  - lea rcx,[GameAssembly.dll+3E59380]
+GameAssembly.dll+25038C5: E8 66 53 E0 FD        - call GameAssembly.il2cpp_get_exception_argument_null+3F0
+GameAssembly.dll+25038CA: C6 05 B3 9F BC 01 01  - mov byte ptr [GameAssembly.dll+40CD884],01
+GameAssembly.dll+25038D1: 80 BB 3C 02 00 00 00  - cmp byte ptr [rbx+0000023C],00
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>231</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>level_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>314</ID>
+              <Description>"gameType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>315</ID>
+              <Description>"_offsetLeaderboardAtStartPosition"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>316</ID>
+              <Description>"showOnlyRecordLeague"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>317</ID>
+              <Description>"minDeadFlyingCharacterDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>318</ID>
+              <Description>"deadFlyingCharactersCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>319</ID>
+              <Description>"killingPiranhasDelay"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>320</ID>
+              <Description>"beatShakeDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+64</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>321</ID>
+              <Description>"beatShakeRadius"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>322</ID>
+              <Description>"oneWhackChance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>323</ID>
+              <Description>"whacksCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>324</ID>
+              <Description>"delayBeforeAutomaticWhack"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>325</ID>
+              <Description>"minPausePopupMatches"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>326</ID>
+              <Description>"minTimeForAutomaticShowingMenuScreen"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>327</ID>
+              <Description>"minHeightForAirBillboard"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>328</ID>
+              <Description>"isFlyingCharacterFlyingDown"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>329</ID>
+              <Description>"currentLevelState"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+128</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>330</ID>
+              <Description>"currentTimeForAutomaticShowingMenuScreen"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>331</ID>
+              <Description>"beatingAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>332</ID>
+              <Description>"_distance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+160</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>333</ID>
+              <Description>"currentDeadCharactersCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+198</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>334</ID>
+              <Description>"countCollisionsBetweenCollisionWithGround"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+1B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>335</ID>
+              <Description>"_skyDiverValue"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+1B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>336</ID>
+              <Description>"_isSkyDiver"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+1B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>337</ID>
+              <Description>"isRecordBroken"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+1B9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>338</ID>
+              <Description>"isOneWhackEnabled"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+1C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>339</ID>
+              <Description>"currentWhacksCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+1CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>340</ID>
+              <Description>"currentDelayBeforeAutomatickWhack"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+1E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>341</ID>
+              <Description>"isWhackEnabled"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+1E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>342</ID>
+              <Description>"currentScoreMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+1E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>343</ID>
+              <Description>"initialCurrentFlyingChatacterXPosition"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+1EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>344</ID>
+              <Description>"previousCurrentFlyingCharacterXPosition"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+1F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>345</ID>
+              <Description>"isBestScoreReached"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+218</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>346</ID>
+              <Description>"currentLeagueLineIndex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+21C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>347</ID>
+              <Description>"timeInGame"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+238</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>348</ID>
+              <Description>"tickTimerEnable"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+23C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>349</ID>
+              <Description>"hitDistance"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+240</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>350</ID>
+              <Description>"_levelFirstFinished"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+258</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>351</ID>
+              <Description>"BoostersBombForce"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[level_ptr]+270</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>352</ID>
+              <Description>"_beated"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+274</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>353</ID>
+              <Description>"&lt;IsAbilityUsed&gt;"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+275</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>354</ID>
+              <Description>"&lt;KickType&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+278</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>355</ID>
+              <Description>"&lt;ComboMax&gt;"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[level_ptr]+290</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>356</ID>
+              <Description>"skipFrame"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[level_ptr]+294</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>126</ID>
+          <Description>"StatisticsManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : BounceMasters.exe
+  Version:
+  Date   : 2026-04-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+253FA50)
+define(bytes,40 53 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+253FA50)
+
+label(code)
+label(return)
+
+newmem:
+mov [statisticsmanager_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,30
+  jmp return
+
+statisticsmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(statisticsmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(statisticsmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: StatisticsManager.Update
+
+GameAssembly.dll+253FA46: C3                       - ret
+GameAssembly.dll+253FA47: CC                       - int 3
+GameAssembly.dll+253FA48: CC                       - int 3
+GameAssembly.dll+253FA49: CC                       - int 3
+GameAssembly.dll+253FA4A: CC                       - int 3
+GameAssembly.dll+253FA4B: CC                       - int 3
+GameAssembly.dll+253FA4C: CC                       - int 3
+GameAssembly.dll+253FA4D: CC                       - int 3
+GameAssembly.dll+253FA4E: CC                       - int 3
+GameAssembly.dll+253FA4F: CC                       - int 3
+// ---------- INJECTING HERE ----------
+StatisticsManager.Update: 40 53                    - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+253FA52: 48 83 EC 30              - sub rsp,30
+GameAssembly.dll+253FA56: 0F 29 74 24 20           - movaps [rsp+20],xmm6
+GameAssembly.dll+253FA5B: 48 8B D9                 - mov rbx,rcx
+GameAssembly.dll+253FA5E: F3 0F 10 B1 8C 00 00 00  - movss xmm6,[rcx+0000008C]
+GameAssembly.dll+253FA66: 33 C9                    - xor ecx,ecx
+GameAssembly.dll+253FA68: E8 B3 1B 7C 00           - call UnityEngine.Time.get_unscaledDeltaTime
+GameAssembly.dll+253FA6D: F3 0F 58 C6              - addss xmm0,xmm6
+GameAssembly.dll+253FA71: 33 C9                    - xor ecx,ecx
+GameAssembly.dll+253FA73: F3 0F 10 B3 94 00 00 00  - movss xmm6,[rbx+00000094]
+GameAssembly.dll+253FA7B: F3 0F 11 83 8C 00 00 00  - movss [rbx+0000008C],xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>232</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>statisticsmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>143</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>357</ID>
+                  <Description>"sessionMatchesFinished"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>358</ID>
+                  <Description>"missInARowCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+64</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>359</ID>
+                  <Description>"lastCollidableType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>360</ID>
+                  <Description>"isApplicationInFocus"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[statisticsmanager_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>361</ID>
+                  <Description>"isNeedSkipDeltaTime"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[statisticsmanager_ptr]+89</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>362</ID>
+                  <Description>"secondsInGameOnCurrentSession"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[statisticsmanager_ptr]+8C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>363</ID>
+                  <Description>"minutesInGame"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[statisticsmanager_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>364</ID>
+                  <Description>"playtimeSecondsSinceLastCheck"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[statisticsmanager_ptr]+94</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>365</ID>
+                  <Description>"playtimeSeconds"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[statisticsmanager_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>366</ID>
+                  <Description>"leaderboardWorldPosition"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+9C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>367</ID>
+                  <Description>"isAbTestsInitialized"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[statisticsmanager_ptr]+B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>368</ID>
+                  <Description>"&lt;CoinsGetOnLevel&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>369</ID>
+                  <Description>"&lt;ComboRewardOnLevel&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>370</ID>
+                  <Description>"&lt;IsCrossPromoShowAvailable&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[statisticsmanager_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>371</ID>
+                  <Description>"&lt;CanUseFakeFlyingCharacter&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[statisticsmanager_ptr]+D1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>372</ID>
+                  <Description>"_chests"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>373</ID>
+                  <Description>"_spentChests"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>374</ID>
+                  <Description>"&lt;CurrentTimeState&gt;"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[statisticsmanager_ptr]+DC</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>144</ID>
+              <Description>"cachedMissionsManager"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>229</ID>
+                  <Description>"Value Show After Play One Time"</Description>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>0000FF</Color>
+                  <GroupHeader>1</GroupHeader>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>375</ID>
+                      <Description>"minMatchesForDailyMissions"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>376</ID>
+                      <Description>"missionsBonusRewardMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>377</ID>
+                      <Description>"_rewardChestCount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>378</ID>
+                      <Description>"missionNotificationDeltaMinutes"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>379</ID>
+                      <Description>"generateIfComplete"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>380</ID>
+                      <Description>"isDebugGenerationMode"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>91</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>381</ID>
+                      <Description>"_timerInterval"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>382</ID>
+                      <Description>"_missionsBonusRewardMultiplier"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>383</ID>
+                      <Description>"_maxActiveMissionsCount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"_currentMissions"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>384</ID>
+                      <Description>"_size"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>385</ID>
+                      <Description>"Count"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[statisticsmanager_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>156</ID>
+                      <Description>"[0]MissionBase"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>386</ID>
+                          <Description>"missionNameKey"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>387</ID>
+                          <Description>"neededValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>388</ID>
+                          <Description>"missionType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>389</ID>
+                          <Description>"missionRewardType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>390</ID>
+                          <Description>"rewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>34</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>391</ID>
+                          <Description>"isOneMatchMission"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>392</ID>
+                          <Description>"missionDifficultyType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>393</ID>
+                          <Description>"_missionProgressState"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>394</ID>
+                          <Description>"_progress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>395</ID>
+                          <Description>"_maxProgress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>396</ID>
+                          <Description>"_cachedRewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>397</ID>
+                          <Description>"neededValueType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>398</ID>
+                          <Description>"neededFixedValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>157</ID>
+                      <Description>"[1]MissionBase"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>399</ID>
+                          <Description>"missionNameKey"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>400</ID>
+                          <Description>"neededValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>401</ID>
+                          <Description>"missionType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>402</ID>
+                          <Description>"missionRewardType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>403</ID>
+                          <Description>"rewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>34</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>404</ID>
+                          <Description>"isOneMatchMission"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>405</ID>
+                          <Description>"missionDifficultyType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>406</ID>
+                          <Description>"_missionProgressState"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>407</ID>
+                          <Description>"_progress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>408</ID>
+                          <Description>"_maxProgress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>409</ID>
+                          <Description>"_cachedRewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>410</ID>
+                          <Description>"neededValueType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>411</ID>
+                          <Description>"neededFixedValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>28</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>158</ID>
+                      <Description>"[2]MissionBase"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>412</ID>
+                          <Description>"missionNameKey"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>413</ID>
+                          <Description>"neededValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>414</ID>
+                          <Description>"missionType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>415</ID>
+                          <Description>"missionRewardType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>416</ID>
+                          <Description>"rewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>34</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>417</ID>
+                          <Description>"isOneMatchMission"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>418</ID>
+                          <Description>"missionDifficultyType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>419</ID>
+                          <Description>"_missionProgressState"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>420</ID>
+                          <Description>"_progress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>421</ID>
+                          <Description>"_maxProgress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>422</ID>
+                          <Description>"_cachedRewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>423</ID>
+                          <Description>"neededValueType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>424</ID>
+                          <Description>"neededFixedValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>30</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>159</ID>
+                      <Description>"[3]MissionBase"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>425</ID>
+                          <Description>"missionNameKey"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>426</ID>
+                          <Description>"neededValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>427</ID>
+                          <Description>"missionType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>428</ID>
+                          <Description>"missionRewardType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>429</ID>
+                          <Description>"rewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>34</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>430</ID>
+                          <Description>"isOneMatchMission"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>431</ID>
+                          <Description>"missionDifficultyType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>432</ID>
+                          <Description>"_missionProgressState"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>433</ID>
+                          <Description>"_progress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>434</ID>
+                          <Description>"_maxProgress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>435</ID>
+                          <Description>"_cachedRewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>436</ID>
+                          <Description>"neededValueType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>437</ID>
+                          <Description>"neededFixedValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>38</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>160</ID>
+                      <Description>"[4]MissionBase"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" Activated="1" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>438</ID>
+                          <Description>"missionNameKey"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>48</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>439</ID>
+                          <Description>"neededValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>440</ID>
+                          <Description>"missionType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>2C</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>441</ID>
+                          <Description>"missionRewardType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>442</ID>
+                          <Description>"rewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>34</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>443</ID>
+                          <Description>"isOneMatchMission"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>38</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>444</ID>
+                          <Description>"missionDifficultyType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>445</ID>
+                          <Description>"_missionProgressState"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>446</ID>
+                          <Description>"_progress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>447</ID>
+                          <Description>"_maxProgress"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>448</ID>
+                          <Description>"_cachedRewardValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>449</ID>
+                          <Description>"neededValueType"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>450</ID>
+                          <Description>"neededFixedValue"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[statisticsmanager_ptr]+A0</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>40</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>227</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>228</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Bounce Masters - v2.7.4.272 ^*^*Created By DANGER DASH ^*^*"
+
+</LuaScript>
+</CheatTable>

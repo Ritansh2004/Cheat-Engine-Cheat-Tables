@@ -1,0 +1,3246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>250</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Cursed Words.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>253</ID>
+          <Description>"EncounterController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cursed Words.exe
+  Version: 
+  Date   : 2026-04-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,EncounterController:SubmitWord)
+define(bytes,55 48 8B EC 48 81 EC 30 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,EncounterController:SubmitWord)
+
+label(code)
+label(return)
+
+newmem:
+mov [encountercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000130
+  jmp return
+
+encountercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(encountercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000130
+
+dealloc(newmem)
+unregistersymbol(encountercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: EncounterController:SubmitWord
+
+11A2ED06F0C: 00 00                 - add [rax],al
+11A2ED06F0E: 00 00                 - add [rax],al
+11A2ED06F10: 00 00                 - add [rax],al
+11A2ED06F12: 00 00                 - add [rax],al
+11A2ED06F14: 00 00                 - add [rax],al
+11A2ED06F16: 00 00                 - add [rax],al
+11A2ED06F18: 00 00                 - add [rax],al
+11A2ED06F1A: 00 00                 - add [rax],al
+11A2ED06F1C: 00 00                 - add [rax],al
+11A2ED06F1E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+EncounterController:SubmitWord: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+EncounterController:SubmitWord+1: 48 8B EC              - mov rbp,rsp
+EncounterController:SubmitWord+4: 48 81 EC 30 01 00 00  - sub rsp,00000130
+EncounterController:SubmitWord+b: 48 89 5D D0           - mov [rbp-30],rbx
+EncounterController:SubmitWord+f: 48 89 75 D8           - mov [rbp-28],rsi
+EncounterController:SubmitWord+13: 48 89 7D E0           - mov [rbp-20],rdi
+EncounterController:SubmitWord+17: 4C 89 65 E8           - mov [rbp-18],r12
+EncounterController:SubmitWord+1b: 4C 89 6D F0           - mov [rbp-10],r13
+EncounterController:SubmitWord+1f: 4C 89 7D F8           - mov [rbp-08],r15
+EncounterController:SubmitWord+23: 4C 8B F9              - mov r15,rcx
+EncounterController:SubmitWord+26: 48 89 95 48 FF FF FF  - mov [rbp-000000B8],rdx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>254</ID>
+              <Description>"Value Show/Update When Submit Word"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>255</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>encountercontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>256</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>257</ID>
+                  <Description>"_encounterThreadStage"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>258</ID>
+                  <Description>"_remainingGrids"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>259</ID>
+                  <Description>"_totalGridsPerRound"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>260</ID>
+                  <Description>"_rerollsForEncounter"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>261</ID>
+                  <Description>"_rerollReminderDelay"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>262</ID>
+                  <Description>"_rerollTracker"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>263</ID>
+                  <Description>"TwinkleToesSwapAvailable"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+200</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>264</ID>
+                  <Description>"_awaitingForcedSell"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+201</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>265</ID>
+                  <Description>"_shownChallengeDialogue"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+202</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>266</ID>
+                  <Description>"_enteredWithNoMoney"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+203</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>267</ID>
+                  <Description>"_showLongEnding"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+204</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>268</ID>
+                  <Description>"_piggyBankSavings"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+208</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>277</ID>
+              <Description>"_bossModifiers"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>278</ID>
+                  <Description>"_size"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+150</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>279</ID>
+                  <Description>"Count"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+150</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>280</ID>
+                  <Description>"[0]BossModifier"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>281</ID>
+                      <Description>"Name"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>282</ID>
+                      <Description>"PrefabFileName"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>283</ID>
+                      <Description>"SpriteFileName"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>284</ID>
+                      <Description>"FloorAdjustedModification"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>285</ID>
+                      <Description>"IsCursed"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>286</ID>
+                      <Description>"IsSecretCharacter"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>287</ID>
+                      <Description>"CanBeSummonedByMichael"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>[encountercontroller_ptr]+150</Address>
+                      <Offsets>
+                        <Offset>66</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>269</ID>
+              <Description>"_totalTarget"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>270</ID>
+                  <Description>"Score"</Description>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+198</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>271</ID>
+                  <Description>"IsInfinite"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+198</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>272</ID>
+                  <Description>"IsNegative"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+198</Address>
+                  <Offsets>
+                    <Offset>19</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>273</ID>
+              <Description>"_remainingTarget"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>274</ID>
+                  <Description>"Score"</Description>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[encountercontroller_ptr]+1A0</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>275</ID>
+                  <Description>"IsInfinite"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+1A0</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>276</ID>
+                  <Description>"IsNegative"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[encountercontroller_ptr]+1A0</Address>
+                  <Offsets>
+                    <Offset>19</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"ShopController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cursed Words.exe
+  Version: 
+  Date   : 2026-04-06
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,ShopController:OnAdviceButtonClickedCallback)
+define(bytes,55 48 8B EC 48 81 EC D0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,ShopController:OnAdviceButtonClickedCallback)
+
+label(code)
+label(return)
+
+newmem:
+mov [shopcontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000D0
+  jmp return
+
+shopcontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(shopcontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000D0
+
+dealloc(newmem)
+unregistersymbol(shopcontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ShopController:OnAdviceButtonClickedCallback
+
+UnityEngine.Rendering.Universal.Internal.ColorGradingLutPass+ShaderConstants:.cctor+3c8: 89 08                 - mov [rax],ecx
+UnityEngine.Rendering.Universal.Internal.ColorGradingLutPass+ShaderConstants:.cctor+3ca: 48 8D 65 00           - lea rsp,[rbp+00]
+UnityEngine.Rendering.Universal.Internal.ColorGradingLutPass+ShaderConstants:.cctor+3ce: 5D                    - pop rbp
+UnityEngine.Rendering.Universal.Internal.ColorGradingLutPass+ShaderConstants:.cctor+3cf: C3                    - ret 
+272ADA8EB70: 01 04 02              - add [rdx+rax],eax
+272ADA8EB73: 05 04 03 01 50        - add eax,50010304
+272ADA8EB78: 00 00                 - add [rax],al
+272ADA8EB7A: 00 00                 - add [rax],al
+272ADA8EB7C: 00 00                 - add [rax],al
+272ADA8EB7E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+ShopController:OnAdviceButtonClickedCallback: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+ShopController:OnAdviceButtonClickedCallback+1: 48 8B EC              - mov rbp,rsp
+ShopController:OnAdviceButtonClickedCallback+4: 48 81 EC D0 00 00 00  - sub rsp,000000D0
+ShopController:OnAdviceButtonClickedCallback+b: 48 89 75 F0           - mov [rbp-10],rsi
+ShopController:OnAdviceButtonClickedCallback+f: 4C 89 6D F8           - mov [rbp-08],r13
+ShopController:OnAdviceButtonClickedCallback+13: 48 8B F1              - mov rsi,rcx
+ShopController:OnAdviceButtonClickedCallback+16: 33 C0                 - xor eax,eax
+ShopController:OnAdviceButtonClickedCallback+18: 48 89 45 A0           - mov [rbp-60],rax
+ShopController:OnAdviceButtonClickedCallback+1c: 48 89 45 A8           - mov [rbp-58],rax
+ShopController:OnAdviceButtonClickedCallback+20: 0F B6 86 E1 00 00 00  - movzx eax,byte ptr [rsi+000000E1]
+ShopController:OnAdviceButtonClickedCallback+27: 85 C0                 - test eax,eax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Value Show/Update When Click Advice Button In SHOP"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>shopcontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"_rerollPrice"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"_rerollDeduction"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"_hasUsedAngelInvestment"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[shopcontroller_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"_foilPercentage"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"_freeItemActive"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[shopcontroller_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"_isMegShop"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[shopcontroller_ptr]+E1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"_rerollCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"_randomQuipRerollCost"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"MostRecentHippoAnimationStartTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[shopcontroller_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"_itemsInStock_Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"_stickersInStock"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"[0]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>28</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"[1]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"[2]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>82</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>83</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>84</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"[3]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>85</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>86</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>87</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>88</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>89</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>90</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>91</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>92</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>93</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>94</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>95</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>96</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>97</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>98</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>99</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>100</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>101</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>102</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>103</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>104</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>105</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+90</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"_stampsInStock"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"[0]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>113</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>114</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>115</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>116</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>117</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>118</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>119</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>120</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>121</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>122</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>123</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>124</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>125</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>126</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>127</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>128</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>129</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"[1]ItemInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>130</ID>
+                      <Description>"IsFrozen"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>131</ID>
+                      <Description>"IsFirstDiscount"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>132</ID>
+                      <Description>"IsFree"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>133</ID>
+                      <Description>"DisplayedCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>134</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>135</ID>
+                      <Description>"Name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>136</ID>
+                      <Description>"TimesUpgraded"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>137</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>138</ID>
+                      <Description>"Cost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>139</ID>
+                      <Description>"SellCost"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>140</ID>
+                      <Description>"Discount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>141</ID>
+                      <Description>"IsFoil"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>142</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>143</ID>
+                      <Description>"CostsMoneyToSell"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>96</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>144</ID>
+                      <Description>"IsFood"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>97</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>145</ID>
+                      <Description>"IsAnimal"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>146</ID>
+                      <Description>"WrappedPresentIndex"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>147</ID>
+                      <Description>"IsHumanBoyFavouriteSticker"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>148</ID>
+                      <Description>"IsUnderhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A1</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>149</ID>
+                      <Description>"IsOverhandTarget"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A2</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>150</ID>
+                      <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+98</Address>
+                      <Offsets>
+                        <Offset>A3</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"_tilesInStock"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+A0</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"[0]TileInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>154</ID>
+                      <Description>"Price"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>155</ID>
+                      <Description>"HasBeenBought"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>156</ID>
+                      <Description>"Letter"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>157</ID>
+                      <Description>"MyGlyphType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>158</ID>
+                      <Description>"Number"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>159</ID>
+                      <Description>"CardSuit"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>160</ID>
+                      <Description>"PieceType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>161</ID>
+                      <Description>"IsWhitePiece"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>162</ID>
+                      <Description>"MyTileType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>163</ID>
+                      <Description>"IsEmptyTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>164</ID>
+                      <Description>"WasConsumable"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>165</ID>
+                      <Description>"HasBeenDestroyed"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5D</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>166</ID>
+                      <Description>"IsCrossedOut"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5E</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>167</ID>
+                      <Description>"IsInTheVoid"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5F</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>168</ID>
+                      <Description>"Gone"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>169</ID>
+                      <Description>"IsInverted"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>61</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>170</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>62</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>171</ID>
+                      <Description>"IsNumberGoUpMiddleTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>63</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>172</ID>
+                      <Description>"SafeFromDestruction"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>173</ID>
+                      <Description>"WasGlitchTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>174</ID>
+                      <Description>"AlreadyOnTileRack"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>66</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>175</ID>
+                      <Description>"ValueModifier_Score"</Description>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>176</ID>
+                      <Description>"ValueModifier_IsInfinite"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>177</ID>
+                      <Description>"ValueModifier_IsNegative"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>178</ID>
+                      <Description>"CactusGrowth_Score"</Description>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>179</ID>
+                      <Description>"CactusGrowth_IsInfinite"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>180</ID>
+                      <Description>"CactusGrowth_IsNegative"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"[1]TileInStock"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>181</ID>
+                      <Description>"Price"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>182</ID>
+                      <Description>"HasBeenBought"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>207</ID>
+                      <Description>"Letter"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>183</ID>
+                      <Description>"MyGlyphType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>184</ID>
+                      <Description>"Number"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>185</ID>
+                      <Description>"CardSuit"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>186</ID>
+                      <Description>"PieceType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>187</ID>
+                      <Description>"IsWhitePiece"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>188</ID>
+                      <Description>"MyTileType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>189</ID>
+                      <Description>"IsEmptyTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>190</ID>
+                      <Description>"WasConsumable"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>191</ID>
+                      <Description>"HasBeenDestroyed"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5D</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>192</ID>
+                      <Description>"IsCrossedOut"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5E</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>193</ID>
+                      <Description>"IsInTheVoid"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>5F</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>194</ID>
+                      <Description>"Gone"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>195</ID>
+                      <Description>"IsInverted"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>61</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>196</ID>
+                      <Description>"IsSellingPrevented"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>62</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>197</ID>
+                      <Description>"IsNumberGoUpMiddleTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>63</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>198</ID>
+                      <Description>"SafeFromDestruction"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>199</ID>
+                      <Description>"WasGlitchTile"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>65</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>200</ID>
+                      <Description>"AlreadyOnTileRack"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>66</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>201</ID>
+                      <Description>"ValueModifier_Score"</Description>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>202</ID>
+                      <Description>"ValueModifier_IsInfinite"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>203</ID>
+                      <Description>"ValueModifier_IsNegative"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>204</ID>
+                      <Description>"CactusGrowth_Score"</Description>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>205</ID>
+                      <Description>"CactusGrowth_IsInfinite"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>206</ID>
+                      <Description>"CactusGrowth_IsNegative"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+A0</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>208</ID>
+              <Description>"_player"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"Money"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[shopcontroller_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>210</ID>
+                  <Description>"HasFacedUncursedBoss"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[shopcontroller_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"IsDemo"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[shopcontroller_ptr]+B8</Address>
+                  <Offsets>
+                    <Offset>6D</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>212</ID>
+                  <Description>"CurrentRunProgress"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>213</ID>
+                      <Description>"Ascension"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>214</ID>
+                      <Description>"StartTime"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>215</ID>
+                      <Description>"IsFirstTimeBeatingChallenge"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>216</ID>
+                      <Description>"CurrentNodeType"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>217</ID>
+                      <Description>"CurrentStage"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>218</ID>
+                      <Description>"CactusGrowthLevel"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>219</ID>
+                      <Description>"CurrentRunStatistics"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>220</ID>
+                          <Description>"EndCondition"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>221</ID>
+                          <Description>"TotalCashEarned"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>222</ID>
+                          <Description>"HasSeenSecretBoss"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>223</ID>
+                          <Description>"Timer"</Description>
+                          <VariableType>Float</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>8C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>224</ID>
+                          <Description>"IsSpeedrunMode"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>225</ID>
+                          <Description>"IsFullProfile"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>91</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>226</ID>
+                          <Description>"Language"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>10</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>227</ID>
+                  <Description>"MyCharacter"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>228</ID>
+                      <Description>"_name"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>229</ID>
+                      <Description>"_description"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>230</ID>
+                      <Description>"_artFileName"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>231</ID>
+                      <Description>"MyEmotion"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>232</ID>
+                      <Description>"_isSecret"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[shopcontroller_ptr]+B8</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>233</ID>
+                      <Description>"CharacterItem"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>234</ID>
+                          <Description>"Name"</Description>
+                          <VariableType>String</VariableType>
+                          <Length>999</Length>
+                          <Unicode>1</Unicode>
+                          <CodePage>0</CodePage>
+                          <ZeroTerminate>1</ZeroTerminate>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>14</Offset>
+                            <Offset>10</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>235</ID>
+                          <Description>"TimesUpgraded"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>80</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>236</ID>
+                          <Description>"Rarity"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>84</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>237</ID>
+                          <Description>"Cost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>88</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>238</ID>
+                          <Description>"SellCost"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>8C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>239</ID>
+                          <Description>"Discount"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>90</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>240</ID>
+                          <Description>"IsFoil"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>94</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>241</ID>
+                          <Description>"IsSellingPrevented"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>95</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>242</ID>
+                          <Description>"CostsMoneyToSell"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>96</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>243</ID>
+                          <Description>"IsFood"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>97</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>244</ID>
+                          <Description>"IsAnimal"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>98</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>245</ID>
+                          <Description>"WrappedPresentIndex"</Description>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>9C</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>246</ID>
+                          <Description>"IsHumanBoyFavouriteSticker"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>A0</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>247</ID>
+                          <Description>"IsUnderhandTarget"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>A1</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>248</ID>
+                          <Description>"IsOverhandTarget"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>A2</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>249</ID>
+                          <Description>"IsBlacklistedFromShopRecommendations"</Description>
+                          <VariableType>Byte</VariableType>
+                          <Address>[shopcontroller_ptr]+B8</Address>
+                          <Offsets>
+                            <Offset>A3</Offset>
+                            <Offset>30</Offset>
+                            <Offset>48</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>251</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>252</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Cursed Words: The Word Game That Isn't - v4.0 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

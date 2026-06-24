@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>100</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Boxman.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Timer"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Boxman.exe
+  Version: 
+  Date   : 2026-04-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Timer:Update)
+define(bytes,55 8B EC 57 83 EC 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Timer:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [timer_ptr],ecx
+
+code:
+  push ebp
+  mov ebp,esp
+  push edi
+  sub esp,24
+  jmp return
+
+timer_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registersymbol(timer_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // push edi
+  // sub esp,24
+
+dealloc(newmem)
+unregistersymbol(timer_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Timer:Update
+
+CustomPause:Update+3e: 8B 45 08              - mov eax,[ebp+08]
+CustomPause:Update+41: 89 48 0C              - mov [eax+0C],ecx
+CustomPause:Update+44: C9                    - leave 
+CustomPause:Update+45: C3                    - ret 
+49A6E04E: 00 00                 - add [eax],al
+49A6E050: 68 28 49 08 45        - push 45084928
+49A6E055: E9 A6 20 60 B9        - jmp 03070100
+49A6E05A: 00 00                 - add [eax],al
+49A6E05C: 00 00                 - add [eax],al
+49A6E05E: 00 00                 - add [eax],al
+// ---------- INJECTING HERE ----------
+Timer:Update: 55                    - push ebp
+// ---------- DONE INJECTING  ----------
+Timer:Update+1: 8B EC                 - mov ebp,esp
+Timer:Update+3: 57                    - push edi
+Timer:Update+4: 83 EC 24              - sub esp,24
+Timer:Update+7: 8B 7D 08              - mov edi,[ebp+08]
+Timer:Update+a: C7 04 24 B0 24 9B 54  - mov [esp],549B24B0
+Timer:Update+11: 8B C0                 - mov eax,eax
+Timer:Update+13: E8 28 01 00 00        - call UnityEngine.Input:GetKeyDown
+Timer:Update+18: 85 C0                 - test eax,eax
+Timer:Update+1a: 74 08                 - je Timer:Update+24
+Timer:Update+1c: C6 47 50 00           - mov byte ptr [edi+50],00
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>timer_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"days"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+24</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"hours"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"minutes"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+2C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"seconds"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"startAtRuntime"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"useAsClock"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+35</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"daysDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+36</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"hoursDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+37</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"minutesDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"secondsDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+39</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"millisecondsDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+3A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"adaptiveDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+3B</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"removeLeadingZeros"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"percentageDisplay"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+3D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"timerSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[timer_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>18</ID>
+              <Description>"countMethod"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"seperatorType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"outputType"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[timer_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"timerRunning"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"timerPaused"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[timer_ptr]+51</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"timeRemaining"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[timer_ptr]+58</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Boxman.exe
+  Version: 
+  Date   : 2026-04-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlayerController:Update)
+define(bytes,55 8B EC 57 81 EC A4 00 00 00)
+
+[ENABLE]
+
+
+assert(address,bytes)
+alloc(newmem,$1000,PlayerController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],ecx
+
+code:
+  push ebp
+  mov ebp,esp
+  push edi
+  sub esp,000000A4
+  jmp return
+
+playercontroller_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop 5
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // push edi
+  // sub esp,000000A4
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlayerController:Update
+
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+10: 8B 45 08           - mov eax,[ebp+08]
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+13: 05 08 00 00 00     - add eax,00000008
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+18: 89 04 24           - mov [esp],eax
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+1b: E8 C0 DA FF FF     - call Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2:MoveNext
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+20: C9                 - leave 
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+21: C3                 - ret 
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+22: 6A 24              - push 24
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+24: 68 A0 01 00 00     - push 000001A0
+Naninovel.Async.CompilerServices.MoveNextRunner`1[Naninovel.Commands.StopBgm+&lt;ExecuteAsync&gt;d__2]:Run+29: E8 22 6C 77 F0     - call 02B41100
+123CA4DE: 00 00              - add [eax],al
+// ---------- INJECTING HERE ----------
+PlayerController:Update: 55                 - push ebp
+// ---------- DONE INJECTING  ----------
+PlayerController:Update+1: 8B EC              - mov ebp,esp
+PlayerController:Update+3: 57                 - push edi
+PlayerController:Update+4: 81 EC A4 00 00 00  - sub esp,000000A4
+PlayerController:Update+a: 8B 7D 08           - mov edi,[ebp+08]
+PlayerController:Update+d: 89 3C 24           - mov [esp],edi
+PlayerController:Update+10: 8D 6D 00           - lea ebp,[ebp+00]
+PlayerController:Update+13: E8 04 03 00 00     - call 123CA7FC
+PlayerController:Update+18: 0F B6 47 4D        - movzx eax,byte ptr [edi+4D]
+PlayerController:Update+1c: 85 C0              - test eax,eax
+PlayerController:Update+1e: 75 10              - jne PlayerController:Update+30
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>playercontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"debugMode"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"canMove"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+4D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"workMode"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+4E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"allowDash"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+4F</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"dashTrigger"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"isInDeadDropArea"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"interactMode"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"currMoveSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"maxMoveSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"maxForkliftSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+64</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"defaultMass"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"forkliftMass"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"exhaustMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"forkliftBoostMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"sprintMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"staminaRegainMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+7C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>42</ID>
+              <Description>"energyDrinkMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"currStamina"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"maxStamina"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>45</ID>
+              <Description>"hasBox"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+94</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>46</ID>
+              <Description>"defaultAngle"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+98</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"knockbackDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+9C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>48</ID>
+              <Description>"knockbackMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"hasVelocity"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>50</ID>
+              <Description>"lastMove"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[playercontroller_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"boostMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"boostDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"enableSprint"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"enableStaminaPenalty"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+B9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"enableStaminaRegain"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+BA</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"energyDrinkEffect"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+BB</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"energyDrinkDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"defaultCameraSize"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"zoomSize"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"currentEnergyDrinkDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"zoomSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"propScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"isStunned"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"isSlowed"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+D5</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"stunTrapDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"slowTrapDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+DC</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>67</ID>
+          <Description>"ParcelDetector"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Boxman.exe
+  Version: 
+  Date   : 2026-04-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,ParcelDetector:Update)
+define(bytes,55 8B EC 53 57)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,ParcelDetector:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [parceldetector_ptr],ecx
+
+code:
+  push ebp
+  mov ebp,esp
+  push ebx
+  push edi
+  jmp return
+
+parceldetector_ptr:
+dd 0
+
+address:
+  jmp newmem
+return:
+registersymbol(parceldetector_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // push ebx
+  // push edi
+
+dealloc(newmem)
+unregistersymbol(parceldetector_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ParcelDetector:Update
+
+PackagingDetection:Update+123: C9                 - leave 
+PackagingDetection:Update+124: C3                 - ret 
+123E20A5: 00 00              - add [eax],al
+123E20A7: 00 68 50           - add [eax+50],ch
+123E20AA: A8 68              - test al,68
+123E20AC: 0E                 - push cs
+123E20AD: E9 4E E0 75 F0     - jmp 02B40100
+123E20B2: 00 00              - add [eax],al
+123E20B4: 00 00              - add [eax],al
+123E20B6: 00 00              - add [eax],al
+// ---------- INJECTING HERE ----------
+ParcelDetector:Update: 55                 - push ebp
+// ---------- DONE INJECTING  ----------
+ParcelDetector:Update+1: 8B EC              - mov ebp,esp
+ParcelDetector:Update+3: 53                 - push ebx
+ParcelDetector:Update+4: 57                 - push edi
+ParcelDetector:Update+5: 56                 - push esi
+ParcelDetector:Update+6: 83 EC 1C           - sub esp,1C
+ParcelDetector:Update+9: 8B 7D 08           - mov edi,[ebp+08]
+ParcelDetector:Update+c: 0F B6 47 36        - movzx eax,byte ptr [edi+36]
+ParcelDetector:Update+10: 85 C0              - test eax,eax
+ParcelDetector:Update+12: 0F 84 C8 00 00 00  - je ParcelDetector:Update+e0
+ParcelDetector:Update+18: 8B 47 20           - mov eax,[edi+20]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>parceldetector_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"canTrigger"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"isDeaddrop"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+35</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"playerIsNear"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+36</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"OnTriggerInvoked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+37</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"timeStamped"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+38</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>71</ID>
+              <Description>"_pos"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"generateOnWake"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"delayOnGenerate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"minItemCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"maxItemCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"difficulty"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"maxItemCount_Easy"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"maxItemCount_Normal"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"maxItemCount_Hard"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"defaultPaperY"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"paperOffset"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"orderCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"orderCreated"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>74</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"createWayPoints"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>75</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"stampSize"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"boxType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"minAisleCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"maxAisleCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>84</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"chanceOfHighValue"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[parceldetector_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"_quota"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"deliveries"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+1C</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"quota"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+1C</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"correct"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+1C</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"miss"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[parceldetector_ptr]+1C</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>99</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>101</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Boxman - v0.5.02 Build 022826 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

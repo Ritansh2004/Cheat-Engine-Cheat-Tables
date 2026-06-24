@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>178</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "BakiHanmaBloodArena.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>180</ID>
+          <Description>"Enable in Main Menu before Battle Start. If value doesn't show, then Restart the Battle through Pause Menu"</Description>
+          <LastState Value="" RealAddress="00000000"/>
+          <Color>0000FF</Color>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"InGameDebugManager"</Description>
+          <Options moHideChildren="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : BakiHanmaBloodArena.exe
+  Version: 
+  Date   : 2026-03-02
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,IngameDebugManager:LateUpdate)
+define(bytes,55 48 8B EC 48 81 EC A0 06 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,IngameDebugManager:LateUpdate)
+
+label(code)
+label(return)
+
+newmem:
+mov [ingamedebugmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000006A0
+  jmp return
+
+ingamedebugmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(ingamedebugmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000006A0
+
+dealloc(newmem)
+unregistersymbol(ingamedebugmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: IngameDebugManager:LateUpdate
+
+17F6BFC3A79: 04 02                          - add al,02
+17F6BFC3A7B: 05 04 03 01 50                 - add eax,50010304
+17F6BFC3A80: 00 00                          - add [rax],al
+17F6BFC3A82: 00 00                          - add [rax],al
+17F6BFC3A84: 00 00                          - add [rax],al
+17F6BFC3A86: 00 00                          - add [rax],al
+17F6BFC3A88: 00 00                          - add [rax],al
+17F6BFC3A8A: 00 00                          - add [rax],al
+17F6BFC3A8C: 00 00                          - add [rax],al
+17F6BFC3A8E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+IngameDebugManager:LateUpdate: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+IngameDebugManager:LateUpdate+1: 48 8B EC                       - mov rbp,rsp
+IngameDebugManager:LateUpdate+4: 48 81 EC A0 06 00 00           - sub rsp,000006A0
+IngameDebugManager:LateUpdate+b: 48 89 5D D0                    - mov [rbp-30],rbx
+IngameDebugManager:LateUpdate+f: 48 89 75 D8                    - mov [rbp-28],rsi
+IngameDebugManager:LateUpdate+13: 48 89 7D E0                    - mov [rbp-20],rdi
+IngameDebugManager:LateUpdate+17: 4C 89 6D E8                    - mov [rbp-18],r13
+IngameDebugManager:LateUpdate+1b: 4C 89 75 F0                    - mov [rbp-10],r14
+IngameDebugManager:LateUpdate+1f: 4C 89 7D F8                    - mov [rbp-08],r15
+IngameDebugManager:LateUpdate+23: 48 8B F1                       - mov rsi,rcx
+IngameDebugManager:LateUpdate+26: C7 85 50 FE FF FF 00 00 00 00  - mov [rbp-000001B0],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1</ID>
+                  <Description>"debugFrameByFrame"</Description>
+                  <LastState Value="0" RealAddress="204A8D85590"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+80</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"initialTimeScale"</Description>
+                  <LastState Value="1" RealAddress="204A8D85594"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+84</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"fps"</Description>
+                  <LastState Value="24" RealAddress="204A8D85598"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"fpsFreq"</Description>
+                  <LastState Value="0.5" RealAddress="204A8D8559C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+8C</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"humanPlayer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"_health"</Description>
+                  <LastState Value="100" RealAddress="205ACECF160"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>160</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"sucessfullAtack"</Description>
+                  <LastState Value="0" RealAddress="205ACECF148"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>148</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"isIA"</Description>
+                  <LastState Value="0" RealAddress="205ACECF149"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>149</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"armor"</Description>
+                  <LastState Value="0" RealAddress="205ACECF14C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>14C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"posXSign"</Description>
+                  <LastState Value="-1" RealAddress="205ACECF150"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>150</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"scaleXSign"</Description>
+                  <LastState Value="1" RealAddress="205ACECF154"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>154</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"maxhealth"</Description>
+                  <LastState Value="100" RealAddress="205ACECF158"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>158</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"&lt;knockedTimes&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF15C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>15C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"_health"</Description>
+                  <LastState Value="100" RealAddress="205ACECF160"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>160</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"CanContinueNoStopAttack"</Description>
+                  <LastState Value="0" RealAddress="205ACECF164"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>164</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"immortal"</Description>
+                  <LastState Value="0" RealAddress="205ACECF165"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>165</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"healthInRecovery"</Description>
+                  <LastState Value="100" RealAddress="205ACECF168"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>168</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"parryStopCounter"</Description>
+                  <LastState Value="-1" RealAddress="205ACECF16C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"punchsReceivedForCombo"</Description>
+                  <LastState Value="0" RealAddress="205ACECF170"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>170</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"punchsBlockedOrEvadedForCombo"</Description>
+                  <LastState Value="0" RealAddress="205ACECF174"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>174</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"animationFreezeTimeOnHit"</Description>
+                  <LastState Value="0" RealAddress="205ACECF178"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>178</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"animationFreezeTimeOnBlock"</Description>
+                  <LastState Value="0" RealAddress="205ACECF17C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>17C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"animationFreezeTimeOnChargedAttack"</Description>
+                  <LastState Value="0" RealAddress="205ACECF180"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>180</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"&lt;animationFreezeTimeCounter&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF184"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>184</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"_punchesToDizzyDoNotReset"</Description>
+                  <LastState Value="0" RealAddress="205ACECF188"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>188</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"unblockedSilentDamageMultiplier"</Description>
+                  <LastState Value="0.1000000015" RealAddress="205ACECF18C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>18C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"damageFactorForNonSpecialAttacks"</Description>
+                  <LastState Value="1" RealAddress="205ACECF190"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>190</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"min_movement_speed"</Description>
+                  <LastState Value="1" RealAddress="205ACECF194"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>194</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"max_movement_speed"</Description>
+                  <LastState Value="1.299999952" RealAddress="205ACECF198"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>198</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"doingParry"</Description>
+                  <LastState Value="0" RealAddress="205ACECF19C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>19C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"pressDownTimer"</Description>
+                  <LastState Value="-1" RealAddress="205ACECF1A0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"pressDownTwoTimesTime"</Description>
+                  <LastState Value="0.5" RealAddress="205ACECF1A4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"usedTauntOnEnemyKnockout"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1A8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"tauntDamageMultiplier"</Description>
+                  <LastState Value="4" RealAddress="205ACECF1AC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"actualTauntDamageMultiplier"</Description>
+                  <LastState Value="1" RealAddress="205ACECF1B0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"tauntTimer"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1B4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"tauntTime"</Description>
+                  <LastState Value="5" RealAddress="205ACECF1B8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"stunnedCounter"</Description>
+                  <LastState Value="-1" RealAddress="205ACECF1BC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"stunnedTime"</Description>
+                  <LastState Value="5" RealAddress="205ACECF1C0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"specialPlayerVelocity"</Description>
+                  <LastState Value="1" RealAddress="205ACECF1C4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"doingLastBreathe"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1C8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"lastBreatheAttackMultiplier"</Description>
+                  <LastState Value="1.100000024" RealAddress="205ACECF1CC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"playerCanInput"</Description>
+                  <LastState Value="1" RealAddress="205ACECF1D0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"specialSucceded"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1D1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1D1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"moreThanOnePunchTimeNormalMode"</Description>
+                  <LastState Value="5" RealAddress="205ACECF1D4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"moreThanOnePunchTimeCounter"</Description>
+                  <LastState Value="-1" RealAddress="205ACECF1D8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"parryStopTime"</Description>
+                  <LastState Value="0.3000000119" RealAddress="205ACECF1DC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"_isUnblockedSilentOverrideFromNode"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"blocksAllSpecialAttacksExceptInInDizzy"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"blockUsesDodgeAnimation"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E2"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E2</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"flipRandomlyOnDefense"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E3"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E3</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"forceBlockedSilentOverrideAlwaysExceptOnIdle"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"punchsReceivedForBlock"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1E8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"punchsReceivedForOtherBlockUp"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1EC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1EC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"punchsReceivedForOtherBlockDown"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"punchsReceivedForEvent"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1F4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1F4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"punchsBlockedForIdle"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1F8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"punchsinPunchReceived"</Description>
+                  <LastState Value="0" RealAddress="205ACECF1FC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>1FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"&lt;IsDizzy&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF200"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>200</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"&lt;IsWaitingForDizzyExit&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF201"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>201</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"&lt;NumTimesDizzyStarted&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF204"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>204</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"_hitCounterWhileDizzy"</Description>
+                  <LastState Value="0" RealAddress="205ACECF208"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>208</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"dizzyTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205ACECF20C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>20C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"totalHitsReceived"</Description>
+                  <LastState Value="0" RealAddress="205ACECF210"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>210</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"&lt;IsConfused&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF214"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>214</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"confusedTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205ACECF218"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>218</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"&lt;IsPoisoned&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF21C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>21C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"poisonedTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205ACECF220"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>220</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"&lt;specialStop&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF224"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>224</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"recoverInterrupted"</Description>
+                  <LastState Value="0" RealAddress="205ACECF225"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>225</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"damageFactorInDizzy"</Description>
+                  <LastState Value="1" RealAddress="205ACECF228"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>228</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"skipDefenseStateOnAttackEvent"</Description>
+                  <LastState Value="0" RealAddress="205ACECF22C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>22C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"disableBlock"</Description>
+                  <LastState Value="0" RealAddress="205ACECF240"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>240</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"lastEvadedSfxTime"</Description>
+                  <LastState Value="0" RealAddress="205ACECF244"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>244</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"numAttackAnimationEventsTriggeredForCurrentSpecialAttack"</Description>
+                  <LastState Value="0" RealAddress="205ACECF248"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>248</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"normalizedTimeToPlayInLateUpdate"</Description>
+                  <LastState Value="0" RealAddress="205ACECF24C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>24C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"frameToPlayInLateUpdate"</Description>
+                  <LastState Value="0" RealAddress="205ACECF250"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>250</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"animationTypeToPlayInLateUpdate"</Description>
+                  <LastState Value="0" RealAddress="205ACECF254"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>254</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"&lt;initialNormalizedTimeForLatestAnimationPlayed&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF258"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>258</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"&lt;animationNumber&gt;"</Description>
+                  <LastState Value="1" RealAddress="205ACECF260"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>260</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"&lt;attackNumber&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF268"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>268</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"&lt;CanBeAffectedByAttacks&gt;"</Description>
+                  <LastState Value="1" RealAddress="205ACECF270"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>270</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"lastAttackWasHit"</Description>
+                  <LastState Value="0" RealAddress="205ACECF271"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>271</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"&lt;LastFrameHealthLost&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF274"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>274</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"&lt;LastFrameReceivedPunchSilent&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF278"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>278</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"&lt;LastDirectionReceivedPunchSilent&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF27C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>27C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"&lt;LastFrameFXFrame&gt;"</Description>
+                  <LastState Value="0" RealAddress="205ACECF280"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>280</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"lastDefense"</Description>
+                  <LastState Value="0" RealAddress="205ACECF284"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>284</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"lastPoisonIntervalTime"</Description>
+                  <LastState Value="0" RealAddress="205ACECF288"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>288</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"AttackReceived"</Description>
+                  <LastState Value="0" RealAddress="205ACECF28C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>28C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"enemyPlayer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"sucessfullAtack"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBC8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>148</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"isIA"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFBC9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>149</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"armor"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBCC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>14C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"posXSign"</Description>
+                  <LastState Value="-1" RealAddress="205AC6EFBD0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>150</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"scaleXSign"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFBD4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>154</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"maxhealth"</Description>
+                  <LastState Value="400" RealAddress="205AC6EFBD8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>158</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"&lt;knockedTimes&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBDC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>15C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"_health"</Description>
+                  <LastState Value="400" RealAddress="205AC6EFBE0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>160</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"CanContinueNoStopAttack"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBE4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>164</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"immortal"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBE5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>165</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"healthInRecovery"</Description>
+                  <LastState Value="100" RealAddress="205AC6EFBE8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>168</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"parryStopCounter"</Description>
+                  <LastState Value="-1" RealAddress="205AC6EFBEC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>16C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"punchsReceivedForCombo"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBF0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>170</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>106</ID>
+                  <Description>"punchsBlockedOrEvadedForCombo"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBF4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>174</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>107</ID>
+                  <Description>"animationFreezeTimeOnHit"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBF8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>178</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>108</ID>
+                  <Description>"animationFreezeTimeOnBlock"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFBFC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>17C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"animationFreezeTimeOnChargedAttack"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC00"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>180</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>110</ID>
+                  <Description>"&lt;animationFreezeTimeCounter&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC04"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>184</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"_punchesToDizzyDoNotReset"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC08"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>188</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"unblockedSilentDamageMultiplier"</Description>
+                  <LastState Value="0.1000000015" RealAddress="205AC6EFC0C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>18C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>113</ID>
+                  <Description>"damageFactorForNonSpecialAttacks"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFC10"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>190</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>114</ID>
+                  <Description>"min_movement_speed"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFC14"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>194</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>115</ID>
+                  <Description>"max_movement_speed"</Description>
+                  <LastState Value="1.299999952" RealAddress="205AC6EFC18"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>198</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>116</ID>
+                  <Description>"doingParry"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC1C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>19C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"pressDownTimer"</Description>
+                  <LastState Value="-1" RealAddress="205AC6EFC20"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"pressDownTwoTimesTime"</Description>
+                  <LastState Value="0.5" RealAddress="205AC6EFC24"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"usedTauntOnEnemyKnockout"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC28"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"tauntDamageMultiplier"</Description>
+                  <LastState Value="1.5" RealAddress="205AC6EFC2C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"actualTauntDamageMultiplier"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFC30"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"tauntTimer"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC34"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"tauntTime"</Description>
+                  <LastState Value="5" RealAddress="205AC6EFC38"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"stunnedCounter"</Description>
+                  <LastState Value="-1" RealAddress="205AC6EFC3C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>125</ID>
+                  <Description>"stunnedTime"</Description>
+                  <LastState Value="5" RealAddress="205AC6EFC40"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"specialPlayerVelocity"</Description>
+                  <LastState Value="0.05999999866" RealAddress="205AC6EFC44"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>127</ID>
+                  <Description>"doingLastBreathe"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC48"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"lastBreatheAttackMultiplier"</Description>
+                  <LastState Value="1.100000024" RealAddress="205AC6EFC4C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"playerCanInput"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFC50"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>130</ID>
+                  <Description>"specialSucceded"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC51"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1D1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>131</ID>
+                  <Description>"moreThanOnePunchTimeNormalMode"</Description>
+                  <LastState Value="5" RealAddress="205AC6EFC54"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>132</ID>
+                  <Description>"moreThanOnePunchTimeCounter"</Description>
+                  <LastState Value="-1" RealAddress="205AC6EFC58"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"parryStopTime"</Description>
+                  <LastState Value="0.8999999762" RealAddress="205AC6EFC5C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>134</ID>
+                  <Description>"_isUnblockedSilentOverrideFromNode"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC60"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>135</ID>
+                  <Description>"blocksAllSpecialAttacksExceptInInDizzy"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC61"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"blockUsesDodgeAnimation"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC62"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E2</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>137</ID>
+                  <Description>"flipRandomlyOnDefense"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC63"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E3</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>138</ID>
+                  <Description>"forceBlockedSilentOverrideAlwaysExceptOnIdle"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC64"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"punchsReceivedForBlock"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"punchsReceivedForOtherBlockUp"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC6C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1EC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"punchsReceivedForOtherBlockDown"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC70"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"punchsReceivedForEvent"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC74"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1F4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>143</ID>
+                  <Description>"punchsBlockedForIdle"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC78"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>144</ID>
+                  <Description>"punchsinPunchReceived"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC7C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>1FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"&lt;IsDizzy&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC80"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>200</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>146</ID>
+                  <Description>"&lt;IsWaitingForDizzyExit&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC81"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>201</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>147</ID>
+                  <Description>"&lt;NumTimesDizzyStarted&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC84"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>204</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>148</ID>
+                  <Description>"_hitCounterWhileDizzy"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC88"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>208</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>149</ID>
+                  <Description>"dizzyTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>20C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>150</ID>
+                  <Description>"totalHitsReceived"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC90"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>210</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"&lt;IsConfused&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC94"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>214</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"confusedTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC98"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>218</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"&lt;IsPoisoned&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFC9C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>21C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"poisonedTimeLeft"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCA0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>220</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>155</ID>
+                  <Description>"&lt;specialStop&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCA4"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>224</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>156</ID>
+                  <Description>"recoverInterrupted"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCA5"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>225</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>157</ID>
+                  <Description>"damageFactorInDizzy"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFCA8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>228</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>158</ID>
+                  <Description>"skipDefenseStateOnAttackEvent"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCAC"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>22C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"disableBlock"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCC0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>240</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>160</ID>
+                  <Description>"lastEvadedSfxTime"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCC4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>244</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"numAttackAnimationEventsTriggeredForCurrentSpecialAttack"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCC8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>248</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>162</ID>
+                  <Description>"normalizedTimeToPlayInLateUpdate"</Description>
+                  <LastState Value="0.2221882194" RealAddress="205AC6EFCCC"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>24C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"frameToPlayInLateUpdate"</Description>
+                  <LastState Value="4294967295" RealAddress="205AC6EFCD0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>250</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"animationTypeToPlayInLateUpdate"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCD4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>254</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"&lt;initialNormalizedTimeForLatestAnimationPlayed&gt;"</Description>
+                  <LastState Value="0.2221882194" RealAddress="205AC6EFCD8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>258</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"&lt;animationNumber&gt;"</Description>
+                  <LastState Value="5" RealAddress="205AC6EFCE0"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>260</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>167</ID>
+                  <Description>"&lt;attackNumber&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCE8"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>268</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>168</ID>
+                  <Description>"&lt;CanBeAffectedByAttacks&gt;"</Description>
+                  <LastState Value="1" RealAddress="205AC6EFCF0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>270</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>169</ID>
+                  <Description>"lastAttackWasHit"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCF1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>271</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>170</ID>
+                  <Description>"&lt;LastFrameHealthLost&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCF4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>274</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>171</ID>
+                  <Description>"&lt;LastFrameReceivedPunchSilent&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCF8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>278</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"&lt;LastDirectionReceivedPunchSilent&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFCFC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>27C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"&lt;LastFrameFXFrame&gt;"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFD00"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>280</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>174</ID>
+                  <Description>"lastDefense"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFD04"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>284</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>175</ID>
+                  <Description>"lastPoisonIntervalTime"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFD08"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>288</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>176</ID>
+                  <Description>"AttackReceived"</Description>
+                  <LastState Value="0" RealAddress="205AC6EFD0C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ingamedebugmanager_ptr]+68</Address>
+                  <Offsets>
+                    <Offset>28C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>177</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>179</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Baki Hanma: Blood Arena - v2.0.4 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

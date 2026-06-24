@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>6</ID>
+      <Description>"[ Active Cheat Table ]"</Description>
+      <Options moHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+LuaCall(function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel4.Visible    = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true))
+{$lua}
+LaunchMonoDataCollector()
+[DISABLE]
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"No Cost"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Automachef
+  Version:
+  Date   : 2019-07-23
+  Author : fantomas
+}
+
+[ENABLE]
+//LevelManager:OnKitchenBuildChange+10
+aobscanregion(noCost,LevelManager:OnKitchenBuildChange,LevelManager:OnKitchenBuildChange+60,488BF2)
+
+noCost:
+  db 49 8B F4
+//mov rsi,r12
+registersymbol(noCost)
+
+[DISABLE]
+noCost:
+  db 48 8B F2
+//mov rsi,rdx
+unregistersymbol(noCost)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>49</ID>
+          <Description>"Max Dishes"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Automachef
+  Version:
+  Date   : 2019-07-23
+  Author : fantomas
+}
+
+[ENABLE]
+//FoodDisplayCase:ManualFixedUpdate+10a6
+aobscanregion(maxDishes,FoodDisplayCase:ManualFixedUpdate,FoodDisplayCase:ManualFixedUpdate+2370,8988)
+alloc(newmem,$1000,maxDishes)
+
+label(code)
+label(return)
+
+newmem:
+  push rbx
+  mov rbx,[rax+00000058] //0x58 - level
+  mov ecx,[rbx+00000070] //0x70 - numberOfDishes
+  pop rbx
+
+code:
+  mov [rax+0000009C],ecx
+  jmp return
+
+maxDishes:
+  jmp newmem
+  nop
+return:
+registersymbol(maxDishes)
+
+[DISABLE]
+maxDishes:
+  db 89 88 9C 00 00 00
+
+unregistersymbol(maxDishes)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: FoodDisplayCase:ManualFixedUpdate+10a6
+
+2160BD78C6A: 48 8B 85 D0 FB FF FF           -  mov rax,[rbp-00000430]
+2160BD78C71: 83 38 00                       -  cmp dword ptr [rax],00
+2160BD78C74: 66 90                          -  nop
+2160BD78C76: 49 BB B0 3A DC 0B 16 02 00 00  -  mov r11,000002160BDC3AB0
+2160BD78C80: 41 FF D3                       -  call r11
+2160BD78C83: 48 8B 46 20                    -  mov rax,[rsi+20]
+2160BD78C87: 48 8B C8                       -  mov rcx,rax
+2160BD78C8A: 83 39 00                       -  cmp dword ptr [rcx],00
+2160BD78C8D: 48 63 88 9C 00 00 00           -  movsxd  rcx,dword ptr [rax+0000009C]
+2160BD78C94: FF C1                          -  inc ecx
+// ---------- INJECTING HERE ----------
+2160BD78C96: 89 88 9C 00 00 00              -  mov [rax+0000009C],ecx
+// ---------- DONE INJECTING  ----------
+2160BD78C9C: 48 8B 46 58                    -  mov rax,[rsi+58]
+2160BD78CA0: 48 89 85 98 FB FF FF           -  mov [rbp-00000468],rax
+2160BD78CA7: 48 8B 46 30                    -  mov rax,[rsi+30]
+2160BD78CAB: 48 89 85 90 FB FF FF           -  mov [rbp-00000470],rax
+2160BD78CB2: 48 63 8D C0 FC FF FF           -  movsxd  rcx,dword ptr [rbp-00000340]
+2160BD78CB9: 89 8D B8 FB FF FF              -  mov [rbp-00000448],ecx
+2160BD78CBF: 83 38 00                       -  cmp dword ptr [rax],00
+2160BD78CC2: 48 8B 85 90 FB FF FF           -  mov rax,[rbp-00000470]
+2160BD78CC9: 48 63 40 18                    -  movsxd  rax,dword ptr [rax+18]
+2160BD78CCD: 39 85 B8 FB FF FF              -  cmp [rbp-00000448],eax
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>16</ID>
+          <Description>"No Power Consuming"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Automachef
+  Version: 
+  Date   : 2019-07-23
+  Author : fantomas
+}
+
+[ENABLE]
+PowerMeter:Add:
+  ret
+
+[DISABLE]
+PowerMeter:Add:
+  push ebp
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"No Ingredients Used"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Automachef
+  Version: 
+  Date   : 2019-07-23
+  Author : fantomas
+}
+
+[ENABLE]
+//Dispenser:FixedUpdate+4a5
+aobscanregion(noIngredientsUsed,Dispenser:FixedUpdate,Dispenser:FixedUpdate+600,FFC1)
+
+noIngredientsUsed:
+  db 90 90
+
+registersymbol(noIngredientsUsed)
+
+[DISABLE]
+noIngredientsUsed:
+  db FF C1
+
+unregistersymbol(noIngredientsUsed)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Dispenser:FixedUpdate+4a5
+
+2160BD69548: 48 8B CE                       -  mov rcx,rsi
+2160BD6954B: 48 8B D7                       -  mov rdx,rdi
+2160BD6954E: 48 8B 06                       -  mov rax,[rsi]
+2160BD69551: FF 90 28 02 00 00              -  call qword ptr [rax+00000228]
+2160BD69557: 48 8D AD 00 00 00 00           -  lea rbp,[rbp+00000000]
+2160BD6955E: 49 BB C0 CD CF 0B 16 02 00 00  -  mov r11,000002160BCFCDC0
+2160BD69568: 41 FF D3                       -  call r11
+2160BD6956B: 48 8B C8                       -  mov rcx,rax
+2160BD6956E: 83 39 00                       -  cmp dword ptr [rcx],00
+2160BD69571: 48 63 48 10                    -  movsxd  rcx,dword ptr [rax+10]
+// ---------- INJECTING HERE ----------
+2160BD69575: FF C1                          -  inc ecx
+2160BD69577: 89 48 10                       -  mov [rax+10],ecx
+// ---------- DONE INJECTING  ----------
+2160BD6957A: 48 8B 86 C8 00 00 00           -  mov rax,[rsi+000000C8]
+2160BD69581: 48 8B C8                       -  mov rcx,rax
+2160BD69584: 33 D2                          -  xor edx,edx
+2160BD69586: 83 38 00                       -  cmp dword ptr [rax],00
+2160BD69589: 48 8D 64 24 00                 -  lea rsp,[rsp+00]
+2160BD6958E: 49 BB 40 F5 D7 0B 16 02 00 00  -  mov r11,000002160BD7F540
+2160BD69598: 41 FF D3                       -  call r11
+2160BD6959B: 48 63 86 9C 01 00 00           -  movsxd  rax,dword ptr [rsi+0000019C]
+2160BD695A2: FF C0                          -  inc eax
+2160BD695A4: 89 86 9C 01 00 00              -  mov [rsi+0000019C],eax
+}
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>42</ID>
+      <Description>"[ Debug ]"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>C0C0C0</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>19</ID>
+          <Description>"Resolve ApplicationState"</Description>
+          <LastState/>
+          <Color>FF0000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+label(ApplicationState.threadexit)
+label(classname)
+label(namespace)
+label(assemblyname)
+label(status)
+label(domain)
+label(assembly)
+label(ApplicationState.Static)
+label(ApplicationState.Class)
+alloc(ApplicationState.threadstart, 2048, mono-2.0-bdwgc.mono_thread_attach)
+
+registersymbol(ApplicationState.Static)
+registersymbol(ApplicationState.Class)
+
+ApplicationState.threadstart:
+sub rsp,28
+
+xor rax,rax
+mov [ApplicationState.Class],rax
+mov [ApplicationState.Static],rax
+
+call mono-2.0-bdwgc.mono_get_root_domain
+cmp rax,0
+je ApplicationState.threadexit
+mov [domain],rax
+
+mov rcx,[domain]
+call mono-2.0-bdwgc.mono_thread_attach
+
+mov rcx,assemblyname
+mov rdx,status
+call mono-2.0-bdwgc.mono_assembly_load_with_partial_name
+cmp rax,0
+je ApplicationState.threadexit
+
+mov rcx,rax
+call mono-2.0-bdwgc.mono_assembly_get_image
+cmp rax,0
+je ApplicationState.threadexit
+mov [assembly], rax
+
+mov rcx,eax
+mov rdx,namespace
+mov r8,classname
+
+call mono-2.0-bdwgc.mono_class_from_name_case
+cmp rax,0
+je ApplicationState.threadexit
+mov [ApplicationState.Class],rax
+
+mov rcx,[domain]
+mov rdx,rax
+call mono-2.0-bdwgc.mono_class_vtable
+cmp rax,0
+je ApplicationState.threadexit
+
+mov rcx,rax
+call mono-2.0-bdwgc.mono_vtable_get_static_field_data
+
+mov [ApplicationState.Static],rax
+jmp ApplicationState.threadexit
+///////////////////////////////////////////////////////
+// Data section
+ApplicationState.Static:
+dq 0
+ApplicationState.Class:
+dq 0
+assemblyname:
+db 'Assembly-CSharp',0
+namespace:
+db '',0
+classname:
+db 'ApplicationState',0
+status:
+dq 0
+domain:
+dq 0
+assembly:
+dq 0
+
+ApplicationState.threadexit:
+add rsp,28
+ret
+createthread(ApplicationState.threadstart)
+
+[DISABLE]
+unregistersymbol(ApplicationState.Static)
+unregistersymbol(ApplicationState.Class)
+dealloc(ApplicationState.threadstart)
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>20</ID>
+              <Description>"ApplicationState.Static"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>[ApplicationState.Static]</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"ApplicationState.Class"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>[ApplicationState.Class]</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"currentState"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>23</ID>
+              <Description>"levelToLoad"</Description>
+              <VariableType>String</VariableType>
+              <Length>80</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>C</Offset>
+                <Offset>8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>24</ID>
+              <Description>"tutorialMode"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"gameSettings"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>26</ID>
+              <Description>"audioMixer"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>20</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"debugMode"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>0000FF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>28</ID>
+              <Description>"testSiteMode"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>2C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>29</ID>
+              <Description>"slotToLoad"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"contractsSlotToLoad"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>34</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"returningFromCompletingALevel"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>38</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"bCompletedLastLevel"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>39</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>33</ID>
+              <Description>"companyName"</Description>
+              <VariableType>String</VariableType>
+              <Length>80</Length>
+              <Unicode>1</Unicode>
+              <CodePage>0</CodePage>
+              <ZeroTerminate>1</ZeroTerminate>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>C</Offset>
+                <Offset>40</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"companyLogo"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>48</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"companyId"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>4C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"company"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>50</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"acceptedContractToPlay"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>58</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"contractCompleted"</Description>
+              <DropDownList ReadOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"scenario"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>68</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>40</ID>
+              <Description>"workshopTestSite"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>70</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>41</ID>
+              <Description>"lastLoadedMod"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>Pointer</VariableType>
+              <Address>ApplicationState.Static</Address>
+              <Offsets>
+                <Offset>78</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

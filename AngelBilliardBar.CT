@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>26</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("AngelBilliardBar.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Table Disabled!')
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"AIOpponent"</Description>
+          <Options moHideChildren="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : AngelBilliardBar.exe
+  Version: 
+  Date   : 2025-12-17
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+3724E0)
+define(bytes,40 57 48 83 EC 50)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+3724E0)
+
+label(code)
+label(return)
+
+newmem:
+mov [aiopponent_ptr],rcx
+
+code:
+  push rdi
+  sub rsp,50
+  jmp return
+
+aiopponent_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(aiopponent_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rdi
+  // sub rsp,50
+
+dealloc(newmem)
+unregistersymbol(aiopponent_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: AIOpponent.FixedUpdate
+
+GameAssembly.dll+3724D6: CC                    - int 3 
+GameAssembly.dll+3724D7: CC                    - int 3 
+GameAssembly.dll+3724D8: CC                    - int 3 
+GameAssembly.dll+3724D9: CC                    - int 3 
+GameAssembly.dll+3724DA: CC                    - int 3 
+GameAssembly.dll+3724DB: CC                    - int 3 
+GameAssembly.dll+3724DC: CC                    - int 3 
+GameAssembly.dll+3724DD: CC                    - int 3 
+GameAssembly.dll+3724DE: CC                    - int 3 
+GameAssembly.dll+3724DF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+AIOpponent.FixedUpdate: 40 57                 - push rdi
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+3724E2: 48 83 EC 50           - sub rsp,50
+GameAssembly.dll+3724E6: 80 3D D1 6F FB 01 00  - cmp byte ptr [GameAssembly.dll+23294BE],00
+GameAssembly.dll+3724ED: 48 8B F9              - mov rdi,rcx
+GameAssembly.dll+3724F0: 75 1F                 - jne GameAssembly.dll+372511
+GameAssembly.dll+3724F2: 48 8D 0D 77 AB E7 01  - lea rcx,[GameAssembly.dll+21ED070]
+GameAssembly.dll+3724F9: E8 82 A1 EF FF        - call GameAssembly.mono_type_is_struct+6AA0
+GameAssembly.dll+3724FE: 48 8D 0D B3 48 E4 01  - lea rcx,[GameAssembly.dll+21B6DB8]
+GameAssembly.dll+372505: E8 76 A1 EF FF        - call GameAssembly.mono_type_is_struct+6AA0
+GameAssembly.dll+37250A: C6 05 AD 6F FB 01 01  - mov byte ptr [GameAssembly.dll+23294BE],01
+GameAssembly.dll+372511: 48 8B 0D 58 AB E7 01  - mov rcx,[GameAssembly.dll+21ED070]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"isAI"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+18</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"myType"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[aiopponent_ptr]+1C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"hasFreeBall"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"powerCharacteristicsPotting"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"powerCharacteristicsNoPot"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"&lt;ShotIsInProgress&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"&lt;CheckForShotCompletion&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+20</Address>
+                  <Offsets>
+                    <Offset>29</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"aimSettings"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"AimFineMovementCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"RotationAmountPerIteration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"MaxPowerRangeScalerAggressiveCueBallToPocket"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"MaxPowerRangeScalerCalmCueBallToPocket"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"MinPowerRange"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"MaxPowerRangeScalerAggressiveCueBallToObjectBall"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"MaxPowerRangeScalerCalmCueBallToObjectBall"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[aiopponent_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"freeBallController"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"&lt;FreeBallIsActive&gt;"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"isCollidingDuringFreeBall"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>19</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"playerOnesTurn"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"lastPlayerOnesTurn"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>31</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"isAI"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>32</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"isBreak"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                    <Offset>38</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"isOpenTable"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>69</Offset>
+                    <Offset>38</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"foulCommitted"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[aiopponent_ptr]+48</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                    <Offset>38</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>""</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>28</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " Angel Club ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

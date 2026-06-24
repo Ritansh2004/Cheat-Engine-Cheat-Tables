@@ -1,0 +1,1803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>174</ID>
+      <Description>"Attach Process &amp; Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+{$lua}
+OpenProcess("Angst.exe")
+{$asm}
+
+{$lua}
+if syntaxcheck then return end
+if process and readInteger(process) ~= 0 then
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                         --For Sound
+else
+    local msg = 'Please Attach to the Game First!'
+    print(msg)
+    error(msg)
+    beep(msg)
+    showMessage('Mono Initialize Failed!')         --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+showMessage('Mono Disabled!')
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"PlayerState"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Player.PlayerController:UpdateStats+6ab)
+define(bytes,F3 0F 11 68 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Player.PlayerController:UpdateStats+6ab)
+
+label(code)
+label(return)
+
+newmem:
+mov [playerstate_ptr],rcx
+
+code:
+  movss [rax+24],xmm5
+  jmp return
+
+playerstate_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(playerstate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rax+24],xmm5
+
+dealloc(newmem)
+unregistersymbol(playerstate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Player.PlayerController:UpdateStats+6ab
+
+PAP.Player.PlayerController:UpdateStats+676: 49 BB 30 6D E2 FF E9 01 00 00  - mov r11,PAP.Time.GameTimeController:get_DeltaTime
+PAP.Player.PlayerController:UpdateStats+680: 41 FF D3                       - call r11
+PAP.Player.PlayerController:UpdateStats+683: F3 0F 5A D0                    - cvtss2sd xmm2,xmm0
+PAP.Player.PlayerController:UpdateStats+687: 48 8B 45 98                    - mov rax,[rbp-68]
+PAP.Player.PlayerController:UpdateStats+68b: 48 8B 4D 88                    - mov rcx,[rbp-78]
+PAP.Player.PlayerController:UpdateStats+68f: F2 0F 10 85 78 FF FF FF        - movsd xmm0,[rbp-00000088]
+PAP.Player.PlayerController:UpdateStats+697: F2 0F 10 8D 70 FF FF FF        - movsd xmm1,[rbp-00000090]
+PAP.Player.PlayerController:UpdateStats+69f: F2 0F 59 CA                    - mulsd xmm1,xmm2
+PAP.Player.PlayerController:UpdateStats+6a3: F2 0F 58 C1                    - addsd xmm0,xmm1
+PAP.Player.PlayerController:UpdateStats+6a7: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+PAP.Player.PlayerController:UpdateStats+6ab: F3 0F 11 68 24                 - movss [rax+24],xmm5
+// ---------- DONE INJECTING  ----------
+PAP.Player.PlayerController:UpdateStats+6b0: 48 B8 70 BF 8F 89 E9 01 00 00  - mov rax,000001E9898FBF70
+PAP.Player.PlayerController:UpdateStats+6ba: 48 8B 00                       - mov rax,[rax]
+PAP.Player.PlayerController:UpdateStats+6bd: 48 89 45 98                    - mov [rbp-68],rax
+PAP.Player.PlayerController:UpdateStats+6c1: 48 B8 70 BF 8F 89 E9 01 00 00  - mov rax,000001E9898FBF70
+PAP.Player.PlayerController:UpdateStats+6cb: 48 8B 00                       - mov rax,[rax]
+PAP.Player.PlayerController:UpdateStats+6ce: F3 0F 10 40 24                 - movss xmm0,[rax+24]
+PAP.Player.PlayerController:UpdateStats+6d3: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+PAP.Player.PlayerController:UpdateStats+6d7: 66 0F 57 C9                    - xorpd xmm1,xmm1
+PAP.Player.PlayerController:UpdateStats+6db: 48 B8 00 BF 8F 89 E9 01 00 00  - mov rax,000001E9898FBF00
+PAP.Player.PlayerController:UpdateStats+6e5: 48 8B 00                       - mov rax,[rax]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>49</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"CurrentHealth"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"CurrentStamina"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"IsSprinting"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"IsDashing"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>29</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"IsDead"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"LatestMovementDeltaRecordTime"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"LatestHealthChangeRatePerSecond"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"GodModeOn"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"NeedsUpdateBlocked"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>49</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"NeedStates"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"Count"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>playerstate_ptr</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>2</ID>
+                  <Description>"[0]PlayerNeedState (Energy)"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"NeedType"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"CurrentAmount"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"LastDelta"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"LastDeltaPerSecond"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"AdditionalChangeRate"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"[1]PlayerNeedState (Health)"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"NeedType"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"CurrentAmount"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"LastDelta"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"LastDeltaPerSecond"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"AdditionalChangeRate"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"[2]PlayerNeedState (Hunger)"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"NeedType"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"CurrentAmount"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"LastDelta"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>47</ID>
+                      <Description>"LastDeltaPerSecond"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"AdditionalChangeRate"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>playerstate_ptr</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>51</ID>
+          <Description>"PlayerSettings"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Player.PlayerController:UpdateStats+72f)
+define(bytes,F3 0F 11 68 24)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Player.PlayerController:UpdateStats+72f)
+
+label(code)
+label(return)
+
+newmem:
+mov [playersettings_ptr],rcx
+
+code:
+  movss [rax+24],xmm5
+  jmp return
+
+playersettings_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(playersettings_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rax+24],xmm5
+
+dealloc(newmem)
+unregistersymbol(playersettings_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Player.PlayerController:UpdateStats+72f
+
+PAP.Player.PlayerController:UpdateStats+705: F3 0F 5A D2                    - cvtss2sd xmm2,xmm2
+PAP.Player.PlayerController:UpdateStats+709: F2 0F 5A D2                    - cvtsd2ss xmm2,xmm2
+PAP.Player.PlayerController:UpdateStats+70d: F2 0F 5A C9                    - cvtsd2ss xmm1,xmm1
+PAP.Player.PlayerController:UpdateStats+711: F2 0F 5A C0                    - cvtsd2ss xmm0,xmm0
+PAP.Player.PlayerController:UpdateStats+715: 90                             - nop 
+PAP.Player.PlayerController:UpdateStats+716: 49 BB F0 F4 FB 60 36 02 00 00  - mov r11,UnityEngine.Mathf:Clamp
+PAP.Player.PlayerController:UpdateStats+720: 41 FF D3                       - call r11
+PAP.Player.PlayerController:UpdateStats+723: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+PAP.Player.PlayerController:UpdateStats+727: 48 8B 45 98                    - mov rax,[rbp-68]
+PAP.Player.PlayerController:UpdateStats+72b: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+PAP.Player.PlayerController:UpdateStats+72f: F3 0F 11 68 24                 - movss [rax+24],xmm5
+// ---------- DONE INJECTING  ----------
+PAP.Player.PlayerController:UpdateStats+734: 48 B8 70 BF 46 63 36 02 00 00  - mov rax,000002366346BF70
+PAP.Player.PlayerController:UpdateStats+73e: 48 8B 00                       - mov rax,[rax]
+PAP.Player.PlayerController:UpdateStats+741: F3 0F 10 40 24                 - movss xmm0,[rax+24]
+PAP.Player.PlayerController:UpdateStats+746: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+PAP.Player.PlayerController:UpdateStats+74a: F3 0F 10 4D B8                 - movss xmm1,[rbp-48]
+PAP.Player.PlayerController:UpdateStats+74f: F3 0F 5A C9                    - cvtss2sd xmm1,xmm1
+PAP.Player.PlayerController:UpdateStats+753: 66 0F 2F C8                    - comisd xmm1,xmm0
+PAP.Player.PlayerController:UpdateStats+757: 0F 86 B6 00 00 00              - jbe PAP.Player.PlayerController:UpdateStats+813
+PAP.Player.PlayerController:UpdateStats+75d: 48 B8 70 BF 46 63 36 02 00 00  - mov rax,000002366346BF70
+PAP.Player.PlayerController:UpdateStats+767: 48 8B 00                       - mov rax,[rax]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"movementSpeed"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>53</ID>
+              <Description>"interactionCooldown"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>2c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>54</ID>
+              <Description>"movementDeltaRecordInterval"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>55</ID>
+              <Description>"movementDeltaRecordsMaxCount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>34</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>56</ID>
+              <Description>"inputBlockDueToPickupDuration"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>38</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>57</ID>
+              <Description>"rotationSpeed"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>3c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>58</ID>
+              <Description>"sprintRotationSpeedMultiplier"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>40</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>59</ID>
+              <Description>"initialHealthAmount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>44</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>60</ID>
+              <Description>"maxHealth"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>48</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"minHealthPercentOnGameLoad"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>4c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>62</ID>
+              <Description>"maxStamina"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>50</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>63</ID>
+              <Description>"lowStaminaThresholdPCT"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>54</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>64</ID>
+              <Description>"nonSprintingStaminaChangeRatePerSecond"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>58</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"sprintingStaminaChangeRatePerSecond"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>5c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>66</ID>
+              <Description>"sprintAdditionalEnergyChangeRatePerSecond"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>67</ID>
+              <Description>"sprintMovementSpeedMultiplier"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>64</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>68</ID>
+              <Description>"dashDistanceInMeters"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>68</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"dashDurationInSeconds"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>6c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>70</ID>
+              <Description>"dashStaminaCost"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>playersettings_ptr</Address>
+              <Offsets>
+                <Offset>70</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>124</ID>
+          <Description>"GameTimeState"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Time.GameTimeController:UpdateGameTime+ad)
+define(bytes,F3 0F 11 68 14)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Time.GameTimeController:UpdateGameTime+ad)
+
+label(code)
+label(return)
+
+newmem:
+mov [gametimestate_ptr],rcx
+
+code:
+  movss [rax+14],xmm5
+  jmp return
+
+gametimestate_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(gametimestate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rax+14],xmm5
+
+dealloc(newmem)
+unregistersymbol(gametimestate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Time.GameTimeController:UpdateGameTime+ad
+
+PAP.Time.GameTimeController:UpdateGameTime+7e: 49 BB 40 55 D2 7F FD 02 00 00  - mov r11,PAP.Time.GameTimeController:get_TimeScale
+PAP.Time.GameTimeController:UpdateGameTime+88: 41 FF D3                       - call r11
+PAP.Time.GameTimeController:UpdateGameTime+8b: F3 0F 5A D0                    - cvtss2sd xmm2,xmm0
+PAP.Time.GameTimeController:UpdateGameTime+8f: 48 8B 45 F8                    - mov rax,[rbp-08]
+PAP.Time.GameTimeController:UpdateGameTime+93: 48 8B 4D F0                    - mov rcx,[rbp-10]
+PAP.Time.GameTimeController:UpdateGameTime+97: F2 0F 10 45 E8                 - movsd xmm0,[rbp-18]
+PAP.Time.GameTimeController:UpdateGameTime+9c: F2 0F 10 4D E0                 - movsd xmm1,[rbp-20]
+PAP.Time.GameTimeController:UpdateGameTime+a1: F2 0F 59 CA                    - mulsd xmm1,xmm2
+PAP.Time.GameTimeController:UpdateGameTime+a5: F2 0F 58 C1                    - addsd xmm0,xmm1
+PAP.Time.GameTimeController:UpdateGameTime+a9: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+PAP.Time.GameTimeController:UpdateGameTime+ad: F3 0F 11 68 14                 - movss [rax+14],xmm5
+// ---------- DONE INJECTING  ----------
+PAP.Time.GameTimeController:UpdateGameTime+b2: 48 8D 65 00                    - lea rsp,[rbp+00]
+PAP.Time.GameTimeController:UpdateGameTime+b6: 5D                             - pop rbp
+PAP.Time.GameTimeController:UpdateGameTime+b7: C3                             - ret 
+2FD7FD254F8: 01 04 02                       - add [rdx+rax],eax
+2FD7FD254FB: 05 04 03 01 50                 - add eax,50010304
+2FD7FD25500: 00 00                          - add [rax],al
+2FD7FD25502: 00 00                          - add [rax],al
+2FD7FD25504: 00 00                          - add [rax],al
+2FD7FD25506: 00 00                          - add [rax],al
+2FD7FD25508: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"LastFrameGameTime"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>gametimestate_ptr</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"GameTime"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>gametimestate_ptr</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>127</ID>
+              <Description>"TimeScale"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>gametimestate_ptr</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>128</ID>
+              <Description>"GamePaused"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>gametimestate_ptr</Address>
+              <Offsets>
+                <Offset>1c</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>129</ID>
+              <Description>"GameStarted"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>gametimestate_ptr</Address>
+              <Offsets>
+                <Offset>1d</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>134</ID>
+          <Description>"InventorySlotState"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Inventory.InventoryController+InventorySlotState:SetItem+a2)
+define(bytes,89 47 30 48 8B 7D F8)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Inventory.InventoryController+InventorySlotState:SetItem+a2)
+
+label(code)
+label(return)
+
+newmem:
+mov [inventoryslotstate_ptr],rdi
+
+code:
+  mov [rdi+30],eax
+  mov rdi,[rbp-08]
+  jmp return
+
+inventoryslotstate_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registersymbol(inventoryslotstate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rdi+30],eax
+  // mov rdi,[rbp-08]
+
+dealloc(newmem)
+unregistersymbol(inventoryslotstate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Inventory.InventoryController+InventorySlotState:SetItem+a2
+
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+7b: 48 8D 47 10                    - lea rax,[rdi+10]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+7f: 48 8B 4D D8                    - mov rcx,[rbp-28]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+83: 48 89 08                       - mov [rax],rcx
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+86: 48 8B 4D E0                    - mov rcx,[rbp-20]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+8a: 48 89 48 08                    - mov [rax+08],rcx
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+8e: 48 8B 4D E8                    - mov rcx,[rbp-18]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+92: 48 89 48 10                    - mov [rax+10],rcx
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+96: 48 8B 4D F0                    - mov rcx,[rbp-10]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+9a: 48 89 48 18                    - mov [rax+18],rcx
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+9e: 48 63 45 A8                    - movsxd  rax,dword ptr [rbp-58]
+// ---------- INJECTING HERE ----------
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+a2: 89 47 30                       - mov [rdi+30],eax
+// ---------- DONE INJECTING  ----------
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+a5: 48 8B 7D F8                    - mov rdi,[rbp-08]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+a9: 48 8D 65 00                    - lea rsp,[rbp+00]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+ad: 5D                             - pop rbp
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+ae: C3                             - ret 
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+af: BA 56 00 00 00                 - mov edx,00000056
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+b4: B9 62 01 00 00                 - mov ecx,00000162
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+b9: 48 8D 64 24 00                 - lea rsp,[rsp+00]
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+be: 49 BB 60 1F 3E 3D FB 02 00 00  - mov r11,000002FB3D3E1F60
+PAP.Inventory.InventoryController+InventorySlotState:SetItem+c8: 41 FF D3                       - call r11
+2FD7FC0CC0B: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"Value Show/Change When Pick-Up/Drop Item"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>131</ID>
+                  <Description>"containedItem"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>inventoryslotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>132</ID>
+                  <Description>"containedItemCount"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>inventoryslotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"expectedTargetSlot"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>inventoryslotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>173</ID>
+              <Description>"Value Show/Change When Decrease Durability (Axe, Knife)"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"Durability"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>inventoryslotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>138</ID>
+          <Description>"CookingSpotState"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+f6)
+define(bytes,F3 0F 11 6E 1C)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+f6)
+
+label(code)
+label(return)
+
+newmem:
+mov [cookingspotstate_ptr],rsi
+code:
+  movss [rsi+1C],xmm5
+  jmp return
+
+cookingspotstate_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(cookingspotstate_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rsi+1C],xmm5
+
+dealloc(newmem)
+unregistersymbol(cookingspotstate_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+f6
+
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+ca: 0F 83 97 01 00 00  - jae PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+267
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+d0: 0F B6 46 24        - movzx eax,byte ptr [rsi+24]
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+d4: 85 C0              - test eax,eax
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+d6: 0F 84 8B 01 00 00  - je PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+267
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+dc: F3 0F 10 46 1C     - movss xmm0,[rsi+1C]
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+e1: F3 0F 5A C0        - cvtss2sd xmm0,xmm0
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+e5: F3 0F 10 4D BC     - movss xmm1,[rbp-44]
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+ea: F3 0F 5A C9        - cvtss2sd xmm1,xmm1
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+ee: F2 0F 5C C1        - subsd xmm0,xmm1
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+f2: F2 0F 5A E8        - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+f6: F3 0F 11 6E 1C     - movss [rsi+1C],xmm5
+// ---------- DONE INJECTING  ----------
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+fb: 48 8B FE           - mov rdi,rsi
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+fe: F3 0F 10 4E 1C     - movss xmm1,[rsi+1C]
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+103: F3 0F 5A C9        - cvtss2sd xmm1,xmm1
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+107: 66 0F 57 C0        - xorpd xmm0,xmm0
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+10b: F2 0F 5A E9        - cvtsd2ss xmm5,xmm1
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+10f: F3 0F 11 6D B8     - movss [rbp-48],xmm5
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+114: F2 0F 5A E8        - cvtsd2ss xmm5,xmm0
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+118: F3 0F 11 6D B4     - movss [rbp-4C],xmm5
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+11d: 66 0F 57 C0        - xorpd xmm0,xmm0
+PAP.Cooking.CookingController:SubtractFromRemainingCookingSpotsTime+121: F2 0F 5A E8        - cvtsd2ss xmm5,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>162</ID>
+              <Description>"Value Show When Fuel Decrease"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>143</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>150</ID>
+                  <Description>"interactionNameKey"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>cookingspotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"Built"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>cookingspotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"ActiveTimeRemaining"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>cookingspotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>1c</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"Burnout"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>cookingspotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"Active"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>cookingspotstate_ptr</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>144</ID>
+              <Description>"Type"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>145</ID>
+                      <Description>"durability"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>cookingspotstate_ptr</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>146</ID>
+                      <Description>"isRenewable"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>cookingspotstate_ptr</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>147</ID>
+                      <Description>"burnoutDropCountMin"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>cookingspotstate_ptr</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>148</ID>
+                      <Description>"burnoutDropCountMax"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>cookingspotstate_ptr</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>149</ID>
+                      <Description>"id"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>cookingspotstate_ptr</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"prefab"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>157</ID>
+                      <Description>"Main"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>153</ID>
+                          <Description>"isInitiallyActive"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>50</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>154</ID>
+                          <Description>"_initialColorizationRadius"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Float</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>54</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>155</ID>
+                          <Description>"_initialTintRadius"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Float</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>58</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>156</ID>
+                          <Description>"_isActive"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>5C</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>158</ID>
+                      <Description>"temperatureZone"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>FFFF80</Color>
+                      <GroupHeader>1</GroupHeader>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>159</ID>
+                          <Description>"temperature"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Float</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>160</ID>
+                          <Description>"range"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Float</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>24</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>161</ID>
+                          <Description>"isOverride"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Byte</VariableType>
+                          <Address>cookingspotstate_ptr</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                            <Offset>28</Offset>
+                            <Offset>18</Offset>
+                            <Offset>10</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>164</ID>
+          <Description>"WorldTemperatureController"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-07
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.Temperature.WorldTemperatureController:Update+3bd)
+define(bytes,F3 0F 11 28 4C 8B 7D F8)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.Temperature.WorldTemperatureController:Update+3bd)
+
+label(code)
+label(return)
+
+newmem:
+mov [worldtemperaturecontroller_ptr],rax
+
+code:
+  movss [rax],xmm5
+  mov r15,[rbp-08]
+  jmp return
+
+worldtemperaturecontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(worldtemperaturecontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rax],xmm5
+  // mov r15,[rbp-08]
+
+dealloc(newmem)
+unregistersymbol(worldtemperaturecontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.Temperature.WorldTemperatureController:Update+3bd
+
+PAP.Temperature.WorldTemperatureController:Update+38c: F2 0F 59 D3                    - mulsd xmm2,xmm3
+PAP.Temperature.WorldTemperatureController:Update+390: F2 0F 5A D2                    - cvtsd2ss xmm2,xmm2
+PAP.Temperature.WorldTemperatureController:Update+394: F2 0F 5A C9                    - cvtsd2ss xmm1,xmm1
+PAP.Temperature.WorldTemperatureController:Update+398: F2 0F 5A C0                    - cvtsd2ss xmm0,xmm0
+PAP.Temperature.WorldTemperatureController:Update+39c: 66 90                          - nop 2
+PAP.Temperature.WorldTemperatureController:Update+39e: 49 BB D0 6D D2 7F FD 02 00 00  - mov r11,UnityEngine.Mathf:MoveTowards
+PAP.Temperature.WorldTemperatureController:Update+3a8: 41 FF D3                       - call r11
+PAP.Temperature.WorldTemperatureController:Update+3ab: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+PAP.Temperature.WorldTemperatureController:Update+3af: 48 B8 F8 BA 2A 1F FC 02 00 00  - mov rax,000002FC1F2ABAF8
+PAP.Temperature.WorldTemperatureController:Update+3b9: F2 0F 5A E8                    - cvtsd2ss xmm5,xmm0
+// ---------- INJECTING HERE ----------
+PAP.Temperature.WorldTemperatureController:Update+3bd: F3 0F 11 28                    - movss [rax],xmm5
+// ---------- DONE INJECTING  ----------
+PAP.Temperature.WorldTemperatureController:Update+3c1: 4C 8B 7D F8                    - mov r15,[rbp-08]
+PAP.Temperature.WorldTemperatureController:Update+3c5: 48 8D 65 00                    - lea rsp,[rbp+00]
+PAP.Temperature.WorldTemperatureController:Update+3c9: 5D                             - pop rbp
+PAP.Temperature.WorldTemperatureController:Update+3ca: C3                             - ret 
+PAP.Temperature.WorldTemperatureController:Update+3cb: BA E4 01 00 00                 - mov edx,000001E4
+PAP.Temperature.WorldTemperatureController:Update+3d0: B9 46 01 00 00                 - mov ecx,00000146
+PAP.Temperature.WorldTemperatureController:Update+3d5: 90                             - nop 
+PAP.Temperature.WorldTemperatureController:Update+3d6: 49 BB 60 1F 3E 3D FB 02 00 00  - mov r11,000002FB3D3E1F60
+PAP.Temperature.WorldTemperatureController:Update+3e0: 41 FF D3                       - call r11
+2FD7FD25983: 00 00                          - add [rax],al
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>165</ID>
+              <Description>"Value"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>worldtemperaturecontroller_ptr</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>177</ID>
+          <Description>"DeliveryPoint"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Angst.exe
+  Version: 
+  Date   : 2025-12-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PAP.DeliveryPoints.DeliveryPointPopup:Refresh)
+define(bytes,55 48 8B EC 48 81 EC 60 01 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PAP.DeliveryPoints.DeliveryPointPopup:Refresh)
+
+label(code)
+label(return)
+
+newmem:
+mov [deliverypointpopup_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000160
+  jmp return
+
+deliverypointpopup_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(deliverypointpopup_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000160
+
+dealloc(newmem)
+unregistersymbol(deliverypointpopup_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PAP.DeliveryPoints.DeliveryPointPopup:Refresh
+
+21606A7270D: 00 00                 - add [rax],al
+21606A7270F: 00 00                 - add [rax],al
+21606A72711: 00 00                 - add [rax],al
+21606A72713: 00 00                 - add [rax],al
+21606A72715: 00 00                 - add [rax],al
+21606A72717: 00 00                 - add [rax],al
+21606A72719: 00 00                 - add [rax],al
+21606A7271B: 00 00                 - add [rax],al
+21606A7271D: 00 00                 - add [rax],al
+21606A7271F: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+1: 48 8B EC              - mov rbp,rsp
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+4: 48 81 EC 60 01 00 00  - sub rsp,00000160
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+b: 48 89 5D C8           - mov [rbp-38],rbx
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+f: 48 89 75 D0           - mov [rbp-30],rsi
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+13: 48 89 7D D8           - mov [rbp-28],rdi
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+17: 4C 89 65 E0           - mov [rbp-20],r12
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+1b: 4C 89 6D E8           - mov [rbp-18],r13
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+1f: 4C 89 75 F0           - mov [rbp-10],r14
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+23: 4C 89 7D F8           - mov [rbp-08],r15
+PAP.DeliveryPoints.DeliveryPointPopup:Refresh+27: 4C 8B E1              - mov r12,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>179</ID>
+              <Description>"Value Show When Open Crafting Table"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>178</ID>
+              <Description>"_allAvailableItems"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>180</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="19" RealAddress="2167D44DCD8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>181</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="4" RealAddress="21603C442F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>182</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="9" RealAddress="21603C442B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="5" RealAddress="21603C44270"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>184</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="9" RealAddress="21603C44230"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>185</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="8" RealAddress="21603C441F0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>186</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="1" RealAddress="21603C441B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>187</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="2" RealAddress="21603C44170"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>188</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="10" RealAddress="21603C44130"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>189</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="10" RealAddress="21603C440F0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>190</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="2" RealAddress="21603C440B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>191</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C44070"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>192</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C44030"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>193</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C50FF0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>194</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C50FB0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>195</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C50F70"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>196</ID>
+                  <Description>"containedItemCount"</Description>
+                  <LastState Value="0" RealAddress="21603C50F30"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>197</ID>
+                  <Description>"containedItemCount (Quick Slot 1)"</Description>
+                  <LastState Value="1" RealAddress="21603C50EF0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>198</ID>
+                  <Description>"containedItemCount (Quick Slot 2)"</Description>
+                  <LastState Value="0" RealAddress="21603C50EB0"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>199</ID>
+                  <Description>"containedItemCount (Quick Slot 3)"</Description>
+                  <LastState Value="0" RealAddress="21603C50E70"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[deliverypointpopup_ptr]+110</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>175</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>176</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>attachlist=getAutoAttachList()
+stringlist_add(attachlist,"Angst.exe");
+
+function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+getMainForm().caption = " ANGST - A Tale of Survival - v1.0.2-rel ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

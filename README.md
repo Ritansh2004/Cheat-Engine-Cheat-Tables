@@ -1,20 +1,3 @@
-# Hi there, I'm DANGER DASH! 👋 | Game Reverse Engineer & Tool Developer
-
-Welcome to my portfolio! I specialize in **Game Reverse Engineering, Memory Manipulation, and Binary Exploitation**, with a core focus on **Unity Engine games**. Using **Cheat Engine**, I develop advanced, highly optimized Cheat Tables (`.CT`) powered by custom Assembly injection scripts and dynamic pointer structures.
-
-[![FearlessRevolution Profile](https://img.shields.io/badge/FearlessRevolution-Profile-orange?style=for-the-badge)](https://fearlessrevolution.com/memberlist.php?mode=viewprofile&u=213726&sid=0f7ddd121c4e244f2663f8c2b424024d)
-
----
-
-## 🚀 Technical Skill Set
-
-* **Reverse Engineering:** Memory Scanning, Pointer Scanning, Pointer Maps, Data Structure Analysis.
-* **Scripting & Injection:** Advanced Assembly (x86/x64) Scripting, Full Code Injection, API Hooking.
-* **Game Engines:** Deep understanding of Unity Engine (Mono/IL2CPP architectures).
-* **Tools:** Cheat Engine, x64dbg, Ghidra, ReClass.NET.
-
----
-
 ## 🛠️ Featured Work: Cheat Engine Tables
 
 This repository serves as a showcase of my technical capabilities in bypassing game memory protections and structuring robust scripts. 

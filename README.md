@@ -9,7 +9,7 @@ This repository serves as a showcase of my technical capabilities in bypassing g
 
 ---
 
-**Here is the Table's [Browse All Cheat Tables (table branch)](https://github.com/Ritansh2004Cheat-Engine-Cheat-Tables/tree/Table's)**
+**Here is the Table's [Browse All Cheat Tables (table branch)](https://github.com/Ritansh2004/Cheat-Engine-Cheat-Tables/tree/Table's)**
 
 ## 💻 How to Use the Tables
 

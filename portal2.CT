@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>16</ID>
+      <Description>"Main"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"Developer Console"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Disabled
+1:Enabled
+</DropDownList>
+          <VariableType>Byte</VariableType>
+          <Address>engine.dll+510918</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Cheat State (sv_cheat)"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Disabled
+1:Enabled
+</DropDownList>
+          <VariableType>Byte</VariableType>
+          <Address>engine.dll+66C778</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>17</ID>
+          <Description>"Game Speed"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0.5:Half Speed
+1:Default
+2:double Speed
+</DropDownList>
+          <VariableType>Float</VariableType>
+          <Address>engine.dll+68C45C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"Create Portal Anywhere"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Disabled
+1:Enabled
+</DropDownList>
+          <VariableType>Byte</VariableType>
+          <Address>client.dll+A0CC50</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>10</ID>
+          <Description>"Show FPS"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Disabled
+1:Normal FPS
+2:Smooth FPS
+3:Server MS
+4:Show FPS &amp; Log to File
+</DropDownList>
+          <VariableType>Byte</VariableType>
+          <Address>client.dll+9F4EA0</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>12</ID>
+      <Description>"Option's"</Description>
+      <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+      <LastState Activated="1"/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : portal2.exe
+  Version: 
+  Date   : 2026-07-04
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"server.dll"+1EA7C0)
+define(bytes,8B 81 CC 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"server.dll"+1EA7C0)
+
+label(code)
+label(return)
+
+newmem:
+mov [god_ptr],ecx
+
+code:
+  mov eax,[ecx+000000CC]
+  jmp return
+
+god_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(god_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov eax,[ecx+000000CC]
+
+dealloc(newmem)
+unregistersymbol(god_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: server.dll+1EA7C0
+
+server.dll+1EA7B3: 8B E5              - mov esp,ebp
+server.dll+1EA7B5: 5D                 - pop ebp
+server.dll+1EA7B6: C2 0C 00           - ret 000C
+server.dll+1EA7B9: CC                 - int 3 
+server.dll+1EA7BA: CC                 - int 3 
+server.dll+1EA7BB: CC                 - int 3 
+server.dll+1EA7BC: CC                 - int 3 
+server.dll+1EA7BD: CC                 - int 3 
+server.dll+1EA7BE: CC                 - int 3 
+server.dll+1EA7BF: CC                 - int 3 
+// ---------- INJECTING HERE ----------
+server.dll+1EA7C0: 8B 81 CC 00 00 00  - mov eax,[ecx+000000CC]
+// ---------- DONE INJECTING  ----------
+server.dll+1EA7C6: C1 E8 08           - shr eax,08
+server.dll+1EA7C9: 83 E0 01           - and eax,01
+server.dll+1EA7CC: C3                 - ret 
+server.dll+1EA7CD: CC                 - int 3 
+server.dll+1EA7CE: CC                 - int 3 
+server.dll+1EA7CF: CC                 - int 3 
+server.dll+1EA7D0: 55                 - push ebp
+server.dll+1EA7D1: 8B EC              - mov ebp,esp
+server.dll+1EA7D3: 8B 45 08           - mov eax,[ebp+08]
+server.dll+1EA7D6: 56                 - push esi
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>13</ID>
+          <Description>"Instance"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>8000FF</Color>
+          <VariableType>4 Bytes</VariableType>
+          <Address>god_ptr</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"GodMode/NoTarget"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Disabled
+64:God Mode
+192:No Target
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[god_ptr]+CD</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"NoClip"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">2:Disabled
+8:Enabled
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>[god_ptr]+DA</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>18</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>19</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Portal 2 - BuildID 23934121 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

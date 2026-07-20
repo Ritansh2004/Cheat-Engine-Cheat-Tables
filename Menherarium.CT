@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>4</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Menherarium.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"GameManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Menherarium.exe
+  Version:
+  Date   : 2026-07-19
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+5FBA60)
+define(bytes,40 53 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+5FBA60)
+
+label(code)
+label(return)
+
+newmem:
+mov [gamemanager_ptr],rcx
+
+code:
+  push rbx
+  sub rsp,30
+  jmp return
+
+gamemanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(gamemanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbx
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(gamemanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Chinchiro.GameManager.set_State
+
+GameAssembly.dll+5FBA56: C3                    - ret
+GameAssembly.dll+5FBA57: CC                    - int 3
+GameAssembly.dll+5FBA58: CC                    - int 3
+GameAssembly.dll+5FBA59: CC                    - int 3
+GameAssembly.dll+5FBA5A: CC                    - int 3
+GameAssembly.dll+5FBA5B: CC                    - int 3
+GameAssembly.dll+5FBA5C: CC                    - int 3
+GameAssembly.dll+5FBA5D: CC                    - int 3
+GameAssembly.dll+5FBA5E: CC                    - int 3
+GameAssembly.dll+5FBA5F: CC                    - int 3
+// ---------- INJECTING HERE ----------
+Chinchiro.GameManager.set_State: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+5FBA62: 48 83 EC 30           - sub rsp,30
+GameAssembly.dll+5FBA66: 80 B9 01 02 00 00 00  - cmp byte ptr [rcx+00000201],00
+GameAssembly.dll+5FBA6D: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+5FBA70: 0F 85 E2 00 00 00     - jne GameAssembly.dll+5FBB58
+GameAssembly.dll+5FBA76: 83 B9 6C 01 00 00 09  - cmp dword ptr [rcx+0000016C],09
+GameAssembly.dll+5FBA7D: 75 0B                 - jne GameAssembly.dll+5FBA8A
+GameAssembly.dll+5FBA7F: 83 FA 09              - cmp edx,09
+GameAssembly.dll+5FBA82: 0F 85 D0 00 00 00     - jne GameAssembly.dll+5FBB58
+GameAssembly.dll+5FBA88: EB 05                 - jmp GameAssembly.dll+5FBA8F
+GameAssembly.dll+5FBA8A: 83 FA 09              - cmp edx,09
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"Value Show/Update When Set State"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000019FCF8F5540" RealAddress="7FF828F00011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>gamemanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"DayMaxRank"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5680"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+140</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"IsNext"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5684"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+144</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"IsTutorialSkip"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5685"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+145</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"IsEndlessTutorialEnabled"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5686"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+146</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"IsItemUseLockedByTutorial"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5687"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+147</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"IsDrawWin"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5688"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+148</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"IsClear"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5689"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+149</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"IsOverkill"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F568A"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+14A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"RerollNum"</Description>
+                  <LastState Value="4" RealAddress="19FCF8F568C"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"Turn"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5690"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+150</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"Day"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5694"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+154</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"DisplayDayBet"</Description>
+                  <LastState Value="100" RealAddress="19FCF8F5698"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"AddItemDistributionNum"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F569C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"PossessionMc"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F56A0"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"RecoveryNum"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F56A4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"RemainJudgeCnt"</Description>
+                  <LastState Value="20" RealAddress="19FCF8F56A8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"_state"</Description>
+                  <LastState Value="3" RealAddress="19FCF8F56AC"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"Mode"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F56B0"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"Difficulty"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F56B4"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"EndingType"</Description>
+                  <LastState Value="6" RealAddress="19FCF8F56B8"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"_dayBet"</Description>
+                  <LastState Value="100" RealAddress="19FCF8F5700"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"_rerollCnt"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5704"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"_totalRerollCnt"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5708"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"_maxDay"</Description>
+                  <LastState Value="7" RealAddress="19FCF8F570C"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"LikeabilityNum"</Description>
+                  <LastState Value="6" RealAddress="19FCF8F5710"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"_latestRoll"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5714"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"_trueEndIndex"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5718"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"_overkillCnt"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F571C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"_defaultDayBet"</Description>
+                  <LastState Value="100" RealAddress="19FCF8F5720"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"_targetScore"</Description>
+                  <LastState Value="400" RealAddress="19FCF8F5728"/>
+                  <Color>808040</Color>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"_overkillScore"</Description>
+                  <LastState Value="500" RealAddress="19FCF8F5730"/>
+                  <Color>808040</Color>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"_currentScore"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5738"/>
+                  <Color>808040</Color>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+1F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"_isFirstScore"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5740"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+200</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"_isReturningToTitle"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5741"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+201</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"_isContinue"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5742"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+202</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"_isInfiniteLoop"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5743"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+203</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"_isGameOverProcessRunning"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5744"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+204</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"_skipEnemyLoseSequenceOnNextGameOver"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5745"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+205</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"_skipBlackoutOnNextGameOverResultModal"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5746"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+206</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"_isEnemyDying"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5747"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+207</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"_skipPlayerJudgeOnNextResultAppearance"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5748"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+208</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"_isPlayTimeTrackingPaused"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5749"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+209</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"_isStateSaveSuppressedDuringJudge"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F574A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+20A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"_isAmuletReorderLocked"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F574B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+20B</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"_stateSaveSuppressedDuringDialogueCount"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F574C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+20C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"_itemUseLockCount"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5750"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+210</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"_rollMag"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F5760"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+220</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"_selectedGameSpeedIndex"</Description>
+                  <LastState Value="0" RealAddress="19FCF8F5764"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+224</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"_defaultFixedDeltaTime"</Description>
+                  <LastState Value="0.0199999921" RealAddress="19FCF8F5768"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[gamemanager_ptr]+228</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"_isStateMachineInitialized"</Description>
+                  <LastState Value="1" RealAddress="19FCF8F57B0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[gamemanager_ptr]+270</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"_player"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"IsSuspension"</Description>
+                      <LastState Value="0" RealAddress="1A00CE824A0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"MaxBlood"</Description>
+                      <LastState Value="1000" RealAddress="1A00CE824E0"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"CurrentBlood"</Description>
+                      <LastState Value="500" RealAddress="1A00CE824E4"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"CurrentItemCode"</Description>
+                      <LastState Value="0" RealAddress="1A00CE824E8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"ActiveDices"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"_size"</Description>
+                      <LastState Value="3" RealAddress="1A00CFA1C18"/>
+                      <Color>000000</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="4" RealAddress="1A03BF8E298"/>
+                      <Color>000000</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownListLink>NumType_CurrentRollData</DropDownListLink>
+                      <LastState Value="4" RealAddress="1A03BF42850"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownListLink>NumType_CurrentRollData</DropDownListLink>
+                      <LastState Value="4" RealAddress="1A03BF44340"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:One
+1:Two
+2:Three
+3:Four
+4:Five
+5:Six
+</DropDownList>
+                      <LastState Value="4" RealAddress="1A03BF49DF0"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+20</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>69</ID>
+              <Description>"_enemy"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"IsSuspension"</Description>
+                      <LastState Value="0" RealAddress="1A00D01F420"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"IsDialogue"</Description>
+                      <LastState Value="0" RealAddress="1A00D01F4A8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"_fadeTime"</Description>
+                      <LastState Value="0.5" RealAddress="1A00D01F4B8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"_talkSkipRequested"</Description>
+                      <LastState Value="0" RealAddress="1A00D01F4E8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"_isTalkSkipAccepting"</Description>
+                      <LastState Value="0" RealAddress="1A00D01F4E9"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>E9</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"ActiveDices"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"_size"</Description>
+                      <LastState Value="3" RealAddress="1A03BEFB198"/>
+                      <Color>000000</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"Count"</Description>
+                      <LastState Value="4" RealAddress="1A03BF766F8"/>
+                      <Color>000000</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>79</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:One
+1:Two
+2:Three
+3:Four
+4:Five
+5:Six
+</DropDownList>
+                      <LastState Value="5" RealAddress="19FD3873D00"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>80</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:One
+1:Two
+2:Three
+3:Four
+4:Five
+5:Six
+</DropDownList>
+                      <LastState Value="4" RealAddress="19FD38758B0"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>81</ID>
+                      <Description>"NumType_CurrentRollData"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:One
+1:Two
+2:Three
+3:Four
+4:Five
+5:Six
+</DropDownList>
+                      <LastState Value="0" RealAddress="19FD387F670"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[gamemanager_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>48</Offset>
+                        <Offset>30</Offset>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"_targetScores"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"_size"</Description>
+                  <LastState Value="8" RealAddress="1A00D27E288"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="8" RealAddress="1A00D287168"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>86</ID>
+                  <Description>"[0]Int64"</Description>
+                  <LastState Value="400" RealAddress="1A00D287170"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>87</ID>
+                  <Description>"[1]Int64"</Description>
+                  <LastState Value="1000" RealAddress="1A00D287178"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>88</ID>
+                  <Description>"[2]Int64"</Description>
+                  <LastState Value="3000" RealAddress="1A00D287180"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>89</ID>
+                  <Description>"[3]Int64"</Description>
+                  <LastState Value="6500" RealAddress="1A00D287188"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>90</ID>
+                  <Description>"[4]Int64"</Description>
+                  <LastState Value="9000" RealAddress="1A00D287190"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"[5]Int64"</Description>
+                  <LastState Value="17000" RealAddress="1A00D287198"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>92</ID>
+                  <Description>"[6]Int64"</Description>
+                  <LastState Value="24000" RealAddress="1A00D2871A0"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>93</ID>
+                  <Description>"[7]Int64"</Description>
+                  <LastState Value="141064" RealAddress="1A00D2871A8"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+188</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"_overkillScores"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>94</ID>
+                  <Description>"_size"</Description>
+                  <LastState Value="8" RealAddress="1A00D27E258"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>95</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="8" RealAddress="1A00D2870F8"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>96</ID>
+                  <Description>"[0]Int64"</Description>
+                  <LastState Value="500" RealAddress="1A00D287100"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>97</ID>
+                  <Description>"[1]Int64"</Description>
+                  <LastState Value="1200" RealAddress="1A00D287108"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>98</ID>
+                  <Description>"[2]Int64"</Description>
+                  <LastState Value="3600" RealAddress="1A00D287110"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>99</ID>
+                  <Description>"[3]Int64"</Description>
+                  <LastState Value="7800" RealAddress="1A00D287118"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>100</ID>
+                  <Description>"[4]Int64"</Description>
+                  <LastState Value="10800" RealAddress="1A00D287120"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>101</ID>
+                  <Description>"[5]Int64"</Description>
+                  <LastState Value="20400" RealAddress="1A00D287128"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>102</ID>
+                  <Description>"[6]Int64"</Description>
+                  <LastState Value="28800" RealAddress="1A00D287130"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"[7]Int64"</Description>
+                  <LastState Value="0" RealAddress="1A00D287138"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[gamemanager_ptr]+190</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"_levelEditor"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" Activated="1" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>105</ID>
+                  <Description>"Debug"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" Activated="1" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>106</ID>
+                      <Description>"IsStartFromDay7"</Description>
+                      <DropDownListLink>IsPlayerDesignRoll</DropDownListLink>
+                      <LastState Value="0" RealAddress="19F8E460F18"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>107</ID>
+                      <Description>"IsStartWithLikeabilityZero"</Description>
+                      <DropDownListLink>IsPlayerDesignRoll</DropDownListLink>
+                      <LastState Value="0" RealAddress="19F8E460F19"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>19</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>108</ID>
+                      <Description>"IsInfinityReroll"</Description>
+                      <DropDownListLink>IsPlayerDesignRoll</DropDownListLink>
+                      <LastState Value="0" RealAddress="19F8E460F1A"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>1A</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>109</ID>
+                      <Description>"IsDesignGimmick"</Description>
+                      <DropDownListLink>IsPlayerDesignRoll</DropDownListLink>
+                      <LastState Value="0" RealAddress="19F8E460F1B"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>1B</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>110</ID>
+                      <Description>"GameSpeed"</Description>
+                      <LastState Value="1" RealAddress="19F8E460F28"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>111</ID>
+                      <Description>"IsEnemyDesignRoll"</Description>
+                      <DropDownListLink>IsPlayerDesignRoll</DropDownListLink>
+                      <LastState Value="0" RealAddress="19F8E460F2C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>112</ID>
+                      <Description>"IsPlayerDesignRoll"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="19F8E460F38"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[gamemanager_ptr]+260</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>5</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>6</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Menherarium - v20260620230534 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

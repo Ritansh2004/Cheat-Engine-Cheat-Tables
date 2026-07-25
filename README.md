@@ -16,7 +16,7 @@ This repository serves as a showcase of my technical capabilities in bypassing g
 1. **Prerequisites:** Download and install [Cheat Engine](https://cheatengine.org/).
 2. **Download the Tables:** Click on the green **"Code"** button at the top of this page and select **"Download ZIP"**, then extract the contents to your local machine.
 3. **Execution:**
-   * Launch your desired Unity game.
+   * Launch your desired game.
    * Open the corresponding `.CT` file from the extracted `cheat-tables` folder.
    * Attach Cheat Engine to the game's running process.
    * Activate the features via the interactive UI script checkboxes.

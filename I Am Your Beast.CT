@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>19</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "I Am Your Beast.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"DebugManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : I Am Your Beast.exe
+  Version: 
+  Date   : 2026-10-23
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,DebugManager:Update)
+define(bytes,55 48 8B EC 48 81 EC A0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,DebugManager:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [debugmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000A0
+  jmp return
+
+debugmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(debugmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000A0
+
+dealloc(newmem)
+unregistersymbol(debugmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: DebugManager:Update
+
+287BA665D99: 04 02                          - add al,02
+287BA665D9B: 05 04 03 01 50                 - add eax,50010304
+287BA665DA0: 00 00                          - add [rax],al
+287BA665DA2: 00 00                          - add [rax],al
+287BA665DA4: 00 00                          - add [rax],al
+287BA665DA6: 00 00                          - add [rax],al
+287BA665DA8: 00 00                          - add [rax],al
+287BA665DAA: 00 00                          - add [rax],al
+287BA665DAC: 00 00                          - add [rax],al
+287BA665DAE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+DebugManager:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+DebugManager:Update+1: 48 8B EC                       - mov rbp,rsp
+DebugManager:Update+4: 48 81 EC A0 00 00 00           - sub rsp,000000A0
+DebugManager:Update+b: 48 89 75 D8                    - mov [rbp-28],rsi
+DebugManager:Update+f: 48 89 7D E0                    - mov [rbp-20],rdi
+DebugManager:Update+13: 4C 89 6D E8                    - mov [rbp-18],r13
+DebugManager:Update+17: 4C 89 75 F0                    - mov [rbp-10],r14
+DebugManager:Update+1b: 4C 89 7D F8                    - mov [rbp-08],r15
+DebugManager:Update+1f: 48 8B F1                       - mov rsi,rcx
+DebugManager:Update+22: C7 45 98 00 00 00 00           - mov [rbp-68],00000000
+DebugManager:Update+29: 48 B8 A0 34 8E E1 85 02 00 00  - mov rax,00000285E18E34A0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>debugmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"hideCommands"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"hideCommands"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"hideHud"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"disableMusic"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"disableEnemyRadio"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"pauseLevelTimer"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"infiniteHealth"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"disableEnemyVision"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+104</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"infiniteAmmo"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+10C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"lookSensitivityScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[debugmanager_ptr]+118</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"disableAimAssist"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+124</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"muteHarding"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"hideArms"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>15</ID>
+              <Description>"hideDeveloperText"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"active"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>808040</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+141</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"active_freeCamera"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>808040</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[debugmanager_ptr]+28</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>18</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>20</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " I Am Your Beast - v2026.43.C ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

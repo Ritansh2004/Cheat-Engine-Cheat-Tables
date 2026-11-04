@@ -1,0 +1,4857 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>65</ID>
+      <Description>"Scripts"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>13</ID>
+          <Description>"Fast Boot"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Enable it before the loading square logo disappears when booting up the game
+
+aobscan(fastboot,23 70 49 AF 00 00 00 00 00)
+registersymbol(fastboot)
+
+fastboot+08:
+  db 01
+
+
+[DISABLE]
+
+fastboot+08:
+  db 00
+
+unregistersymbol(fastboot)
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>21</ID>
+          <Description>"Debug Enable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Enable this script before the PRESS START or while in a game level
+
+aobscan(debug,EE E4 00 00 00 00 01 00)
+registersymbol(debug)
+
+debug+02:
+  db 00 00 00 00 00 00
+
+[DISABLE]
+
+debug+02:
+  db 00 00 00 00 01 00
+
+unregistersymbol(debug)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"Debug Main Menu UI"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Enter a race and finish it. Then press QUIT TO MENU.
+//DO NOT GO INTO PAUSE MENU WHEN THIS IS ENABLED!!!
+
+aobscan(predebug,93 C4 6C FF 00 00 00 00 00)
+registersymbol(predebug)
+
+predebug+08:
+  db 01
+
+
+[DISABLE]
+
+predebug+08:
+  db 00
+
+unregistersymbol(predebug)
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"Garage Car Render"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Tends to crash if many vehicles are instanced
+
+aobscan(carrender,C5 ED F2 21 00 00 00 00 00)
+registersymbol(carrender)
+
+carrender+08:
+  db 02
+
+[DISABLE]
+
+carrender+08:
+  db 00
+
+unregistersymbol(carrender)
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>592</ID>
+          <Description>"Show Hidden UI Options"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+///UILabelTreeMenuItem::Visibility:InvertValue
+//"Need for Speed The Run.exe"+568F52: cmp [esi+40],bl
+
+//1.0.0.0 Executable
+//0150B680:
+//jmp 0150B6AB
+
+00968F50:
+jmp 00968F7B
+
+[DISABLE]
+
+00968F50:
+jne 00968F7B
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>498</ID>
+          <Description>"UI Objects Hook"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(UI_PTR,$500)
+registersymbol(UI_PTR)
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push rcx
+lea rcx,[edi]
+mov [UI_PTR],rcx
+jmp originalcode
+
+originalcode:
+pop rcx
+mov eax,[edi]
+mov [edi+04],esi
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1089270:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(UI_PTR)
+"Need for Speed The Run.exe"+1089270:
+mov eax,[edi]
+mov [edi+04],esi
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>488</ID>
+              <Description>"UI Switch"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>UI_PTR</Address>
+              <Offsets>
+                <Offset>-C4</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>555</ID>
+          <Description>"Camera Type"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+alloc(cameratype,$500)
+registersymbol(cameratype)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+//GlobalCameraModeSetter::CinebotStateLogicEntityData::Mode
+
+//Pause Photo Mode: b8cd-dad5796cc5f1
+//Garage Photo Mode: 8a3e-163a5b9bebcd
+
+newmem:
+push ebx
+lea ebx,[eax+10]
+mov [cameratype],ebx
+jmp originalcode
+
+originalcode:
+pop ebx
+mov ecx,[eax+10]
+push ecx
+lea ecx,[esi+18]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+D5416A:
+jmp newmem
+nop 2
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(cameratype)
+"Need for Speed The Run.exe"+D5416A:
+mov ecx,[eax+10]
+push ecx
+lea ecx,[esi+18]
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>556</ID>
+              <Description>"Mode"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>4</ByteLength>
+              <Address>cameratype</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>584</ID>
+          <Description>"World Speed"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax+38]
+mov [ebx],(float)0.1
+movss xmm0,[ebx]
+pop ebx
+
+originalcode:
+//movss xmm0,[eax+38]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+11359:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+11359:
+movss xmm0,[eax+38]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>567</ID>
+          <Description>"All Vehicles Static"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+017A4265:
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+
+017A4265:
+movaps xmm0,[esi+000000D0]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>613</ID>
+          <Description>"Debug Camera Manual Control"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(debugcam,$500)
+registersymbol(debugcam)
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[esi+30]
+mov [debugcam],ebx
+jmp originalcode
+
+originalcode:
+pop ebx
+movaps xmm0,[esi+30]
+mulps xmm0,xmm0
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+B04C8B:
+jmp newmem
+nop 2
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(debugcam)
+"Need for Speed The Run.exe"+B04C8B:
+movaps xmm0,[esi+30]
+mulps xmm0,xmm0
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>617</ID>
+              <Description>"My X"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>615</ID>
+              <Description>"My Y"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>616</ID>
+              <Description>"My Z"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>619</ID>
+              <Description>"My Focus"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>3C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>614</ID>
+              <Description>"My Rotate X"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>-30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>618</ID>
+              <Description>"My Rotate Y"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>debugcam</Address>
+              <Offsets>
+                <Offset>-20</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>620</ID>
+              <Description>"Manual Control Enable"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+{$Lua}
+local getMemRecByDesc = getAddressList().getMemoryRecordByDescription
+
+MR_MyX = getMemRecByDesc("My X")
+MR_MyY = getMemRecByDesc("My Y")
+MR_MyZ = getMemRecByDesc("My Z")
+MR_Rotate_X = getMemRecByDesc("My Rotate X")
+MR_Rotate_Y = getMemRecByDesc("My Rotate Y")
+MR_Focus = getMemRecByDesc("My Focus")
+
+function checkKeys(timer)
+   if (isKeyPressed(VK_F)) then
+      MR_MyX.value = MR_MyX.value + 5
+   end
+   if (isKeyPressed(VK_G)) then
+      MR_MyY.value = MR_MyY.value + 5
+   end
+   if (isKeyPressed(VK_H)) then
+      MR_MyZ.value = MR_MyZ.value + 5
+   end
+   if (isKeyPressed(VK_J)) then
+      MR_MyX.value = MR_MyX.value - 5
+   end
+   if (isKeyPressed(VK_K)) then
+      MR_MyY.value = MR_MyY.value - 5
+   end
+   if (isKeyPressed(VK_L)) then
+      MR_MyZ.value = MR_MyZ.value - 5
+   end
+   if (isKeyPressed(VK_N)) then
+      MR_Rotate_X.value = MR_Rotate_X.value + .2
+   end
+   if (isKeyPressed(VK_M)) then
+      MR_Rotate_X.value = MR_Rotate_X.value - .2
+   end
+   if (isKeyPressed(VK_B)) then
+      MR_Rotate_Y.value = MR_Rotate_Y.value + .2
+   end
+   if (isKeyPressed(VK_V)) then
+      MR_Rotate_Y.value = MR_Rotate_Y.value - .2
+   end
+   if (isKeyPressed(VK_P)) then
+      MR_Focus.value = MR_Focus.value + .5
+   end
+   if (isKeyPressed(VK_O)) then
+      MR_Focus.value = MR_Focus.value - .5
+   end
+end
+t=createTimer(nil)
+timer_setInterval(t, 1)
+timer_onTimer(t, checkKeys)
+timer_setEnabled(t, true)
+
+[DISABLE]
+
+{$Lua}
+t.destroy();
+t=nil
+</AssemblerScript>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>746</ID>
+          <Description>"Framerate Unlocker"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+/*
+004106F6:
+jmp 00410720
+
+00410710:
+mov byte ptr [02714099],00
+
+00410717:
+mov byte ptr [02753F00],00
+*/
+
+004106F8:
+mov byte ptr [02714099],00
+
+004106FF:
+mov byte ptr [02753F00],00
+
+00410706:
+nop
+nop
+nop
+nop
+nop
+
+0041070B:
+mov byte ptr [esp+13],00
+
+00410710:
+mov byte ptr [02714099],00
+
+00410717:
+mov byte ptr [02753F00],00
+
+0041076F:
+mov byte ptr [02753F00],01
+
+[DISABLE]
+
+/*
+004106F6:
+je 00410720
+
+00410710:
+mov byte ptr [02714099],01
+
+00410717:
+mov byte ptr [02753F00],01
+*/
+
+004106F8:
+mov byte ptr [02714099],01
+
+004106FF:
+mov byte ptr [02753F00],01
+
+00410706:
+jmp 00410796
+
+0041070B:
+mov byte ptr [esp+13],01
+
+00410710:
+mov byte ptr [02714099],01
+
+00410717:
+mov byte ptr [02753F00],01
+
+0041076F:
+mov byte ptr [02753F00],00
+</AssemblerScript>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Activate</Action>
+              <Keys>
+                <Key>121</Key>
+              </Keys>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Deactivate</Action>
+              <Keys>
+                <Key>120</Key>
+              </Keys>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>739</ID>
+          <Description>"GameTime Settings"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+alloc(varSimTick,$500)
+registersymbol(varSimTick)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push edi
+lea edi,[eax+40]
+mov [varSimTick],edi
+pop edi
+jmp originalcode
+
+originalcode:
+mov cl,[eax+40]
+mov eax,[ebx+08]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+A607F7:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+A607F7:
+mov cl,[eax+40]
+mov eax,[ebx+08]
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>740</ID>
+              <Description>"VariableSimTickTimeEnable"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>varSimTick</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+              <Hotkeys>
+                <Hotkey>
+                  <Action>Set Value</Action>
+                  <Keys>
+                    <Key>123</Key>
+                  </Keys>
+                  <Value>1</Value>
+                  <ID>0</ID>
+                </Hotkey>
+                <Hotkey>
+                  <Action>Set Value</Action>
+                  <Keys>
+                    <Key>122</Key>
+                  </Keys>
+                  <Value>0</Value>
+                  <ID>1</ID>
+                </Hotkey>
+              </Hotkeys>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>742</ID>
+              <Description>"MaxVariableFps"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>varSimTick</Address>
+              <Offsets>
+                <Offset>-18</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>743</ID>
+          <Description>"Player Vehicle Control Check"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+alloc(isdriving,$500)
+registersymbol(isdriving)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[esi+04]
+mov [isdriving],ebx
+pop ebx
+jmp originalcode
+
+originalcode:
+cmp byte ptr [esi+04],00
+push edi
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+3F6C73:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(isdriving)
+unregistersymbol(isdriving)
+"Need for Speed The Run.exe"+3F6C73:
+cmp byte ptr [esi+04],00
+push edi
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>745</ID>
+              <Description>"PlayerHasVehicleControl"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>isdriving</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>611</ID>
+          <Description>"Tunnel of Pain Crash Bypass"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Coastal Rush Array - S01: b3a1-42b5eb5939bd
+
+//Tunnel of Pain - S02_2: a258-5ce0408bcb16
+//Don't Drive Junk - S01_5: 99e3-5d2adeb0ccde
+//Drive Harder - S13_6: a814-627b55388bb8
+//**CUT** - S01_3: a98a-a74323d9c933
+
+0121D23B:
+nop
+nop
+nop
+
+[DISABLE]
+
+0121D23B:
+cmp [esi],dx
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>747</ID>
+          <Description>"Chicago Interstate Action Level Crash Bypass"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00E4EB60:
+nop
+nop
+nop
+nop
+nop
+nop
+
+00E50F0E:
+nop
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+
+00E4EB60:
+mov [eax+00000090],edx
+
+00E50F0E:
+mov [edi+00000090],eax
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>654</ID>
+      <Description>"Time of Day"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>373</ID>
+          <Description>"Career &amp; Challenge Series Time Of Day Changer"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+push ebx
+lea ebx,[eax+64]
+mov [ebx],4 //The value of the TOD
+mov ecx,[ebx]
+pop ebx
+push 01
+
+originalcode:
+//mov ecx,[eax+64]
+//push 01
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+59BF25:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+59BF25:
+mov ecx,[eax+64]
+push 01
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>448</ID>
+          <Description>"Multiplayer Time of Day Changer"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+edx*4]
+mov [ebx],0 //TOD
+mov edx,[ebx]
+pop ebx
+pop esi
+mov eax,edx
+
+originalcode:
+//mov edx,[ecx+edx*4]
+//pop esi
+//mov eax,edx
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+45599E:
+jmp newmem
+nop
+
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+45599E:
+mov edx,[ecx+edx*4]
+pop esi
+mov eax,edx
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>52</ID>
+      <Description>"Vehicle"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>641</ID>
+          <Description>"Disable All Vehicle Assists"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+/*
+0181A09B:
+jne 0181A191 // Disables DriftIntentAnalyzer
+
+0181A1EF:
+jne 0181A24A // Disables RaceLineAnalyzer
+
+0181A4D7:
+je 0181A512 // Disables RaceCarExtraForces
+
+0181A35D:
+je 0181A3E9 // Disables RaceLineAssist states prep
+
+0069B003:
+je 0069B01E //"Wallride Grief Protection"
+*/
+
+0069B167:
+je 0069B1A7 // Disables AlignToRoad
+
+0069B5E2:
+jne 0069B60F // Disables OverrideDriftIntent
+
+01819981: // Sets RaceLineAssist status to RaceLineAssist_Off
+mov [edi+50],00000000
+
+018199A6: // Skips RaceLineAssist calculation
+jmp 01819CDC
+nop
+
+01819AB1:
+jne 01819CAC // Disables all RaceLineAssist forces
+
+0181AA64: // Disables drift assist forces
+nop
+nop
+nop
+nop
+nop
+
+01828E73: // Skips DriftIntents calculation
+jmp 018293A0
+nop
+
+[DISABLE]
+
+/*
+0181A09B:
+je 0181A191
+
+0181A1EF:
+je 0181A24A
+
+0181A4D7:
+jne 0181A512
+
+0181A35D:
+jne 0181A3E9
+
+0069B003:
+jne 0069B01E
+*/
+
+0069B167:
+jne 0069B1A7
+
+0069B5E2:
+je 0069B60F
+
+01819981:
+mov [edi+50],00000002
+
+018199A6:
+ja 01819CDC
+
+01819AB1:
+je 01819CAC
+
+0181AA64:
+call 0181A8E0
+
+01828E73:
+je 018293A0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>889</ID>
+          <Description>"Disable Basic Vehicle Assists"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+0181A09B:
+je 0181A191 // Disables DriftIntentAnalyzer
+
+0181A1EF:
+je 0181A24A // Disables RaceLineAnalyzer
+
+0181A4D7:
+jne 0181A512 // Disables RaceCarExtraForces
+
+0181A35D:
+jne 0181A3E9 // Disables RaceLineAssist states prep
+
+0181A43D:
+mov [ebx+00004640],00000000 // Sets RaceLineStatus to RaceLineAssist_Off
+
+[DISABLE]
+0181A09B:
+je 0181A191
+
+0181A1EF:
+je 0181A24A
+
+0181A4D7:
+jne 0181A512
+
+0181A35D:
+jne 0181A3E9
+
+0181A43D:
+mov [ebx+00004640],00000002
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>657</ID>
+          <Description>"Drift Physics Enhance"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+0069AF4D:
+jne 0069AF58
+
+[DISABLE]
+
+0069AF4D:
+je 0069AF58
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>643</ID>
+          <Description>"Vehicle Coordinates"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(car_coords,$500)
+registersymbol(car_coords)
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+60]
+mov [car_coords],ebx
+jmp originalcode
+
+originalcode:
+pop ebx
+movaps xmm0,[ecx+60]
+movaps xmm1,[edx]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1391D22:
+jmp newmem
+nop 2
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(car_coords)
+"Need for Speed The Run.exe"+1391D22:
+movaps xmm0,[ecx+60]
+movaps xmm1,[edx]
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>644</ID>
+              <Description>"X"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>car_coords</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>645</ID>
+              <Description>"Y"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>car_coords</Address>
+              <Offsets>
+                <Offset>4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>646</ID>
+              <Description>"Z"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>car_coords</Address>
+              <Offsets>
+                <Offset>8</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>733</ID>
+          <Description>"Vehicle Damage"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edi+eax*4+10]
+mov [ebx],(float)101 //Damage Amount: &gt;100 Detachable Parts
+movss xmm2,[ebx]
+pop ebx
+
+originalcode:
+//movss xmm2,[edi+eax*4+10]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+BDF4B0:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+BDF4B0:
+movss xmm2,[edi+eax*4+10]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>472</ID>
+          <Description>"Vehicle Lights Switch"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//84 D0 54 02
+
+//HeadLights
+00F8E41B:
+nop
+nop
+nop
+nop
+nop
+nop
+
+00F8B149:
+cmp byte ptr [esi+000001E7],1
+
+00F8E42C:
+mov byte ptr [esi+000001E7],1
+
+00F8AA6D:
+mov byte ptr [esi+000001E7],0
+
+00F86BB4:
+cmp byte ptr [esi+000001E7],1
+
+//RearLights
+00F86CFB:
+nop
+nop
+nop
+nop
+nop
+nop
+
+00F8B1E5:
+cmp byte ptr [esi+000001E9],1
+
+[DISABLE]
+
+//HeadLights
+00F8E41B:
+nop
+nop
+nop
+nop
+nop
+nop
+
+00F8B149:
+cmp byte ptr [esi+000001E7],1
+
+00F8E42C:
+cmp byte ptr [esi+000001E7],0
+
+00F8AA6D:
+cmp byte ptr [esi+000001E7],0
+
+00F86BB4:
+cmp byte ptr [esi+000001E7],0
+
+//RearLights
+00F86CFB:
+nop
+nop
+nop
+nop
+nop
+nop
+
+00F8B1E5:
+cmp byte ptr [esi+000001E9],0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>610</ID>
+          <Description>"Aero Spoiler &amp; Popup Headlights Fixer"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00FCE81D:
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+
+00FCE81D:
+movss [ebx+4C],xmm0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>478</ID>
+          <Description>"Aero Spoiler &amp; Popup Headlights Amount"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push edi
+lea edi,[ebx+4C]
+mov [edi],(float)1 //Amount of openness
+movss xmm0,[edi]
+pop edi
+
+originalcode:
+//movss xmm0,[ebx+4C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+BCE7DF:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+BCE7DF:
+movss xmm0,[ebx+4C]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>557</ID>
+          <Description>"All Vehicles Stock Bodykit"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+01194DCE:
+mov eax,[ebx+24]
+
+01195843:
+mov ecx,[eax+24]
+
+[DISABLE]
+
+01194DCE:
+mov eax,[ebx+20]
+
+01195843:
+mov ecx,[eax+20]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>558</ID>
+          <Description>"All Vehicles Stock Spoiler"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00F1D6D4:
+nop
+nop
+nop
+
+[DISABLE]
+
+00F1D6D4:
+mov eax,[esi+30]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>559</ID>
+          <Description>"All Vehicles Stock Exhaust"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00F1D6E5:
+nop
+nop
+nop
+
+[DISABLE]
+
+00F1D6E5:
+mov eax,[esi+38]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>560</ID>
+          <Description>"All Vehicles Stock Hood"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00F1D6F6:
+nop
+nop
+nop
+
+[DISABLE]
+
+00F1D6F6:
+mov eax,[esi+40]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>561</ID>
+          <Description>"All Vehicles Stock Rims"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//Front Axel
+00F1D707:
+nop
+nop
+nop
+
+//Rear Axel
+00F1D718:
+nop
+nop
+nop
+
+[DISABLE]
+
+00F1D707:
+mov eax,[esi+48]
+
+00F1D718:
+mov eax,[esi+50]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>562</ID>
+          <Description>"All Vehicles Default Paint"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00F1D72C:
+nop
+nop
+nop
+
+[DISABLE]
+
+00F1D72C:
+mov eax,[esi+58]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>564</ID>
+          <Description>"All Vehicles Stock Performance"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+00F1D757:
+mov ecx,[esi+5C]
+
+[DISABLE]
+
+00F1D757:
+mov ecx,[esi+68]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>566</ID>
+          <Description>"Vehicle Customization Script"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+getLuaEngine().cbShowOnPrint.Checked=false
+getLuaEngine().hide()
+
+function DEC_HEX(IN)
+    local B,K,OUT,I,D=16,"0123456789ABCDEF","",0
+    while IN&gt;0 do
+        I=I+1
+        IN,D=math.floor(IN/B),math.mod(IN,B)+1
+        OUT=string.sub(K,D,D)..OUT
+    end
+    return OUT
+end
+
+function Split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
+
+function AOBtoDEC(str)
+    split_string = Split(str, " ")
+    local hex = ""
+    for i=1,#split_string do
+        hex = hex .. split_string[#split_string+1-i]
+    end
+    return(tonumber(hex,16))
+end
+
+function hexByteString(addressdec)
+    local decByteString = table.concat(readBytes(addressdec,4,true),' ')
+    local hexByteS = decByteString:gsub('%S+',function (c) return string.format('%02X',c) end)
+    return(hexByteS)
+end
+
+local addressStart = "F9416A54" --First Vehicle of Customization Template
+local addressEnd = "F945A5D4" --Last Vehicle of Customization Template
+
+[ENABLE]
+function myTimer()
+    local currentCar = "9A 65 E3 66"
+
+    local AOB = "02 00 00 31 56 4F CC 99 "..currentCar.." 56 4F CC 99"
+    local MyMemscan = createMemScan()
+    memscan_returnOnlyOneResult(MyMemscan, true)
+    memscan_firstScan(MyMemscan,soExactValue,vtByteArray,0,AOB,"",addressStart,addressEnd,"*X*W*C",0,"",true,true,false,false)
+    memscan_waitTillDone(MyMemscan)
+    local address = memscan_getOnlyResult(MyMemscan) --Returns the address in integer format
+
+    local bodykit = address + 0x18
+    local spoiler = address + 0x28
+    local exhaust = address + 0x30
+    local hood = address + 0x38
+    local frontrims = address + 0x40
+    local rearrims = address + 0x48
+    local livery = address + 0x50
+    local performance = address + 0x60
+
+    --Variable Declaration
+    local BDK_ID = hexByteString(bodykit)
+    local SPL_ID = hexByteString(spoiler)
+    local EXH_ID = hexByteString(exhaust)
+    local HOD_ID = hexByteString(hood)
+    local FRM_ID = hexByteString(frontrims)
+    local RRM_ID = hexByteString(rearrims)
+    local LIV_ID = hexByteString(livery)
+    local PRF_ID = hexByteString(performance)
+
+    --Custom Values [Comment if not set]
+    --BDK_ID = "00 00 00 00"
+    --SPL_ID = "00 00 00 00"
+    --EXH_ID = "00 00 00 00"
+    --HOD_ID = "00 00 00 00"
+    --FRM_ID = "00 00 00 00"
+    --RRM_ID = "00 00 00 00"
+    LIV_ID = "E5 89 F7 57"
+    --PRF_ID = "00 00 00 00"
+
+    writeInteger(bodykit,AOBtoDEC(BDK_ID))
+    writeInteger(spoiler,AOBtoDEC(SPL_ID))
+    writeInteger(exhaust,AOBtoDEC(EXH_ID))
+    writeInteger(hood,AOBtoDEC(HOD_ID))
+    writeInteger(frontrims,AOBtoDEC(FRM_ID))
+    writeInteger(rearrims,AOBtoDEC(RRM_ID))
+    writeInteger(livery,AOBtoDEC(LIV_ID))
+    writeInteger(performance,AOBtoDEC(PRF_ID))
+
+    print "Customization Complete!"
+    timer_setEnabled(tmer, false)
+end
+
+tmer = createTimer(nil)
+timer_onTimer(tmer,myTimer)
+timer_setInterval(tmer, 100)
+timer_setEnabled(tmer, true)
+
+[DISABLE]
+--[[
+
+SPOILER:
+
+C2 FB 40 7D Spoilerless
+6A B9 6D 26 Evo X Time Attack
+61 B9 6D 26 Evo X Aero Pack
+49 B9 6D 26 Evo X Spoiler Lip
+48 9B 36 65 R35 SpecV Time Attack
+4B 84 04 14 200SX Drifting Pack Carbon
+6A 84 04 14 200SX Drifting Pack
+
+CB E1 DD 47 RX7 Time Attack
+29 67 1D 94 911 GT3RS 4.0 RSR Replica
+E1 E7 29 F6 911 GT2 Retro
+E1 5D A3 FC AE86 Longtail
+C9 8C E5 53 Carrera S Circuit Racer
+E1 A0 58 4D Challenger SRT8 Retro Pack
+6F EE BD 5E Vantage S Racer Pack
+2F 30 18 09 BMW M3 Racer Pack
+69 88 70 A2 Corvette Z06 NFS Edition
+
+EXHAUST:
+
+2A 65 EE CA Quadruple Custom Evo X
+C9 3F 57 21 Double Custom Evo X
+2E 44 95 11 Double Oval Mégane RS
+29 44 95 11 Quadruple Mégane RS
+6D 8A 5A FE Single AE86
+AE B2 A7 0A Quadruple R35 SpecV Time Attack
+EC F5 98 2F Single 200SX Oval
+EB F5 98 2F Double 200SX
+CD BF 63 E6 Single 240ZG Retro
+C9 4B 38 EB Quadruple SLS Circuit Racer
+AD 84 70 6C Single 2000GT-R Retro Racer
+A9 84 70 6C Double 2000GT-R Signature
+2A 05 65 00 Double MX5 Tuner Pack
+8D 4F D5 D7 Double Scirocco Concept Pack
+2B 2C AE C2 Double Scirocco NFS Edition
+
+2A D8 3B 0B Quadruple 370Z
+0A F8 F1 65 Double 1M Coupé
+09 F8 F1 65 Quadruple Custom 1M Coupé
+6B BD 50 5A Double Impreza WRX STi
+69 BD 50 5A Quadruple Impreza WRX STi
+EC 88 38 CB Double 911 GT2 Old Spice
+6C 1F D4 CE Single Oval RX7
+2F 09 BB E2 Double Nicholas RX7
+6F 72 BC B3 Double Supra
+AD 3F AB 01 Quadruple M3 GTS
+CB 7B 1B FB Double M3 GTS
+E9 03 78 D8 Quadruple Challenger STR8
+4C C8 C7 42 Quadruple Squared Challenger SRT8
+8B AC 96 3A Quadruple Focus RS
+4D 76 5B 69 Double Mustang Boss 302 Oval
+88 3E 81 41 Quadruple Camaro SS ’67
+2B 1B 5A 2C Double Camaro SS ’67
+08 7B 63 F7 Quadruple Challenger R/T
+
+LIVERY:
+
+3C 57 37 89 Snowflake
+63 37 4D 9C Venom
+DC 05 06 3F Signature - M3 Sport Evolution
+3C E8 8F D8 Yeti
+32 4E EE B8 Black Box
+3C AD 4C 88 SpeedHunters
+1C CC EB D5 Alpinestars
+47 2E E1 D2 The Run - Carrera S
+C3 D4 C1 69 Signature - 1M Coupé
+05 72 6A C9 Glossy Carbon Fiber Apollo S
+97 B0 15 22 Camaro SS ’67 NFS Edition
+57 59 47 26 Mustang Boss RTR:C NFS Edition
+03 16 C4 F2 Signature - El Camino SS
+23 DC F7 7C 2000GT-R Fatlace
+17 6D F7 37 200SX NFS Edition
+E3 61 39 55 Signature - Camaro SS
+C3 C6 B2 A4 Signature - Mustang Boss 302 ’12
+9C E3 98 BD Signature - 240ZG Miki Taka
+17 0E 78 E1 Corvette Carbon Fiber NFS Edition
+A3 9E BF 36 Signature - Autolog RX7
+23 EF 59 DE Signature - Strider ZL1
+15 5F 14 5F Signature - Corvette Dr. Pepper
+66 79 D7 25 M3 GTS Black w/ White Stripes
+69 79 D7 25 M3 GTS Red w/ White Stripes
+44 48 8E 20 Camaro SS White w/ Orange-Grey Flame Stripes
+47 48 8E 20 Camaro SS Red w/ Red-Black Flame Stripes
+46 48 8E 20 Camaro SS Blue w/ Blue-Black Flame Stripes
+49 48 8E 20 Camaro SS Black w/ White Flame Stripes
+67 9B BE 75 El Camino SS Black w/ White Stripes
+64 9B BE 75 El Camino SS White w/ Black Stripes
+65 9B BE 75 El Camino SS Yellow w/ Black Stripes
+62 9B BE 75 El Camino SS Red w/ Black Stripes
+63 9B BE 75 El Camino SS Dark Grey w/ Black Stripes
+60 F4 44 45 El Camino SS Light Grey w/ Black Stripes
+64 53 44 8A Focus RS White w/ Grey Stripes
+67 53 44 8A Focus RS Black w/ Grey Stripes
+66 53 44 8A Focus RS Blue w/ White Stripes
+69 53 44 8A Focus RS White w/ Blue Stripes
+E5 89 F7 57 GT3RS Matte Black w/ Yellow-White Stripe
+
+PAINT:
+
+25 7F 25 12 Aston Martin Metallic Blue
+8E F5 EC 34 Aston Martin Metallic Grey
+21 7F 25 12 Aston Martin Metallic Black
+A1 EB 38 6D Aston Martin Metallic Mint Green
+20 7F 25 12 Aston Martin Metallic Light Grey
+22 7F 25 12 Aston Martin Metallic Green
+2E 7F 25 12 Aston Martin Metallic Orange
+85 F5 EC 34 Vantage S Dark Green
+82 F5 EC 34 Vantage S Metallic Light Green
+81 F5 EC 34 Vantage S Gloss Turcoise
+8E F5 EC 34 Vantage S Metallic Light Grey
+C3 AF 4A F8 Audi Metallic Dark Blue
+C0 AF 4A F8 Audi Metallic Light Blue
+C4 AF 4A F8 R8 White
+A7 83 78 CC BMW Metallic Orange
+6E 40 AC BF BMW Metallic Electric Blue
+A5 83 78 CC 1M Coupé Black
+A1 83 78 CC 1M Coupé Red
+A2 83 78 CC 1M Coupé Blue
+AE 83 78 CC 1M Coupé Grey
+A3 80 A8 38 M3 E90 Dark Blue
+4E C0 45 CE Porsche Dark Blue
+00 21 64 2B Porsche Metallic Glacier Blue
+44 C0 45 CE Porsche Glossy Glacier Blue
+40 C0 45 CE Porsche Glossy Red
+45 C0 45 CE Porsche Glossy White
+86 2D 64 2B Porsche Metallic Light Blue
+E7 89 F7 57 GT3RS Metallic Blue
+C4 CE CB 5D 918RSR Metallic Blue
+C4 82 F0 34 Carrera GT Metallic Red
+C7 82 F0 34 Carrera GT Metallic Grey
+CE 82 F0 34 Carrera GT Metallic Dark Blue
+C0 82 F0 34 Carrera GT White
+C5 82 F0 34 Carrera GT Purple
+C2 2D 3D 22 GTR R35 Red
+00 67 A1 70 200SX Glossy Dark Purple
+C0 C0 44 4B RX7 Passion Red
+C2 C0 44 4B RX7 Pearlecent Green Blue
+03 30 22 28 RX7 Glossy Black w/ Gold Rims
+00 30 22 28 RX7 Metallic Dark Green w/ Gold Rims
+01 30 22 28 RX7 Metallic Light Grey w/ Gold Rims
+00 F1 AD A4 MX5 Glossy Black w/ Gold Anodized Rims
+00 61 63 E8 Subaru Blue
+47 6E 68 D1 Subaru Blue w/ Gold Rims
+80 69 63 E8 Subaru Blue w/ White Rims
+45 6E 68 D1 Subaru Red w/ Gold Rims
+22 BB 9E AA Countach Metallic Pastel Yellow
+2E BB 9E AA Countach Metallic Pastel Blue
+21 BB 9E AA Countach Metallic Pastel Green
+20 BB 9E AA Countach Metallic Pastel Orange
+25 BB 9E AA Countach Metallic Pastel Red
+42 09 0D 8F Aventador Purple
+43 09 0D 8F Aventador Yellow
+4E 09 0D 8F Aventador Matte Black
+40 14 73 8F SLS Glaciar White
+86 53 AE 45 SLS Metallic Blue
+C7 94 BC 78 Mégane RS Yellow
+C4 94 BC 78 Mégane RS Glaciar White
+CE 94 BC 78 Mégane RS Metallic Soft Blue
+07 80 65 82 Mégane RS Metallic Copper Yellow
+43 1F 82 16 Apollo S Metallic Blue
+85 B5 8C 94 LFA Blue
+82 B5 8C 94 LFA Yellow
+83 B5 8C 94 LFA Red
+8E B5 8C 94 LFA Matte Black
+6E 9B BE 75 El Camino SS Pastel Blue
+65 F4 44 45 El Camino SS Metallic Dark Blue
+82 DA B5 D1 Camaro SS Gloss Purple
+8E DA B5 D1 Camaro SS Gloss Dark Green
+43 48 8E 20 Camaro SS Metallic Dark Blue
+C0 33 8E 20 Camaro SS Pastel Yellow
+C1 33 8E 20 Camaro SS Pastel Light Blue
+05 A8 AE 98 Corvette Metallic Blue
+C2 9F 21 05 Challenger SRT8 Metallic Dark Blue
+CE 9F 21 05 Challenger SRT8 Metallic Dark Purple
+85 A2 B7 DD Challenger SRT8 Metallic Pink
+80 C3 26 52 Huayra Metallic Blue
+C3 1F E8 47 Cobra Daytona Glossy Red
+C1 1F E8 47 Cobra Daytona Metallic Blue
+47 A9 D0 06 Scirocco Metallic Blue
+4E A9 D0 06 Scirocco Matte Grey
+
+BODYKIT:
+
+20 12 C9 2C Hidden M3 GTS
+A9 98 E1 3D Hidden GT3RS 4.0
+AB 91 F5 40 Hidden Challenger R/T
+08 8A 79 17 Hidden Mustang Boss ’69
+CE 5A 5D EB Hidden R35 GT-R
+4B F4 4F D4 Hidden 200SX
+5F 1B 18 34 Hidden Corolla GT-S
+39 65 A4 5A Hidden Scirocco R
+08 9A 83 36 Hidden R32 GT-R
+95 37 32 D7 Hidden 370Z
+24 1D 96 87 Hidden RX-7
+
+B4 37 32 D7 Nikki 370Z
+01 12 C9 2C M3 GTS Jack Rourke
+3A 7E FA F6 WRX STi Time Attack
+FA 1B 18 34 AE86 Drifting Pack
+D1 22 A1 B5 Mégane RS Tuner Pack
+FB 25 E1 DC Evo X Time Attack
+D8 25 E1 DC Evo X Aero Pack
+66 1D 96 87 RX7 Time Attack
+05 1D 96 87 RX7 Nicholas
+C9 59 50 4E Mustang Boss 302 Track Day
+99 70 98 33 1M Coupé Aero Pack
+5C A0 90 80 Challenger SRT8 Retro Racer
+D5 E3 E7 86 Focus RS Tuner Pack
+36 E3 E7 86 Focus RS Racer Pack
+CE 99 83 36 R32 Merlin
+4A 9A 83 36 R32 Track Day
+FB 1C 95 C1 Gallardo Racer Pack
+D8 1C 95 C1 Gallardo Aero Pack
+6D 5B 5D EB R35 Racer Pack
+F4 FD 64 D0 911 GT2 Retro Racer
+03 7D 44 9A Corvette Circuit Racer
+E0 7D 44 9A Corvette NFS Edition
+BD 9A 29 EB 240ZG Retro Racer
+6D 54 CE 99 M3 E30 Circuit Racer Pack
+AF 53 CE 99 M3 E30 Pack 1
+03 F1 1E 27 Camaro ZL1 Strider
+28 A1 F4 7D Carrera S Circuit Racer
+7B 65 A4 5A Scirocco R Concept Pack
+84 44 46 4C Shelby GT500 The Run
+26 E2 43 69 Camaro SS ’67 Pack 1
+69 92 F5 40 Challenger R/T Retro Racer
+
+PERFORMANCE:
+
+1D 90 38 14 Tier 4 Carrera S Demo
+F4 1E EE BD Tier 5 Carrera S Signature
+15 44 7E 16 Tier 5 GT3RS 4.0 Signature
+DE 26 11 F3 Tier 4 Mustang Boss 302 Signature
+9C 3D 18 F1 Tier 5 Mustang Boss 302 Signature
+5A 35 E3 7D Tier 4 Mustang Boss 302 ’69 Old Spice
+A3 E8 FF AC Tier 4 Mustang Boss 302 ’69 AI
+1D 2B D1 95 Tier 4 Mustang Boss RTR AI
+B1 1C 46 EC Tier 4 370Z AI
+3B 11 24 F3 Tier 4 370Z AEM
+7E F2 CF 42 Tier 4 370Z Mila Belova
+72 C7 09 54 Tier 4 370Z Nikki
+CB B0 05 EE Tier 5 370Z Mila Belova
+4D DD 07 EF Tier 5 370Z Venom
+65 48 91 7A Tier 5 R35 NFS Edition
+A4 32 67 65 Tier 5 R35 Signature Edition
+F4 36 0B BF Tier 5 R35 SpecV AI
+A9 5F 58 1A Tier 6 R35 SpecV NFS Edition
+4B 0B A6 1A Tier 3 R32 Signature
+3C 7D B4 82 Tier 4 R32 AI
+DB AD E4 33 Tier 6 R32 Merlin
+5E 34 28 CB Tier 4 WRX STi NFS Edition
+10 87 EC B5 Tier 4 WRX STi AI
+81 7B 0E 8E Tier 5 WRX STi AI
+E6 87 8B 2D Tier 4 Camaro SS ’67 AI
+97 B0 15 22 Tier 4 Camaro SS ’67 NFS Edition
+91 21 38 5E Tier 6 Camaro SS Signature
+19 43 C2 7F Tier 4 RX7 AI
+74 C0 91 1F Tier 5 RX7 Nicholas
+E4 3C B7 72 Tier 6 RX7 NFS Edition
+63 8D 8E CC Tier 4 Challenger SRT8 NFS Edition
+A4 FB 4D 39 Tier 4 Challenger SRT8 AEM
+A7 67 99 8A Tier 6 R8 Tecknik
+CE D5 A7 B6 Tier 5 R8 NFS Edition
+33 2B 9E 88 Tier 4 Evo X AI
+7F BF DA 3B Tier 4 Evo X AI
+4B 29 A6 46 Tier 1 Challenger R/T
+AD 2C AA 1F Tier 4 Challenger R/T NFS Edition
+
+HOOD:
+
+09 DC 8F 5F RX7 Pack 2
+0A DC 8F 5F RX7 Time Attack
+09 D0 76 A2 Evo X Aero Pack
+09 DB 43 67 Mégane RS Tuner Pack
+E9 4D D7 20 GT3RS 4.0 RSR Pack
+8D 30 59 7B Challenger SRT8 Retro Pack
+81 3C C4 0B M3 GTS NFS Edition
+8F 3C C4 0B M3 GTS Racer Pack
+8E 1B 0D B3 Camaro SS ’67 Retro Racer
+8D 1B 0D B3 Camaro SS ’67 NFS Edition
+
+SPECIAL CARS:
+
+8A 96 3A 36 Porsche 911 GT2 - E3 Edition
+C5 03 A8 D7 Porsche 911 GT2 - Stock Black - RWB
+9A 65 E3 66 Porsche 911 Carrera S - Demo - Tier 4
+0A 92 03 CE McLaren MP4-12C - E3 Start Screen
+DE C7 BA 70 Lamborghini Miura SV - Hidden Rival
+85 C8 E0 5E Ford Focus RS - NFS Edition - Tier 4
+44 F7 F1 46 Nissan 240ZG - NFS Edition - Tier 1
+29 D2 CE 60 Nissan 240ZG - Coeur de Valerie - Tier 1
+18 A0 CA 29 Toyota Supra - Chris Rado - Tier 2
+BE 01 8A 22 Porsche 911 Carrera 4S
+
+CUSTOM AI PERFORMANCE CARS:
+
+E4 F4 A9 DB Mazda RX7 - Stock White Gold Rims
+FF E4 DD 52 Mazda RX7 - Modified Yellow
+57 28 CA A2 Mazda RX7 - Battle Machine
+94 5C 10 68 Mazda RX7 - Hankook
+9D 35 C9 5D Mazda RX7 - Modified Black
+
+10 F7 C2 4C Toyota AE86 - Modified White - ProStreet
+23 43 DD 7E Toyota AE86 - Modified White
+C6 8B 82 AE Toyota AE86 - Stock Light Blue
+
+C2 BA 50 67 Renault Sport Mégane RS - Modified Blue
+3C B7 48 A8 Renault Sport Mégane RS - Modified Green
+
+E4 C1 DA 57 Nissan Skyline 2000GT-R - Royal Purple
+A4 EB 99 5C Nissan Skyline 2000GT-R - Modified Red
+9A 98 47 9A Nissan Skyline 2000GT-R - Modified Blue
+
+56 5F EC 9B Lamborghini Miura SV - Stock Gray
+22 AE AC 0E Lamborghini Miura SV - Stock Yellow
+65 D9 FA E8 Lamborghini Miura SV - Modified White
+D8 BF 06 C7 Lamborghini Miura SV - Modified Blue
+
+BF 7C C9 CB Audi Quattro 20V - Modified Blue
+14 9E AE 8C Audi Quattro 20V - Modified Red
+
+1F B7 0F FA BMW 1 Series M Coupé - Modified Gray
+68 02 84 9D BMW 1 Series M Coupé - Modified White
+6E 01 F4 29 BMW 1 Series M Coupé - BBS
+8C 03 EC 91 BMW 1 Series M Coupé - Hankook
+
+3D D4 55 EC BMW M3 Sport Evolution - Modified Red
+A5 CA DA B2 BMW M3 Sport Evolution - Modified White
+CD B7 FA 2D BMW M3 Sport Evolution - Modified Gray
+0A 60 83 E6 BMW M3 Sport Evolution - Bimmerworld
+
+CB E4 ED C3 Mitsubishi Lancer EVO X - Modified Blue
+0F 66 2C 27 Mitsubishi Lancer EVO X - Modified White
+0C 59 74 71 Mitsubishi Lancer EVO X - Modified Blue
+7C B8 A8 57 Mitsubishi Lancer EVO X - Modified Green
+
+C0 F9 B0 EE Nissan Fairlady 240ZG - Modified Blue
+9D 96 E6 58 Nissan Fairlady 240ZG - Modified Gray
+
+FA BA E6 46 Nissan 370Z - Modified Red
+CC CB 26 F1 Nissan 370Z - MILA - Tier 5
+
+D2 BE 15 8E Nissan Skyline R32 - Stock Gray
+23 10 8D BF Nissan Skyline R32 - Stock Blue
+91 98 9E 4F Nissan Skyline R32 - Sparco
+4D 1B A1 EA Nissan Skyline R32 - Modified Yellow
+63 EE 1E A2 Nissan Skyline R32 - Modified Blue
+59 C0 2A 63 Nissan Skyline R32 - Modified White
+
+CD CB C5 A7 Nissan 200SX - Endless
+22 B9 8F B2 Nissan 200SX - Modified Orange
+2E F1 F4 4C Nissan 200SX - Modified Gray
+FB 77 8F 95 Nissan 200SX - Modified Blue
+
+36 8A F9 CA Subaru Impreza WRX STI - Stock Blue
+5C 5D 55 E1 Subaru Impreza WRX STI - Pearl White
+33 A4 2F 98 Subaru Impreza WRX STI - Modified Yellow
+74 0B 93 FC Subaru Impreza WRX STI - Modified White
+1E 24 C3 05 Subaru Impreza WRX STI - Modified White
+97 0F 60 BE Subaru Impreza WRX STI - Modified Black - Tier 5
+
+C6 C5 F0 5B Toyota Supra - Stock Blue
+2F BF A5 40 Toyota Supra - Modified White
+
+06 AE CF E5 Volkswagen Scirocco R - Modified White
+3B 16 BC 88 Volkswagen Scirocco R - Modified White
+6D 7C 25 69 Volkswagen Scirocco R - Modified Green
+
+A0 0F C5 56 Mazda MX-5 - Stock Metallic Grey Custom Vinyl
+E0 F9 FF F1 Mazda MX-5 - Stock Blue
+06 1D 02 F4 Mazda MX-5 - Modified Yellow
+F7 34 A3 F1 Mazda MX-5 - Modified White
+54 7A D5 DB Mazda MX-5 - Modified Blue
+
+E3 90 28 05 Ford Mustang RTR - Stock White
+78 C4 98 97 Ford Mustang RTR - Stock Blue
+
+73 AD 1B D6 Ford Mustang Boss 302 ’69 - Modified White
+95 9B B3 01 Ford Mustang Boss 302 ’69 - Modified Dark Green
+
+ED DC C5 72 Chevrolet Camaro SS ’67 - Stock White Stripe Flames
+59 94 A9 A0 Chevrolet Camaro SS ’67 - Stock Grey
+4A 34 03 45 Chevrolet Camaro SS ’67 - Modified Red
+
+DE C6 00 41 Ford Focus RS - Modified White
+
+39 55 6D 3C Dodge Challenger R/T - Stock Blue
+84 FA E4 07 Dodge Challenger R/T - Stock Green
+
+4C E2 D7 C5 Audi R8 - Stock - Technik Livery
+43 04 6E 49 Audi R8 - Bodykit - Tier 5
+AF DF C5 59 Audi R8 - Bodykit White - Tier 5
+
+48 3B 44 54 Chevrolet Camaro ZL1 - Modified Green
+A2 4A 7A 3C Chevrolet Camaro ZL1 - Stock Blue
+B6 1B F2 6C Chevrolet Camaro ZL1 - Modified Light Gray
+35 69 AD C9 Chevrolet Camaro ZL1 - Dark Matte - Tier 5
+
+9A 8F 1A C8 Shelby Cobra Daytona Coupé - Stock Blue
+35 02 D9 0D Shelby Cobra Daytona Coupé - Stock White
+52 7E 9D 47 Shelby Cobra Daytona Coupé - Modified Blue - Tier 5
+
+1C 71 F1 1C Lotus Evora - Stock Dark Green
+15 3A 8B 0C Lotus Evora - Stock Dark Red
+54 41 08 99 Lotus Evora - Modified Dark Green
+
+EB D5 99 9F Lotus Exige Cup 260 - Modified Dark Green
+37 27 76 CB Lotus Exige Cup 260 - Alpinestars - Tier 5
+
+52 96 24 CC Ford Shelby GT500 Super Snake - Stock Red
+
+FE 6F D7 4F Wolkswagen Golf GTI MKI - Modified Red
+
+20 E5 62 7A Chevrolet El Camino SS - Modified Yellow
+3F A6 4B CA Chevrolet El Camino SS - Modified Black
+3F A6 4B CA Chevrolet El Camino SS - Cesar DeLeon - Tier 5
+
+93 FE E1 3E Pontiac Firebird Formula - Stock Red
+
+3F 39 1A 27 Chevrolet Corvette Z06 - Stock White - Tier 5
+
+23 AF 71 FA Nissan GT-R V-Spec - Tier 5
+
+25 5C 71 F6 Porsche 911 GT3RS 4.0 - Tier 5
+
+4F AE C3 17 Lamborghini Gallardo Valentino Balboni - Tier 5
+
+COP CARS:
+
+D8 FF BC 87 Lamborghini Gallardo VB - Federal Police
+81 7F E6 92 Nissan GT-R (R35) - Federal Police
+8E 8E DB 0E Porsche Cayenne Turbo - Federal Police
+5E E3 BF 29 Dodge Charger SRT-8 - Federal Police (Slow)
+37 40 29 A5 Dodge Charger SRT-8 - Federal Police (Fast)
+C2 30 71 9E Ford Police Interceptor - Undercover
+3A A1 4B EB Ford Police Interceptor - State Police (Slow)
+F8 1E 05 81 Ford Police Interceptor - State Police (Fast)
+8E 25 E9 5C Ford Police Interceptor - Federal Police
+
+--]]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>220</ID>
+          <Description>"Car Changer"</Description>
+          <LastState Value="1D ED 2C 8C" RealAddress="F3D313CC"/>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>4</ByteLength>
+          <Address>F3D313CC</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"Car Locker"</Description>
+          <LastState Value="00 00 00 00" RealAddress="F94C692C"/>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>4</ByteLength>
+          <Address>F94C692C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>436</ID>
+          <Description>"Car Object"</Description>
+          <LastState Value="37 65 D7 15" RealAddress="ED54F1A0"/>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>4</ByteLength>
+          <Address>"Need for Speed The Run.exe"+023B8D58</Address>
+          <Offsets>
+            <Offset>3C8</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>192</Key>
+              </Keys>
+              <Value>1889692556</Value>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>652</ID>
+      <Description>"Traffic"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>461</ID>
+          <Description>"Traffic Density Scale"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx]
+mov [ebx],(float)0 //DensityScale (default = 0.05)
+movss xmm0,[ebx]
+and eax,-04
+pop ebx
+
+
+originalcode:
+//movss xmm0,[ecx]
+//and eax,-04
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+E5EEF6:
+jmp newmem
+nop 2
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+E5EEF6:
+movss xmm0,[ecx]
+and eax,-04
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>462</ID>
+          <Description>"Traffic Max Density"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax+1C]
+mov [ebx],(float)0 //MaxDensity (default = 0.15)
+movss xmm2,[ebx]
+pop ebx
+
+originalcode:
+//movss xmm2,[eax+1C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+E5EEE9:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+E5EEE9:
+movss xmm2,[eax+1C]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>463</ID>
+          <Description>"Traffic Vehicle Limit"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax+60]
+mov [ebx],(int)0 //VehicleLimit (default 25)
+mov eax,[ebx]
+pop ebx
+cmp eax,19
+
+originalcode:
+//mov eax,[eax+60]
+//cmp eax,19
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+E5A9A3:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+E5A9A3:
+mov eax,[eax+60]
+cmp eax,19
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>653</ID>
+      <Description>"Timers"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" Activated="1" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Checkpoint Timer Disable"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+008FBF06:
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+
+013DB998:
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+008FBF06:
+movss [ecx+00000580],xmm0
+
+013DB998:
+movss [eax+04],xmm0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>19</ID>
+          <Description>"Reset OOB Disable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+007FAA8C:
+nop
+nop
+nop
+
+[DISABLE]
+007FAA8C:
+fld dword ptr [ecx+68]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>473</ID>
+          <Description>"Wrong Way Respawn Disable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+nop
+nop
+nop
+nop
+nop
+nop
+
+originalcode:
+//fld dword ptr [esi+00002924]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+408915:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+408915:
+fld dword ptr [esi+00002924]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>609</ID>
+          <Description>"Rival Getting Away Disable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+008CFB6E:
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+
+008CFB6E:
+movss xmm0,[esi+24]
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>51</ID>
+      <Description>"Game"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>445</ID>
+          <Description>"Unlock All Vehicles"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+mov [eax+18],1
+jne "Need for Speed The Run.exe"+53D639
+
+originalcode:
+//cmp [eax+18],bl
+//jne "Need for Speed The Run.exe"+53D639
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+53D629:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+53D629:
+cmp [eax+18],bl
+jne "Need for Speed The Run.exe"+53D639
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>447</ID>
+          <Description>"Unlock All Challenges"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+mov byte ptr [ebp+18],1
+je "Need for Speed The Run.exe"+45B204
+
+originalcode:
+//cmp byte ptr [ebp+18],00
+//je "Need for Speed The Run.exe"+45B204
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+45B162:
+jmp newmem
+nop 5
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+45B162:
+cmp byte ptr [ebp+18],00
+je "Need for Speed The Run.exe"+45B204
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>451</ID>
+          <Description>"No Vehicle Event Restriction"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[esi+48]
+mov [ebx],0 //Address of _c4/Gameplay/Playlist/Restrictions/CarFilter
+mov ecx,[ebx]
+pop ebx
+push 00
+
+originalcode:
+//mov ecx,[esi+48]
+//push 00
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+48D46C:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+48D46C:
+mov ecx,[esi+48]
+push 00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>640</ID>
+          <Description>"AI Difficulty Expert"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax+2C]
+mov [ebx],(int)3 //RaceAIDifficulty_Expert
+mov edi,[ebx]
+test ecx,ecx
+pop ebx
+
+originalcode:
+//mov edi,[eax+2C]
+//test ecx,ecx
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+44A6C5:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+44A6C5:
+mov edi,[eax+2C]
+test ecx,ecx
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>457</ID>
+          <Description>"Enable AI In Events"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+7D]
+mov [ebx],1 //Enables AI
+mov dl,[ebx]
+pop ebx
+mov [esi+000005C3],dl
+
+originalcode:
+//mov dl,[ecx+7D]
+//mov [esi+000005C3],dl
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+FCC0B9:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+FCC0B9:
+mov dl,[ecx+7D]
+mov [esi+000005C3],dl
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>454</ID>
+          <Description>"Number of Players Override"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+70]
+mov [ebx],1 //Number of Opponents Including the Player
+mov edx,[ebx]
+pop ebx
+mov [esi+000005C8],edx
+
+originalcode:
+//mov edx,[ecx+70]
+//mov [esi+000005C8],edx
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+FCC0D1:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+FCC0D1:
+mov edx,[ecx+70]
+mov [esi+000005C8],edx
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>455</ID>
+          <Description>"AI Opponent Car List Override"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+68]
+mov [ebx],0 //CarList Class Address
+mov edx,[ebx]
+pop ebx
+mov ecx,["Need for Speed The Run.exe"+24E6884]
+
+originalcode:
+//mov edx,[ecx+68]
+//mov ecx,["Need for Speed The Run.exe"+24E6884]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+FCC268:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+FCC268:
+mov edx,[ecx+68]
+mov ecx,["Need for Speed The Run.exe"+24E6884]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>459</ID>
+          <Description>"Player Grid Position Single Player"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax+74]
+mov [ebx],1 //Start Position
+mov ecx,[ebx]
+pop ebx
+mov [esi+000005CC],ecx
+
+originalcode:
+//mov ecx,[eax+74]
+//mov [esi+000005CC],ecx
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+FCC0DD:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+FCC0DD:
+mov ecx,[eax+74]
+mov [esi+000005CC],ecx
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>460</ID>
+          <Description>"Race Info Collection Key Override"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+64]
+mov [ebx],(int)1143901348 //CollectionKey
+mov edx,[ebx]
+pop ebx
+mov ecx,["Need for Speed The Run.exe"+24824F8]
+
+originalcode:
+//mov edx,[ecx+64]
+//mov ecx,["Need for Speed The Run.exe"+24824F8]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+597A3B:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+597A3B:
+mov edx,[ecx+64]
+mov ecx,["Need for Speed The Run.exe"+24824F8]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>464</ID>
+          <Description>"Difficulty Scalar"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax]
+mov [ebx],(float)5.0 //DifficultyScalar
+movss xmm0,[ebx]
+movss xmm1,[esi+0C]
+pop ebx
+
+originalcode:
+//movss xmm0,[eax]
+//movss xmm1,[esi+0C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+E61ED9:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+E61ED9:
+movss xmm0,[eax]
+movss xmm1,[esi+0C]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>466</ID>
+          <Description>"Glue Scalar"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[eax]
+mov [ebx],(float)0.7 //GlueScalar
+movss xmm0,[ebx]
+movss xmm1,[esi+08]
+pop ebx
+
+originalcode:
+//movss xmm0,[eax]
+//movss xmm1,[esi+08]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+E61EA1:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+E61EA1:
+movss xmm0,[eax]
+movss xmm1,[esi+08]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>972</ID>
+          <Description>"Blown Tires"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+0069B0E1:
+mov byte ptr [esi+00000110],01
+[DISABLE]
+0069B0E1:
+mov byte ptr [esi+00000114],00
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>975</ID>
+          <Description>"Engine Blown"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+0069B09D:
+mov byte ptr [esi+0000010D],01
+[DISABLE]
+0069B09D:
+mov byte ptr [esi+0000010D],00
+</AssemblerScript>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Toggle Activation</Action>
+              <Keys>
+                <Key>81</Key>
+              </Keys>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>976</ID>
+          <Description>"Is Traffic"</Description>
+          <LastState Activated="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+mov [esi+00000103],1
+
+originalcode:
+//mov [esi+00000103],al
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29AB10:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29AB10:
+mov [esi+00000103],al
+</AssemblerScript>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Toggle Activation</Action>
+              <Keys>
+                <Key>9</Key>
+              </Keys>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>978</ID>
+          <Description>"Natural Air Expected"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+mov [esi+00000298],1
+
+originalcode:
+//mov [esi+00000298],al
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29B161:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29B161:
+mov [esi+00000298],al
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>982</ID>
+          <Description>"Nos Enabled"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+
+originalcode:
+mov [esi+000000B5],0
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29B064:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29B064:
+mov [esi+000000B5],bl
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>984</ID>
+          <Description>"Extra Nos Unlocked"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+//When disabled, it only fills up half the NOS bar
+
+newmem:
+mov [esi+000000B6],0
+
+originalcode:
+//mov [esi+000000B6],al
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29B08C:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29B08C:
+mov [esi+000000B6],al
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>988</ID>
+          <Description>"Steering Type"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+//0 GAMEPAD (DEFAULT), 1 RAW INPUT, 2 UNKNOWN, 3 NO STEERING
+
+newmem:
+mov [esi+00000088],1
+
+originalcode:
+//mov [esi+00000088],eax
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29AB3A:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29AB3A:
+mov [esi+00000088],eax
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>991</ID>
+          <Description>"Drafting Enabled"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+mov [esi+000002B0],0
+
+originalcode:
+//movss [esi+000002B0],xmm0
+
+exit:
+jmp returnhere
+
+"Need For Speed The Run.exe"+29B65C:
+jmp newmem
+nop 3
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need For Speed The Run.exe"+29B65C:
+movss [esi+000002B0],xmm0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>154</ID>
+          <Description>"Force Reset"</Description>
+          <LastState Value="0" RealAddress="E4FB0B21"/>
+          <VariableType>Byte</VariableType>
+          <Address>"Need for Speed The Run.exe"+026858B0</Address>
+          <Offsets>
+            <Offset>AE1</Offset>
+            <Offset>8</Offset>
+            <Offset>14C</Offset>
+            <Offset>D0</Offset>
+            <Offset>38</Offset>
+            <Offset>88</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>749</ID>
+          <Description>"Vehicle Collision Disable"</Description>
+          <LastState Value="0" RealAddress="E4FB0B23"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>"Need for Speed The Run.exe"+026858B0</Address>
+          <Offsets>
+            <Offset>AE3</Offset>
+            <Offset>8</Offset>
+            <Offset>14C</Offset>
+            <Offset>D0</Offset>
+            <Offset>38</Offset>
+            <Offset>88</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1019</ID>
+          <Description>"Wrecked Trigger"</Description>
+          <LastState Value="0" RealAddress="E4FB0B2A"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>"Need for Speed The Run.exe"+026858B0</Address>
+          <Offsets>
+            <Offset>AEA</Offset>
+            <Offset>8</Offset>
+            <Offset>14C</Offset>
+            <Offset>D0</Offset>
+            <Offset>38</Offset>
+            <Offset>88</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>751</ID>
+          <Description>"Explosion Request"</Description>
+          <LastState Value="0" RealAddress="E4FB0B2C"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>"Need for Speed The Run.exe"+026858B0</Address>
+          <Offsets>
+            <Offset>AEC</Offset>
+            <Offset>8</Offset>
+            <Offset>14C</Offset>
+            <Offset>D0</Offset>
+            <Offset>38</Offset>
+            <Offset>88</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>84</Key>
+              </Keys>
+              <Value>1</Value>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"In-Game HUD"</Description>
+          <LastState Value="1" RealAddress="F3D54758"/>
+          <VariableType>Byte</VariableType>
+          <Address>0288B55C</Address>
+          <Offsets>
+            <Offset>5B8</Offset>
+            <Offset>C</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>103</Key>
+              </Keys>
+              <Value>1</Value>
+              <ID>0</ID>
+            </Hotkey>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>104</Key>
+              </Keys>
+              <Value>0</Value>
+              <ID>1</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>452</ID>
+          <Description>"Multiplayer Playlist Sets: d369-41fd72fb1cb0"</Description>
+          <LastState Value="" RealAddress="00000000"/>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>510</ID>
+      <Description>"VisEnv"</Description>
+      <Options moDefaultCollapsed="1" moManualExpandCollapse="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>673</ID>
+          <Description>"VisEnv Custom Night Settings"</Description>
+          <Options moAlwaysHideChildren="1" moActivateChildrenAsWell="1" moDeactivateChildrenAsWell="1"/>
+          <LastState Value="" RealAddress="00000000"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>695</ID>
+              <Description>"Time Of Day Changer Career &amp; Challenge Series"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+push ebx
+lea ebx,[eax+64]
+mov [ebx],0 //The value of the TOD
+mov ecx,[ebx]
+pop ebx
+push 01
+
+/*
+push ebx
+lea ebx, [eax+64]
+mov [ebx], xxx (whatever value you want to move to the address here)
+mov edx, [ebx]
+pop ebx
+*/
+
+originalcode:
+//mov ecx,[eax+64]
+//push 01
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+59BF25:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+59BF25:
+mov ecx,[eax+64]
+push 01
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>661</ID>
+              <Description>"World Render Light Intensity"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx]
+mov [ebx],(float)0.5
+fld dword ptr [ebx]
+fstp dword ptr [eax+18]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+18]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1E3B13B:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1E3B13B:
+fld dword ptr [edx]
+fstp dword ptr [eax+18]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>666</ID>
+              <Description>"Light Exposure Intensity"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx]
+mov [ebx],(float)7.5
+fld dword ptr [ebx]
+fstp dword ptr [eax+5C]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+5C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620B8:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620B8:
+fld dword ptr [edx]
+fstp dword ptr [eax+5C]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>667</ID>
+              <Description>"HeadlightCondition"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx+000000D0]
+mov [ebx],(int)1
+mov edx,[ebx]
+pop ebx
+
+originalcode:
+//mov edx,[edx+000000D0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620E8:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620E8:
+mov edx,[edx+000000D0]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>671</ID>
+              <Description>"SkyBrightnessScale"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)0.25
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+34]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+34]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F63073:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F63073:
+fld dword ptr [edx]
+fstp dword ptr [eax+34]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>669</ID>
+              <Description>"SunRotationX"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)0
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+58]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+58]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620B0:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620B0:
+fld dword ptr [edx]
+fstp dword ptr [eax+58]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>670</ID>
+              <Description>"SunRotationY"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)0
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+54]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+54]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620A8:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620A8:
+fld dword ptr [edx]
+fstp dword ptr [eax+54]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>668</ID>
+              <Description>"TimeOfDayType"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx+000000B0]
+mov [ebx],(int)1
+mov edx,[ebx]
+pop ebx
+
+originalcode:
+//mov edx,[edx+000000B0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F6209C:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F6209C:
+mov edx,[edx+000000B0]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>672</ID>
+              <Description>"SunSize"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)-10
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+3C]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+3C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F63087:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F63087:
+fld dword ptr [edx]
+fstp dword ptr [eax+3C]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>694</ID>
+              <Description>"SunColor"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+push edi
+push ecx
+lea ebx,[edx] //x
+lea edi,[edx+4] //y
+lea ecx,[edx+8] //z
+mov [ebx],(float)0
+mov [edi],(float)0
+mov [ecx],(float)0
+movq xmm0,[edx]
+mov eax,[esp+04]
+pop ecx
+pop edi
+pop ebx
+
+originalcode:
+//movq xmm0,[edx]
+//mov eax,[esp+04]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F62032:
+jmp newmem
+nop 3
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F62032:
+movq xmm0,[edx]
+mov eax,[esp+04]
+</AssemblerScript>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>543</ID>
+          <Description>"VisEnv Real-Time Hook"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+alloc(visenv,$500)
+registersymbol(visenv)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ebp+000000F0]
+mov [visenv],ebx
+jmp originalcode
+
+originalcode:
+pop ebx
+lea esi,[ebp+000000F0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1587E88:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+dealloc(visenv)
+"Need for Speed The Run.exe"+1587E88:
+lea esi,[ebp+000000F0]
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>656</ID>
+              <Description>"TimeOfDayType"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-A0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>650</ID>
+              <Description>"HeadlightCondition"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>545</ID>
+              <Description>"Skybox Lighting"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>134</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>547</ID>
+              <Description>"Light Source X Axis"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-9C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>548</ID>
+              <Description>"Light Source Y Axis"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-98</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>549</ID>
+              <Description>"Light Exposure Intensity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-94</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>550</ID>
+              <Description>"Sun Light Intensity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>-88</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>552</ID>
+              <Description>"World Render Light"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>90</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>585</ID>
+              <Description>"World Render Light Intensity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>98</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>682</ID>
+              <Description>"FogDensity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>1E8</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>696</ID>
+              <Description>"FogStart"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>208</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>683</ID>
+              <Description>"FogEnd"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>20C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>687</ID>
+              <Description>"DynamicEnvmapComponent"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>visenv</Address>
+              <Offsets>
+                <Offset>71</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>553</ID>
+          <Description>"VisEnv Parameter Fixer"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//WorldRender Light
+01987EA7:
+nop
+nop
+nop
+nop
+nop
+
+//SkyboxLighting
+01987ECD:
+nop
+nop
+nop
+nop
+nop
+
+//LightExposure Intensity
+01987E86:
+nop
+nop
+
+//Fog
+01987EE5:
+nop
+nop
+
+[DISABLE]
+
+01987EA7:
+mov ecx,00000010
+
+01987ECD:
+mov ecx,00000034
+
+01987E86:
+repe movsd
+
+01987EE5:
+repe movsd
+</AssemblerScript>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Toggle Activation</Action>
+              <Keys>
+                <Key>98</Key>
+              </Keys>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>504</ID>
+          <Description>"TimeOfDayType"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx+000000B0]
+mov [ebx],(int)1
+mov edx,[ebx]
+pop ebx
+
+originalcode:
+//mov edx,[edx+000000B0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F6209C:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F6209C:
+mov edx,[edx+000000B0]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>508</ID>
+          <Description>"HeadlightCondition"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx+000000D0]
+mov [ebx],(int)1
+mov edx,[ebx]
+pop ebx
+
+originalcode:
+//mov edx,[edx+000000D0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620E8:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620E8:
+mov edx,[edx+000000D0]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>651</ID>
+          <Description>"HeadlightCondition Freeze"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+//HeadLights
+00F8E41B:
+nop
+nop
+nop
+nop
+nop
+nop
+
+//RearLights
+00F86CFB:
+nop
+nop
+nop
+nop
+nop
+nop
+
+[DISABLE]
+
+//Headlights
+00F8E41B:
+mov [esi+000001E7],al
+
+//RearLights
+00F86CFB:
+mov [esi+000001E9],al
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>674</ID>
+          <Description>"World Render Light Intensity"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx]
+mov [ebx],(float)0.5
+fld dword ptr [ebx]
+fstp dword ptr [eax+18]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+18]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1E3B13B:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1E3B13B:
+fld dword ptr [edx]
+fstp dword ptr [eax+18]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>675</ID>
+          <Description>"Light Exposure Intensity"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[edx]
+mov [ebx],(float)10.0
+fld dword ptr [ebx]
+fstp dword ptr [eax+5C]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+5C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620B8:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620B8:
+fld dword ptr [edx]
+fstp dword ptr [eax+5C]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>502</ID>
+          <Description>"SunRotationX"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)0
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+58]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+58]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620B0:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620B0:
+fld dword ptr [edx]
+fstp dword ptr [eax+58]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>503</ID>
+          <Description>"SunRotationY"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)200
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+54]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+54]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F620A8:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F620A8:
+fld dword ptr [edx]
+fstp dword ptr [eax+54]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>514</ID>
+          <Description>"SkyBrightnessScale"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)0.5
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+34]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+34]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F63073:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F63073:
+fld dword ptr [edx]
+fstp dword ptr [eax+34]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>515</ID>
+          <Description>"SunSize"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+mov ebx,(float)-10
+mov [edx],ebx
+fld dword ptr [edx]
+fstp dword ptr [eax+3C]
+pop ebx
+
+originalcode:
+//fld dword ptr [edx]
+//fstp dword ptr [eax+3C]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F63087:
+jmp newmem
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F63087:
+fld dword ptr [edx]
+fstp dword ptr [eax+3C]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>509</ID>
+          <Description>"OutdoorLightComponentDataEnable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+push ebx
+lea ebx,[ecx+000000C0]
+mov [ebx],(int)1
+mov eax,[ebx]
+pop ebx
+
+originalcode:
+//mov eax,[ecx+000000C0]
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F62580:
+jmp newmem
+nop
+returnhere:
+
+[DISABLE]
+dealloc(newmem)
+"Need for Speed The Run.exe"+1F62580:
+mov eax,[ecx+000000C0]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>910</ID>
+          <Description>"SunFlareDisable"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+//SunFlareComponentData::Enable
+
+newmem:
+push ebx
+lea ebx,[edx]
+mov [ebx],(int)0
+movzx edx,byte ptr [ebx] //00 XX 01 00
+mov [eax+000001B5],dl
+pop ebx
+
+originalcode:
+//movzx edx,byte ptr [edx]
+//mov [eax+000001B5],dl
+
+exit:
+jmp returnhere
+
+"Need for Speed The Run.exe"+1F64463:
+jmp newmem
+nop 4
+returnhere:
+
+[DISABLE]
+dealloc(*)
+unregistersymbol(*)
+"Need for Speed The Run.exe"+1F64463:
+movzx edx,byte ptr [edx]
+mov [eax+000001B5],dl
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>593</ID>
+          <Description>"Light Source Randomizer"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+getLuaEngine().cbShowOnPrint.Checked=false
+getLuaEngine().hide()
+math.randomseed(os.time())
+[ENABLE]
+x = math.random(0,360)
+y = math.random(0,360)
+writeFloat("[visenv]-9C",x)
+writeFloat("[visenv]-98",y)
+[DISABLE]
+x = math.random(0,360)
+y = math.random(0,360)
+writeFloat("[visenv]-9C",x)
+writeFloat("[visenv]-98",y)
+</AssemblerScript>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Toggle Activation</Action>
+              <Keys>
+                <Key>97</Key>
+              </Keys>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>Code :mov edx,[ebp+00] Debug Menu Options</Description>
+      <AddressString>Need for Speed The Run.exe+AD264B</AddressString>
+      <Before>
+        <Byte>83</Byte>
+        <Byte>F8</Byte>
+        <Byte>07</Byte>
+        <Byte>74</Byte>
+        <Byte>0D</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>55</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>89</Byte>
+        <Byte>17</Byte>
+        <Byte>8B</Byte>
+        <Byte>45</Byte>
+        <Byte>04</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ecx,[ecx+08] GameSettings</Description>
+      <AddressString>Need for Speed The Run.exe+3BCA58</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>50</Byte>
+        <Byte>EB</Byte>
+        <Byte>5E</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>49</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>51</Byte>
+        <Byte>8D</Byte>
+        <Byte>54</Byte>
+        <Byte>24</Byte>
+        <Byte>04</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ecx,[eax+64] Career&amp;CS TimeOfDay</Description>
+      <AddressString>Need for Speed The Run.exe+59BF25</AddressString>
+      <Before>
+        <Byte>FF</Byte>
+        <Byte>D2</Byte>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>64</Byte>
+      </Actual>
+      <After>
+        <Byte>6A</Byte>
+        <Byte>01</Byte>
+        <Byte>51</Byte>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :cmp [eax+18],bl VehicleUnlock</Description>
+      <AddressString>Need for Speed The Run.exe+53D629</AddressString>
+      <Before>
+        <Byte>5C</Byte>
+        <Byte>24</Byte>
+        <Byte>17</Byte>
+        <Byte>75</Byte>
+        <Byte>0B</Byte>
+      </Before>
+      <Actual>
+        <Byte>38</Byte>
+        <Byte>58</Byte>
+        <Byte>18</Byte>
+      </Actual>
+      <After>
+        <Byte>75</Byte>
+        <Byte>0B</Byte>
+        <Byte>38</Byte>
+        <Byte>5C</Byte>
+        <Byte>24</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :cmp byte ptr [ebp+18],00 ChallengePackUnlock</Description>
+      <AddressString>Need for Speed The Run.exe+45B162</AddressString>
+      <Before>
+        <Byte>55</Byte>
+        <Byte>57</Byte>
+        <Byte>90</Byte>
+        <Byte>8B</Byte>
+        <Byte>29</Byte>
+      </Before>
+      <Actual>
+        <Byte>80</Byte>
+        <Byte>7D</Byte>
+        <Byte>18</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>98</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov edx,[ecx+edx*4] MultiplayerEventTOD</Description>
+      <AddressString>Need for Speed The Run.exe+45599E</AddressString>
+      <Before>
+        <Byte>08</Byte>
+        <Byte>33</Byte>
+        <Byte>D2</Byte>
+        <Byte>F7</Byte>
+        <Byte>F6</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>14</Byte>
+        <Byte>91</Byte>
+      </Actual>
+      <After>
+        <Byte>5E</Byte>
+        <Byte>8B</Byte>
+        <Byte>C2</Byte>
+        <Byte>5F</Byte>
+        <Byte>C3</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ecx,[esi+48] EventVehicleRestrictions</Description>
+      <AddressString>Need for Speed The Run.exe+48D46C</AddressString>
+      <Before>
+        <Byte>3D</Byte>
+        <Byte>00</Byte>
+        <Byte>25</Byte>
+        <Byte>88</Byte>
+        <Byte>02</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>4E</Byte>
+        <Byte>48</Byte>
+      </Actual>
+      <After>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>50</Byte>
+        <Byte>81</Byte>
+        <Byte>C7</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm0,[eax+18] UIObjects</Description>
+      <AddressString>Need for Speed The Run.exe+10C5B7D</AddressString>
+      <Before>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>11</Byte>
+        <Byte>41</Byte>
+        <Byte>10</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>40</Byte>
+        <Byte>18</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>5A</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>5A</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov edx,[ecx+70] MaxPlayersEvents</Description>
+      <AddressString>Need for Speed The Run.exe+FCC0D1</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>51</Byte>
+        <Byte>70</Byte>
+      </Actual>
+      <After>
+        <Byte>89</Byte>
+        <Byte>96</Byte>
+        <Byte>C8</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov edx,[ecx+68] AIOpponentsCarList</Description>
+      <AddressString>Need for Speed The Run.exe+FCC268</AddressString>
+      <Before>
+        <Byte>74</Byte>
+        <Byte>13</Byte>
+        <Byte>8B</Byte>
+        <Byte>49</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>51</Byte>
+        <Byte>68</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>84</Byte>
+        <Byte>68</Byte>
+        <Byte>8E</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov dl,[ecx+7D] AIEnabled</Description>
+      <AddressString>Need for Speed The Run.exe+FCC0B9</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8A</Byte>
+        <Byte>51</Byte>
+        <Byte>7D</Byte>
+      </Actual>
+      <After>
+        <Byte>88</Byte>
+        <Byte>96</Byte>
+        <Byte>C3</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov eax,[edi+50] PointersToStartOfClassesInCurrentEvent</Description>
+      <AddressString>Need for Speed The Run.exe+EB5B4D</AddressString>
+      <Before>
+        <Byte>BE</Byte>
+        <Byte>C0</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>47</Byte>
+        <Byte>50</Byte>
+      </Actual>
+      <After>
+        <Byte>33</Byte>
+        <Byte>DB</Byte>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+        <Byte>75</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm0,[eax] DifficultyScalar</Description>
+      <AddressString>Need for Speed The Run.exe+E61ED9</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>17</Byte>
+        <Byte>06</Byte>
+        <Byte>0B</Byte>
+        <Byte>01</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>4E</Byte>
+        <Byte>0C</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm0,[eax] GlueScalar</Description>
+      <AddressString>Need for Speed The Run.exe+E61EA1</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>1F</Byte>
+        <Byte>06</Byte>
+        <Byte>0B</Byte>
+        <Byte>01</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>4E</Byte>
+        <Byte>08</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov eax,[ecx+1C] BoostPerformanceProperties</Description>
+      <AddressString>Need for Speed The Run.exe+E61F0C</AddressString>
+      <Before>
+        <Byte>46</Byte>
+        <Byte>28</Byte>
+        <Byte>8B</Byte>
+        <Byte>4F</Byte>
+        <Byte>10</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>41</Byte>
+        <Byte>1C</Byte>
+      </Actual>
+      <After>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+        <Byte>74</Byte>
+        <Byte>03</Byte>
+        <Byte>89</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ecx,[eax+74] SinglePlayerStartPosition</Description>
+      <AddressString>Need for Speed The Run.exe+FCC0DD</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>8B</Byte>
+        <Byte>40</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>74</Byte>
+      </Actual>
+      <After>
+        <Byte>89</Byte>
+        <Byte>8E</Byte>
+        <Byte>CC</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov edx,[ecx+64] RaceInfoCollectionKey</Description>
+      <AddressString>Need for Speed The Run.exe+597A3B</AddressString>
+      <Before>
+        <Byte>74</Byte>
+        <Byte>27</Byte>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>14</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>51</Byte>
+        <Byte>64</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>F8</Byte>
+        <Byte>24</Byte>
+        <Byte>88</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+30] DefaultSpoilerNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D6D4</AddressString>
+      <Before>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+        <Byte>83</Byte>
+        <Byte>C4</Byte>
+        <Byte>10</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>30</Byte>
+      </Actual>
+      <After>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>68</Byte>
+        <Byte>40</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+38] DefaultExhaustNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D6E5</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>2B</Byte>
+        <Byte>DE</Byte>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>38</Byte>
+      </Actual>
+      <After>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>68</Byte>
+        <Byte>80</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+40] DefaultHoodNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D6F6</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>5A</Byte>
+        <Byte>DF</Byte>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>40</Byte>
+      </Actual>
+      <After>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>68</Byte>
+        <Byte>C0</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+48] DefaultFrontAxelWheelsNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D707</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>89</Byte>
+        <Byte>E0</Byte>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>48</Byte>
+      </Actual>
+      <After>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>68</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+50] DefaultRearAxelWheelsNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D718</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>B8</Byte>
+        <Byte>E1</Byte>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>50</Byte>
+      </Actual>
+      <After>
+        <Byte>83</Byte>
+        <Byte>C4</Byte>
+        <Byte>40</Byte>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov eax,[esi+58] DefaultPaintColorNop</Description>
+      <AddressString>Need for Speed The Run.exe+B1D72C</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>A4</Byte>
+        <Byte>E1</Byte>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>58</Byte>
+      </Actual>
+      <After>
+        <Byte>53</Byte>
+        <Byte>6A</Byte>
+        <Byte>00</Byte>
+        <Byte>68</Byte>
+        <Byte>80</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm0,[ecx] TrafficDensityScale</Description>
+      <AddressString>Need for Speed The Run.exe+E5EEF6</AddressString>
+      <Before>
+        <Byte>8B</Byte>
+        <Byte>02</Byte>
+        <Byte>8B</Byte>
+        <Byte>4E</Byte>
+        <Byte>0C</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>01</Byte>
+      </Actual>
+      <After>
+        <Byte>83</Byte>
+        <Byte>E0</Byte>
+        <Byte>FC</Byte>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm2,[eax+1C] TrafficMaxDensity</Description>
+      <AddressString>Need for Speed The Run.exe+E5EEE9</AddressString>
+      <Before>
+        <Byte>8B</Byte>
+        <Byte>F1</Byte>
+        <Byte>8B</Byte>
+        <Byte>46</Byte>
+        <Byte>04</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>50</Byte>
+        <Byte>1C</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>56</Byte>
+        <Byte>38</Byte>
+        <Byte>8B</Byte>
+        <Byte>02</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov eax,[eax+60] TrafficVehicleLimit</Description>
+      <AddressString>Need for Speed The Run.exe+E5A9A3</AddressString>
+      <Before>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>8B</Byte>
+        <Byte>41</Byte>
+        <Byte>04</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>40</Byte>
+        <Byte>60</Byte>
+      </Actual>
+      <After>
+        <Byte>83</Byte>
+        <Byte>F8</Byte>
+        <Byte>19</Byte>
+        <Byte>72</Byte>
+        <Byte>05</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [esi+000001E7],al HeadlightsNop</Description>
+      <AddressString>Need for Speed The Run.exe+B8E41B</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>EB</Byte>
+        <Byte>02</Byte>
+        <Byte>33</Byte>
+        <Byte>C0</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>86</Byte>
+        <Byte>E7</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>44</Byte>
+        <Byte>8F</Byte>
+        <Byte>88</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of mov [esi+000001E9],al RearlightsNop</Description>
+      <AddressString>Need for Speed The Run.exe+B86CFB</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>EB</Byte>
+        <Byte>02</Byte>
+        <Byte>33</Byte>
+        <Byte>C0</Byte>
+      </Before>
+      <Actual>
+        <Byte>88</Byte>
+        <Byte>86</Byte>
+        <Byte>E9</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>44</Byte>
+        <Byte>8F</Byte>
+        <Byte>88</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of fld dword ptr [esi+00002924] NoWrongWayRespawn</Description>
+      <AddressString>Need for Speed The Run.exe+408915</AddressString>
+      <Before>
+        <Byte>9B</Byte>
+        <Byte>8C</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>D9</Byte>
+        <Byte>86</Byte>
+        <Byte>24</Byte>
+        <Byte>29</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>D9</Byte>
+        <Byte>9B</Byte>
+        <Byte>90</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss [ebx+4C],xmm0 ControllableVehiclePartsNop</Description>
+      <AddressString>Need for Speed The Run.exe+BCE81D</AddressString>
+      <Before>
+        <Byte>76</Byte>
+        <Byte>03</Byte>
+        <Byte>0F</Byte>
+        <Byte>28</Byte>
+        <Byte>C1</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>11</Byte>
+        <Byte>43</Byte>
+        <Byte>4C</Byte>
+      </Actual>
+      <After>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>4B</Byte>
+        <Byte>5C</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm0,[ebx+4C] VehiclePartsOpennessValue</Description>
+      <AddressString>Need for Speed The Run.exe+BCE7DF</AddressString>
+      <Before>
+        <Byte>86</Byte>
+        <Byte>53</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>43</Byte>
+        <Byte>4C</Byte>
+      </Actual>
+      <After>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>5A</Byte>
+        <Byte>CB</Byte>
+        <Byte>0F</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movss xmm2,[ebx+4C] AllVehiclesAllPartsOpenness</Description>
+      <AddressString>Need for Speed The Run.exe+BCE827</AddressString>
+      <Before>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>4B</Byte>
+        <Byte>5C</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>53</Byte>
+        <Byte>4C</Byte>
+      </Actual>
+      <After>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>10</Byte>
+        <Byte>5B</Byte>
+        <Byte>60</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movzx eax,byte ptr [esi+0C] VehiclePartsRemovalNop</Description>
+      <AddressString>Need for Speed The Run.exe+BD0D99</AddressString>
+      <Before>
+        <Byte>10</Byte>
+        <Byte>C4</Byte>
+        <Byte>8D</Byte>
+        <Byte>14</Byte>
+        <Byte>80</Byte>
+      </Before>
+      <Actual>
+        <Byte>0F</Byte>
+        <Byte>B6</Byte>
+        <Byte>46</Byte>
+        <Byte>0C</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>29</Byte>
+        <Byte>44</Byte>
+        <Byte>24</Byte>
+        <Byte>30</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :movaps xmm0,[esi+30] CameraRegion</Description>
+      <AddressString>Need for Speed The Run.exe+B04C8B</AddressString>
+      <Before>
+        <Byte>C6</Byte>
+        <Byte>44</Byte>
+        <Byte>24</Byte>
+        <Byte>2C</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>0F</Byte>
+        <Byte>28</Byte>
+        <Byte>46</Byte>
+        <Byte>30</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>59</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>28</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov edx,[eax+60] BundleName</Description>
+      <AddressString>Need for Speed The Run.exe+A1CF77</AddressString>
+      <Before>
+        <Byte>0C</Byte>
+        <Byte>8B</Byte>
+        <Byte>48</Byte>
+        <Byte>64</Byte>
+        <Byte>52</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>50</Byte>
+        <Byte>60</Byte>
+      </Actual>
+      <After>
+        <Byte>51</Byte>
+        <Byte>8B</Byte>
+        <Byte>0D</Byte>
+        <Byte>3C</Byte>
+        <Byte>AD</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+</CheatTable>

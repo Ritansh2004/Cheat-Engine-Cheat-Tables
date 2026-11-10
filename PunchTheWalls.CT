@@ -1,0 +1,1678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>123</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "PunchTheWalls.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"PlayerController"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version: 
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.PlayerController:Update)
+define(bytes,55 48 8B EC 48 81 EC 70 04 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.PlayerController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [playercontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000470
+  jmp return
+
+playercontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(playercontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000470
+
+dealloc(newmem)
+unregistersymbol(playercontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.PlayerController:Update
+
+2375103CCA9: 04 02                          - add al,02
+2375103CCAB: 05 04 03 01 50                 - add eax,50010304
+2375103CCB0: 00 00                          - add [rax],al
+2375103CCB2: 00 00                          - add [rax],al
+2375103CCB4: 00 00                          - add [rax],al
+2375103CCB6: 00 00                          - add [rax],al
+2375103CCB8: 00 00                          - add [rax],al
+2375103CCBA: 00 00                          - add [rax],al
+2375103CCBC: 00 00                          - add [rax],al
+2375103CCBE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+PunchForEscape.PlayerController:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+PunchForEscape.PlayerController:Update+1: 48 8B EC                       - mov rbp,rsp
+PunchForEscape.PlayerController:Update+4: 48 81 EC 70 04 00 00           - sub rsp,00000470
+PunchForEscape.PlayerController:Update+b: 48 89 5D D0                    - mov [rbp-30],rbx
+PunchForEscape.PlayerController:Update+f: 48 89 75 D8                    - mov [rbp-28],rsi
+PunchForEscape.PlayerController:Update+13: 48 89 7D E0                    - mov [rbp-20],rdi
+PunchForEscape.PlayerController:Update+17: 4C 89 65 E8                    - mov [rbp-18],r12
+PunchForEscape.PlayerController:Update+1b: 4C 89 6D F0                    - mov [rbp-10],r13
+PunchForEscape.PlayerController:Update+1f: 4C 89 75 F8                    - mov [rbp-08],r14
+PunchForEscape.PlayerController:Update+23: 48 8B F1                       - mov rsi,rcx
+PunchForEscape.PlayerController:Update+26: C7 85 20 FC FF FF 00 00 00 00  - mov [rbp-000003E0],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001FE1FE743F0" RealAddress="1FE4B910017"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>playercontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"walkSpeed"</Description>
+              <LastState Value="3.5" RealAddress="1FE1FE74420"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"mouseSensitivity"</Description>
+              <LastState Value="0.07999999821" RealAddress="1FE1FE74424"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"gravity"</Description>
+              <LastState Value="-20" RealAddress="1FE1FE74428"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"jumpHeight"</Description>
+              <LastState Value="0.8999999762" RealAddress="1FE1FE7442C"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"yaw"</Description>
+              <LastState Value="7.760001659" RealAddress="1FE1FE74430"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"pitch"</Description>
+              <LastState Value="8.399999619" RealAddress="1FE1FE74434"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+44</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"verticalVelocity"</Description>
+              <LastState Value="-2.667677879" RealAddress="1FE1FE74438"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+48</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"crouch"</Description>
+              <LastState Value="0" RealAddress="1FE1FE7443C"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+4C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>10</ID>
+              <Description>"Crouching"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <LastState Value="0" RealAddress="1FE1FE74440"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"stepDistance"</Description>
+              <LastState Value="0" RealAddress="1FE1FE74444"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"sprint"</Description>
+              <LastState Value="0" RealAddress="1FE1FE74448"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"Running"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <LastState Value="0" RealAddress="1FE1FE7444C"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[playercontroller_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"nextScoot"</Description>
+              <LastState Value="0" RealAddress="1FE1FE74450"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[playercontroller_ptr]+60</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>15</ID>
+          <Description>"PunchRig"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version:
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.PunchRig:Update)
+define(bytes,55 48 8B EC 48 81 EC D0 02 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.PunchRig:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [punchrig_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000002D0
+  jmp return
+
+punchrig_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(punchrig_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000002D0
+
+dealloc(newmem)
+unregistersymbol(punchrig_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.PunchRig:Update
+
+237510535B9: 04 02                 - add al,02
+237510535BB: 05 04 03 01 50        - add eax,50010304
+237510535C0: 00 00                 - add [rax],al
+237510535C2: 00 00                 - add [rax],al
+237510535C4: 00 00                 - add [rax],al
+237510535C6: 00 00                 - add [rax],al
+237510535C8: 00 00                 - add [rax],al
+237510535CA: 00 00                 - add [rax],al
+237510535CC: 00 00                 - add [rax],al
+237510535CE: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+PunchForEscape.PunchRig:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PunchForEscape.PunchRig:Update+1: 48 8B EC              - mov rbp,rsp
+PunchForEscape.PunchRig:Update+4: 48 81 EC D0 02 00 00  - sub rsp,000002D0
+PunchForEscape.PunchRig:Update+b: 48 89 5D C8           - mov [rbp-38],rbx
+PunchForEscape.PunchRig:Update+f: 48 89 75 D0           - mov [rbp-30],rsi
+PunchForEscape.PunchRig:Update+13: 48 89 7D D8           - mov [rbp-28],rdi
+PunchForEscape.PunchRig:Update+17: 4C 89 65 E0           - mov [rbp-20],r12
+PunchForEscape.PunchRig:Update+1b: 4C 89 6D E8           - mov [rbp-18],r13
+PunchForEscape.PunchRig:Update+1f: 4C 89 75 F0           - mov [rbp-10],r14
+PunchForEscape.PunchRig:Update+23: 4C 89 7D F8           - mov [rbp-08],r15
+PunchForEscape.PunchRig:Update+27: 48 8B F1              - mov rsi,rcx
+}
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>16</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001FE1DC3DBB0" RealAddress="1FE4B940017"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>punchrig_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>17</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"Current"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC48"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"punchInterval"</Description>
+                  <LastState Value="0.5" RealAddress="1FE1DC3DC4C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+9C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"damage"</Description>
+                  <LastState Value="1" RealAddress="1FE1DC3DC50"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"Charge"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC54"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"CooldownTotal"</Description>
+                  <LastState Value="50" RealAddress="1FE1DC3DC58"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"charging"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1DC3DC5C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"wasGreen"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1DC3DC5D"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+AD</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"chargeClock"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC60"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"chargeReady"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC64"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"nextChargeFx"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC68"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"thorPower"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC6C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"thorPerfect"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1DC3DC70"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"slowUntil"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC74"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"fovKick"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC78"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"baseFov"</Description>
+                  <LastState Value="75" RealAddress="1FE1DC3DC7C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"hitStop"</Description>
+                  <LastState Value="0.03500000015" RealAddress="1FE1DC3DC8C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"nextRight"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="1FE1DC3DC90"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"lastPunch"</Description>
+                  <LastState Value="-1" RealAddress="1FE1DC3DC94"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"hitStopUntil"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC98"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"bobPhase"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DC9C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"waitRelease"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1DC3DCA0"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"AutoPunch"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1DC3DCA1"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+F1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"lastLeftClick"</Description>
+                  <LastState Value="-9" RealAddress="1FE1DC3DCA4"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"nextBedrockNote"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DCA8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"hitAt"</Description>
+                  <LastState Value="-9" RealAddress="1FE1DC3DCAC"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"hitForce"</Description>
+                  <LastState Value="0" RealAddress="1FE1DC3DCB0"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+100</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>44</ID>
+              <Description>"AimWall"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"depthAxis"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>9C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"depthFrom"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"Built"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>A4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"seed"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"waveA"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>AC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"waveB"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>B0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>51</ID>
+                  <Description>"waveRow"</Description>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+70</Address>
+                  <Offsets>
+                    <Offset>B4</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>52</ID>
+              <Description>"right"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"side"</Description>
+                  <LastState Value="1" RealAddress="1FE1FF29EF8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"armIndex"</Description>
+                  <LastState Value="1" RealAddress="1FE1FF29EFC"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"holding"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29F00"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"carrying"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29F01"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>C1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"phase"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29F04"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"phaseT"</Description>
+                  <LastState Value="7.167881489" RealAddress="1FE1FF29F08"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"slideMax"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29F18"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"outTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29F1C"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>61</ID>
+                  <Description>"holdTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29F20"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"backTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29F24"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"impactDue"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29F28"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"knocking"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29F68"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>128</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>65</ID>
+              <Description>"left"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"side"</Description>
+                  <LastState Value="-1" RealAddress="1FE1FF29DC8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"armIndex"</Description>
+                  <LastState Value="1" RealAddress="1FE1FF29DCC"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"holding"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29DD0"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"carrying"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29DD1"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C1</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"phase"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29DD4"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"phaseT"</Description>
+                  <LastState Value="7.167881489" RealAddress="1FE1FF29DD8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"slideMax"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29DE8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"outTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29DEC"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>DC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"holdTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29DF0"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"backTime"</Description>
+                  <LastState Value="0" RealAddress="1FE1FF29DF4"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"impactDue"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29DF8"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"knocking"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="1FE1FF29E38"/>
+                  <Color>FFFFFF</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[punchrig_ptr]+80</Address>
+                  <Offsets>
+                    <Offset>128</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>78</ID>
+          <Description>"Vacuum"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version: 
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.Vacuum:Update)
+define(bytes,55 48 8B EC 48 81 EC C0 02 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.Vacuum:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [vacuum_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000002C0
+  jmp return
+
+vacuum_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(vacuum_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000002C0
+
+dealloc(newmem)
+unregistersymbol(vacuum_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.Vacuum:Update
+
+237780D6D09: 04 02                 - add al,02
+237780D6D0B: 05 04 03 01 50        - add eax,50010304
+237780D6D10: 00 00                 - add [rax],al
+237780D6D12: 00 00                 - add [rax],al
+237780D6D14: 00 00                 - add [rax],al
+237780D6D16: 00 00                 - add [rax],al
+237780D6D18: 00 00                 - add [rax],al
+237780D6D1A: 00 00                 - add [rax],al
+237780D6D1C: 00 00                 - add [rax],al
+237780D6D1E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+PunchForEscape.Vacuum:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PunchForEscape.Vacuum:Update+1: 48 8B EC              - mov rbp,rsp
+PunchForEscape.Vacuum:Update+4: 48 81 EC C0 02 00 00  - sub rsp,000002C0
+PunchForEscape.Vacuum:Update+b: 48 89 5D C8           - mov [rbp-38],rbx
+PunchForEscape.Vacuum:Update+f: 48 89 75 D0           - mov [rbp-30],rsi
+PunchForEscape.Vacuum:Update+13: 48 89 7D D8           - mov [rbp-28],rdi
+PunchForEscape.Vacuum:Update+17: 4C 89 65 E0           - mov [rbp-20],r12
+PunchForEscape.Vacuum:Update+1b: 4C 89 6D E8           - mov [rbp-18],r13
+PunchForEscape.Vacuum:Update+1f: 4C 89 75 F0           - mov [rbp-10],r14
+PunchForEscape.Vacuum:Update+23: 4C 89 7D F8           - mov [rbp-08],r15
+PunchForEscape.Vacuum:Update+27: 48 8B F1              - mov rsi,rcx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000000000000000" RealAddress="1FE4B950017"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>vacuum_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>80</ID>
+              <Description>"model"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[vacuum_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>81</ID>
+              <Description>"range"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>82</ID>
+              <Description>"coneAngle"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>83</ID>
+              <Description>"capacity"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[vacuum_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>84</ID>
+              <Description>"flowRate"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>85</ID>
+              <Description>"ejectSpeed"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>86</ID>
+              <Description>"pullAccel"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87</ID>
+              <Description>"maxPullSpeed"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"Collected"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[vacuum_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"power"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+154</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>90</ID>
+              <Description>"ejectAccum"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+164</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>91</ID>
+              <Description>"captureAccum"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+168</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"grabAccum"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+16C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"ejectedThisBurst"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[vacuum_ptr]+170</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"fullWarning"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[vacuum_ptr]+174</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"blowingNow"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[vacuum_ptr]+175</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"suckingNow"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[vacuum_ptr]+176</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"loopPaused"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[vacuum_ptr]+177</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"nextTrickle"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[vacuum_ptr]+178</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"shownAlarm"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[vacuum_ptr]+17C</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>100</ID>
+          <Description>"Shredder"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version: 
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.Shredder:Update)
+define(bytes,55 48 8B EC 48 81 EC 80 04 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.Shredder:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [shredder_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000480
+  jmp return
+
+shredder_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(shredder_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000480
+
+dealloc(newmem)
+unregistersymbol(shredder_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.Shredder:Update
+
+2374083FFEC: 00 00                 - add [rax],al
+2374083FFEE: 00 00                 - add [rax],al
+2374083FFF0: 00 00                 - add [rax],al
+2374083FFF2: 00 00                 - add [rax],al
+2374083FFF4: 00 00                 - add [rax],al
+2374083FFF6: 00 00                 - add [rax],al
+2374083FFF8: 00 00                 - add [rax],al
+2374083FFFA: 00 00                 - add [rax],al
+2374083FFFC: 00 00                 - add [rax],al
+2374083FFFE: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+PunchForEscape.Shredder:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+PunchForEscape.Shredder:Update+1: 48 8B EC              - mov rbp,rsp
+PunchForEscape.Shredder:Update+4: 48 81 EC 80 04 00 00  - sub rsp,00000480
+PunchForEscape.Shredder:Update+b: 48 89 75 D8           - mov [rbp-28],rsi
+PunchForEscape.Shredder:Update+f: 48 89 7D E0           - mov [rbp-20],rdi
+PunchForEscape.Shredder:Update+13: 4C 89 6D E8           - mov [rbp-18],r13
+PunchForEscape.Shredder:Update+17: 4C 89 75 F0           - mov [rbp-10],r14
+PunchForEscape.Shredder:Update+1b: 4C 89 7D F8           - mov [rbp-08],r15
+PunchForEscape.Shredder:Update+1f: 48 8B F1              - mov rsi,rcx
+PunchForEscape.Shredder:Update+22: 33 C0                 - xor eax,eax
+PunchForEscape.Shredder:Update+24: 48 89 85 F8 FB FF FF  - mov [rbp-00000408],rax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000001FD10652620" RealAddress="1FE4B960017"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>shredder_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>102</ID>
+              <Description>"valuePerCube"</Description>
+              <LastState Value="1" RealAddress="1FD106526A0"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+80</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"rollerSpeed"</Description>
+              <LastState Value="160" RealAddress="1FD106526A4"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+84</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"thump"</Description>
+              <LastState Value="0" RealAddress="1FD106526A8"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+88</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"nextWake"</Description>
+              <LastState Value="0" RealAddress="1FD106526D0"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"soundFrame"</Description>
+              <LastState Value="0" RealAddress="1FD106526D4"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"payCarry"</Description>
+              <LastState Value="0" RealAddress="1FD106526D8"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"pendingPay"</Description>
+              <LastState Value="0" RealAddress="1FD106526DC"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"payFrame"</Description>
+              <LastState Value="0" RealAddress="1FD106526E0"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"payAt"</Description>
+              <LastState Value="0" RealAddress="1FD106526E4"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"treasureSum"</Description>
+              <LastState Value="0" RealAddress="1FD106526E8"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>112</ID>
+              <Description>"treasureCount"</Description>
+              <LastState Value="0" RealAddress="1FD106526EC"/>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[shredder_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>113</ID>
+              <Description>"treasureAt"</Description>
+              <LastState Value="0" RealAddress="1FD106526F0"/>
+              <Color>FFFFFF</Color>
+              <VariableType>Float</VariableType>
+              <Address>[shredder_ptr]+D0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>114</ID>
+          <Description>"Wallet"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version: 
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.Wallet:Add+28)
+define(bytes,89 08 85 F6 7E 20)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.Wallet:Add+28)
+
+label(code)
+label(return)
+
+newmem:
+mov [wallet_ptr],rax
+
+code:
+  mov [rax],ecx
+  test esi,esi
+  jle PunchForEscape.Wallet:Add+4e
+  jmp return
+
+wallet_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(wallet_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rax],ecx
+  // test esi,esi
+  // jle PunchForEscape.Wallet:Add+4e
+
+dealloc(newmem)
+unregistersymbol(wallet_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.Wallet:Add+28
+
+2377811BADE: 00 00                          - add [rax],al
+PunchForEscape.Wallet:Add: 55                             - push rbp
+PunchForEscape.Wallet:Add+1: 48 8B EC                       - mov rbp,rsp
+PunchForEscape.Wallet:Add+4: 48 83 EC 50                    - sub rsp,50
+PunchForEscape.Wallet:Add+8: 48 89 75 F8                    - mov [rbp-08],rsi
+PunchForEscape.Wallet:Add+c: 48 8B F1                       - mov rsi,rcx
+PunchForEscape.Wallet:Add+f: 48 B8 60 CD 79 0B 35 02 00 00  - mov rax,000002350B79CD60
+PunchForEscape.Wallet:Add+19: 48 63 08                       - movsxd  rcx,dword ptr [rax]
+PunchForEscape.Wallet:Add+1c: 03 CE                          - add ecx,esi
+PunchForEscape.Wallet:Add+1e: 48 B8 60 CD 79 0B 35 02 00 00  - mov rax,000002350B79CD60
+// ---------- INJECTING HERE ----------
+PunchForEscape.Wallet:Add+28: 89 08                          - mov [rax],ecx
+// ---------- DONE INJECTING  ----------
+PunchForEscape.Wallet:Add+2a: 85 F6                          - test esi,esi
+PunchForEscape.Wallet:Add+2c: 7E 20                          - jle PunchForEscape.Wallet:Add+4e
+PunchForEscape.Wallet:Add+2e: 48 B8 90 DF 90 72 36 02 00 00  - mov rax,000002367290DF90
+PunchForEscape.Wallet:Add+38: 48 8B 08                       - mov rcx,[rax]
+PunchForEscape.Wallet:Add+3b: 48 63 C6                       - movsxd  rax,esi
+PunchForEscape.Wallet:Add+3e: 48 03 C8                       - add rcx,rax
+PunchForEscape.Wallet:Add+41: 48 B8 90 DF 90 72 36 02 00 00  - mov rax,000002367290DF90
+PunchForEscape.Wallet:Add+4b: 48 89 08                       - mov [rax],rcx
+PunchForEscape.Wallet:Add+4e: 48 B8 68 CD 79 0B 35 02 00 00  - mov rax,000002350B79CD68
+PunchForEscape.Wallet:Add+58: 48 8B 00                       - mov rax,[rax]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>117</ID>
+              <Description>"Value Show/Update When Increase Money &amp; It Take Few Second to Update"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000000000000000" RealAddress="1FE4B970016"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>wallet_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"Money"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[wallet_ptr]</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>118</ID>
+          <Description>"Dynamite + C4"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PunchTheWalls.exe
+  Version: 
+  Date   : 2026-11-08
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PunchForEscape.Dynamite:TryPlace+50)
+define(bytes,48 63 40 20 85 C0)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PunchForEscape.Dynamite:TryPlace+50)
+
+label(code)
+label(return)
+
+newmem:
+mov [dynamite_ptr],rax
+
+code:
+  movsxd  rax,dword ptr [rax+20]
+  test eax,eax
+  jmp return
+
+dynamite_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(dynamite_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movsxd  rax,dword ptr [rax+20]
+  // test eax,eax
+
+dealloc(newmem)
+unregistersymbol(dynamite_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PunchForEscape.Dynamite:TryPlace+50
+
+PunchForEscape.Dynamite:TryPlace+f: C7 45 A0 00 00 00 00           - mov [rbp-60],00000000
+PunchForEscape.Dynamite:TryPlace+16: C7 45 A4 00 00 00 00           - mov [rbp-5C],00000000
+PunchForEscape.Dynamite:TryPlace+1d: C7 45 A8 00 00 00 00           - mov [rbp-58],00000000
+PunchForEscape.Dynamite:TryPlace+24: C7 45 B0 00 00 00 00           - mov [rbp-50],00000000
+PunchForEscape.Dynamite:TryPlace+2b: C7 45 B4 00 00 00 00           - mov [rbp-4C],00000000
+PunchForEscape.Dynamite:TryPlace+32: C7 45 B8 00 00 00 00           - mov [rbp-48],00000000
+PunchForEscape.Dynamite:TryPlace+39: 48 B8 E0 2E 11 D3 36 02 00 00  - mov rax,00000236D3112EE0
+PunchForEscape.Dynamite:TryPlace+43: 48 8B 00                       - mov rax,[rax]
+PunchForEscape.Dynamite:TryPlace+46: 83 78 18 00                    - cmp dword ptr [rax+18],00
+PunchForEscape.Dynamite:TryPlace+4a: 0F 86 C6 00 00 00              - jbe PunchForEscape.Dynamite:TryPlace+116
+// ---------- INJECTING HERE ----------
+PunchForEscape.Dynamite:TryPlace+50: 48 63 40 20                    - movsxd  rax,dword ptr [rax+20]
+// ---------- DONE INJECTING  ----------
+PunchForEscape.Dynamite:TryPlace+54: 85 C0                          - test eax,eax
+PunchForEscape.Dynamite:TryPlace+56: 0F 8E 23 00 00 00              - jng PunchForEscape.Dynamite:TryPlace+7f
+PunchForEscape.Dynamite:TryPlace+5c: 48 8B 4D 98                    - mov rcx,[rbp-68]
+PunchForEscape.Dynamite:TryPlace+60: 48 8B D5                       - mov rdx,rbp
+PunchForEscape.Dynamite:TryPlace+63: 48 83 C2 A0                    - add rdx,-60
+PunchForEscape.Dynamite:TryPlace+67: 4C 8B C5                       - mov r8,rbp
+PunchForEscape.Dynamite:TryPlace+6a: 49 83 C0 B0                    - add r8,-50
+PunchForEscape.Dynamite:TryPlace+6e: 49 BB 80 28 18 7F 37 02 00 00  - mov r11,PunchForEscape.Dynamite:Find
+PunchForEscape.Dynamite:TryPlace+78: 41 FF D3                       - call r11
+PunchForEscape.Dynamite:TryPlace+7b: 85 C0                          - test eax,eax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>119</ID>
+              <Description>"Value Show/Update When Place Dynamite"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>120</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000000000000000" RealAddress="1FE4B980012"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>dynamite_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>121</ID>
+              <Description>"[0]Int32"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dynamite_ptr]+20</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"[1]Int32"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dynamite_ptr]+24</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>124</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>125</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Punch The Walls - v1.0.0 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

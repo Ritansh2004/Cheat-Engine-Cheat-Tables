@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>9</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDefaultCollapsed="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "WeMarchAsOne.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    OpenProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>1</ID>
+          <Description>"GoldData"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : WeMarchAsOne.exe
+  Version: 
+  Date   : 2026-11-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,ShapeWar.PlayerGold:TrySpend+6f)
+define(bytes,48 63 48 10 2B CE)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,ShapeWar.PlayerGold:TrySpend+6f)
+
+label(code)
+label(return)
+
+newmem:
+mov [golddata_ptr],rax
+
+code:
+  movsxd  rcx,dword ptr [rax+10]
+  sub ecx,esi
+  jmp return
+
+golddata_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(golddata_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movsxd  rcx,dword ptr [rax+10]
+  // sub ecx,esi
+
+dealloc(newmem)
+unregistersymbol(golddata_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: ShapeWar.PlayerGold:TrySpend+6f
+
+ShapeWar.PlayerGold:TrySpend+43: 48 B8 C0 34 8C 3B F8 01 00 00  - mov rax,000001F83B8C34C0
+ShapeWar.PlayerGold:TrySpend+4d: 48 8B 00                       - mov rax,[rax]
+ShapeWar.PlayerGold:TrySpend+50: 48 63 40 10                    - movsxd  rax,dword ptr [rax+10]
+ShapeWar.PlayerGold:TrySpend+54: 3B C6                          - cmp eax,esi
+ShapeWar.PlayerGold:TrySpend+56: 7D 07                          - jnl ShapeWar.PlayerGold:TrySpend+5f
+ShapeWar.PlayerGold:TrySpend+58: 33 C0                          - xor eax,eax
+ShapeWar.PlayerGold:TrySpend+5a: E9 51 00 00 00                 - jmp ShapeWar.PlayerGold:TrySpend+b0
+ShapeWar.PlayerGold:TrySpend+5f: 48 B8 C0 34 8C 3B F8 01 00 00  - mov rax,000001F83B8C34C0
+ShapeWar.PlayerGold:TrySpend+69: 48 8B 00                       - mov rax,[rax]
+ShapeWar.PlayerGold:TrySpend+6c: 48 8B D0                       - mov rdx,rax
+// ---------- INJECTING HERE ----------
+ShapeWar.PlayerGold:TrySpend+6f: 48 63 48 10                    - movsxd  rcx,dword ptr [rax+10]
+// ---------- DONE INJECTING  ----------
+ShapeWar.PlayerGold:TrySpend+73: 2B CE                          - sub ecx,esi
+ShapeWar.PlayerGold:TrySpend+75: 89 48 10                       - mov [rax+10],ecx
+ShapeWar.PlayerGold:TrySpend+78: 48 B8 C8 34 8C 3B F8 01 00 00  - mov rax,000001F83B8C34C8
+ShapeWar.PlayerGold:TrySpend+82: 48 8B 08                       - mov rcx,[rax]
+ShapeWar.PlayerGold:TrySpend+85: 48 B8 C0 34 8C 3B F8 01 00 00  - mov rax,000001F83B8C34C0
+ShapeWar.PlayerGold:TrySpend+8f: 48 8B 10                       - mov rdx,[rax]
+ShapeWar.PlayerGold:TrySpend+92: 49 BA A0 A7 32 79 F8 01 00 00  - mov r10,000001F87932A7A0
+ShapeWar.PlayerGold:TrySpend+9c: 66 90                          - nop 2
+ShapeWar.PlayerGold:TrySpend+9e: 49 BB E0 87 14 A5 F8 01 00 00  - mov r11,ShapeWar.SaveSystem:Save
+ShapeWar.PlayerGold:TrySpend+a8: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Value Show/Update When Spend Gold"</Description>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>golddata_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"gold"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[golddata_ptr]+10</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"crystals"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[golddata_ptr]+14</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"goldEarned"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[golddata_ptr]+18</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"crystalsEarned"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[golddata_ptr]+1C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"earnedCounted"</Description>
+              <Color>FFFFFF</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[golddata_ptr]+20</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>10</ID>
+      <Description>""</Description>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>11</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " We March As One - v ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

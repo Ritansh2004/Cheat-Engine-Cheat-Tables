@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>40</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Counter Targets Clicker.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    openProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"RoundTime"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Counter Targets Clicker.exe
+  Version: 
+  Date   : 2026-11-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+620440)
+define(bytes,48 83 EC 28 48 8B 49 68)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+620440)
+
+label(code)
+label(return)
+
+newmem:
+mov [corestatcollectorroundtime_ptr],rcx
+
+code:
+  sub rsp,28
+  mov rcx,[rcx+68]
+  jmp return
+
+corestatcollectorroundtime_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(corestatcollectorroundtime_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // sub rsp,28
+  // mov rcx,[rcx+68]
+
+dealloc(newmem)
+unregistersymbol(corestatcollectorroundtime_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CoreStatCollector_Round_Time.get_Value
+
+GameAssembly.dll+620436: CC              - int 3 
+GameAssembly.dll+620437: CC              - int 3 
+GameAssembly.dll+620438: CC              - int 3 
+GameAssembly.dll+620439: CC              - int 3 
+GameAssembly.dll+62043A: CC              - int 3 
+GameAssembly.dll+62043B: CC              - int 3 
+GameAssembly.dll+62043C: CC              - int 3 
+GameAssembly.dll+62043D: CC              - int 3 
+GameAssembly.dll+62043E: CC              - int 3 
+GameAssembly.dll+62043F: CC              - int 3 
+// ---------- INJECTING HERE ----------
+CoreStatCollector_Round_Time.get_Value: 48 83 EC 28     - sub rsp,28
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+620444: 48 8B 49 68     - mov rcx,[rcx+68]
+GameAssembly.dll+620448: 48 85 C9        - test rcx,rcx
+GameAssembly.dll+62044B: 74 0B           - je GameAssembly.dll+620458
+GameAssembly.dll+62044D: 33 D2           - xor edx,edx
+GameAssembly.dll+62044F: 48 83 C4 28     - add rsp,28
+GameAssembly.dll+620453: E9 98 85 06 00  - jmp Services.LevelTimeService.get_Duration
+GameAssembly.dll+620458: E8 63 2F F0 FF  - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+62045D: CC              - int 3 
+GameAssembly.dll+62045E: CC              - int 3 
+GameAssembly.dll+62045F: CC              - int 3 
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>9</ID>
+              <Description>"Value Show/Update When Round Over"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000278B9C39600" RealAddress="7FFCBDD40014"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>corestatcollectorroundtime_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"_isPaused"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <LastState Value="0" RealAddress="278A3B36AF0"/>
+              <Color>808040</Color>
+              <VariableType>Byte</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"TimeLeft"</Description>
+              <LastState Value="0" RealAddress="278A3B36AF4"/>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>4</ID>
+              <Description>"_timeStart"</Description>
+              <LastState Value="778.3609619" RealAddress="278A3B36B08"/>
+              <VariableType>Float</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>28</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>5</ID>
+              <Description>"_timeStop"</Description>
+              <LastState Value="803.9204102" RealAddress="278A3B36B0C"/>
+              <VariableType>Float</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>2C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"_isStart"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <LastState Value="0" RealAddress="278A3B36B10"/>
+              <VariableType>Byte</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>7</ID>
+              <Description>"_timerLastTick"</Description>
+              <LastState Value="0.3000000119" RealAddress="278A3B36B28"/>
+              <VariableType>Float</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>48</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>8</ID>
+              <Description>"_lastTickSecond"</Description>
+              <LastState Value="1" RealAddress="278A3B36B2C"/>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[corestatcollectorroundtime_ptr]+68</Address>
+              <Offsets>
+                <Offset>4C</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>10</ID>
+          <Description>"WeaponBase"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Counter Targets Clicker.exe
+  Version: 
+  Date   : 2026-11-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+65A020)
+define(bytes,48 89 5C 24 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+65A020)
+
+label(code)
+label(return)
+
+newmem:
+mov [weaponbase_ptr],rcx
+
+code:
+  mov [rsp+10],rbx
+  jmp return
+
+weaponbase_ptr:
+dq 0
+
+address:
+  jmp newmem
+return:
+registersymbol(weaponbase_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+10],rbx
+
+dealloc(newmem)
+unregistersymbol(weaponbase_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WeaponBase.Tick
+
+GameAssembly.dll+659FFF: E8 4C 81 F0 02        - call UnityEngine.ContactPoint.get_point
+GameAssembly.dll+65A004: F2 0F 10 00           - movsd xmm0,[rax]
+GameAssembly.dll+65A008: 8B 40 08              - mov eax,[rax+08]
+GameAssembly.dll+65A00B: F2 0F 11 07           - movsd [rdi],xmm0
+GameAssembly.dll+65A00F: 89 47 08              - mov [rdi+08],eax
+GameAssembly.dll+65A012: EB B1                 - jmp GameAssembly.dll+659FC5
+GameAssembly.dll+65A014: E8 A7 93 EC FF        - call GameAssembly.il2cpp_method_get_class+B0
+GameAssembly.dll+65A019: CC                    - int 3 
+GameAssembly.dll+65A01A: E8 91 93 EC FF        - call GameAssembly.il2cpp_method_get_class+A0
+GameAssembly.dll+65A01F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+WeaponBase.Tick: 48 89 5C 24 10        - mov [rsp+10],rbx
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+65A025: 48 89 74 24 18        - mov [rsp+18],rsi
+GameAssembly.dll+65A02A: 48 89 7C 24 20        - mov [rsp+20],rdi
+GameAssembly.dll+65A02F: 41 56                 - push r14
+GameAssembly.dll+65A031: 48 83 EC 60           - sub rsp,60
+GameAssembly.dll+65A035: 80 3D DF 3E 64 04 00  - cmp byte ptr [GameAssembly.dll+4C9DF1B],00
+GameAssembly.dll+65A03C: 41 8B F9              - mov edi,r9d
+GameAssembly.dll+65A03F: 4D 8B F0              - mov r14,r8
+GameAssembly.dll+65A042: 48 8B F2              - mov rsi,rdx
+GameAssembly.dll+65A045: 48 8B D9              - mov rbx,rcx
+GameAssembly.dll+65A048: 75 43                 - jne GameAssembly.dll+65A08D
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"Value Show/Update When Shoot"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>12</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000278D9F42130" RealAddress="7FFCBDD30011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>weaponbase_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>21</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"WeaponID"</Description>
+                  <LastState Value="14" RealAddress="278D9F42150"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"WeaponGroup"</Description>
+                  <LastState Value="5" RealAddress="278D9F42154"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+24</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"_impulseValue"</Description>
+                  <LastState Value="1" RealAddress="278D9F42168"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"IsWaitingReloadDrop"</Description>
+                  <LastState Value="0" RealAddress="278D9F421A0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[weaponbase_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"_delayReload"</Description>
+                  <LastState Value="0.200000003" RealAddress="278D9F421C8"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+98</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"_canIgnoreCooldown"</Description>
+                  <LastState Value="1" RealAddress="278D9F42220"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[weaponbase_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"_currentReloadPresentationStyle"</Description>
+                  <LastState Value="1" RealAddress="278D9F42238"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"HandSlotIndex"</Description>
+                  <LastState Value="0" RealAddress="278D9F42248"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+118</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>22</ID>
+              <Description>"_currentMode"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"_nextTimShot"</Description>
+                  <LastState Value="804.9978027" RealAddress="278C19248E0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"_delay"</Description>
+                  <LastState Value="0.200000003" RealAddress="278C19248E4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"_nextTimeFastShot"</Description>
+                  <LastState Value="804.9644775" RealAddress="278C19248F0"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"one_click_shooting_fire_rate"</Description>
+                  <LastState Value="1.5" RealAddress="278C19248F4"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[weaponbase_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>27</ID>
+              <Description>"_context"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"AmountInClip"</Description>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"IsReloading"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[weaponbase_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"WeaponID"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"WeaponGroup"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[weaponbase_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"IsHelper"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[weaponbase_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>33</ID>
+          <Description>"WalletService"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Counter Targets Clicker.exe
+  Version: 
+  Date   : 2026-11-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+698080)
+define(bytes,48 8B C4 48 89 58 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+698080)
+
+label(code)
+label(return)
+
+newmem:
+mov [walletservice_ptr],rcx
+
+code:
+  mov rax,rsp
+  mov [rax+08],rbx
+  jmp return
+
+walletservice_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registersymbol(walletservice_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov rax,rsp
+  // mov [rax+08],rbx
+
+dealloc(newmem)
+unregistersymbol(walletservice_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Services.WalletService.IsEnough
+
+GameAssembly.dll+69806F: F3 48 0F 2C C1        - cvttss2si rax,xmm1
+GameAssembly.dll+698074: 48 83 C4 28           - add rsp,28
+GameAssembly.dll+698078: C3                    - ret 
+GameAssembly.dll+698079: CC                    - int 3 
+GameAssembly.dll+69807A: CC                    - int 3 
+GameAssembly.dll+69807B: CC                    - int 3 
+GameAssembly.dll+69807C: CC                    - int 3 
+GameAssembly.dll+69807D: CC                    - int 3 
+GameAssembly.dll+69807E: CC                    - int 3 
+GameAssembly.dll+69807F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+Services.WalletService.IsEnough: 48 8B C4              - mov rax,rsp
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+698083: 48 89 58 08           - mov [rax+08],rbx
+GameAssembly.dll+698087: 57                    - push rdi
+GameAssembly.dll+698088: 48 81 EC A0 00 00 00  - sub rsp,000000A0
+GameAssembly.dll+69808F: 0F 29 70 E8           - movaps [rax-18],xmm6
+GameAssembly.dll+698093: 0F 29 78 D8           - movaps [rax-28],xmm7
+GameAssembly.dll+698097: 44 0F 29 40 C8        - movaps [rax-38],xmm8
+GameAssembly.dll+69809C: 44 0F 29 48 B8        - movaps [rax-48],xmm9
+GameAssembly.dll+6980A1: 48 8B DA              - mov rbx,rdx
+GameAssembly.dll+6980A4: 48 8B F9              - mov rdi,rcx
+GameAssembly.dll+6980A7: 80 3D 05 61 60 04 00  - cmp byte ptr [GameAssembly.dll+4C9E1B3],00
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>34</ID>
+              <Description>"Value Show/Update When Hover Mouse on Unlock Upgrades. Not Worked on Locked &amp; Max Skill"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>35</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="00000278A3C0CBA0" RealAddress="7FFCBDD20013"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>walletservice_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"_size"</Description>
+              <LastState Value="2" RealAddress="278B988B6A8"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>000000</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[walletservice_ptr]+10</Address>
+              <Offsets>
+                <Offset>18</Offset>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>37</ID>
+              <Description>"Count"</Description>
+              <LastState Value="4" RealAddress="278C2D3EE78"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>000000</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[walletservice_ptr]+10</Address>
+              <Offsets>
+                <Offset>18</Offset>
+                <Offset>10</Offset>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>38</ID>
+              <Description>"Value"</Description>
+              <LastState Value="4.611686018E18" RealAddress="278C08D90F4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[walletservice_ptr]+10</Address>
+              <Offsets>
+                <Offset>14</Offset>
+                <Offset>20</Offset>
+                <Offset>10</Offset>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>39</ID>
+              <Description>"Value"</Description>
+              <LastState Value="1000000000" RealAddress="278C08D90D4"/>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[walletservice_ptr]+10</Address>
+              <Offsets>
+                <Offset>14</Offset>
+                <Offset>28</Offset>
+                <Offset>10</Offset>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>41</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>42</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Counter Targets Clicker - v0.10.3 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

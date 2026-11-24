@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>79</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1"/>
+      <LastState/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "RoundAndRound.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    openProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"SaveData"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : RoundAndRound.exe
+  Version: 
+  Date   : 2026-11-16
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,"GameAssembly.dll"+18D4D4C)
+define(bytes,F2 41 0F 10 57 10)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GameAssembly.dll"+18D4D4C)
+
+label(code)
+label(return)
+
+newmem:
+mov [savedata_ptr],r15
+
+code:
+  movsd xmm2,[r15+10]
+  jmp return
+
+savedata_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(savedata_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // movsd xmm2,[r15+10]
+
+dealloc(newmem)
+unregistersymbol(savedata_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+18D4D4C
+//double value type
+
+GameAssembly.dll+18D4D22: E8 39 D4 72 FE        - call GameAssembly.dll+2160
+GameAssembly.dll+18D4D27: 48 8D 54 24 40        - lea rdx,[rsp+40]
+GameAssembly.dll+18D4D2C: F2 0F 11 74 24 40     - movsd [rsp+40],xmm6
+GameAssembly.dll+18D4D32: 48 8B CB              - mov rcx,rbx
+GameAssembly.dll+18D4D35: 89 74 24 48           - mov [rsp+48],esi
+GameAssembly.dll+18D4D39: 4C 8B 40 08           - mov r8,[rax+08]
+GameAssembly.dll+18D4D3D: 4C 8B 08              - mov r9,[rax]
+GameAssembly.dll+18D4D40: 41 FF D1              - call r9
+GameAssembly.dll+18D4D43: 4D 85 FF              - test r15,r15
+GameAssembly.dll+18D4D46: 0F 84 5D 01 00 00     - je GameAssembly.dll+18D4EA9
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+18D4D4C: F2 41 0F 10 57 10     - movsd xmm2,[r15+10]
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+18D4D52: 45 33 C9              - xor r9d,r9d
+GameAssembly.dll+18D4D55: 0F 28 CF              - movaps xmm1,xmm7
+GameAssembly.dll+18D4D58: 48 8B CF              - mov rcx,rdi
+GameAssembly.dll+18D4D5B: E8 F0 E5 FF FF        - call RoundAndRound.HudView.UpdateMoney
+GameAssembly.dll+18D4D60: 45 33 C9              - xor r9d,r9d
+GameAssembly.dll+18D4D63: 4D 8B C7              - mov r8,r15
+GameAssembly.dll+18D4D66: 49 8B D6              - mov rdx,r14
+GameAssembly.dll+18D4D69: 48 8B CF              - mov rcx,rdi
+GameAssembly.dll+18D4D6C: E8 BF F8 FF FF        - call RoundAndRound.HudView.UpdateStats
+GameAssembly.dll+18D4D71: 48 8B AF 80 00 00 00  - mov rbp,[rdi+00000080]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="000002276B781C60" RealAddress="7FFCBF720012"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>savedata_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>2</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"money"</Description>
+                  <LastState Value="+Inf" RealAddress="2276B781C70"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>808040</Color>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+10</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"lifetimeMoney"</Description>
+                  <LastState Value="1708001088966.31" RealAddress="2276B781C78"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+18</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>5</ID>
+                  <Description>"people"</Description>
+                  <LastState Value="8200060928" RealAddress="2276B781C80"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+20</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>6</ID>
+                  <Description>"figures"</Description>
+                  <LastState Value="51383" RealAddress="2276B781C88"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[savedata_ptr]+28</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"playSeconds"</Description>
+                  <LastState Value="81.533337585628" RealAddress="2276B781CA0"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+40</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"crankHintDone"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="2276B781CA8"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[savedata_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"endingSeen"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="2276B781CA9"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[savedata_ptr]+49</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"savedAtUnix"</Description>
+                  <LastState Value="1794830685" RealAddress="2276B781CB0"/>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>[savedata_ptr]+50</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"contractSigned"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="2276B781CC0"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[savedata_ptr]+60</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"pendingShop"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="2276B781CC1"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[savedata_ptr]+61</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"moneySpent"</Description>
+                  <LastState Value="1345032665835" RealAddress="2276B781CC8"/>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+68</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"bestCombo"</Description>
+                  <LastState Value="296" RealAddress="2276B781CD0"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[savedata_ptr]+70</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"prizeTickets"</Description>
+                  <LastState Value="999999998" RealAddress="2276B781CD4"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[savedata_ptr]+74</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"prizeClock"</Description>
+                  <LastState Value="0" RealAddress="2276B781CD8"/>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[savedata_ptr]+78</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"deliveryClock"</Description>
+                  <LastState Value="101.5274506" RealAddress="2276B781CDC"/>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[savedata_ptr]+7C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"wallSeconds"</Description>
+                  <LastState Value="27.466668099165" RealAddress="2276B781CE0"/>
+                  <Color>808040</Color>
+                  <VariableType>Double</VariableType>
+                  <Address>[savedata_ptr]+80</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>19</ID>
+              <Description>"meta"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>21</ID>
+                      <Description>"rebirths"</Description>
+                      <LastState Value="2" RealAddress="227ABC46410"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"buzzHintDone"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="227ABC46414"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>23</ID>
+                      <Description>"introducedGuests"</Description>
+                      <LastState Value="63" RealAddress="227ABC46418"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>24</ID>
+                      <Description>"lifetimePeople"</Description>
+                      <LastState Value="204410" RealAddress="227ABC46420"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>25</ID>
+                      <Description>"spinEnergy"</Description>
+                      <LastState Value="999812383" RealAddress="227ABC46428"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"spinEarned"</Description>
+                      <LastState Value="22" RealAddress="227ABC4642C"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>27</ID>
+                      <Description>"topContracts"</Description>
+                      <LastState Value="0" RealAddress="227ABC46440"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>28</ID>
+                      <Description>"carryMoney"</Description>
+                      <LastState Value="0" RealAddress="227ABC46448"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>29</ID>
+                      <Description>"milestones"</Description>
+                      <LastState Value="6" RealAddress="227ABC46450"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>30</ID>
+                      <Description>"seenGuests"</Description>
+                      <LastState Value="62" RealAddress="227ABC46460"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>31</ID>
+                      <Description>"seenFacades"</Description>
+                      <LastState Value="63" RealAddress="227ABC46464"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>32</ID>
+                      <Description>"seenBlades"</Description>
+                      <LastState Value="63" RealAddress="227ABC46468"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>33</ID>
+                      <Description>"bestCombo"</Description>
+                      <LastState Value="20487" RealAddress="227ABC4646C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>34</ID>
+                      <Description>"bestRunPeople"</Description>
+                      <LastState Value="117082" RealAddress="227ABC46470"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>35</ID>
+                      <Description>"totalSeconds"</Description>
+                      <LastState Value="448.150023372844" RealAddress="227ABC46478"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>36</ID>
+                      <Description>"clerksOn"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="227ABC46480"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>37</ID>
+                      <Description>"branch"</Description>
+                      <LastState Value="1" RealAddress="227ABC46490"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>38</ID>
+                      <Description>"branchStartSeconds"</Description>
+                      <LastState Value="0" RealAddress="227ABC46498"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>39</ID>
+                      <Description>"branchStartRebirths"</Description>
+                      <LastState Value="0" RealAddress="227ABC464A0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>40</ID>
+                      <Description>"lastBranchSeconds"</Description>
+                      <LastState Value="0" RealAddress="227ABC464A8"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>41</ID>
+                      <Description>"trust"</Description>
+                      <LastState Value="0" RealAddress="227ABC464B0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>42</ID>
+                      <Description>"branchStartHandTurns"</Description>
+                      <LastState Value="0" RealAddress="227ABC464C0"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>43</ID>
+                      <Description>"branchStartThrown"</Description>
+                      <LastState Value="0" RealAddress="227ABC464C8"/>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>C8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>44</ID>
+                      <Description>"branchBestCombo"</Description>
+                      <LastState Value="20487" RealAddress="227ABC464D0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"gulpHinted"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="227ABC464E0"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>46</ID>
+                      <Description>"lastWallSeconds"</Description>
+                      <LastState Value="146.383340967819" RealAddress="227ABC464E8"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"record"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>48</ID>
+                      <Description>"doorTurns"</Description>
+                      <LastState Value="139.536435301606" RealAddress="227ABC4DB70"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>49</ID>
+                      <Description>"handTurns"</Description>
+                      <LastState Value="57.7206831393508" RealAddress="227ABC4DB78"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>50</ID>
+                      <Description>"handSeconds"</Description>
+                      <LastState Value="38.6985631473362" RealAddress="227ABC4DB80"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>51</ID>
+                      <Description>"topTurnsPerMinute"</Description>
+                      <LastState Value="51.59405899" RealAddress="227ABC4DB88"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>52</ID>
+                      <Description>"figures"</Description>
+                      <LastState Value="179894" RealAddress="227ABC4DB90"/>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>53</ID>
+                      <Description>"thrown"</Description>
+                      <LastState Value="176259" RealAddress="227ABC4DB98"/>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>54</ID>
+                      <Description>"thrownFriends"</Description>
+                      <LastState Value="3" RealAddress="227ABC4DBA0"/>
+                      <VariableType>8 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>55</ID>
+                      <Description>"friendGroups"</Description>
+                      <LastState Value="0" RealAddress="227ABC4DBB0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>50</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>56</ID>
+                      <Description>"idols"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBB4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>54</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>57</ID>
+                      <Description>"fans"</Description>
+                      <LastState Value="160" RealAddress="227ABC4DBB8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>58</ID>
+                      <Description>"robots"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBBC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>59</ID>
+                      <Description>"riders"</Description>
+                      <LastState Value="3" RealAddress="227ABC4DBC0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>60</ID>
+                      <Description>"ridersTipped"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBC4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>64</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>61</ID>
+                      <Description>"guides"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBC8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>68</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>62</ID>
+                      <Description>"parades"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBCC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>63</ID>
+                      <Description>"combos"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBD0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>64</ID>
+                      <Description>"rushHours"</Description>
+                      <LastState Value="5" RealAddress="227ABC4DBD4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>74</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>65</ID>
+                      <Description>"buses"</Description>
+                      <LastState Value="6" RealAddress="227ABC4DBD8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>66</ID>
+                      <Description>"trains"</Description>
+                      <LastState Value="7" RealAddress="227ABC4DBDC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>67</ID>
+                      <Description>"planes"</Description>
+                      <LastState Value="5" RealAddress="227ABC4DBE0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>68</ID>
+                      <Description>"prizeDraws"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DBE4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>69</ID>
+                      <Description>"prizeJackpots"</Description>
+                      <LastState Value="0" RealAddress="227ABC4DBE8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>70</ID>
+                      <Description>"deliveries"</Description>
+                      <LastState Value="0" RealAddress="227ABC4DBEC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>71</ID>
+                      <Description>"gulps"</Description>
+                      <LastState Value="0" RealAddress="227ABC4DBF0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>72</ID>
+                      <Description>"moneyEarned"</Description>
+                      <LastState Value="1708647166375.21" RealAddress="227ABC4DBF8"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>73</ID>
+                      <Description>"upgradesBought"</Description>
+                      <LastState Value="231" RealAddress="227ABC4DC00"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>74</ID>
+                      <Description>"perksBought"</Description>
+                      <LastState Value="88" RealAddress="227ABC4DC04"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>A4</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>75</ID>
+                      <Description>"contractsSigned"</Description>
+                      <LastState Value="2" RealAddress="227ABC4DC08"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>76</ID>
+                      <Description>"fastestRunSeconds"</Description>
+                      <LastState Value="176.200009189546" RealAddress="227ABC4DC10"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>77</ID>
+                      <Description>"endingSeconds"</Description>
+                      <LastState Value="529.683360958472" RealAddress="227ABC4DC18"/>
+                      <VariableType>Double</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>78</ID>
+                      <Description>"endingRuns"</Description>
+                      <LastState Value="3" RealAddress="227ABC4DC20"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[savedata_ptr]+58</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>80</ID>
+      <Description>""</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>81</ID>
+      <Description>"PROFILE LINK"</Description>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Round And Round INC. - v1.0.0 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

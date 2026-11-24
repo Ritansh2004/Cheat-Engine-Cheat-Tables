@@ -1,0 +1,2650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>107</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Trust Your Gut.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    openProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>5</ID>
+          <Description>"BetUIManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Trust Your Gut.exe
+  Version: 
+  Date   : 2026-11-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,BetUIManager:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,BetUIManager:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [betuimanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+betuimanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(betuimanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(betuimanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BetUIManager:Update
+
+2170315FB48: 01 04 02                       - add [rdx+rax],eax
+2170315FB4B: 05 04 03 01 50                 - add eax,50010304
+2170315FB50: 00 00                          - add [rax],al
+2170315FB52: 00 00                          - add [rax],al
+2170315FB54: 00 00                          - add [rax],al
+2170315FB56: 00 00                          - add [rax],al
+2170315FB58: 00 00                          - add [rax],al
+2170315FB5A: 00 00                          - add [rax],al
+2170315FB5C: 00 00                          - add [rax],al
+2170315FB5E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+BetUIManager:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+BetUIManager:Update+1: 48 8B EC                       - mov rbp,rsp
+BetUIManager:Update+4: 48 83 EC 30                    - sub rsp,30
+BetUIManager:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+BetUIManager:Update+c: 48 8B F1                       - mov rsi,rcx
+BetUIManager:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+BetUIManager:Update+16: 49 BB F0 FB 15 03 17 02 00 00  - mov r11,BetUIManager:UpdateFeedbackPause
+BetUIManager:Update+20: 41 FF D3                       - call r11
+BetUIManager:Update+23: 48 8B CE                       - mov rcx,rsi
+BetUIManager:Update+26: 49 BB D0 93 BF 5A 14 02 00 00  - mov r11,BetUIManager:RefreshResultScrollFeedback
+BetUIManager:Update+30: 41 FF D3                       - call r11
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>betuimanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"enableTvShow"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+278</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"_electricPlayed"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+279</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>112</ID>
+              <Description>"payoutChainNormalCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+27C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>113</ID>
+              <Description>"payoutChainGrowth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+280</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>114</ID>
+              <Description>"payoutChainMaxBoost"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+284</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"_chainBaseSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+288</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"_chainAppliedSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+28C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>117</ID>
+              <Description>"tvStaticLineDensity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+290</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>118</ID>
+              <Description>"tvButtonHeatAmount"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+294</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>119</ID>
+              <Description>"tvHeatEmission"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+298</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>120</ID>
+              <Description>"tvHeatYellowPoint"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+29C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>121</ID>
+              <Description>"tvHeatMaxGlow"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"tvScreenHeatMaxGlow"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>123</ID>
+              <Description>"tvScreenHeatStrength"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>124</ID>
+              <Description>"tvPayoutGlow"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+2AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>125</ID>
+              <Description>"tvPayoutGlowIntensity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"tvPayoutGlowRadius"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>127</ID>
+              <Description>"tvPayoutGlowThreshold"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>128</ID>
+              <Description>"_presentationGeneration"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+2BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>129</ID>
+              <Description>"gamepadScrollViewportsPerSecond"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>130</ID>
+              <Description>"gamepadScrollDeadzone"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>131</ID>
+              <Description>"_mementoBeat"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+2C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>132</ID>
+              <Description>"_nextTickIsMultiplier"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+2CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>133</ID>
+              <Description>"_refreshAfterFeedback"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+2CD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>134</ID>
+              <Description>"_counterPausedForFeedback"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+2CE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>135</ID>
+              <Description>"currentMoney"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[betuimanager_ptr]+2D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>136</ID>
+              <Description>"currentMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>137</ID>
+              <Description>"ShepardPosition"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>138</ID>
+              <Description>"_rawMoney (Freeze &amp; Set +inf)"</Description>
+              <Color>808040</Color>
+              <VariableType>Double</VariableType>
+              <Address>[betuimanager_ptr]+2E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>139</ID>
+              <Description>"_rawMultiplier (Freeze)"</Description>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>140</ID>
+              <Description>"_displayedPayout"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[betuimanager_ptr]+2F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>141</ID>
+              <Description>"levelThresholdBase"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>142</ID>
+              <Description>"levelThresholdGrowth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+2FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>143</ID>
+              <Description>"maxLevelCap"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+300</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>144</ID>
+              <Description>"levelTransitionTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+304</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>145</ID>
+              <Description>"payoutAnimUnscaled"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+308</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>146</ID>
+              <Description>"levelGatedPayoutCount"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+309</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>147</ID>
+              <Description>"levelSegmentMaxDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+30C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>148</ID>
+              <Description>"gradientMaxLevel"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+310</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>149</ID>
+              <Description>"tintPayoutTextByLevel"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+314</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>150</ID>
+              <Description>"payoutHeatLook"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+315</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>151</ID>
+              <Description>"payoutHeatMaxGrowth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+318</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>152</ID>
+              <Description>"payoutHeatResponse"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+31C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>153</ID>
+              <Description>"_payoutHeatLook"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+320</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>154</ID>
+              <Description>"_payoutHeatScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+324</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>155</ID>
+              <Description>"lightIntensityBase"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+328</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>156</ID>
+              <Description>"lightIntensityGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+32C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>157</ID>
+              <Description>"lightIntensityMax"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+330</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>158</ID>
+              <Description>"fontSizeBaseMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+334</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>159</ID>
+              <Description>"fontSizeGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+338</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>160</ID>
+              <Description>"fontSizeMaxMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+33C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>161</ID>
+              <Description>"fontPumpPerHit"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+340</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>162</ID>
+              <Description>"fontPumpMultiplierPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+344</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>163</ID>
+              <Description>"fontPumpDecayPerSecond"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+348</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>164</ID>
+              <Description>"fontPumpCap"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+34C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>165</ID>
+              <Description>"levelPauseBase"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+350</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>166</ID>
+              <Description>"levelPauseGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+354</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>167</ID>
+              <Description>"levelPauseMin"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+358</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>168</ID>
+              <Description>"levelPauseMax"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+35C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>169</ID>
+              <Description>"cameraShakeBaseMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+360</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>170</ID>
+              <Description>"cameraShakeGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+364</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>171</ID>
+              <Description>"cameraShakeMaxMultiplier"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+368</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>172</ID>
+              <Description>"tvProgressMaxLevel"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+37C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>173</ID>
+              <Description>"chipParticleEmissionCount"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+388</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>174</ID>
+              <Description>"chipParticleMinLevel"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+38C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>175</ID>
+              <Description>"_levelTransitionPaused"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+390</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>176</ID>
+              <Description>"_payoutTweenSegment"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[betuimanager_ptr]+398</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>177</ID>
+              <Description>"_basePayoutFontSize"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>178</ID>
+              <Description>"_topLevelExtraFont"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>179</ID>
+              <Description>"_currentPayoutLevelIndex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+3A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>180</ID>
+              <Description>"earnCount"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>181</ID>
+              <Description>"baseFrameShake"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>182</ID>
+              <Description>"frameShakeGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>183</ID>
+              <Description>"maxFrameShake"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>184</ID>
+              <Description>"baseAccScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>185</ID>
+              <Description>"accScaleGrowthPerLevel"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>186</ID>
+              <Description>"maxAccScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>187</ID>
+              <Description>"accScaleUpTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"accScaleDownTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"basePulseInterval"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>190</ID>
+              <Description>"pulseIntervalDecay"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"minPulseInterval"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"tvHeatRiseRate"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"tvHeatDecayRate"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"_tvStacked"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"testContinuousTvPulse"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"testTvLevelIndex"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[betuimanager_ptr]+3EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"_testPulseTimer"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"_tvHeat"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+3F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"IsBetUIAnimationFinished"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"_roundActive"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3F9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>201</ID>
+              <Description>"_resultContextActive"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3FA</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>202</ID>
+              <Description>"_manualGamepadScroll"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3FB</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>203</ID>
+              <Description>"_gamepadScrollHeld"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+3FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"_gamepadScrollTarget"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+400</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>205</ID>
+              <Description>"_gamepadScrollApplied"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+404</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>206</ID>
+              <Description>"_resultScrollY"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+408</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>207</ID>
+              <Description>"_resultScrollFeedbackVisible"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+40C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>208</ID>
+              <Description>"_interactionEnabled"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[betuimanager_ptr]+40D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>209</ID>
+              <Description>"baseGrow"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+410</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>210</ID>
+              <Description>"maxScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+414</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>211</ID>
+              <Description>"perHit"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+418</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>212</ID>
+              <Description>"upTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+41C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>213</ID>
+              <Description>"downTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+420</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>214</ID>
+              <Description>"stacked"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[betuimanager_ptr]+424</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>215</ID>
+          <Description>"BallSlot"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Trust Your Gut.exe
+  Version: 
+  Date   : 2026-11-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,BallSlot:PushTooltip)
+define(bytes,55 48 8B EC 48 81 EC 30 03 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,BallSlot:PushTooltip)
+
+label(code)
+label(return)
+
+newmem:
+mov [ballslot_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000330
+  jmp return
+
+ballslot_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(ballslot_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000330
+
+dealloc(newmem)
+unregistersymbol(ballslot_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BallSlot:PushTooltip
+
+153ED53DC08: 01 04 02              - add [rdx+rax],eax
+153ED53DC0B: 05 04 03 01 50        - add eax,50010304
+153ED53DC10: 00 00                 - add [rax],al
+153ED53DC12: 00 00                 - add [rax],al
+153ED53DC14: 00 00                 - add [rax],al
+153ED53DC16: 00 00                 - add [rax],al
+153ED53DC18: 00 00                 - add [rax],al
+153ED53DC1A: 00 00                 - add [rax],al
+153ED53DC1C: 00 00                 - add [rax],al
+153ED53DC1E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+BallSlot:PushTooltip: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+BallSlot:PushTooltip+1: 48 8B EC              - mov rbp,rsp
+BallSlot:PushTooltip+4: 48 81 EC 30 03 00 00  - sub rsp,00000330
+BallSlot:PushTooltip+b: 48 89 5D D0           - mov [rbp-30],rbx
+BallSlot:PushTooltip+f: 48 89 7D D8           - mov [rbp-28],rdi
+BallSlot:PushTooltip+13: 4C 89 65 E0           - mov [rbp-20],r12
+BallSlot:PushTooltip+17: 4C 89 6D E8           - mov [rbp-18],r13
+BallSlot:PushTooltip+1b: 4C 89 75 F0           - mov [rbp-10],r14
+BallSlot:PushTooltip+1f: 4C 89 7D F8           - mov [rbp-08],r15
+BallSlot:PushTooltip+23: 48 89 8D 50 FD FF FF  - mov [rbp-000002B0],rcx
+BallSlot:PushTooltip+2a: 48 89 95 48 FD FF FF  - mov [rbp-000002B8],rdx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>217</ID>
+              <Description>"Value Show/Update When Hover Pointer on Ball Slot / Show Tooltip"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>216</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>ballslot_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>221</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>222</ID>
+                  <Description>"layers"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ballslot_ptr]+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>223</ID>
+                  <Description>"activate"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ballslot_ptr]+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>224</ID>
+                  <Description>"_outlineLocked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ballslot_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>225</ID>
+                  <Description>"IsHovered"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ballslot_ptr]+39</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>226</ID>
+                  <Description>"sellHoldDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[ballslot_ptr]+88</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>227</ID>
+                  <Description>"_lastSellDeniedAt"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[ballslot_ptr]+8C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>228</ID>
+                  <Description>"_myIndex"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[ballslot_ptr]+90</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>229</ID>
+                  <Description>"_isActiveForThrowing"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ballslot_ptr]+94</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>230</ID>
+                  <Description>"_isCapacityLocked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ballslot_ptr]+95</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>231</ID>
+                  <Description>"_hovered"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[ballslot_ptr]+96</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>232</ID>
+              <Description>"currentBall"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>267</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>233</ID>
+                      <Description>"layers"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>234</ID>
+                      <Description>"activate"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>235</ID>
+                      <Description>"_outlineLocked"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>236</ID>
+                      <Description>"IsHovered"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>39</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>237</ID>
+                      <Description>"initialForce"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>238</ID>
+                      <Description>"pullStartTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>118</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>239</ID>
+                      <Description>"pullForce"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>11C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>240</ID>
+                      <Description>"pullEaseDuration"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>120</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>241</ID>
+                      <Description>"snapDistance"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>124</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>242</ID>
+                      <Description>"snapHeight"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>128</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>243</ID>
+                      <Description>"isTest"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>12C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>244</ID>
+                      <Description>"minImpactSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>130</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>245</ID>
+                      <Description>"maxImpactSpeed"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>134</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>246</ID>
+                      <Description>"impactCooldown"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>247</ID>
+                      <Description>"impactPitchVariance"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>13C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>248</ID>
+                      <Description>"_lastImpactTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>140</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>249</ID>
+                      <Description>"inSlotScale"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>144</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>250</ID>
+                      <Description>"inventoryPickupDuration"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>251</ID>
+                      <Description>"inventoryPlaceDuration"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>14C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>252</ID>
+                      <Description>"inventoryPickupPopScale"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>253</ID>
+                      <Description>"_hasPreparedTransferPose"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>17C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>254</ID>
+                      <Description>"IsOnRoulette"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>255</ID>
+                      <Description>"contactDeformation"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1AC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>256</ID>
+                      <Description>"_renderersCached"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1C0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>257</ID>
+                      <Description>"_flashAttached"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1C1</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>258</ID>
+                      <Description>"_contactPoseCached"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1D0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>259</ID>
+                      <Description>"_lastContactTime"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1D4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>260</ID>
+                      <Description>"_abilityHoldUntil"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1D8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>261</ID>
+                      <Description>"_pendingAbilityCount"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1DC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>262</ID>
+                      <Description>"_pendingAbilityFlash"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1E0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>263</ID>
+                      <Description>"_pendingAbilitySound"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1E1</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>264</ID>
+                      <Description>"_pendingCombo"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1E4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>265</ID>
+                      <Description>"_throwOutlineVisible"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1E8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>266</ID>
+                      <Description>"_throwOutlineFade"</Description>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>1EC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>268</ID>
+                  <Description>"currentBase"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>357</ID>
+                      <Description>"Below Option's Depend On Which Type of Ball You Choose"</Description>
+                      <Options moHideChildren="1"/>
+                      <LastState Value="" RealAddress="00000000"/>
+                      <Color>0000FF</Color>
+                      <GroupHeader>1</GroupHeader>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>269</ID>
+                      <Description>"Id"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>270</ID>
+                      <Description>"Description"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>271</ID>
+                      <Description>"NameKey"</Description>
+                      <VariableType>String</VariableType>
+                      <Length>999</Length>
+                      <Unicode>1</Unicode>
+                      <CodePage>0</CodePage>
+                      <ZeroTerminate>1</ZeroTerminate>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>40</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>272</ID>
+                      <Description>"Rarity"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>78</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>273</ID>
+                      <Description>"ExcludeFromMarket"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>274</ID>
+                      <Description>"UnlockConditionMode"</Description>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>275</ID>
+                      <Description>"IsEffectCopy"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>276</ID>
+                      <Description>"_suppressEffectAdditions"</Description>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>85</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>277</ID>
+                      <Description>"LANDED_BALL_COUNT"</Description>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>337</ID>
+                      <Description>"BONUS"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>339</ID>
+                      <Description>"BALLS_PER_EMPTY_SLOT"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>340</ID>
+                      <Description>"SELL_VALUE"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>341</ID>
+                      <Description>"ADD_MONEY"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>342</ID>
+                      <Description>"_subscribed"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>346</ID>
+                      <Description>"BASE_CASH"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>349</ID>
+                      <Description>"LANDED_BALL_COUNT"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>350</ID>
+                      <Description>"TOKEN_AMOUNT"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>351</ID>
+                      <Description>"BONUS_STEP"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>343</ID>
+                      <Description>"_isRelaunched"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>89</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>338</ID>
+                      <Description>"_totalBonusAdded"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>335</ID>
+                      <Description>"MULTIPLIER"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>352</ID>
+                      <Description>"MAX_COPIES"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>336</ID>
+                      <Description>"_triggerSerial"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>353</ID>
+                      <Description>"_isCopy"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>94</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>354</ID>
+                      <Description>"_subscribed"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>95</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>278</ID>
+                      <Description>"BET_INCREASE"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>347</ID>
+                      <Description>"NEIGHBOUR_COUNT"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>348</ID>
+                      <Description>"MULTIPLIER"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>355</ID>
+                      <Description>"_isCopy"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>98</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>356</ID>
+                      <Description>"_subscribed"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>99</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>344</ID>
+                      <Description>"MULTIPLIER"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>D0</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>345</ID>
+                      <Description>"SPINS"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[ballslot_ptr]+48</Address>
+                      <Offsets>
+                        <Offset>D4</Offset>
+                        <Offset>78</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>358</ID>
+          <Description>"RoundManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Trust Your Gut.exe
+  Version: 
+  Date   : 2026-11-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,RoundManager:set_depositedCurrency)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,RoundManager:set_depositedCurrency)
+
+label(code)
+label(return)
+
+newmem:
+mov [roundmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+roundmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(roundmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(roundmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: RoundManager:set_depositedCurrency
+
+153EBE6704D: 54                    - push rsp
+153EBE6704E: 01 00                 - add [rax],eax
+153EBE67050: 00 00                 - add [rax],al
+153EBE67052: 00 00                 - add [rax],al
+153EBE67054: 00 00                 - add [rax],al
+153EBE67056: 00 00                 - add [rax],al
+153EBE67058: 00 00                 - add [rax],al
+153EBE6705A: 00 00                 - add [rax],al
+153EBE6705C: 00 00                 - add [rax],al
+153EBE6705E: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+RoundManager:set_depositedCurrency: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+RoundManager:set_depositedCurrency+1: 48 8B EC              - mov rbp,rsp
+RoundManager:set_depositedCurrency+4: 48 83 EC 30           - sub rsp,30
+RoundManager:set_depositedCurrency+8: 48 89 75 F8           - mov [rbp-08],rsi
+RoundManager:set_depositedCurrency+c: 48 8B F1              - mov rsi,rcx
+RoundManager:set_depositedCurrency+f: F2 0F 11 4D F0        - movsd [rbp-10],xmm1
+RoundManager:set_depositedCurrency+14: 48 85 F6              - test rsi,rsi
+RoundManager:set_depositedCurrency+17: 0F 84 28 00 00 00     - je RoundManager:set_depositedCurrency+45
+RoundManager:set_depositedCurrency+1d: 48 8D 8E D8 00 00 00  - lea rcx,[rsi+000000D8]
+RoundManager:set_depositedCurrency+24: F2 0F 10 45 F0        - movsd xmm0,[rbp-10]
+RoundManager:set_depositedCurrency+29: F2 0F 10 C8           - movsd xmm1,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>359</ID>
+              <Description>"Value Show/Update When Deposited Currency"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>360</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>roundmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>361</ID>
+              <Description>"currentRound"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>362</ID>
+              <Description>"currentDay"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>363</ID>
+              <Description>"totalRunRound"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>364</ID>
+              <Description>"startingDeposit"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[roundmanager_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>365</ID>
+              <Description>"_deposited"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>8 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>366</ID>
+              <Description>"_dailyExtraRounds"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+100</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>367</ID>
+              <Description>"rewardPerRemainingSpin"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+104</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>368</ID>
+              <Description>"minimumTargetReachReward"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+108</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>369</ID>
+              <Description>"cashIconOnInterestPredict"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[roundmanager_ptr]+10C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>370</ID>
+              <Description>"spinnedForThisRound"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[roundmanager_ptr]+10D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>371</ID>
+              <Description>"depositFlashDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>372</ID>
+              <Description>"depositCountDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>373</ID>
+              <Description>"feelMoveUp"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>374</ID>
+              <Description>"feelDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>375</ID>
+              <Description>"_lastDisplayedDeposit"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[roundmanager_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>376</ID>
+              <Description>"_feelInitialized"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[roundmanager_ptr]+164</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>377</ID>
+              <Description>"_wonTriggered"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[roundmanager_ptr]+165</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>378</ID>
+              <Description>"_endless"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[roundmanager_ptr]+166</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>379</ID>
+              <Description>"roundsRevealPunch"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+168</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>380</ID>
+              <Description>"roundsRevealFadeSeconds"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[roundmanager_ptr]+16C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>381</ID>
+              <Description>"_previousTarget"</Description>
+              <VariableType>Double</VariableType>
+              <Address>[roundmanager_ptr]+190</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>382</ID>
+              <Description>"_previousTargetDay"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[roundmanager_ptr]+198</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>383</ID>
+          <Description>"RerollManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Trust Your Gut.exe
+  Version: 
+  Date   : 2026-11-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,RerollManager:OnRerollUsed)
+define(bytes,55 48 8B EC 48 81 EC E0 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,RerollManager:OnRerollUsed)
+
+label(code)
+label(return)
+
+newmem:
+mov [rerollmanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,000000E0
+  jmp return
+
+rerollmanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(rerollmanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,000000E0
+
+dealloc(newmem)
+unregistersymbol(rerollmanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: RerollManager:OnRerollUsed
+
+System.Threading.Thread:EndCriticalRegion+4a: C3                             - ret 
+15547A16B9B: 00 00                          - add [rax],al
+15547A16B9D: 00 00                          - add [rax],al
+15547A16B9F: 00 01                          - add [rcx],al
+15547A16BA1: 04 02                          - add al,02
+15547A16BA3: 05 04 03 01 50                 - add eax,50010304
+15547A16BA8: 00 00                          - add [rax],al
+15547A16BAA: 00 00                          - add [rax],al
+15547A16BAC: 00 00                          - add [rax],al
+15547A16BAE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+RerollManager:OnRerollUsed: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+RerollManager:OnRerollUsed+1: 48 8B EC                       - mov rbp,rsp
+RerollManager:OnRerollUsed+4: 48 81 EC E0 00 00 00           - sub rsp,000000E0
+RerollManager:OnRerollUsed+b: 48 89 75 F0                    - mov [rbp-10],rsi
+RerollManager:OnRerollUsed+f: 48 89 7D F8                    - mov [rbp-08],rdi
+RerollManager:OnRerollUsed+13: 48 8B F1                       - mov rsi,rcx
+RerollManager:OnRerollUsed+16: C7 85 78 FF FF FF 00 00 00 00  - mov [rbp-00000088],00000000
+RerollManager:OnRerollUsed+20: C7 85 7C FF FF FF 00 00 00 00  - mov [rbp-00000084],00000000
+RerollManager:OnRerollUsed+2a: C7 45 80 00 00 00 00           - mov [rbp-80],00000000
+RerollManager:OnRerollUsed+31: C7 45 88 00 00 00 00           - mov [rbp-78],00000000
+RerollManager:OnRerollUsed+38: C7 45 8C 00 00 00 00           - mov [rbp-74],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>384</ID>
+              <Description>"Value Show/Update When Reroll Used"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>385</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>rerollmanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>386</ID>
+              <Description>"startingRerolls"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+30</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>387</ID>
+              <Description>"rerollsPerDayEnd"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+34</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>388</ID>
+              <Description>"_baseRemaining"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>389</ID>
+              <Description>"_bonusRemaining"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>390</ID>
+              <Description>"_dailyBonusCapacity"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+40</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>391</ID>
+              <Description>"_lastRelaunchDay"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[rerollmanager_ptr]+44</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>392</ID>
+          <Description>"OfferManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Trust Your Gut.exe
+  Version: 
+  Date   : 2026-11-20
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,OfferManager:OpenOfferScreen)
+define(bytes,55 48 8B EC 48 81 EC 90 00 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,OfferManager:OpenOfferScreen)
+
+label(code)
+label(return)
+
+newmem:
+mov [offermanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,00000090
+  jmp return
+
+offermanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 6
+return:
+registersymbol(offermanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,00000090
+
+dealloc(newmem)
+unregistersymbol(offermanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: OfferManager:OpenOfferScreen
+
+1554792E49B: D3 08                 - ror [rax],cl
+1554792E49D: F0 D9 43 F6           - lock fld dword ptr [rbx-0A]
+1554792E4A1: 54                    - push rsp
+1554792E4A2: 01 00                 - add [rax],eax
+1554792E4A4: 00 00                 - add [rax],al
+1554792E4A6: 00 00                 - add [rax],al
+1554792E4A8: 00 00                 - add [rax],al
+1554792E4AA: 00 00                 - add [rax],al
+1554792E4AC: 00 00                 - add [rax],al
+1554792E4AE: 00 00                 - add [rax],al
+// ---------- INJECTING HERE ----------
+OfferManager:OpenOfferScreen: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+OfferManager:OpenOfferScreen+1: 48 8B EC              - mov rbp,rsp
+OfferManager:OpenOfferScreen+4: 48 81 EC 90 00 00 00  - sub rsp,00000090
+OfferManager:OpenOfferScreen+b: 48 89 75 F8           - mov [rbp-08],rsi
+OfferManager:OpenOfferScreen+f: 48 8B F1              - mov rsi,rcx
+OfferManager:OpenOfferScreen+12: 0F B6 86 2B 01 00 00  - movzx eax,byte ptr [rsi+0000012B]
+OfferManager:OpenOfferScreen+19: 85 C0                 - test eax,eax
+OfferManager:OpenOfferScreen+1b: 0F 85 DA 04 00 00     - jne OfferManager:OpenOfferScreen+4fb
+OfferManager:OpenOfferScreen+21: 0F B6 86 30 01 00 00  - movzx eax,byte ptr [rsi+00000130]
+OfferManager:OpenOfferScreen+28: 85 C0                 - test eax,eax
+OfferManager:OpenOfferScreen+2a: 0F 85 CB 04 00 00     - jne OfferManager:OpenOfferScreen+4fb
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>393</ID>
+              <Description>"Value Show/Update When Open Offer Screen"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>394</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>offermanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>395</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>399</ID>
+                  <Description>"_exitDropHeight"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>400</ID>
+                  <Description>"_exitDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>401</ID>
+                  <Description>"_exitEase"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>402</ID>
+                  <Description>"_entranceStaggerDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>403</ID>
+                  <Description>"_exitStaggerDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>404</ID>
+                  <Description>"_selectedExitDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+CC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>405</ID>
+                  <Description>"_useSharedEntranceStart"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>406</ID>
+                  <Description>"_drawEntrancePathGizmos"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+D9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>407</ID>
+                  <Description>"_typeHistoryScreens"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+10C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>408</ID>
+                  <Description>"_rerollBaseCost"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>409</ID>
+                  <Description>"_rerollButtonSpacing"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[offermanager_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>410</ID>
+                  <Description>"_rerollPresses"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>411</ID>
+                  <Description>"_isSelectionLocked"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>412</ID>
+                  <Description>"_isSequenceComplete"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+129</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>413</ID>
+                  <Description>"_hasPickedOfferToday"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+12A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>414</ID>
+                  <Description>"_currentOfferConsumed"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+12B</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>415</ID>
+                  <Description>"_queuedExtraOffers"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>416</ID>
+                  <Description>"_isOpen"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>417</ID>
+                  <Description>"_offerAnnounced"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+131</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>418</ID>
+                  <Description>"_loadedFromSave"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+132</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>398</ID>
+              <Description>"_currentRiskOffer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>419</ID>
+                  <Description>"EnglishName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>420</ID>
+                  <Description>"Description"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>421</ID>
+                  <Description>"Rarity"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>422</ID>
+                  <Description>"UnlockConditionMode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>423</ID>
+                  <Description>"Type"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>424</ID>
+                  <Description>"IsInfiniteStock"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>425</ID>
+                  <Description>"MaxStock"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>426</ID>
+                  <Description>"RoundBonus"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+88</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>397</ID>
+              <Description>"_currentBalanceOffer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>427</ID>
+                  <Description>"EnglishName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>428</ID>
+                  <Description>"Description"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>429</ID>
+                  <Description>"Rarity"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>430</ID>
+                  <Description>"UnlockConditionMode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>431</ID>
+                  <Description>"Type"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>432</ID>
+                  <Description>"IsInfiniteStock"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>433</ID>
+                  <Description>"MaxStock"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+90</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>396</ID>
+              <Description>"_currentChaosOffer"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>434</ID>
+                  <Description>"EnglishName"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>435</ID>
+                  <Description>"Description"</Description>
+                  <VariableType>String</VariableType>
+                  <Length>999</Length>
+                  <Unicode>1</Unicode>
+                  <CodePage>0</CodePage>
+                  <ZeroTerminate>1</ZeroTerminate>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>14</Offset>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>436</ID>
+                  <Description>"Rarity"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>60</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>437</ID>
+                  <Description>"UnlockConditionMode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>64</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>438</ID>
+                  <Description>"Type"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>68</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>439</ID>
+                  <Description>"IsInfiniteStock"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>6C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>440</ID>
+                  <Description>"MaxStock"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>70</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>441</ID>
+                  <Description>"Count"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>442</ID>
+                  <Description>"LoseAllTokens"</Description>
+                  <VariableType>Byte</VariableType>
+                  <Address>[offermanager_ptr]+98</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>108</ID>
+      <Description>""</Description>
+      <Options moHideChildren="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>109</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Trust Your Gut - v1.04 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

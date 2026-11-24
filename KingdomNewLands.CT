@@ -1,0 +1,2904 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>239</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
+      <LastState Activated="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Kingdom.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    openProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>201</ID>
+          <Description>"Kingdom"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Kingdom.exe
+  Version:
+  Date   : 2026-11-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Kingdom:AddArcher)
+define(bytes,55 8B EC 83 EC 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Kingdom:AddArcher)
+
+label(code)
+label(return)
+
+newmem:
+mov [kingdom_ptr],eax
+
+code:
+  push ebp
+  mov ebp,esp
+  sub esp,08
+  jmp return
+
+kingdom_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(kingdom_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // sub esp,08
+
+dealloc(newmem)
+unregistersymbol(kingdom_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Kingdom:AddArcher
+
+Character:add_OnGrabbed+62: C9              - leave
+Character:add_OnGrabbed+63: C3              - ret
+Character:add_OnGrabbed+64: 6A 2B           - push 2B
+Character:add_OnGrabbed+66: 68 7A 06 00 00  - push 0000067A
+Character:add_OnGrabbed+6b: E8 80 D9 89 FF  - call 04EE0F38
+Character:add_OnGrabbed+70: 6A 66           - push 66
+Character:add_OnGrabbed+72: 68 96 06 00 00  - push 00000696
+Character:add_OnGrabbed+77: E8 74 D9 89 FF  - call 04EE0F38
+056435C4: 00 00           - add [eax],al
+056435C6: 00 00           - add [eax],al
+// ---------- INJECTING HERE ----------
+Kingdom:AddArcher: 55              - push ebp
+// ---------- DONE INJECTING  ----------
+Kingdom:AddArcher+1: 8B EC           - mov ebp,esp
+Kingdom:AddArcher+3: 83 EC 08        - sub esp,08
+Kingdom:AddArcher+6: 8B 45 08        - mov eax,[ebp+08]
+Kingdom:AddArcher+9: 8B 40 4C        - mov eax,[eax+4C]
+Kingdom:AddArcher+c: 83 EC 08        - sub esp,08
+Kingdom:AddArcher+f: FF 75 0C        - push [ebp+0C]
+Kingdom:AddArcher+12: 50              - push eax
+Kingdom:AddArcher+13: 8B 00           - mov eax,[eax]
+Kingdom:AddArcher+15: BA 68 93 04 12  - mov edx,12049368
+Kingdom:AddArcher+1a: 90              - nop
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>202</ID>
+              <Description>"Value Show/Update When Add New Archer(Only Work On Beggar-&gt;Archer)"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>203</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000000011DD23C0" RealAddress="01DF0011"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>kingdom_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>205</ID>
+                  <Description>"dayStart"</Description>
+                  <LastState Value="5" RealAddress="11DD2460"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+A0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>206</ID>
+                  <Description>"dayEnd"</Description>
+                  <LastState Value="21.5" RealAddress="11DD2464"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+A4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>207</ID>
+                  <Description>"minKingdomExtents"</Description>
+                  <LastState Value="4" RealAddress="11DD2468"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+A8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>208</ID>
+                  <Description>"minFreeArchers"</Description>
+                  <LastState Value="1" RealAddress="11DD246C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>209</ID>
+                  <Description>"workPortalDistance"</Description>
+                  <LastState Value="12" RealAddress="11DD2470"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>210</ID>
+                  <Description>"campfirePosition"</Description>
+                  <LastState Value="-6" RealAddress="11DD2474"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>211</ID>
+                  <Description>"stoneBuildingUnlocked"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD2478"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+B8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>212</ID>
+                  <Description>"archerStatueCharged"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD2479"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+B9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>213</ID>
+                  <Description>"workerStatueCharged"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD247A"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+BA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>214</ID>
+                  <Description>"knightStatueCharged"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD247B"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+BB</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>215</ID>
+                  <Description>"farmerStatueCharged"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD247C"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+BC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>216</ID>
+                  <Description>"timeStatueCharged"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DD247D"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+BD</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>217</ID>
+                  <Description>"_moveBordersDelay"</Description>
+                  <LastState Value="-0.01433363277" RealAddress="11DD2480"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+C0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>218</ID>
+                  <Description>"_calculateBordersDelay"</Description>
+                  <LastState Value="-0.01678969711" RealAddress="11DD2484"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[kingdom_ptr]+C4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>219</ID>
+                  <Description>"castleBuilt"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="11DD2488"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+C8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>220</ID>
+                  <Description>"isDaytime"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="11DD2489"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+C9</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>221</ID>
+                  <Description>"isSafe"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="11DD248A"/>
+                  <Color>808040</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+CA</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>222</ID>
+                  <Description>"day"</Description>
+                  <LastState Value="7" RealAddress="11DD248C"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+CC</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>226</ID>
+              <Description>"player"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>3</ID>
+                  <Description>"Main"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>242</ID>
+                      <Description>"torchBrightnessThreshold"</Description>
+                      <LastState Value="0.5" RealAddress="11DD807C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>7C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>243</ID>
+                      <Description>"keyDownThreshold"</Description>
+                      <LastState Value="0.150000006" RealAddress="11DD8080"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>244</ID>
+                      <Description>"timeBetweenCoins"</Description>
+                      <LastState Value="0.3000000119" RealAddress="11DD8084"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>84</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>245</ID>
+                      <Description>"timeBeforeTransaction"</Description>
+                      <LastState Value="0.3000000119" RealAddress="11DD8088"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>246</ID>
+                      <Description>"timeBeforeCancel"</Description>
+                      <LastState Value="0.6999999881" RealAddress="11DD808C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>8C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>247</ID>
+                      <Description>"overflowCoinsWaterProbability"</Description>
+                      <LastState Value="0.5" RealAddress="11DD8090"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>90</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>248</ID>
+                      <Description>"_payState"</Description>
+                      <LastState Value="0" RealAddress="11DD809C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>9C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>249</ID>
+                      <Description>"_actionState"</Description>
+                      <LastState Value="2" RealAddress="11DD80A0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>250</ID>
+                      <Description>"_previousKeyDirection"</Description>
+                      <LastState Value="0" RealAddress="11DD80A4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>A4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>251</ID>
+                      <Description>"_groundType"</Description>
+                      <LastState Value="1" RealAddress="11DD80A8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>252</ID>
+                      <Description>"_eatTimer"</Description>
+                      <LastState Value="22.52136803" RealAddress="11DD80AC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>AC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>253</ID>
+                      <Description>"_rearingTimer"</Description>
+                      <LastState Value="185.2763062" RealAddress="11DD80B0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>B0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>254</ID>
+                      <Description>"_payTimer"</Description>
+                      <LastState Value="0" RealAddress="11DD80B4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>B4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>255</ID>
+                      <Description>"_actionStateEntered"</Description>
+                      <LastState Value="459.3756409" RealAddress="11DD80B8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>B8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>256</ID>
+                      <Description>"_isP2"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11DD80BC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>BC</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>257</ID>
+                      <Description>"coinDroppingEnabled"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11DD80BD"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>BD</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>258</ID>
+                      <Description>"hasCrown"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11DD80BE"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>BE</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>259</ID>
+                      <Description>"_model"</Description>
+                      <LastState Value="1" RealAddress="11DD80C0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>C0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>260</ID>
+                      <Description>"_hat"</Description>
+                      <LastState Value="1" RealAddress="11DD80C4"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>C4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"_wallet"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>261</ID>
+                      <Description>"payTaxesAbove"</Description>
+                      <LastState Value="1" RealAddress="11420E60"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>262</ID>
+                      <Description>"maxCoins"</Description>
+                      <LastState Value="1000" RealAddress="11420E64"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>263</ID>
+                      <Description>"canGrabCoins"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11420E74"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>264</ID>
+                      <Description>"onlyGrabPlayerCoins"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11420E75"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>35</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>265</ID>
+                      <Description>"showCoinBag"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11420E76"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>36</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>266</ID>
+                      <Description>"_coins"</Description>
+                      <LastState Value="30" RealAddress="11420E78"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>267</ID>
+                      <Description>"_payingTaxes"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11420E7C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>48</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>91</ID>
+                  <Description>"_mover"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>268</ID>
+                      <Description>"APSpeed"</Description>
+                      <LastState Value="3471299058" RealAddress="11DA8DD8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>269</ID>
+                      <Description>"maxAccelerationPerFrame"</Description>
+                      <LastState Value="0" RealAddress="11DA8DDC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>270</ID>
+                      <Description>"_moveSpeed"</Description>
+                      <LastState Value="0" RealAddress="11DA8DE0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>271</ID>
+                      <Description>"_multiplier"</Description>
+                      <LastState Value="1" RealAddress="11DA8DE4"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>272</ID>
+                      <Description>"_multiplierTimeout"</Description>
+                      <LastState Value="3.402823466E38" RealAddress="11DA8DE8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>273</ID>
+                      <Description>"_pauseTimeout"</Description>
+                      <LastState Value="0" RealAddress="11DA8DEC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>274</ID>
+                      <Description>"_goalPosition"</Description>
+                      <LastState Value="0" RealAddress="11DA8DF0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>275</ID>
+                      <Description>"_goalSpeed"</Description>
+                      <LastState Value="0" RealAddress="11DA8DF4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>276</ID>
+                      <Description>"_goalMode"</Description>
+                      <LastState Value="0" RealAddress="11DA8DF8"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>277</ID>
+                      <Description>"_goalOffset"</Description>
+                      <LastState Value="0" RealAddress="11DA8DFC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>278</ID>
+                      <Description>"_goalOffsetMode"</Description>
+                      <LastState Value="0" RealAddress="11DA8E00"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>279</ID>
+                      <Description>"movingToGoal"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11DA8E04"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>4C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"_damageable"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>280</ID>
+                      <Description>"damagedBy"</Description>
+                      <LastState Value="41" RealAddress="11DA8E30"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>20</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>281</ID>
+                      <Description>"surface"</Description>
+                      <LastState Value="0" RealAddress="11DA8E34"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>24</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>282</ID>
+                      <Description>"useHitPoints"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11DA8E38"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>283</ID>
+                      <Description>"initialHitPoints"</Description>
+                      <LastState Value="0" RealAddress="11DA8E3C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>284</ID>
+                      <Description>"destroyOnDeath"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11DA8E40"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>285</ID>
+                      <Description>"invulnerable"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11DA8E54"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>286</ID>
+                      <Description>"hitPoints"</Description>
+                      <LastState Value="0" RealAddress="11DA8E58"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>48</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>287</ID>
+                      <Description>"isDead"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11DA8E5C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>4C</Offset>
+                        <Offset>54</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"_steed"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>288</ID>
+                      <Description>"price"</Description>
+                      <LastState Value="3" RealAddress="11C42948"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>289</ID>
+                      <Description>"priceIncrease"</Description>
+                      <LastState Value="0" RealAddress="11C4294C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>290</ID>
+                      <Description>"floatingCoinSpacing"</Description>
+                      <LastState Value="0.400000006" RealAddress="11C42958"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>291</ID>
+                      <Description>"glowOnSelect"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11C4295C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>292</ID>
+                      <Description>"playerPayDistance"</Description>
+                      <LastState Value="0.3400000036" RealAddress="11C42978"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>293</ID>
+                      <Description>"_allowPayment"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="11C4297C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>294</ID>
+                      <Description>"selected"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C4297D"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>5D</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>295</ID>
+                      <Description>"walkSpeed"</Description>
+                      <LastState Value="2" RealAddress="11C42A00"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>E0</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>296</ID>
+                      <Description>"runSpeed"</Description>
+                      <LastState Value="3.599999905" RealAddress="11C42A04"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>297</ID>
+                      <Description>"forestSpeedMultiplier"</Description>
+                      <LastState Value="0.8500000238" RealAddress="11C42A08"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>E8</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>298</ID>
+                      <Description>"walkStaminaRate"</Description>
+                      <LastState Value="0.05000000075" RealAddress="11C42A0C"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>EC</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>299</ID>
+                      <Description>"runStaminaRate"</Description>
+                      <LastState Value="-0.07999999821" RealAddress="11C42A10"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>F0</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>300</ID>
+                      <Description>"standStaminaRate"</Description>
+                      <LastState Value="0.150000006" RealAddress="11C42A14"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>F4</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>301</ID>
+                      <Description>"eatDelay"</Description>
+                      <LastState Value="0.5" RealAddress="11C42A18"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>F8</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>302</ID>
+                      <Description>"eatDuration"</Description>
+                      <LastState Value="3" RealAddress="11C42A1C"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>FC</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>303</ID>
+                      <Description>"rearingCooldown"</Description>
+                      <LastState Value="10" RealAddress="11C42A20"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>100</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>304</ID>
+                      <Description>"rearingDuration"</Description>
+                      <LastState Value="0.8000000119" RealAddress="11C42A24"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>104</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>305</ID>
+                      <Description>"wellFedDuration"</Description>
+                      <LastState Value="48" RealAddress="11C42A28"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>108</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>306</ID>
+                      <Description>"tiredDuration"</Description>
+                      <LastState Value="20" RealAddress="11C42A2C"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>10C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>307</ID>
+                      <Description>"reserveStamina"</Description>
+                      <LastState Value="0.25" RealAddress="11C42A30"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>110</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>308</ID>
+                      <Description>"reserveProbability"</Description>
+                      <LastState Value="0.6999999881" RealAddress="11C42A34"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>114</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>309</ID>
+                      <Description>"attacksWhileRunning"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A38"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>118</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>310</ID>
+                      <Description>"attackDamage"</Description>
+                      <LastState Value="0" RealAddress="11C42A4C"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>12C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>311</ID>
+                      <Description>"attackStaminaCost"</Description>
+                      <LastState Value="0" RealAddress="11C42A50"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>130</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>312</ID>
+                      <Description>"attractsDeer"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A54"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>134</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>313</ID>
+                      <Description>"poopCoinsWhenEating"</Description>
+                      <LastState Value="0" RealAddress="11C42A58"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>314</ID>
+                      <Description>"inspireCitizens"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A5C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>13C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>315</ID>
+                      <Description>"inspiredDuration"</Description>
+                      <LastState Value="0" RealAddress="11C42A60"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>140</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>316</ID>
+                      <Description>"inspiredRange"</Description>
+                      <LastState Value="0" RealAddress="11C42A64"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>144</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>317</ID>
+                      <Description>"abilityCooldown"</Description>
+                      <LastState Value="15" RealAddress="11C42A68"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>148</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>318</ID>
+                      <Description>"recolorToCoatOfArms"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A6C"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>14C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>319</ID>
+                      <Description>"disableSteedSwitching"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A6D"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>14D</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>320</ID>
+                      <Description>"doesNotNeedGrass"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42A6E"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>14E</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>321</ID>
+                      <Description>"wanderRange"</Description>
+                      <LastState Value="5" RealAddress="11C42A70"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>150</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>322</ID>
+                      <Description>"_mode"</Description>
+                      <LastState Value="1" RealAddress="11C42A94"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>174</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>323</ID>
+                      <Description>"_homePosition"</Description>
+                      <LastState Value="0" RealAddress="11C42A98"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>178</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>324</ID>
+                      <Description>"_attackLayers"</Description>
+                      <LastState Value="66048" RealAddress="11C42A9C"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>17C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>325</ID>
+                      <Description>"_citizensLayer"</Description>
+                      <LastState Value="1024" RealAddress="11C42AA0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>180</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>326</ID>
+                      <Description>"_abilityTimer"</Description>
+                      <LastState Value="-0.01451076195" RealAddress="11C42AA4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>184</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>327</ID>
+                      <Description>"_walking"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42AA8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>188</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>328</ID>
+                      <Description>"tiredTimer"</Description>
+                      <LastState Value="-52.78830338" RealAddress="11C42AAC"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>18C</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>329</ID>
+                      <Description>"wellFedTimer"</Description>
+                      <LastState Value="-4.788350105" RealAddress="11C42AB0"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>190</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>330</ID>
+                      <Description>"stamina"</Description>
+                      <LastState Value="1" RealAddress="11C42AB4"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>194</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>331</ID>
+                      <Description>"_footSparklesActive"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42AB8"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>198</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>332</ID>
+                      <Description>"_puffActive"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="11C42AB9"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>199</Offset>
+                        <Offset>68</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"selectedPayable"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>333</ID>
+                      <Description>"price"</Description>
+                      <LastState Value="5" RealAddress="1142F7A8"/>
+                      <Color>808040</Color>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>28</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>334</ID>
+                      <Description>"priceIncrease"</Description>
+                      <LastState Value="0" RealAddress="1142F7AC"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>2C</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>335</ID>
+                      <Description>"floatingCoinSpacing"</Description>
+                      <LastState Value="0.400000006" RealAddress="1142F7B8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>336</ID>
+                      <Description>"glowOnSelect"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="1142F7BC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>337</ID>
+                      <Description>"playerPayDistance"</Description>
+                      <LastState Value="0.7400000095" RealAddress="1142F7D8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>338</ID>
+                      <Description>"_allowPayment"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="1142F7DC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>5C</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>339</ID>
+                      <Description>"selected"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="1142F7DD"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>5D</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>340</ID>
+                      <Description>"onlyInBuildableRegion"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="1" RealAddress="1142F7EC"/>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>6C</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>341</ID>
+                      <Description>"requiresStoneTech"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                      <LastState Value="0" RealAddress="1142F7ED"/>
+                      <Color>808040</Color>
+                      <VariableType>Byte</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>6D</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>342</ID>
+                      <Description>"cooldown"</Description>
+                      <LastState Value="0" RealAddress="1142F7F0"/>
+                      <Color>808040</Color>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+28</Address>
+                      <Offsets>
+                        <Offset>70</Offset>
+                        <Offset>74</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>223</ID>
+              <Description>"_archers"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>224</ID>
+                  <Description>"count"</Description>
+                  <LastState Value="7" RealAddress="11E06E04"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>225</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="12" RealAddress="111C75FC"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>C</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>227</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DA3274"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>228</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DA3094"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>14</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>229</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11DA8F94"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>18</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>230</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11E64134"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>1C</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>231</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11CE3B34"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>20</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>232</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="11CE3864"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>24</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>233</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="0" RealAddress="12178FE4"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>28</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>234</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>2C</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>235</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>30</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>236</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>34</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>237</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>38</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>238</ID>
+                  <Description>"invulnerable"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[kingdom_ptr]+4C</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>38</Offset>
+                    <Offset>3C</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>343</ID>
+              <Description>"_beggarCamps"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>344</ID>
+                  <Description>"count"</Description>
+                  <LastState Value="2" RealAddress="11E06CB4"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>345</ID>
+                  <Description>"Count"</Description>
+                  <LastState Value="12" RealAddress="11FB9F0C"/>
+                  <Color>000000</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[kingdom_ptr]+78</Address>
+                  <Offsets>
+                    <Offset>C</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>346</ID>
+                  <Description>"[0]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>353</ID>
+                      <Description>"maxBeggars"</Description>
+                      <LastState Value="2" RealAddress="11473E90"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>354</ID>
+                      <Description>"spawnInterval"</Description>
+                      <LastState Value="120" RealAddress="11473E94"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>355</ID>
+                      <Description>"hungerInterval"</Description>
+                      <LastState Value="10" RealAddress="11473E98"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>348</ID>
+                  <Description>"[1]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>356</ID>
+                      <Description>"maxBeggars"</Description>
+                      <LastState Value="2" RealAddress="11473DF0"/>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>357</ID>
+                      <Description>"spawnInterval"</Description>
+                      <LastState Value="120" RealAddress="11473DF4"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>358</ID>
+                      <Description>"hungerInterval"</Description>
+                      <LastState Value="10" RealAddress="11473DF8"/>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>14</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>349</ID>
+                  <Description>"[2]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>359</ID>
+                      <Description>"maxBeggars"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>360</ID>
+                      <Description>"spawnInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>361</ID>
+                      <Description>"hungerInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>350</ID>
+                  <Description>"[3]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>362</ID>
+                      <Description>"maxBeggars"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>363</ID>
+                      <Description>"spawnInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>364</ID>
+                      <Description>"hungerInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>1C</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>351</ID>
+                  <Description>"[4]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>365</ID>
+                      <Description>"maxBeggars"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>366</ID>
+                      <Description>"spawnInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>367</ID>
+                      <Description>"hungerInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>20</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>347</ID>
+                  <Description>"[5]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>368</ID>
+                      <Description>"maxBeggars"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>369</ID>
+                      <Description>"spawnInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>370</ID>
+                      <Description>"hungerInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>24</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>352</ID>
+                  <Description>"[6]BeggarCamp"</Description>
+                  <Options moHideChildren="1"/>
+                  <LastState Value="" RealAddress="00000000"/>
+                  <Color>80FF00</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>371</ID>
+                      <Description>"maxBeggars"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>372</ID>
+                      <Description>"spawnInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>373</ID>
+                      <Description>"hungerInterval"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>[kingdom_ptr]+78</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>28</Offset>
+                        <Offset>10</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>374</ID>
+          <Description>"Worker"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState Activated="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Kingdom.exe
+  Version: 
+  Date   : 2026-11-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Worker:AssignWork)
+define(bytes,55 8B EC 56 83 EC 04)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Worker:AssignWork)
+
+label(code)
+label(return)
+
+newmem:
+mov [worker_ptr],eax
+
+code:
+  push ebp
+  mov ebp,esp
+  push esi
+  sub esp,04
+  jmp return
+
+worker_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop 2
+return:
+registersymbol(worker_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // push esi
+  // sub esp,04
+
+dealloc(newmem)
+unregistersymbol(worker_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Worker:AssignWork
+
+JobAssigner:FindStarInRow+79: 5B              - pop ebx
+JobAssigner:FindStarInRow+7a: C9              - leave 
+JobAssigner:FindStarInRow+7b: C3              - ret 
+JobAssigner:FindStarInRow+7c: 6A 44           - push 44
+JobAssigner:FindStarInRow+7e: 68 78 06 00 00  - push 00000678
+JobAssigner:FindStarInRow+83: E8 40 B0 3D EA  - call 04D30F38
+JobAssigner:FindStarInRow+88: 6A 5C           - push 5C
+JobAssigner:FindStarInRow+8a: EB F2           - jmp JobAssigner:FindStarInRow+7e
+1A955EFC: 00 00           - add [eax],al
+1A955EFE: 00 00           - add [eax],al
+// ---------- INJECTING HERE ----------
+Worker:AssignWork: 55              - push ebp
+// ---------- DONE INJECTING  ----------
+Worker:AssignWork+1: 8B EC           - mov ebp,esp
+Worker:AssignWork+3: 56              - push esi
+Worker:AssignWork+4: 83 EC 04        - sub esp,04
+Worker:AssignWork+7: 8B 75 08        - mov esi,[ebp+08]
+Worker:AssignWork+a: 8B 46 2C        - mov eax,[esi+2C]
+Worker:AssignWork+d: 83 EC 08        - sub esp,08
+Worker:AssignWork+10: 6A 00           - push 00
+Worker:AssignWork+12: 50              - push eax
+Worker:AssignWork+13: E8 68 C3 A4 EA  - call UnityEngine.Object:op_Inequality
+Worker:AssignWork+18: 83 C4 10        - add esp,10
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>375</ID>
+              <Description>"Value Show/Update When Assign Work"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>376</ID>
+              <Description>"Instance"</Description>
+              <LastState Value="0000000011CCF3C0" RealAddress="1AC20012"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>worker_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>384</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>377</ID>
+                  <Description>"walkSpeed"</Description>
+                  <LastState Value="0.6499999762" RealAddress="11CCF3F8"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>378</ID>
+                  <Description>"runSpeed"</Description>
+                  <LastState Value="1.399999976" RealAddress="11CCF3FC"/>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+3C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>379</ID>
+                  <Description>"workTime"</Description>
+                  <LastState Value="0.6999999881" RealAddress="11CCF400"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+40</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>380</ID>
+                  <Description>"fleeRange"</Description>
+                  <LastState Value="4" RealAddress="11CCF404"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+44</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>381</ID>
+                  <Description>"_originalZ"</Description>
+                  <LastState Value="0.5051137209" RealAddress="11CCF408"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+48</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>382</ID>
+                  <Description>"workPositionOffset"</Description>
+                  <LastState Value="0.4486359358" RealAddress="11CCF40C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+4C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>383</ID>
+                  <Description>"_numWorksBeforeMoving"</Description>
+                  <LastState Value="4" RealAddress="11CCF410"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+50</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>385</ID>
+              <Description>"_mover"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>388</ID>
+                  <Description>"APSpeed"</Description>
+                  <LastState Value="3471299058" RealAddress="11CD0A68"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>389</ID>
+                  <Description>"maxAccelerationPerFrame"</Description>
+                  <LastState Value="0" RealAddress="11CD0A6C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>390</ID>
+                  <Description>"_moveSpeed"</Description>
+                  <LastState Value="0.7846577764" RealAddress="11CD0A70"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>391</ID>
+                  <Description>"_multiplier"</Description>
+                  <LastState Value="1" RealAddress="11CD0A74"/>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>392</ID>
+                  <Description>"_multiplierTimeout"</Description>
+                  <LastState Value="0" RealAddress="11CD0A78"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>393</ID>
+                  <Description>"_pauseTimeout"</Description>
+                  <LastState Value="0" RealAddress="11CD0A7C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>394</ID>
+                  <Description>"_goalPosition"</Description>
+                  <LastState Value="2.724318027" RealAddress="11CD0A80"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>395</ID>
+                  <Description>"_goalSpeed"</Description>
+                  <LastState Value="1.399999976" RealAddress="11CD0A84"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>34</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>396</ID>
+                  <Description>"_goalMode"</Description>
+                  <LastState Value="1" RealAddress="11CD0A88"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>38</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>397</ID>
+                  <Description>"_goalOffset"</Description>
+                  <LastState Value="-0.5" RealAddress="11CD0A8C"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>3C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>398</ID>
+                  <Description>"_goalOffsetMode"</Description>
+                  <LastState Value="1" RealAddress="11CD0A90"/>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>40</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>399</ID>
+                  <Description>"movingToGoal"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <LastState Value="1" RealAddress="11CD0A94"/>
+                  <VariableType>Byte</VariableType>
+                  <Address>[worker_ptr]+14</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>387</ID>
+              <Description>"_currentWork"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>404</ID>
+                  <Description>"buildPoints"</Description>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>405</ID>
+                  <Description>"autoBuildRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>406</ID>
+                  <Description>"_currentBuildPoints"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>407</ID>
+                  <Description>"_buildSoundLastPlayed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+28</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>386</ID>
+              <Description>"_queuedWork"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>400</ID>
+                  <Description>"buildPoints"</Description>
+                  <LastState Value="30" RealAddress="11B7491C"/>
+                  <Color>808040</Color>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[worker_ptr]+2C</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>401</ID>
+                  <Description>"autoBuildRate"</Description>
+                  <LastState Value="0" RealAddress="11B74920"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+2C</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>402</ID>
+                  <Description>"_currentBuildPoints"</Description>
+                  <LastState Value="8" RealAddress="11B74924"/>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+2C</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>403</ID>
+                  <Description>"_buildSoundLastPlayed"</Description>
+                  <LastState Value="476.4585266" RealAddress="11B74928"/>
+                  <VariableType>Float</VariableType>
+                  <Address>[worker_ptr]+2C</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>189</ID>
+          <Description>"PayableShop"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Kingdom.exe
+  Version: 
+  Date   : 2026-11-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PayableShop:AddItem)
+define(bytes,55 8B EC 53 57)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PayableShop:AddItem)
+
+label(code)
+label(return)
+
+newmem:
+mov [payableshop_ptr],edi
+
+code:
+  push ebp
+  mov ebp,esp
+  push ebx
+  push edi
+  jmp return
+
+payableshop_ptr:
+dd 0
+
+address:
+  jmp newmem
+return:
+registersymbol(payableshop_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // push ebx
+  // push edi
+
+dealloc(newmem)
+unregistersymbol(payableshop_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PayableShop:AddItem
+
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+9: 0F B6 40 21           - movzx eax,byte ptr [eax+21]
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+d: 85 C0                 - test eax,eax
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+f: 75 07                 - jne aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+18
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+11: 8B 45 08              - mov eax,[ebp+08]
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+14: C6 40 20 01           - mov byte ptr [eax+20],01
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+18: C9                    - leave 
+aPSbEuDGyhydtuclHlosaPWIjfbo:qZEgEKCMorPnWisBEYshMFxmcift+19: C3                    - ret 
+184F7EBA: 00 00                 - add [eax],al
+184F7EBC: 00 00                 - add [eax],al
+184F7EBE: 00 00                 - add [eax],al
+// ---------- INJECTING HERE ----------
+PayableShop:AddItem: 55                    - push ebp
+// ---------- DONE INJECTING  ----------
+PayableShop:AddItem+1: 8B EC                 - mov ebp,esp
+PayableShop:AddItem+3: 53                    - push ebx
+PayableShop:AddItem+4: 57                    - push edi
+PayableShop:AddItem+5: 56                    - push esi
+PayableShop:AddItem+6: 83 EC 7C              - sub esp,7C
+PayableShop:AddItem+9: 8B 75 08              - mov esi,[ebp+08]
+PayableShop:AddItem+c: 8B 7D 0C              - mov edi,[ebp+0C]
+PayableShop:AddItem+f: C7 45 8C 00 00 00 00  - mov [ebp-74],00000000
+PayableShop:AddItem+16: C7 45 90 00 00 00 00  - mov [ebp-70],00000000
+PayableShop:AddItem+1d: C7 45 94 00 00 00 00  - mov [ebp-6C],00000000
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>190</ID>
+              <Description>"Value Show/Update When Add Item"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>payableshop_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"price"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[payableshop_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"priceIncrease"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[payableshop_ptr]+2C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"floatingCoinSpacing"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[payableshop_ptr]+38</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"glowOnSelect"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[payableshop_ptr]+3C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"playerPayDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[payableshop_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"_allowPayment"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[payableshop_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"selected"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[payableshop_ptr]+5D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"itemSpacing"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[payableshop_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"maxItems"</Description>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[payableshop_ptr]+78</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>182</ID>
+          <Description>"WorkableBuilding"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <LastState/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Kingdom.exe
+  Version: 
+  Date   : 2026-11-24
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,WorkableBuilding:WorkAvailable)
+define(bytes,55 8B EC 83 EC 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,WorkableBuilding:WorkAvailable)
+
+label(code)
+label(return)
+
+newmem:
+mov [workablebuilding_ptr],edi
+
+code:
+  push ebp
+  mov ebp,esp
+  sub esp,08
+  jmp return
+
+workablebuilding_ptr:
+dd 0
+
+address:
+  jmp newmem
+  nop
+return:
+registersymbol(workablebuilding_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push ebp
+  // mov ebp,esp
+  // sub esp,08
+
+dealloc(newmem)
+unregistersymbol(workablebuilding_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: WorkableBuilding:WorkAvailable
+
+19BF759D: E9 86 8A 2F EB  - jmp 04EF0028
+19BF75A2: 00 00           - add [eax],al
+19BF75A4: 00 00           - add [eax],al
+19BF75A6: 00 00           - add [eax],al
+19BF75A8: 61              - popad 
+19BF75A9: 75 BF           - jne WorkableBuilding+&lt;AutoBuild&gt;c__Iterator0:MoveNext+8a
+19BF75AB: 19 61 75        - sbb [ecx+75],esp
+19BF75AE: BF 19           - db BF 19 
+WorkableBuilding:WorkAvailable: 55              - push ebp
+WorkableBuilding:WorkAvailable+1: 8B EC           - mov ebp,esp
+// ---------- INJECTING HERE ----------
+WorkableBuilding:WorkAvailable+3: 83 EC 08        - sub esp,08
+// ---------- DONE INJECTING  ----------
+WorkableBuilding:WorkAvailable+6: 8B 45 08        - mov eax,[ebp+08]
+WorkableBuilding:WorkAvailable+9: D9 40 2C        - fld dword ptr [eax+2C]
+WorkableBuilding:WorkAvailable+c: 8B 40 24        - mov eax,[eax+24]
+WorkableBuilding:WorkAvailable+f: 50              - push eax
+WorkableBuilding:WorkAvailable+10: DB 04 24        - fild dword ptr [esp]
+WorkableBuilding:WorkAvailable+13: D9 1C 24        - fstp dword ptr [esp]
+WorkableBuilding:WorkAvailable+16: D9 04 24        - fld dword ptr [esp]
+WorkableBuilding:WorkAvailable+19: 83 C4 04        - add esp,04
+WorkableBuilding:WorkAvailable+1c: 33 C0           - xor eax,eax
+WorkableBuilding:WorkAvailable+1e: DF F1           - fcomip st(0),st(1)
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>183</ID>
+              <Description>"Value Show/Update When Add Work"</Description>
+              <Options moHideChildren="1"/>
+              <LastState Value="" RealAddress="00000000"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>184</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>workablebuilding_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>185</ID>
+              <Description>"buildPoints"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[workablebuilding_ptr]+24</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>186</ID>
+              <Description>"autoBuildRate"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[workablebuilding_ptr]+28</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>187</ID>
+              <Description>"_currentBuildPoints"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[workablebuilding_ptr]+2C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"_buildSoundLastPlayed"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[workablebuilding_ptr]+30</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>241</ID>
+      <Description>""</Description>
+      <Options moHideChildren="1"/>
+      <LastState Value="" RealAddress="00000000"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>240</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+      <LastState/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Kingdom: New Lands - v1.2.8 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>

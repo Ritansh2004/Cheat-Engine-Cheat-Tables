@@ -1,0 +1,2267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable ShowScriptErrors="1" CheatEngineTableVersion="52">
+  <CheatEntries>
+    <CheatEntry NoScriptTag="1">
+      <ID>236</ID>
+      <Description>"Initialize Mono"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1"/>
+      <Color>FF8080</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+
+local processName = "Cake &amp; Bake.exe"
+local pid = getProcessIDFromProcessName(processName)
+
+if (pid == 0 or pid == nil) then
+    -- 1. Notify the user
+    showMessage("Start Game Process First..!!!")
+    -- 2. Force the script to "crash" out of the Enable phase
+    error("Process not found")
+else
+    -- Process found, proceed
+    openProcess(processName)
+    mono_initialize()
+    LaunchMonoDataCollector()
+    beep()                                               --For Sound
+    showMessage("Made By DANGER DASH...!!!")             --Pop Up Message
+end
+{$asm}
+
+[DISABLE]
+{$lua}
+if process then
+    showMessage('Table Disabled!')
+end
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry NoScriptTag="1">
+          <ID>0</ID>
+          <Description>"CurrencyManager"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CurrencyManager:TrySpend)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CurrencyManager:TrySpend)
+
+label(code)
+label(return)
+
+newmem:
+mov [currencymanager_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+currencymanager_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(currencymanager_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(currencymanager_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CurrencyManager:TrySpend
+
+1C1888185DD: 00 00        - add [rax],al
+1C1888185DF: 00 00        - add [rax],al
+1C1888185E1: 00 00        - add [rax],al
+1C1888185E3: 00 00        - add [rax],al
+1C1888185E5: 00 00        - add [rax],al
+1C1888185E7: 00 00        - add [rax],al
+1C1888185E9: 00 00        - add [rax],al
+1C1888185EB: 00 00        - add [rax],al
+1C1888185ED: 00 00        - add [rax],al
+1C1888185EF: 00           - db 00 
+// ---------- INJECTING HERE ----------
+CurrencyManager:TrySpend: 55           - push rbp
+// ---------- DONE INJECTING  ----------
+CurrencyManager:TrySpend+1: 48 8B EC     - mov rbp,rsp
+CurrencyManager:TrySpend+4: 48 83 EC 30  - sub rsp,30
+CurrencyManager:TrySpend+8: 48 89 75 F0  - mov [rbp-10],rsi
+CurrencyManager:TrySpend+c: 48 89 7D F8  - mov [rbp-08],rdi
+CurrencyManager:TrySpend+10: 48 8B F9     - mov rdi,rcx
+CurrencyManager:TrySpend+13: 48 8B F2     - mov rsi,rdx
+CurrencyManager:TrySpend+16: 85 F6        - test esi,esi
+CurrencyManager:TrySpend+18: 7D 04        - jnl CurrencyManager:TrySpend+1e
+CurrencyManager:TrySpend+1a: 33 C0        - xor eax,eax
+CurrencyManager:TrySpend+1c: EB 3A        - jmp CurrencyManager:TrySpend+58
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>2</ID>
+              <Description>"Value Show/Update When Try Spend Currency"</Description>
+              <Options moHideChildren="1"/>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry NoCheckbox="1">
+              <ID>1</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>currencymanager_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"coins"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[currencymanager_ptr]+20</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>4</ID>
+          <Description>"CustomerSpawner"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,CustomerSpawner:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,CustomerSpawner:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [customerspawner_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+customerspawner_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(customerspawner_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(customerspawner_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: CustomerSpawner:Update
+
+1C107E7B8B9: 04 02                          - add al,02
+1C107E7B8BB: 05 04 03 01 50                 - add eax,50010304
+1C107E7B8C0: 00 00                          - add [rax],al
+1C107E7B8C2: 00 00                          - add [rax],al
+1C107E7B8C4: 00 00                          - add [rax],al
+1C107E7B8C6: 00 00                          - add [rax],al
+1C107E7B8C8: 00 00                          - add [rax],al
+1C107E7B8CA: 00 00                          - add [rax],al
+1C107E7B8CC: 00 00                          - add [rax],al
+1C107E7B8CE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+CustomerSpawner:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+CustomerSpawner:Update+1: 48 8B EC                       - mov rbp,rsp
+CustomerSpawner:Update+4: 48 83 EC 30                    - sub rsp,30
+CustomerSpawner:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+CustomerSpawner:Update+c: 48 8B F1                       - mov rsi,rcx
+CustomerSpawner:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+CustomerSpawner:Update+16: 49 BB C0 9D CE 06 C1 01 00 00  - mov r11,UnityEngine.Application:get_isPlaying
+CustomerSpawner:Update+20: 41 FF D3                       - call r11
+CustomerSpawner:Update+23: 85 C0                          - test eax,eax
+CustomerSpawner:Update+25: 0F 84 50 01 00 00              - je CustomerSpawner:Update+17b
+CustomerSpawner:Update+2b: 48 8B CE                       - mov rcx,rsi
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>5</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>customerspawner_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"spawnOnStart"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+D0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"autoAdvance"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+D1</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"avoidImmediateRepeat"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+D2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"despawnDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+D4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"nextCustomerDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+D8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"walkInDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+DC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"walkOutDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+E0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"walkStretch"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+E4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"walkSquash"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+E8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"walkBobHeight"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+EC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"walkBobCycles"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+F0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"reactToScore"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+F4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"happyThreshold"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+F8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"angryThreshold"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+FC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"holdUntilReleased"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+100</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"happyWalkOutDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+104</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"neutralWalkOutDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+108</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>24</ID>
+                  <Description>"arriveSfxVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+10C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"arrivePitchJitter"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>26</ID>
+                  <Description>"enableDebugKey"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>27</ID>
+                  <Description>"debugToggleKey"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>28</ID>
+                  <Description>"debugAngryLeaveKey"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>29</ID>
+                  <Description>"angryWalkOutDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>30</ID>
+                  <Description>"enableWaitTimer"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>31</ID>
+                  <Description>"baseWaitSeconds"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>32</ID>
+                  <Description>"waitSecondsPerCake"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>33</ID>
+                  <Description>"waitSecondsPerDecoration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>34</ID>
+                  <Description>"disableWaitDuringTutorial"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+134</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>35</ID>
+                  <Description>"graceSlowFrom"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+138</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>36</ID>
+                  <Description>"graceEndRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+13C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>37</ID>
+                  <Description>"neutralMoodFrom"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+140</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>38</ID>
+                  <Description>"angryMoodFrom"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+144</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"_lastTypeIndex"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+148</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"_arrived"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>41</ID>
+                  <Description>"_heldMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>42</ID>
+                  <Description>"_waitRunning"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>43</ID>
+                  <Description>"_waitElapsed"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"_orderSeconds"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>45</ID>
+                  <Description>"_waitDuration"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>46</ID>
+                  <Description>"_waitMoodStage"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>47</ID>
+                  <Description>"_appliedCustomerMoodStage"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"ExternalControl"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>49</ID>
+                  <Description>"WaitTimerPaused"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <Color>808040</Color>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+179</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>50</ID>
+                  <Description>"_restoredWaitElapsed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+17C</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>51</ID>
+              <Description>"_current"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>52</ID>
+                  <Description>"VoiceVolumeScale"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>53</ID>
+                  <Description>"currentMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>54</ID>
+                  <Description>"currentAction"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>55</ID>
+                  <Description>"talkingRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>5C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>56</ID>
+                  <Description>"_lastMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>57</ID>
+                  <Description>"_lastAction"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>8C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>58</ID>
+                  <Description>"_moodTransitionRequested"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>90</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>59</ID>
+                  <Description>"_fromMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>94</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>60</ID>
+                  <Description>"_toMood"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+58</Address>
+                  <Offsets>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>61</ID>
+              <Description>"_currentOrder"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>62</ID>
+                  <Description>"minCakes"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>B8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>63</ID>
+                  <Description>"maxCakes"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>BC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>64</ID>
+                  <Description>"creamChance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>65</ID>
+                  <Description>"creamRequiresFruit"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>C4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>66</ID>
+                  <Description>"samePowderChance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>C8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>67</ID>
+                  <Description>"weightByStock"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>CC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>68</ID>
+                  <Description>"outOfStockWeight"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>69</ID>
+                  <Description>"stickerRequestChance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>D4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>70</ID>
+                  <Description>"sprinkleRequestChance"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>D8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>71</ID>
+                  <Description>"generateOnStart"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>E4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>72</ID>
+                  <Description>"orderRevealDelay"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>E8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>73</ID>
+                  <Description>"hideVisualsOnAwake"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>EC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>74</ID>
+                  <Description>"enableRevealPop"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>ED</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>75</ID>
+                  <Description>"revealPopDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>76</ID>
+                  <Description>"revealStartScale"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>F4</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>77</ID>
+                  <Description>"revealOvershoot"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>78</ID>
+                  <Description>"revealStagger"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>FC</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>79</ID>
+                  <Description>"cakeRevealSfxVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"_manualReveal"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>104</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"_activePops"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"IsOrderRevealed"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>10C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"LastDeliveredCakeCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>110</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"tutorialStickerCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>114</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"tutorialSprinkleAmount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[customerspawner_ptr]+60</Address>
+                  <Offsets>
+                    <Offset>118</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>86</ID>
+          <Description>"BarHoldProgressController"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,BarHoldProgressController:Update)
+define(bytes,55 48 8B EC 48 83 EC 60)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,BarHoldProgressController:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [barholdprogresscontroller_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,60
+  jmp return
+
+barholdprogresscontroller_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(barholdprogresscontroller_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,60
+
+dealloc(newmem)
+unregistersymbol(barholdprogresscontroller_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BarHoldProgressController:Update
+
+1C1886B7510: 00 00                          - add [rax],al
+1C1886B7512: 49 BB 20 02 44 69 BF 01 00 00  - mov r11,000001BF69440220
+1C1886B751C: 41 FF D3                       - call r11
+1C1886B751F: 08 98 7B C8 70 C0              - or [rax-3F8F3785],bl
+1C1886B7525: 01 00                          - add [rax],eax
+1C1886B7527: 00 00                          - add [rax],al
+1C1886B7529: 00 00                          - add [rax],al
+1C1886B752B: 00 00                          - add [rax],al
+1C1886B752D: 00 00                          - add [rax],al
+1C1886B752F: 00                             - db 00 
+// ---------- INJECTING HERE ----------
+BarHoldProgressController:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+BarHoldProgressController:Update+1: 48 8B EC                       - mov rbp,rsp
+BarHoldProgressController:Update+4: 48 83 EC 60                    - sub rsp,60
+BarHoldProgressController:Update+8: 48 89 75 E8                    - mov [rbp-18],rsi
+BarHoldProgressController:Update+c: 48 89 7D F0                    - mov [rbp-10],rdi
+BarHoldProgressController:Update+10: 4C 89 7D F8                    - mov [rbp-08],r15
+BarHoldProgressController:Update+14: 48 8B F1                       - mov rsi,rcx
+BarHoldProgressController:Update+17: 0F B6 86 D8 00 00 00           - movzx eax,byte ptr [rsi+000000D8]
+BarHoldProgressController:Update+1e: 85 C0                          - test eax,eax
+BarHoldProgressController:Update+20: 0F 85 80 02 00 00              - jne BarHoldProgressController:Update+2a6
+BarHoldProgressController:Update+26: 48 63 8E A0 00 00 00           - movsxd  rcx,dword ptr [rsi+000000A0]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>87</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>barholdprogresscontroller_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>88</ID>
+              <Description>"mouseButton"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+A0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>89</ID>
+              <Description>"holdRampTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+A4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>90</ID>
+              <Description>"maxUpSpeed"</Description>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+A8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>91</ID>
+              <Description>"microAcceleration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>92</ID>
+              <Description>"releaseDrag"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>93</ID>
+              <Description>"stopEpsilon"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+B4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>94</ID>
+              <Description>"outsideEpsilon"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>95</ID>
+              <Description>"useFixedTimestep"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>96</ID>
+              <Description>"simStep"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+C0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>97</ID>
+              <Description>"maxStepsPerFrame"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+C4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>98</ID>
+              <Description>"autoCloseFrameAfterResult"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+C8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>99</ID>
+              <Description>"closeDelayAfterResult"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+CC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>100</ID>
+              <Description>"velocity"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>101</ID>
+              <Description>"holdTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>102</ID>
+              <Description>"locked"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>103</ID>
+              <Description>"indicatorMinY"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>104</ID>
+              <Description>"indicatorMaxY"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>105</ID>
+              <Description>"isHolding"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"isReleasing"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+E5</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>107</ID>
+              <Description>"accumulator"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"pendingDown"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>109</ID>
+              <Description>"pendingUp"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+ED</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"evaluatedStop"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+EE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>111</ID>
+              <Description>"resultApplied"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[barholdprogresscontroller_ptr]+EF</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>115</ID>
+          <Description>"BlenderBase"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,BlenderBase:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,BlenderBase:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [blenderbase_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+blenderbase_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(blenderbase_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(blenderbase_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: BlenderBase:Update
+
+1C1886F9AFD: 00 00                 - add [rax],al
+1C1886F9AFF: 00 00                 - add [rax],al
+1C1886F9B01: 00 00                 - add [rax],al
+1C1886F9B03: 00 00                 - add [rax],al
+1C1886F9B05: 00 00                 - add [rax],al
+1C1886F9B07: 00 00                 - add [rax],al
+1C1886F9B09: 00 00                 - add [rax],al
+1C1886F9B0B: 00 00                 - add [rax],al
+1C1886F9B0D: 00 00                 - add [rax],al
+1C1886F9B0F: 00                    - db 00 
+// ---------- INJECTING HERE ----------
+BlenderBase:Update: 55                    - push rbp
+// ---------- DONE INJECTING  ----------
+BlenderBase:Update+1: 48 8B EC              - mov rbp,rsp
+BlenderBase:Update+4: 48 83 EC 30           - sub rsp,30
+BlenderBase:Update+8: 48 89 75 F8           - mov [rbp-08],rsi
+BlenderBase:Update+c: 48 8B F1              - mov rsi,rcx
+BlenderBase:Update+f: 48 63 86 10 01 00 00  - movsxd  rax,dword ptr [rsi+00000110]
+BlenderBase:Update+16: 83 F8 03              - cmp eax,03
+BlenderBase:Update+19: 74 0C                 - je BlenderBase:Update+27
+BlenderBase:Update+1b: 48 63 86 10 01 00 00  - movsxd  rax,dword ptr [rsi+00000110]
+BlenderBase:Update+22: 83 F8 02              - cmp eax,02
+BlenderBase:Update+25: 75 09                 - jne BlenderBase:Update+30
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>116</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>blenderbase_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>117</ID>
+              <Description>"Main"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>118</ID>
+                  <Description>"_currentState"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+110</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>119</ID>
+                  <Description>"hasFruit"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+114</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>120</ID>
+                  <Description>"hasCream"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+115</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>121</ID>
+                  <Description>"hasFlavoredCream"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+116</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>122</ID>
+                  <Description>"spreadableCreamCount"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+118</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>123</ID>
+                  <Description>"feelDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+11C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>124</ID>
+                  <Description>"feelScaleMultiplier"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+120</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>125</ID>
+                  <Description>"shakeIntensity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+124</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>126</ID>
+                  <Description>"shakeSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+128</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>127</ID>
+                  <Description>"milkOpacity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+12C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"milkFadeOutAtProgress"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+130</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"creamFillFps"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+134</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>130</ID>
+                  <Description>"blendingFps"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+138</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>131</ID>
+                  <Description>"mixCompleteFlashUp"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+14C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>132</ID>
+                  <Description>"mixCompleteFlashDown"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+150</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"dischargeToHalfFps"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+154</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>134</ID>
+                  <Description>"dischargeToEmptyFps"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+158</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>135</ID>
+                  <Description>"creamTakeSfxVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+15C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>136</ID>
+                  <Description>"stopFadeDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+160</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>137</ID>
+                  <Description>"loopFadeDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+164</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>138</ID>
+                  <Description>"sfxVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+168</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>139</ID>
+                  <Description>"ingredientSfxVolume"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+16C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>140</ID>
+                  <Description>"blendStopGrace"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+170</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>141</ID>
+                  <Description>"startSfxRetriggerCooldown"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+174</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>142</ID>
+                  <Description>"_lastBlendActiveTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+178</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>143</ID>
+                  <Description>"_lastBlendStopTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+17C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>144</ID>
+                  <Description>"_blendActiveThisFrame"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+180</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>145</ID>
+                  <Description>"_isBlendSoundPlaying"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+181</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>146</ID>
+                  <Description>"_blendingAnimTimer"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+1AC</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>147</ID>
+                  <Description>"_blendingAnimIndex"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+1B0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>148</ID>
+                  <Description>"_mode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+220</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>149</ID>
+                  <Description>"hoverZDepth"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+224</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>150</ID>
+                  <Description>"fruitDragSortingOrder"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+228</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>151</ID>
+                  <Description>"fruitReturnDuration"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+22C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>152</ID>
+                  <Description>"requiredHoldTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+230</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>153</ID>
+                  <Description>"loseProgressOnRelease"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+234</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>154</ID>
+                  <Description>"progressLossRate"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+238</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>155</ID>
+                  <Description>"baseForwardSpeed"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+23C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>156</ID>
+                  <Description>"forwardAcceleration"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+240</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>157</ID>
+                  <Description>"maxForwardSpeed"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+244</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>158</ID>
+                  <Description>"returnSpeed"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+248</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>159</ID>
+                  <Description>"requiredMixTime"</Description>
+                  <Color>808040</Color>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+24C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>160</ID>
+                  <Description>"stardewLiftAccel"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+250</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>161</ID>
+                  <Description>"stardewGravity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+254</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>162</ID>
+                  <Description>"stardewMaxSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+258</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>163</ID>
+                  <Description>"stardewBounceDamping"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+25C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>164</ID>
+                  <Description>"_isHolding"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+260</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>165</ID>
+                  <Description>"_isHoveringForCream"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+261</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>166</ID>
+                  <Description>"_currentHoldTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+264</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>167</ID>
+                  <Description>"_indicatorNorm"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+268</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>168</ID>
+                  <Description>"_forwardSpeed"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+26C</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>169</ID>
+                  <Description>"_stardewVelocity"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+270</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>170</ID>
+                  <Description>"_mixTime"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+274</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>171</ID>
+                  <Description>"_wasHolding"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+278</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>172</ID>
+                  <Description>"_sweetSpotReady"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+279</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>173</ID>
+                  <Description>"_pendingFruitPick"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+27A</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>174</ID>
+                  <Description>"_fruitReturning"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+27B</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>175</ID>
+              <Description>"progressBar"</Description>
+              <Options moHideChildren="1"/>
+              <Color>80FF80</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>176</ID>
+                  <Description>"_mode"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>177</ID>
+                  <Description>"snapToLeftOnStart"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>4C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>178</ID>
+                  <Description>"sweetSpotSpawnMin"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>179</ID>
+                  <Description>"sweetSpotSpawnMax"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>54</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>180</ID>
+                  <Description>"sweetSpotHalfWidthWorld"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>181</ID>
+                  <Description>"_sweetSpotCenterNorm"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>7C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>182</ID>
+                  <Description>"_visibilitySet"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>183</ID>
+                  <Description>"_sweetSpotSet"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <VariableType>Byte</VariableType>
+                  <Address>[blenderbase_ptr]+40</Address>
+                  <Offsets>
+                    <Offset>81</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>184</ID>
+          <Description>"PlatePlacementMinigame"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,PlatePlacementMinigame:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,PlatePlacementMinigame:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [plateplacementminigame_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+plateplacementminigame_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(plateplacementminigame_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(plateplacementminigame_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: PlatePlacementMinigame:Update
+
+1C1886DF47A: 00 00                          - add [rax],al
+1C1886DF47C: 00 00                          - add [rax],al
+1C1886DF47E: 00 00                          - add [rax],al
+1C1886DF480: 01 04 01                       - add [rcx+rax],eax
+1C1886DF483: 00 04 02                       - add [rdx+rax],al
+1C1886DF486: 00 00                          - add [rax],al
+1C1886DF488: 00 00                          - add [rax],al
+1C1886DF48A: 00 00                          - add [rax],al
+1C1886DF48C: 00 00                          - add [rax],al
+1C1886DF48E: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+PlatePlacementMinigame:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+PlatePlacementMinigame:Update+1: 48 8B EC                       - mov rbp,rsp
+PlatePlacementMinigame:Update+4: 48 83 EC 30                    - sub rsp,30
+PlatePlacementMinigame:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+PlatePlacementMinigame:Update+c: 48 8B F1                       - mov rsi,rcx
+PlatePlacementMinigame:Update+f: 48 8B 4E 20                    - mov rcx,[rsi+20]
+PlatePlacementMinigame:Update+13: 33 D2                          - xor edx,edx
+PlatePlacementMinigame:Update+15: 90                             - nop 
+PlatePlacementMinigame:Update+16: 49 BB 50 01 50 D2 C0 01 00 00  - mov r11,UnityEngine.Object:op_Inequality
+PlatePlacementMinigame:Update+20: 41 FF D3                       - call r11
+PlatePlacementMinigame:Update+23: 85 C0                          - test eax,eax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>185</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>plateplacementminigame_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>186</ID>
+              <Description>"moveRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+50</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>187</ID>
+              <Description>"moveSpeed"</Description>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+54</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>188</ID>
+              <Description>"randomizeStart"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>[plateplacementminigame_ptr]+58</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>189</ID>
+              <Description>"randomStartRange"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+5C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>190</ID>
+              <Description>"randomizeStartDirection"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[plateplacementminigame_ptr]+60</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>191</ID>
+              <Description>"forwardDistance"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+64</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>192</ID>
+              <Description>"forwardDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+68</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>193</ID>
+              <Description>"perfectHalfWidth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+6C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>194</ID>
+              <Description>"midHalfWidth"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+70</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>195</ID>
+              <Description>"placeSfxVolume"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+74</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>196</ID>
+              <Description>"closeDelayAfterLand"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+78</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>197</ID>
+              <Description>"gizmoHeight"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+AC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>198</ID>
+              <Description>"_baseX"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[plateplacementminigame_ptr]+B8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>199</ID>
+              <Description>"_moving"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[plateplacementminigame_ptr]+BC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>200</ID>
+              <Description>"_launched"</Description>
+              <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+              <VariableType>Byte</VariableType>
+              <Address>[plateplacementminigame_ptr]+BD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>201</ID>
+              <Description>"_dir"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[plateplacementminigame_ptr]+C0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry NoScriptTag="1">
+          <ID>202</ID>
+          <Description>"DishWasher"</Description>
+          <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+          <Color>80FFFF</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : Cake &amp; Bake.exe
+  Version: 
+  Date   : 2026-11-22
+  Author : DANGER DASH
+
+  This script does blah blah blah
+}
+
+define(address,Dishwasher:Update)
+define(bytes,55 48 8B EC 48 83 EC 30)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,Dishwasher:Update)
+
+label(code)
+label(return)
+
+newmem:
+mov [dishwasher_ptr],rcx
+
+code:
+  push rbp
+  mov rbp,rsp
+  sub rsp,30
+  jmp return
+
+dishwasher_ptr:
+dq 0
+
+address:
+  jmp newmem
+  nop 3
+return:
+registersymbol(dishwasher_ptr)
+
+[DISABLE]
+
+address:
+  db bytes
+  // push rbp
+  // mov rbp,rsp
+  // sub rsp,30
+
+dealloc(newmem)
+unregistersymbol(dishwasher_ptr)
+
+{
+// ORIGINAL CODE - INJECTION POINT: Dishwasher:Update
+
+1C0F81DBD99: 04 02                          - add al,02
+1C0F81DBD9B: 05 04 03 01 50                 - add eax,50010304
+1C0F81DBDA0: 00 00                          - add [rax],al
+1C0F81DBDA2: 00 00                          - add [rax],al
+1C0F81DBDA4: 00 00                          - add [rax],al
+1C0F81DBDA6: 00 00                          - add [rax],al
+1C0F81DBDA8: 00 00                          - add [rax],al
+1C0F81DBDAA: 00 00                          - add [rax],al
+1C0F81DBDAC: 00 00                          - add [rax],al
+1C0F81DBDAE: 00 00                          - add [rax],al
+// ---------- INJECTING HERE ----------
+Dishwasher:Update: 55                             - push rbp
+// ---------- DONE INJECTING  ----------
+Dishwasher:Update+1: 48 8B EC                       - mov rbp,rsp
+Dishwasher:Update+4: 48 83 EC 30                    - sub rsp,30
+Dishwasher:Update+8: 48 89 75 F8                    - mov [rbp-08],rsi
+Dishwasher:Update+c: 48 8B F1                       - mov rsi,rcx
+Dishwasher:Update+f: 48 8D AD 00 00 00 00           - lea rbp,[rbp+00000000]
+Dishwasher:Update+16: 49 BB 20 B5 E9 08 C1 01 00 00  - mov r11,UnityEngine.Time:get_deltaTime
+Dishwasher:Update+20: 41 FF D3                       - call r11
+Dishwasher:Update+23: F3 0F 5A C0                    - cvtss2sd xmm0,xmm0
+Dishwasher:Update+27: 48 8B CE                       - mov rcx,rsi
+Dishwasher:Update+2a: F2 0F 10 C8                    - movsd xmm1,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry NoCheckbox="1">
+              <ID>203</ID>
+              <Description>"Instance"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>8000FF</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>dishwasher_ptr</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>204</ID>
+              <Description>"moveInDuration"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+D0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>205</ID>
+              <Description>"minBowlsToStart"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+D4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>206</ID>
+              <Description>"washDuration"</Description>
+              <Color>808040</Color>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+D8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>207</ID>
+              <Description>"runningPulseScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+DC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>208</ID>
+              <Description>"runningPulseFrequency"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+E0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>209</ID>
+              <Description>"runRampDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+E4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>210</ID>
+              <Description>"chugInterval"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+E8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>211</ID>
+              <Description>"chugScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+EC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>212</ID>
+              <Description>"chugDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>213</ID>
+              <Description>"chugEchoDelay"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+F4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>214</ID>
+              <Description>"chugEchoStrength"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>215</ID>
+              <Description>"squashWidthRatio"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>216</ID>
+              <Description>"bubblesPerChug"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+108</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>217</ID>
+              <Description>"finishBubbleBurst"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+10C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>218</ID>
+              <Description>"bubbleTopEdgeShare"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+110</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>219</ID>
+              <Description>"bubbleOutSpeed"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+12C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>220</ID>
+              <Description>"bubbleWobble"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+130</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>221</ID>
+              <Description>"bubbleAlpha"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+134</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>222</ID>
+              <Description>"bubbleSortingOrder"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+138</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>223</ID>
+              <Description>"finishPunchScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+13C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>224</ID>
+              <Description>"finishPunchDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+140</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>225</ID>
+              <Description>"finishPunchWaves"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+144</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>226</ID>
+              <Description>"finishFxDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+148</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>227</ID>
+              <Description>"sfxVolume"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+14C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>228</ID>
+              <Description>"washLoopFadeDuration"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+150</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>229</ID>
+              <Description>"bowlPlacedVolume"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+154</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>230</ID>
+              <Description>"dispenseStepInterval"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+158</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>231</ID>
+              <Description>"_state"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+15C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>232</ID>
+              <Description>"_lastLidState"</Description>
+              <VariableType>4 Bytes</VariableType>
+              <Address>[dishwasher_ptr]+160</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>233</ID>
+              <Description>"_bottomOffsetAtBaseScale"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+17C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>234</ID>
+              <Description>"_hasDoorRect"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>[dishwasher_ptr]+190</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>235</ID>
+              <Description>"_nextBubbleTime"</Description>
+              <VariableType>Float</VariableType>
+              <Address>[dishwasher_ptr]+194</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry NoCheckbox="1">
+      <ID>237</ID>
+      <Description>""</Description>
+      <Options moHideChildren="1"/>
+      <Color>80FF80</Color>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry NoScriptTag="1">
+      <ID>238</ID>
+      <Description>"PROFILE LINK"</Description>
+      <Options moHideChildren="1" moDefaultCollapsed="1" moAllowManualCollapseAndExpand="1"/>
+      <Color>80FFFF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$LUA}
+if syntaxcheck then return end
+[ENABLE]
+ShellExecute('https://fearlessrevolution.com/memberlist.php?mode=viewprofile&amp;u=213726')
+{$asm}
+nop
+[DISABLE]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>function cycleFullCompact(sender,force) local state = not(compactmenuitem.Caption == 'Compact View Mode'); if force~=nil then state = not force end; compactmenuitem.Caption = state and 'Compact View Mode' or 'Full View Mode'; getMainForm().Splitter1.Visible = state; getMainForm().Panel5.Visible    = state; end; function addCompactMenu() if compactmenualreadyexists then return end; local parent = getMainForm().Menu.Items; compactmenuitem = createMenuItem(parent); parent.add(compactmenuitem); compactmenuitem.Caption = 'Compact View Mode'; compactmenuitem.OnClick = cycleFullCompact; compactmenualreadyexists = 'yes'; end; addCompactMenu(); cycleFullCompact(nil,true)
+function toggleTranslucentMode(sender) translucentEnabled = not translucentEnabled; for i = 0, getFormCount() - 1 do local form = getForm(i); if form then form.AlphaBlend = translucentEnabled; form.AlphaBlendValue = translucentEnabled and 199 or 255; end; end; translucentmenuitem.Caption = translucentEnabled and 'Normal View Mode' or 'Translucent Mode'; end; function addTranslucentMenu() if translucentmenualreadyexists then return end; local parent = getMainForm().Menu.Items; translucentmenuitem = createMenuItem(parent); parent.add(translucentmenuitem); translucentmenuitem.Caption = 'Translucent Mode'; translucentmenuitem.OnClick = toggleTranslucentMode; translucentEnabled = false; translucentmenualreadyexists = 'yes'; end; addTranslucentMenu();
+function setTheme(c, cb, cap) local mf=getMainForm(); local al=getAddressList(); mf.Color=c; mf.Foundlist3.Color=c; al.Control[0].BackgroundColor=c; AddressList.CheckboxColor=cb; themeMenu.Caption='Theme: '..cap; end; function addThemeMenu() if thememenuexists then return end; local m=getMainForm().Menu.Items; themeMenu=createMenuItem(m); m.add(themeMenu); themeMenu.Caption='Theme'; local function addSub(n,f) local s=createMenuItem(themeMenu); s.Caption=n; s.OnClick=f; themeMenu.add(s) end; addSub('Dark Mode', function() setTheme(0x000000, 0x0000FF, 'Dark') end); addSub('Light Mode', function() setTheme(0xFFFFFF, 0x000000, 'Light') end); addSub('Default', function() setTheme(clDefault, clDefault, 'Default') end); thememenuexists='yes' end; addThemeMenu();
+
+getMainForm().caption = " Cake &amp; Bake - vFullBuild009 ^*^*Created By DANGER DASH ^*^*"
+
+
+</LuaScript>
+</CheatTable>
